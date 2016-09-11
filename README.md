@@ -5,4 +5,6 @@ The TTtie Bot source code.
 Install Discordie: `
 npm install discordie
 `<br>
-Now download the source code: [Link](https://github.com/TTtie/TTtie-Bot/blob/master/run.js)
+Now download the source code: [Link](https://github.com/TTtie/TTtie-Bot/blob/master/tttiebotsrc.js)
+# Running the bot
+Open command line, navigate to the directory with bot's files and type `node tttiebotsrc.js
