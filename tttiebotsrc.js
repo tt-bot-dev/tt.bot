@@ -21,7 +21,7 @@ client.Dispatcher.on(Events.GATEWAY_READY, e => {
 });
 
 client.Dispatcher.on(Events.MESSAGE_CREATE, e => {
-if (!e.message.isPrivate) {
+if (!e.message.isPrivate){}
 const role = e.message.guild.roles.find(r => r.name === adminRoleName)
 if (role && e.message.member.hasRole(role)) {
  if (e.message.content.match(prefix + "setnick")) {
@@ -35,20 +35,21 @@ client.User.memberOf(e.message.guild).setNickname(nick);
   console.log(word);
   console.log(word[0]);
   console.log(word[1]);
-  if (word[0] == prefix + "ban") { 
-    if (word[1] == client.User.id) {
-      e.message.channel.sendMessage(e.message.author.nickMention + ", **nope.**")
-      console.log(e.message.author.username + " tried to ban the bot.")
-    } else {
-    e.message.guild.ban(word[1]);
-    e.message.channel.sendMessage(e.message.author.nickMention + ", tried to ban user with ID " + word[1]);
-
+   if (word[0] == prefix + "ban") { 
+    const banUser = e.message.guild.members.find(bu => bu.name === e.message.content.slice(10,42))
+      if (e.message.content.slice(10,42) == client.User.username || e.message.content.slice(10,42) == client.User.memberOf(e.message.guild).name) {
+        e.message.channel.sendMessage(e.message.author.nickMention + ", **nope.**")
+      } else {
+    e.message.guild.ban(banUser);
+    e.message.channel.sendMessage(e.message.author.nickMention + ", tried to ban " + e.message.content.slice(5,37));
+      }
   }
   }
-} else if  (e.message.content == prefix + "help") {
-    e.message.channel.sendMessage(e.message.author.nickMention + ", List of " + adminRoleName + "commands:\n.setnick <nick> - Set the bot's nick.\n.ban - ban a user by ID.")
+  }
+ else if  (e.message.content == prefix + "help") {
+    e.message.channel.sendMessage(e.message.author.nickMention + ", List of " + adminRoleName + " commands:\n.setnick <nick> - Set the bot's nick.\n.ban - ban a user by ID.")
 }
-} }
+
     setGame(prefix + "help | Actually on " + client.Guilds.length + " servers with " + client.Users.length + " users");
  // some commands here
 
@@ -78,8 +79,49 @@ client.User.memberOf(e.message.guild).setNickname(nick);
   }}
 }
 );
+
+client.Dispatcher.on(Events.GUILD_MEMBER_ADD, gma => {
+//this runs if someone joins a server.
+gma.guild.generalChannel.sendMessage(gma.member.nickMention + " has joined **" + gma.guild.name + "**.");
+console.log(gma.member.username + " joined " + gma.guild.name);
+});
+client.Dispatcher.on(Events.GUILD_MEMBER_REMOVE, gmr => {
+//this runs if someone leaves the server.
+gmr.guild.generalChannel.sendMessage(gmr.user.username + " left **" + gmr.guild.name + "**.");
+  
+console.log(gmr.user.username + " left " + gmr.guild.name);
+});
+/* 
+client.Dispatcher.on(Events.GUILD_CREATE, gcr => {
+  // this will run if the bot joined a server, disabled by default, uncomment this block to enable it
+  gcr.guild.generalChannel.sendMessage("Thanks for adding **TTtie Bot** to this server!\nPlease set up the TTtie Bot SU role for more experience!(It's not required)");
+  console.log("New server: " + gcr.guild.name);
+});*/
+client.Dispatcher.on(Events.GUILD_DELETE, gdl => {
+  console.log("Bot got removed from guild with ID " + gdl.guildId);
+});
+/*
+client.Dispatcher.on(Events.GUILD_BAN_ADD, gba => {
+ // this will run if someone is banned from a server, disabled by default, uncomment this block to enable it
+gba.guild.generalChannel.sendMessage(gba.user.username + " got banned from **" + gba.guild.name + "**.");
+console.log(gba.user.username + " got banned from " + gba.guild.name);}
+);*/
+/*
+client.Dispatcher.on(Events.GUILD_BAN_REMOVE, gbr => {
+// this will run if someone is unbanned from a server, disabled by default, uncomment this block to enable it
+  gbr.guild.generalChannel.sendMessage(gbr.user.username + " got unbanned from **" + gbr.guild.name + "**.");
+console.log(gbr.user.username + " got unbanned from " + gbr.guild.name);
+
+});*/
 // the setGame function is meant to set game.
 function setGame(name) {
+  /* 
+  //To set the bot's streaming game, uncomment this code and comment the playing game.
+    var game = {type: 1, name: name, url: ""};
+    url MUST be a valid twitch url
+  */
+  // playing game
   var game = {name: name};
+  //playing game end
   client.User.setGame(game);
-}
+} 
