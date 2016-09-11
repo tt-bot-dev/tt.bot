@@ -9,7 +9,7 @@ var client = new Discordie();
                     // For example, the prefix - will have commands -help etc.
   var token = ""; // place the token in the double quotes
   var ownerid = ""; // place your id in the double quotes, if you don't know the
-                    // id, get into my server(https://tttie.ga/redir.php?dst=dskrd) and type .aboutme
+                    // id, get into my server(https://tttie.ga/redir.php?dst=dskrd) and type TTBot-aboutme
 var adminRoleName = ""; // place the admin role name here. 
 client.connect({ token: token });
 
