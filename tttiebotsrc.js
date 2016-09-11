@@ -21,7 +21,7 @@ client.Dispatcher.on(Events.GATEWAY_READY, e => {
 });
 
 client.Dispatcher.on(Events.MESSAGE_CREATE, e => {
-
+if (!e.message.isPrivate) {
 const role = e.message.guild.roles.find(r => r.name === adminRoleName)
 if (role && e.message.member.hasRole(role)) {
  if (e.message.content.match(prefix + "setnick")) {
@@ -48,7 +48,7 @@ client.User.memberOf(e.message.guild).setNickname(nick);
 } else if  (e.message.content == prefix + "help") {
     e.message.channel.sendMessage(e.message.author.nickMention + ", List of " + adminRoleName + "commands:\n.setnick <nick> - Set the bot's nick.\n.ban - ban a user by ID.")
 }
-}
+} }
     setGame(prefix + "help | Actually on " + client.Guilds.length + " servers with " + client.Users.length + " users");
  // some commands here
 
