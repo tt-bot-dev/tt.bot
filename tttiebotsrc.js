@@ -21,7 +21,7 @@ client.Dispatcher.on(Events.GATEWAY_READY, e => {
 });
 
 client.Dispatcher.on(Events.MESSAGE_CREATE, e => {
-if (!e.message.isPrivate){}
+if (!e.message.isPrivate){
 const role = e.message.guild.roles.find(r => r.name === adminRoleName)
 if (role && e.message.member.hasRole(role)) {
  if (e.message.content.match(prefix + "setnick")) {
@@ -44,21 +44,29 @@ client.User.memberOf(e.message.guild).setNickname(nick);
     e.message.channel.sendMessage(e.message.author.nickMention + ", tried to ban " + e.message.content.slice(5,37));
       }
   }
-  }
-  }
- else if  (e.message.content == prefix + "help") {
+  } else if  (e.message.content == prefix + "help") {
     e.message.channel.sendMessage(e.message.author.nickMention + ", List of " + adminRoleName + " commands:\n.setnick <nick> - Set the bot's nick.\n.ban - ban a user by ID.")
-}
-
-    setGame(prefix + "help | Actually on " + client.Guilds.length + " servers with " + client.Users.length + " users");
- // some commands here
-
+}}
 /* 
 if (e.message.guild.id == <guild id>) {
      // some commands here
 }
 This is used to have custom commands for other servers
 */
+
+}
+
+    setGame(prefix + "help | Actually on " + client.Guilds.length + " servers with " + client.Users.length + " users");
+ // some commands here
+/*To make commands, use this syntax:
+if (e.message.content == prefix + "cmdname") {
+  e.message.channel.sendMessage("command text");
+  // For the first command
+} else if (e.message.content == prefix + "cmd2") {
+  e.message.channel.sendMessage("cmd2 text");
+  //For the next commands
+}
+ */
 if (e.message.author.id == ownerid) {
   if(e.message.content == prefix + "disconnect") {
     client.disconnect();
