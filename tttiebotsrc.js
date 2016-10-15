@@ -24,18 +24,13 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, e => {
 if (!e.message.isPrivate){
 const role = e.message.guild.roles.find(r => r.name === adminRoleName)
 if (role && e.message.member.hasRole(role)) {
- if (e.message.content.match(prefix + "setnick")) {
-var word = e.message.content.split(" ");
-if (word[0] == prefix + "setnick") {
+ if (e.message.content.startsWith(prefix + "setnick")) {
+if (e.message.content != prefix + "setnick") {
   var nick = e.message.content.slice(9);
 client.User.memberOf(e.message.guild).setNickname(nick);
 } 
-} else if (e.message.content.match(prefix + "ban")) {
-  var word = e.message.content.split(" ");
-  console.log(word);
-  console.log(word[0]);
-  console.log(word[1]);
-   if (word[0] == prefix + "ban") { 
+} else if (e.message.content.startsWith(prefix + "ban")) {
+   if (e.message.content != prefix + "ban") { 
     const banUser = e.message.guild.members.find(bu => bu.name === e.message.content.slice(10,42))
       if (e.message.content.slice(10,42) == client.User.username || e.message.content.slice(10,42) == client.User.memberOf(e.message.guild).name) {
         e.message.channel.sendMessage(e.message.author.nickMention + ", **nope.**")
@@ -75,9 +70,8 @@ if (e.message.author.id == ownerid) {
     client.connect({ token: token }); 
   } else if (e.message.content == prefix + "removebot") {
     e.message.guild.leave();
-  } else if (e.message.content.match(prefix + "setnick")) {
-var word = e.message.content.split(" ");
-if (word[0] == prefix + "setnick") {
+  } else if (e.message.content.startsWith(prefix + "setnick")) {
+if (e.message.content != prefix + "setnick") {
   var nick = e.message.content.slice(9);
 client.User.memberOf(e.message.guild).setNickname(nick);
 } 
