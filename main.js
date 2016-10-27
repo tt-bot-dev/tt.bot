@@ -16,7 +16,7 @@ client.Dispatcher.on(Events.GATEWAY_READY, e => {
   console.log("The bot is currently in " + client.Guilds.length + " servers, with " + client.Users.length + " users.");
   setGame();
   client.autoReconnect.enable();
-  require("./httpthings.js").runWebServer(4000 + shardId,shardId)
+  require("./config/httpthings.js").runWebServer(4000 + shardId,shardId)
 });
 
 client.Dispatcher.on(Events.MESSAGE_CREATE, e => {
@@ -423,7 +423,7 @@ function setGame() {
  }
 
 function dbots() {
-require('./dbots.js').post(shardId, shardCount, client.Guilds.length)
+require('./config/dbots.js').post(shardId, shardCount, client.Guilds.length)
 } 
 
 
