@@ -8,7 +8,8 @@ base.js
 events.js
 eventsbackup.js
 speedtest.py
-run*
+run.js
+runShard2.js
 db.js
 dash.js
 tttag.js
