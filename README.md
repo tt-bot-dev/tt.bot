@@ -1,6 +1,7 @@
 # TTtie-Bot
 Here is it, guys!
 The TTtie Bot source code.
+also, finally added original cringe code
 # Before you'll start
 Install Discordie: `npm install discordie`<br>
 Now download the source code: [Link](https://github.com/TTtie/TTtie-Bot/blob/master/tttiebotsrc.js)
