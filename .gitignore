@@ -1,0 +1,14 @@
+*.exe
+node_modules
+config
+SpectraMusic v0.2 (beta)
+rewritten
+rethinkdb*
+base.js
+events.js
+eventsbackup.js
+speedtest.py
+run*
+db.js
+dash.js
+tttag.js
