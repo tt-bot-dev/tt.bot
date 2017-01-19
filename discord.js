@@ -1,9 +1,8 @@
 module.exports = function () {
     global.fs = require("fs");
-    const cfg = require("./config.json")
     global.ErisO = require("eris");
     global.Eris = require("./libutil")
-    const bot = new Eris(cfg.token);
+    const bot = new Eris(config.token);
     global.isO = function(msg) {
         return msg.author.id == config.oid
     }
