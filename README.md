@@ -24,7 +24,7 @@ It is actually made in [Eris](https://abal.moe/Eris).
     description: "your desc", // can be omitted
     display:true, // can be either true or false and is optional
     name:"command name",
-    args: "<code>" // can be ommited
+    args: "something" // can be ommited
     }
     ```
     3. Profit!
