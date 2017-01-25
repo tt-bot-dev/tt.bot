@@ -29,5 +29,5 @@ ex.reload = function(cmN) {
     cmds[cmN] = rld(`./commands/${cmN}.js`);
 }
 ex.unload = function(cmN) {
-    cmds[cmN] = null;
+    cmds[cmN] = undefined;
 }

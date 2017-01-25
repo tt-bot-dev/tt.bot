@@ -23,7 +23,6 @@ class LibWUtil extends eris {
                         else rs();
                 })
         })
-
     }
 }
 module.exports = LibWUtil
