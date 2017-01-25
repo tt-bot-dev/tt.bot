@@ -1,10 +1,10 @@
 #How to add commands
 1. Create a file in commands directory.
 2. Paste into it this skeleton structure: ```js
-module.exports = {<
-    exec: function(msg,args) {<
-        //code<
-        /*if (isO(msg)) {<
+module.exports = {
+    exec: function(msg,args) {
+        //code
+        /*if (isO(msg)) {
             // if your category is 2, please include this block.
         }*/
     },
