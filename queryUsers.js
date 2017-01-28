@@ -2,21 +2,17 @@ module.exports = function (iQuery, msg) {
     return new Promise((rs, rj) => {
         let users = msg.guild.members.filter(fn => {
             let nick = fn.nick ? fn.nick : fn.username;
-            if (fn.username == iQuery || fn.id == iQuery || fn.mention == iQuery || `${fn.username}#${fn.discriminator}` == iQuery || fn.username.startsWith(iQuery)) return true;
+            if (fn.username == iQuery || fn.id == iQuery || `<@${fn.id}>` == iQuery || `<@!${fn.id}>` == iQuery || `${fn.username}#${fn.discriminator}` == iQuery || fn.username.startsWith(iQuery)) return true;
             else if (nick.startsWith(iQuery) || nick == iQuery || `${nick}#${fn.discriminator}` == iQuery) return true;
-            else if (nick.toLowerCase().startsWith(iQuery) || nick.toLowerCase() == iQuery || `${nick.toLowerCase()}#${fn.discriminator}` == iQuery) return true;
-            else if (fn.username.toLowerCase() == iQuery || fn.username.toLowerCase().startsWith(iQuery) || `${fn.username.toLowerCase()}#${fn.discriminator}` == iQuery) return true;
+            else if (nick.toLowerCase().startsWith(iQuery.toLowerCase()) || nick.toLowerCase() == iQuery.toLowerCase() || `${nick.toLowerCase()}#${fn.discriminator}` == iQuery.toLowerCase()) return true;
+            else if (fn.username.toLowerCase() == iQuery.toLowerCase() || fn.username.toLowerCase().startsWith(iQuery.toLowerCase()) || `${fn.username.toLowerCase()}#${fn.discriminator}` == iQuery.toLowerCase()) return true;
             else return false;
         })
         let binds = {};
         if (users.length == 1) {
             return rs(users[0]);
         } else if (users.length >= 2) {
-            let tout = setTimeout(() => {
-                bot.removeListener("messageReactionAdd", r); m.delete(); bot.createMessage(msg.channel.id, "Query canceled automatically after inactivity.")
-                clearTimeout(tout)
-                rj("Canceled automatically.")
-            }, 300000)
+
             let uarr = [];
             function listUsers() {
                 let numbers = [":one:", ":two:", ":three:", ":four:", ":five:"];
@@ -35,9 +31,13 @@ module.exports = function (iQuery, msg) {
             bot.createMessage(msg.channel.id, {
                 embed: {
                     title: "Multiple users found!",
-                    description: `I've found ${users.length} users, displaying maximally 5 users.\n${listUsers()}\nElse, use ❌ to cancel.\nQuery will automatically expire in 5 minutes.`
+                    description: `I've found ${users.length} users, displaying maximally 5 users.\n${listUsers()}\nChoose one from the users by reacting with the number next to the username.\nElse, react with ❌ to cancel.\nQuery will automatically expire in 5 minutes.`
                 }
             }).then(m => {
+                let tout = setTimeout(() => {
+                    bot.removeListener("messageReactionAdd", r); m.delete(); bot.createMessage(msg.channel.id, "Query canceled automatically after inactivity.")
+                    rj("Canceled automatically.")
+                }, 300000)
                 let numbers = ["\u0031\u20E3", "\u0032\u20E3", "\u0033\u20E3", "\u0034\u20E3", "\u0035\u20E3"];
                 for (i = 0; i <= 4; i++) {
                     let u = users[i]
