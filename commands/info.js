@@ -12,7 +12,7 @@ module.exports = {
                     inline:true
                 }, {
                     name: "Author",
-                    value: "TTtie#4719",
+                    value: "TTtie#4719\n[]",
                     inline:true
                 }, {
                     name: "Versions:",

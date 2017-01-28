@@ -3,7 +3,7 @@ module.exports = {
         if (isO(msg)) {
             let evaLUAted
             try {evaLUAted = eval(args)}
-            catch(err) {evaLUAted = err.message};
+            catch(err) {evaLUAted = err.message; console.error(err.stack)};
             let overall;
             if (typeof evaLUAted !== "string") {
                 overall = require("util").inspect(evaLUAted)

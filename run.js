@@ -11,13 +11,15 @@ process.stdin.on('data', (chu) => {
     }
 })
 process.on("unhandledRejection", (r, p) => {
-    console.log(`${__filename}      | Unhandled rejection, reason ${r}`)
+    console.log(`${__filename}      | Unhandled rejection, reason:\n ${require("util").inspect(r)}`)
 })
 process.on("uncaughtException", (err) => {
     console.log(`${__filename}      | Unhandled exception`, err.message)
 })
 global.p = function (p) { return; };
 global.cmds = {};
+global.rCQueue = {};
+global.userQuery = require("./queryUsers.js");
 console.log(__filename + "    | Starting TTtie Bot......")
 console.log()
 console.log(__filename + "     | Checking configuration......")
