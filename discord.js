@@ -3,7 +3,8 @@ module.exports = function () {
     global.ErisO = require("eris");
     global.Eris = require("./libutil")
     const bot = new Eris(config.token,{
-        getAllUsers:true
+        getAllUsers:true,
+        disableEveryone: false
     });
     global.isO = function(msg) {
         return msg.author.id == config.oid

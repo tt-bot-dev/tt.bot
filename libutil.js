@@ -16,11 +16,11 @@ class LibWUtil extends eris {
                 .send({ "server_count": this.guilds.size })
                 .end((e, r) => {
                     if (e || r.statusCode != 200) rj({
-                            message: "Can't post, access text or body property for more info.",
-                            text: r.text,
-                            body: r.body
-                        })
-                        else rs();
+                        message: "Can't post, access text or body property for more info.",
+                        text: r.text,
+                        body: r.body
+                    })
+                    else rs();
                 })
         })
     }

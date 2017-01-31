@@ -6,7 +6,7 @@
             let cmFL = require("./events/" + cmN  + ".js")
             if (cmFL.isEvent) {
                 console.log(`${__filename}      | Loading ${cmN} event, file ${cmF}`)
-            bot.on(cmN, cmFL)
+                bot.on(cmN, cmFL)
             }
             else console.log(__filename + "    | Skipping non-event " + cmF)
         } else {

@@ -5,18 +5,18 @@ module.exports = {
             let s = u.status;
             function getstatus() {
                 switch (s) {
-                    case "online":
-                        return "Online";
-                        break;
-                    case "idle":
-                        return "Idle";
-                        break;
-                    case "dnd":
-                        return "Do not disturb"
-                        break;
-                    case "offline":
-                        return "Invisible/offline"
-                        break;
+                case "online":
+                    return "Online";
+                    break;
+                case "idle":
+                    return "Idle";
+                    break;
+                case "dnd":
+                    return "Do not disturb"
+                    break;
+                case "offline":
+                    return "Invisible/offline"
+                    break;
                 }
             }
             bot.createMessage(msg.channel.id, {

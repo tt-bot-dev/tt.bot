@@ -7,7 +7,7 @@ process.stdin.on('data', (chu) => {
         process.exit(0);
     } else if (chunk.startsWith("eval ")) {
         let slice = chunk.slice("eval ".length);
-        try { console.log(eval(slice)) } catch (err) { console.error(err) };
+        try { console.log(eval(slice)) } catch (err) { console.error(err) }
     }
 })
 process.on("unhandledRejection", (r, p) => {
@@ -19,10 +19,10 @@ process.on("uncaughtException", (err) => {
 })
 global.p = function (p) { return; };
 global.cmds = {};
-global.rCQueue = {};
-global.userQuery = require("./queryUsers.js");
+global.queries  = require("./queries/index")
+global.userQuery = queries.user;
 console.log(__filename + "    | Starting TTtie Bot......")
-console.log()
+console.log()   
 console.log(__filename + "     | Checking configuration......")
 console.log()
 require("./checkConfig")();
