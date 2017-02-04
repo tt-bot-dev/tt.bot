@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+<center>
+<h1><%=bot.user.username%></h1>
+Currently on <strong><%=bot.guilds.size%></strong> servers, with <strong><%=bot.users.size%></strong> cached users, with <strong><%=Object.keys(bot.channelGuildMap).length%></strong> channels
+</center>
+<div style="float: left; width: 50vw">
+<strong>Guild list:</strong><br>
+<div id="glds">
+<script>
+<%
+global.a = function() {
+try {
+    let arr = [];
+    bot.guilds.forEach(fe => {
+        arr.push(fe.name);
+    })
+    return arr
+}catch(err) {
+    ":eyes: A wild error has appeared, check console for more info"
+    console.log(err.stack)
+}
+}
+%>
+document.getElementById("glds").innerHTML = "<%=a().join("<br>")%>".replace(/\&lt\;br\&gt\;/g, "<br>")
+
+</script>
+</div>
+</div>
+</body>
+</html>

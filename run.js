@@ -1,6 +1,6 @@
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
-global.fs = require("fs")
+
 process.stdin.on('data', (chu) => {
     var chunk = chu.toString();
     if (chunk.startsWith("shutdown")) {
@@ -19,12 +19,5 @@ process.on("uncaughtException", (err) => {
 })
 global.p = function (p) { return; };
 global.cmds = {};
-global.queries  = require("./queries/index")
-global.userQuery = queries.user;
-console.log(__filename + "    | Starting TTtie Bot......")
-console.log()   
-console.log(__filename + "     | Checking configuration......")
-console.log()
-require("./checkConfig")();
 console.log(__filename + "     | Running the bot......")
-require("./discord")()
+require("./moduleloader")

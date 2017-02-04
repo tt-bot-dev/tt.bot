@@ -1,2 +1,4 @@
 # my configuration, why did you want to take a look at it you paedo
 config.json
+# database. The bot uses rethinkdb as database.
+db

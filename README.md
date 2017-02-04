@@ -2,6 +2,10 @@
 [TTtie Bot](https://github.com/TTtie/TTtie-Bot), but with better code.<br>
 It is actually made in [Eris](https://abal.moe/Eris).
 
+#Database
+Actually the database does nothing, however, in later future, it might do something.<br>
+The database is RethinkDB, and is a dependency for [`db.js`](./db.js) file
+
 #How to set up
 1. Rename `exampleconfig.json` to `config.json`
 2. Edit token, oid, prefix and optional, but if you need, dbotskey properties.
