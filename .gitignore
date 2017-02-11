@@ -2,3 +2,6 @@
 config.json
 # database. The bot uses rethinkdb as database.
 db
+# my keybase keys, the public key can be found at my keybase.
+key.asc
+public.asc

@@ -20,6 +20,6 @@ app.set("view engine", "ejs");
 app.get("/",(req,res) => {
     res.render("landing")
 })
-app.listen(8090, () =>{
+app.listen(8090, config.webserverip, () =>{
 	console.log("Webserver is running.")
 })
