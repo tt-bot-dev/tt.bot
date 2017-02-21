@@ -4,6 +4,6 @@ module.exports = function () {
     global.cmdWrap = require("../cmdwrapper")
     cmdWrap.loadAll()
     bot.editStatus("online", { name: "Type tt.help" })
-    bot.postStats().then(console.log(__filename + "     | Successfully posted!"), console.log(r.body))
+    bot.postStats().then(console.log(__filename + "     | Successfully posted!"), r => console.log(r.body))
 }
 module.exports.isEvent = true

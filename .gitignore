@@ -1,7 +1,8 @@
-# my configuration, why did you want to take a look at it you paedo
-config.json
-# database. The bot uses rethinkdb as database.
+*.exe
+#Actual files you don't need amirite
 db
-# my keybase keys, the public key can be found at my keybase.
-key.asc
-public.asc
+config.json
+node_modules
+*.asc
+# for some reason i didn't delet it, for backup reason when configs are developed + selfbot
+config
