@@ -4,5 +4,5 @@ db
 config.json
 node_modules
 *.asc
-# for some reason i didn't delet it, for backup reason when configs are developed + selfbot
+# for some reason i didn't delete it, for backup reason when configs are developed + selfbot
 config
