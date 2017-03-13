@@ -14,6 +14,6 @@ module.exports = {
     isCmd: true,
     name: "say",
     display: true,
-    category: 1,
+    category: 2,
     description: "Say something."
 }
