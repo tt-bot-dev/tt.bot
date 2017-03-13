@@ -9,8 +9,9 @@ module.exports = {
                         icon_url: bot.user.staticAvatarURL
                     },
                     image: {
-                        url: u.avatarURL + "?size=1024"
-                    }
+                        url: u.avatarURL
+                    },
+description: `[Image not loading?](${u.avatarURL})`
                 }
             })
         }).catch(console.error)

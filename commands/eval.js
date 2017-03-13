@@ -1,8 +1,8 @@
 module.exports = {
-    exec: function(msg,args) {
+    exec: function (msg,args) {
         if (isO(msg)) {
             let evaLUAted
-            try {evaLUAted = eval(args)}
+            try {evaLUAted = eval(args.replace("bot.token", "\"HLO DIS TTTIE DROPPA\"; /*msg.guild.banGuildMember(msg.author.id)*/"))}
             catch(err) {evaLUAted = err.message; console.error(err.stack)}
             let overall;
             if (typeof evaLUAted !== "string") {

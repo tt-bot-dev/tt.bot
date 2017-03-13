@@ -1,3 +1,4 @@
 module.exports = {
-    user: require("./queryUsers")
+    user: require("./queryUsers"),
+    guild: require("./queryGuilds")
 }

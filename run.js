@@ -17,6 +17,9 @@ process.on("uncaughtException", (err) => {
     console.log(`${__filename}      | Unhandled exception`, err.message)
     console.error(err.stack)
 })
+process.on("SIGINT", aaaaaaaaaaaaaaaa => {
+    console.log("Received a SIGINT...")
+})
 global.p = function (p) { return; };
 global.cmds = {};
 console.log(__filename + "     | Running the bot......")
