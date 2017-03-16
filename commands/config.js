@@ -13,7 +13,7 @@ module.exports = {
                     })
                     server = await db.table("configs").get(msg.guild.id).run();
                 }
-                if (server[setting]) {
+                if (setting && value && server[setting]) {
                     server[setting] = value;
                     await db.table("configs").get(msg.guild.id).update(server).run();
                     return await msg.channel.createMessage(`Updated ${setting} to ${value}`)
@@ -41,5 +41,6 @@ module.exports = {
     name: "config",
     display: true,
     category: 3,
-    description: "Configuration."
+    description: "Configuration.",
+    args: "[item] [value]"
 }

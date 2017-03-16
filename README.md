@@ -7,8 +7,7 @@ tt.bot is a bot with aim for moderation and fun, made in [Eris](https://github.c
 - Getting user info and their avatar
 
 # Database
-Actually the database does nothing, however, in later future, it might do something.<br>
-The database is RethinkDB.
+The database is RethinkDB. It is a required backend that needs to mod commands to work.
 
 # How to set up
 1. Rename `exampleconfig.json` to `config.json`
@@ -18,5 +17,6 @@ The database is RethinkDB.
 # Creating events/commands
 Refer to [EVENTS.md](./EVENTS.md) or [COMMANDS.md](./COMMANDS.md).
 
-# Development
-As the name says, the bot is still in development. You can help recreating all [TTtie Bot](https://github.com/TTtie/TTtie-Bot) commands by submitting a pull request.
+# Running the bot
+The bot uses asynchronous methods, so the run command is
+`node --harmony run.js`
