@@ -4,10 +4,7 @@ class LibWUtil extends eris {
     constuctor(token, options) {
         //super(token,options);
     }
-    getAuthorFromMessage(channelID, messageID) {
-        let msg = this.getMessage(channelID, messageID);
-        if (!msg.author) return; else return msg.author;
-    }
+
     postStats() {
         if (!config.dbotskey || config.dbotskey == "") return
         return new Promise((rs, rj) => {
@@ -23,6 +20,19 @@ class LibWUtil extends eris {
                     else rs();
                 })
         })
+    }
+    async isModerator(member) {
+        let serverHasModRole = false;
+        let modRole = null;
+        let server = await db.table("configs").get(member.guild.id).run()
+        if (server) {
+            let role = member.guild.roles.find(r => r.name == server.mRoleName);
+            if (role) { serverHasModRole = true; modRole = role }
+        } else {
+            let role = member.guild.roles.find(r => r.name == "tt.bot mod");
+            if (role) { serverHasModRole = true; modRole = role }
+        }
+        if (serverHasModRole) return member.roles.includes(modRole.id);
     }
 }
 module.exports = LibWUtil

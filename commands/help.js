@@ -1,13 +1,15 @@
 module.exports = {
-    exec: function (msg, args) {
+    exec: async function (msg, args) {
         if (args == "") {
             let gencmds = [];
             let ocmds = [];
+            let modcmds = []
             function doShit(fe) {
                 let cat = cmds[fe].category;
                 if (cat && cmds[fe].display) {
                     if (cat == 1) gencmds.push(cmds[fe].name);
                     else if (cat == 2) ocmds.push(cmds[fe].name);
+                    else if (cat == 3) modcmds.push(cmds[fe].name)
                 }
             }
 
@@ -20,8 +22,11 @@ module.exports = {
             if (isO(msg) && ocmds.length > 0) {
                 tosnd.push(`Owner commands:\n${ocmds.join(", ")}`)
             }
+            if (await bot.isModerator(msg.member) && modcmds.length > 0) {
+                tosnd.push(`Moderator commands:\n${modcmds.join(",")}`)
+            }
             bot.getDMChannel(msg.author.id).then(dm => {
-                return bot.createMessage(dm.id, `\`\`\`prolog\n${tosnd.join("\n")}\`\`\`\nYou can also do \`tt.help (command)\` to get additional command help.`)
+                return bot.createMessage(dm.id, `\`\`\`prolog\n${tosnd.join("\n") || "No commands, I guess."}\`\`\`\nYou can also do \`tt.help (command)\` to get additional command help.`)
             })
         } else {
             bot.getDMChannel(msg.author.id).then(dm => {
