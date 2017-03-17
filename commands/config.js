@@ -10,7 +10,7 @@ module.exports = {
                     await db.table("configs").insert({
                         id: msg.guild.id,
                         modRole: "tt.bot mod",
-                        prefix: "tt."
+                        prefix: config.prefix
                     })
                     server = await db.table("configs").get(msg.guild.id).run();
                 }
@@ -28,7 +28,7 @@ module.exports = {
                 await db.table("configs").insert({
                     id: msg.guild.id,
                     modRole: "tt.bot mod",
-                    prefix: "tt."
+                    prefix: config.prefix
                 })
                 server = await db.table("configs").get(msg.guild.id).run();
             }
