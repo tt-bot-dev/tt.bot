@@ -40,7 +40,7 @@ class LibWUtil extends eris {
     listBotColls() {
         let arraywithnames = [];
         this.guilds.filter(g => g.members.filter(fn => fn.bot) >= g.members.filter(fn => fn.bot == false)).forEach(i => arraywithnames.push(`${i.name} - ${i.members.filter(fn => fn.bot).length} bots`));
-        return arraywithnames.join("\n")
+        return arraywithnames
     }
 }
 module.exports = LibWUtil

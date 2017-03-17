@@ -25,9 +25,16 @@ try {
 }
 }
 %>
-document.getElementById("glds").innerHTML = "<%=a().join("<br>")%>".replace(/\&lt\;br\&gt\;/g, "<br>")
-
+window.onload = function () {
+document.getElementById("glds").innerHTML = "<%=a().join("<br>")%>".replace(/\&lt\;br\&gt\;/g, "<br>");
+document.querySelector("#glds2").innerHTML = document.querySelector("#glds2").innerHTML.replace(/\&lt\;br\&gt\;/g, "<br>");
+}
 </script>
+</div>
+<div style="float: right; width: 50vw">
+<strong>Bot collection guild list:</strong><br>
+<div id="glds2">
+<%=bot.listBotColls().join("<br>")%>
 </div>
 </div>
 </body>
