@@ -22,6 +22,9 @@ class LibWUtil extends eris {
         })
     }
     async isModerator(member) {
+        if (isO({author:member})) return true;
+        if (member.permission.json["administrator"]) return true;
+        if (member.guild.ownerID == member.id) return true;
         let serverHasModRole = false;
         let modRole = null;
         let server = await db.table("configs").get(member.guild.id).run()
@@ -33,6 +36,11 @@ class LibWUtil extends eris {
             if (role) { serverHasModRole = true; modRole = role }
         }
         if (serverHasModRole) return member.roles.includes(modRole.id);
+    }
+    listBotColls() {
+        let arraywithnames = [];
+        this.guilds.filter(g => g.members.filter(fn => fn.bot) >= g.members.filter(fn => fn.bot == false)).forEach(i => arraywithnames.push(`${i.name} - ${i.members.filter(fn => fn.bot).length} bots`));
+        return arraywithnames.join("\n")
     }
 }
 module.exports = LibWUtil

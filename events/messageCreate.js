@@ -4,7 +4,7 @@ module.exports = async function (msg) {
     if (msg.author.bot) return; // ignore bots
     let server = await db.table("configs").get(msg.guild.id).run();
     if ((server && msg.content.startsWith(server.prefix)) || msg.content.startsWith(config.prefix)) { // if the content starts with the prefix
-        let nameslice = (server && msg.content.startsWith(server.prefix)) ? msg.content.slice(server.prefix.length) : msg.config.slice(config.prefix.length) // we slice it so we can get the command
+        let nameslice = (server && msg.content.startsWith(server.prefix)) ? msg.content.slice(server.prefix.length) : msg.content.slice(config.prefix.length) // we slice it so we can get the command
         console.log("Received a command message from", msg.author.username, nameslice, "from guild", msg.channel.guild.name, `(${msg.channel.guild.id})`) // we log it, because why not
         let cmdName = nameslice.split(" ")[0]; //  we split the slice output by spaces and choosing the command from the first element
         let args = nameslice.slice(cmdName.length).slice(1); // we determine arguments
