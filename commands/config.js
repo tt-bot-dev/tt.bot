@@ -9,7 +9,7 @@ module.exports = {
                 if (!server) {
                     await db.table("configs").insert({
                         id: msg.guild.id,
-                        mRoleName: "tt.bot mod"
+                        modRole: "tt.bot mod"
                     })
                     server = await db.table("configs").get(msg.guild.id).run();
                 }
@@ -26,7 +26,7 @@ module.exports = {
             if (!server) {
                 await db.table("configs").insert({
                     id: msg.guild.id,
-                    mRoleName: "tt.bot mod"
+                    modRole: "tt.bot mod"
                 })
                 server = await db.table("configs").get(msg.guild.id).run();
             }
