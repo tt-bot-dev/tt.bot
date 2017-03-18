@@ -42,5 +42,12 @@ class LibWUtil extends eris {
         this.guilds.filter(g => g.members.filter(fn => fn.bot) >= g.members.filter(fn => fn.bot == false)).forEach(i => arraywithnames.push(`${i.name} - ${i.members.filter(fn => fn.bot).length} bots`));
         return arraywithnames
     }
+    escapeMarkdown(string) {
+        let replacedItallicsAndBold = string.replace("*", "\\*")
+        let replacedBackticks = replacedItallicsAndBold.replace("`", "\\`");
+        let replacedUnderscores = replacedBackticks.replace("_", "\\_");
+        let replacedBrackets = replacedUnderscores.replace("[", "\\[").replace("(", "\\(").replace("]", "\\]").replace(")", "\\)")
+        return replacedBrackets
+    }
 }
 module.exports = LibWUtil

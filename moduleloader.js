@@ -8,3 +8,4 @@ require("./webserver/index")
 global.db = require("rethinkdbdash")({
     db: "ttalpha"
 });
+global.keymetrics = require("./keymetrics/index.js");

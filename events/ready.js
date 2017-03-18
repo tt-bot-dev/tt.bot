@@ -5,5 +5,6 @@ module.exports = function () {
     cmdWrap.loadAll()
     bot.editStatus("online", { name: "Type tt.help" })
     bot.postStats().then(console.log(__filename + "     | Successfully posted!"), r => console.log(r.body))
+    global.keymetricsMetrics = new keymetrics();
 }
 module.exports.isEvent = true
