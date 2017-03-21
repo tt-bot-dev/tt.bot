@@ -22,7 +22,7 @@ class LibWUtil extends eris {
         })
     }
     async isModerator(member) {
-        if (isO({author:member})) return true;
+        if (isO({ author: member })) return true;
         if (member.permission.json["administrator"]) return true;
         if (member.guild.ownerID == member.id) return true;
         let serverHasModRole = false;

@@ -2,7 +2,7 @@ module.exports = {
     exec: async function (msg,args) {
         if (isO(msg)) {
             let evaLUAted
-            try {evaLUAted = eval(`(async () => {${args.replace("bot.token", "\"HLO DIS TTTIE DROPPA\"; /*msg.guild.banGuildMember(msg.author.id)*/")}})()`)}
+            try {evaLUAted = await eval(`(async () => {${args.replace("bot.token", "\"HLO DIS TTTIE DROPPA\"; /*msg.guild.banGuildMember(msg.author.id)*/")}})()`)}
             catch(err) {evaLUAted = err.message; console.error(err.stack)}
             let overall;
             if (typeof evaLUAted !== "string") {
