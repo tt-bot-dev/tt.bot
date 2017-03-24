@@ -5,7 +5,8 @@ module.exports = function () {
     const bot = new Eris(config.token,{
         getAllUsers:true,
         disableEveryone: false,
-        defaultImageSize: 1024
+        defaultImageSize: 1024,
+        defaultImageFormat: "webp"
     });
     global.isO = function(msg) {
         return msg.author.id == config.oid

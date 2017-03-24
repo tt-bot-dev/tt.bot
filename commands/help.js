@@ -7,9 +7,9 @@ module.exports = {
             function doShit(fe) {
                 let cat = cmds[fe].category;
                 if (cat && cmds[fe].display) {
-                    if (cat == 1) gencmds.push(cmds[fe].name);
-                    else if (cat == 2) ocmds.push(cmds[fe].name);
-                    else if (cat == 3) modcmds.push(cmds[fe].name)
+                    if (cat == 1) gencmds.push(fe);
+                    else if (cat == 2) ocmds.push(fe);
+                    else if (cat == 3) modcmds.push(fe)
                 }
             }
 
