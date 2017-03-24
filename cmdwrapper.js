@@ -8,14 +8,15 @@ ex.loadAll = function () {
             let cmN = cmF.match(/(.+)\.js$/)[1]
             try {
                 let cmFL = require("./commands/" + cmN + ".js")
+                if (cmFL.isCmd) {
+                    console.log(`${__filename}      | Loading ${cmN} command, file ${cmF}`)
+                    cmds[cmN] = cmFL;
+                }
+                else console.log(__filename + "    | Skipping non-command " + cmF)
             } catch (err) {
                 console.error(`Error while loading command ${cmN}: ${err}`)
             }
-            if (cmFL.isCmd) {
-                console.log(`${__filename}      | Loading ${cmN} command, file ${cmF}`)
-                cmds[cmN] = cmFL;
-            }
-            else console.log(__filename + "    | Skipping non-command " + cmF)
+
         } else {
             console.log(__filename + "     | Skipping non-JS " + cmF)
         }

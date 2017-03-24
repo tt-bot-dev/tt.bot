@@ -17,7 +17,7 @@ module.exports = {
                 case "load":
                     return bot.createMessage(msg.channel.id, `Loading command ${c[1]}`).then(m => {
                         try {
-                            cmdWrap.load(c[1])
+                            if (c[1] == "all") cmdWrap.loadAll(); else cmdWrap.load(c[1])
                             return m.edit(`Loaded the command ${c[1]}`)
                         } catch (err) {
                             return m.edit(`Cannot load the command ${c[1]} ${err}`)
@@ -43,5 +43,6 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 2,
-    description: "Say something."
+    description: "Say something.",
+    args: "[]"
 }
