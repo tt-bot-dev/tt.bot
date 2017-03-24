@@ -5,8 +5,33 @@ module.exports = {
             let action = c[0];
             switch (action) {
                 case "unload":
-                    bot.createMessage(msg.channel.id, `Unloading command ${c[1]}`).then(m =>{
-                        cmdWrap.unload
+                    return bot.createMessage(msg.channel.id, `Unloading command ${c[1]}`).then(m => {
+                        try {
+                            cmdWrap.unload(c[1])
+                            return m.edit(`Unloaded the command ${c[1]}`)
+                        } catch (err) {
+                            return m.edit(`Cannot unload the command ${c[1]} ${err}`)
+                        }
+                    })
+                    break;
+                case "load":
+                    return bot.createMessage(msg.channel.id, `Loading command ${c[1]}`).then(m => {
+                        try {
+                            cmdWrap.load(c[1])
+                            return m.edit(`Loaded the command ${c[1]}`)
+                        } catch (err) {
+                            return m.edit(`Cannot load the command ${c[1]} ${err}`)
+                        }
+                    })
+                    break;
+                case "reload":
+                    return bot.createMessage(msg.channel.id, `Reloading command ${c[1]}`).then(m => {
+                        try {
+                            cmdWrap.reload(c[1])
+                            return m.edit(`Reloaded the command ${c[1]}`)
+                        } catch (err) {
+                            return m.edit(`Cannot reload the command ${c[1]} ${err}`)
+                        }
                     })
                     break;
                 default:
