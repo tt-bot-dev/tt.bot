@@ -26,7 +26,7 @@ module.exports = {
                 tosnd.push(`Moderator commands:\n${modcmds.join(",")}`)
             }
             bot.getDMChannel(msg.author.id).then(dm => {
-                return bot.createMessage(dm.id, `\`\`\`prolog\n${tosnd.join("\n") || "No commands, I guess."}\`\`\`\nYou can also do \`tt.help (command)\` to get additional command help.`)
+                return bot.createMessage(dm.id, `\`\`\`prolog\n${tosnd.join("\n") || "No commands, I guess."}\`\`\`\nYou can also do \`${config.prefix}.help (command)\` to get additional command help.`)
             })
         } else {
             bot.getDMChannel(msg.author.id).then(dm => {
