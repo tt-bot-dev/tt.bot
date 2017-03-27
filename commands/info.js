@@ -12,7 +12,7 @@ module.exports = {
                     inline:true
                 }, {
                     name: "Author",
-                    value: "<@"+config.oid+">\n[Support server](https://discord.gg/dq6X66H)\n[Eris website](https://abal.moe/Eris)\n[GitHub repository](https://github.com/tttie/tttie-bot)",
+                    value: "<@"+config.oid+">\n[Support server](https://discord.gg/pGN5dMq)\n[Eris website](https://abal.moe/Eris)\n[GitHub repository](https://github.com/tttie/tttie-bot)",
                     inline:true
                 }, {
                     name: "Versions:",
