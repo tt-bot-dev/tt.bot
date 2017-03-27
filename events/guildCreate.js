@@ -1,6 +1,6 @@
 module.exports = (guild) => {
     bot.createMessage(guild.defaultChannel.id, `Thanks for adding me in the server!\nThe bot is in development, so expect bugs.\nOnce again, thank you for adding!\n-TTtie#4719`);
-    bot.createMessage("274844715239866369", {
+    bot.createMessage("220177584548347905", {
         embed: {
             author: {
                 name: `New server ${guild.name} (${guild.id})`,
