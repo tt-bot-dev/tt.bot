@@ -3,7 +3,6 @@ module.exports = function () {
     global.ErisO = require("eris");
     global.Eris = require("./libutil")
     const bot = new Eris(config.token,{
-        restMode:true,
         getAllUsers:true,
         disableEveryone: false,
         defaultImageSize: 1024,

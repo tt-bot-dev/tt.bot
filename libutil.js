@@ -1,5 +1,6 @@
 const eris = require("eris").Client;
 const s = require("superagent")
+const ErisEndpoints = require("eris/lib/rest/Endpoints")
 class LibWUtil extends eris {
     constuctor(token, options) {
         //super(token,options);
@@ -48,6 +49,10 @@ class LibWUtil extends eris {
         let replacedUnderscores = replacedBackticks.replace("_", "\\_");
         let replacedBrackets = replacedUnderscores.replace("[", "\\[").replace("(", "\\(").replace("]", "\\]").replace(")", "\\)")
         return replacedBrackets
+    }
+    //actually Client.getRESTUser, but bypasses the need of options.restMode
+    getUserWithoutRESTMode(userID) {
+         return this.requestHandler.request("GET", ErisEndpoints.USER(userID), true).then((user) => new ErisO.User(user, this));
     }
 }
 module.exports = LibWUtil
