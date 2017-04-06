@@ -3,35 +3,42 @@ module.exports = {
         if (isO(msg)) {
             let c = args.split(" ");
             let action = c[0];
-            if (action && c[1]) {
+            let cmdToRld = c.slice(1);
+            if (action && cmdToRld) {
                 switch (action) {
                     case "unload":
-                        return bot.createMessage(msg.channel.id, `Unloading command ${c[1]}`).then(m => {
+                        return bot.createMessage(msg.channel.id, `Unloading command ${cmdToRld}`).then(m => {
                             try {
-                                cmdWrap.unload(c[1])
-                                return m.edit(`Unloaded the command ${c[1]}`)
+                                cmdWrap.unload(cmdToRld)
+                                return m.edit(`Unloaded the command ${cmdToRld}`)
                             } catch (err) {
-                                return m.edit(`Cannot unload the command ${c[1]} ${err}`)
+                                return m.edit(`Cannot unload the command ${cmdToRld} ${err}`)
                             }
                         })
                         break;
                     case "load":
-                        return bot.createMessage(msg.channel.id, `Loading command ${c[1]}`).then(m => {
-                            try {
-                                if (c[1] == "all") cmdWrap.loadAll(); else cmdWrap.load(c[1])
-                                return m.edit(`Loaded the command ${c[1]}`)
-                            } catch (err) {
-                                return m.edit(`Cannot load the command ${c[1]} ${err}`)
-                            }
-                        })
+                        return bot.createMessage(msg.channel.id, `Loading ${cmdToRld == "all" ? "all commands" : `command ${cmdToRld}`}`).then(m => {
+                                if (cmdToRld == "all") {
+                                    cmdWrap.loadAll();
+                                    return m.edit("Loaded all commands")
+                                } else {
+                                    try {
+                                        cmdWrap.load(cmdToRld)
+                                        return m.edit(`Loaded the command ${cmdToRld}`)
+                                    } catch (err) {
+                                        return m.edit(`Cannot load the command ${cmdToRld} ${err}`)
+                                    }
+                                }
+
+                            })
                         break;
                     case "reload":
-                        return bot.createMessage(msg.channel.id, `Reloading command ${c[1]}`).then(m => {
+                        return bot.createMessage(msg.channel.id, `Reloading command ${cmdToRld}`).then(m => {
                             try {
-                                cmdWrap.reload(c[1])
-                                return m.edit(`Reloaded the command ${c[1]}`)
+                                cmdWrap.reload(cmdToRld)
+                                return m.edit(`Reloaded the command ${cmdToRld}`)
                             } catch (err) {
-                                return m.edit(`Cannot reload the command ${c[1]} ${err}`)
+                                return m.edit(`Cannot reload the command ${cmdToRld} ${err}`)
                             }
                         })
                         break;
