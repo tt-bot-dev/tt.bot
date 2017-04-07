@@ -9,3 +9,4 @@ global.db = require("rethinkdbdash")({
     db: "ttalpha"
 });
 global.keymetrics = require("./keymetrics/index.js");
+global.moment = require("moment");

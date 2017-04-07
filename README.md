@@ -1,5 +1,6 @@
 # tt.bot
-tt.bot is a bot with aim for moderation and fun, made in [Eris](https://github.com/abalabahaha/eris).
+tt.bot is a bot with aim for moderation and fun, made in [Eris](https://github.com/abalabahaha/eris).<br>
+This bot uses some pieces of code from [blargbot](https://github.com/ratismal/blargbot), so here come the credits.
 
 # Features
 <span style="color:red">The bot is being rewritten, so it lacks features it had before.</span>
