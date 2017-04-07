@@ -10,7 +10,7 @@ module.exports = async function (msg) {
         let cmdName = nameslice.split(" ")[0]; //  we split the slice output by spaces and choosing the command from the first element
         let args = nameslice.slice(cmdName.length).slice(1); // we determine arguments
         try {
-            let cmd = cmds[cmdName]; // we load it from object
+            let cmd = cmds[cmdName.toLowerCase()]; // we load it from object
             if (cmd) {
                 let e = cmd.exec(msg, args); // we execute it
             }

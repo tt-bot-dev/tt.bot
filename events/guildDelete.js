@@ -1,5 +1,5 @@
 module.exports = (guild) => {
-    bot.createMessage("220177584548347905", {
+    bot.createMessage("236757363699220480", {
         embed: {
             author: {
                 name: `Bot was removed from ${guild.name} (${guild.id})`,

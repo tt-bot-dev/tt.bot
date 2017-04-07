@@ -1,5 +1,6 @@
 module.exports = {
     exec: function (msg, args) {
+        let ownerMember = bot.users.get(config.oid);
         return bot.createMessage(msg.channel.id, {
             embed: {
                 author: {
@@ -9,11 +10,11 @@ module.exports = {
                 fields: [{
                     name: "Stats",
                     value: `Guilds: ${bot.guilds.size}\nCached users: ${bot.users.size}\nChannels: ${Object.keys(bot.channelGuildMap).length}`,
-                    inline:true
+                    inline: true
                 }, {
                     name: "Author",
-                    value: "<@"+config.oid+">\n[Support server](https://discord.gg/pGN5dMq)\n[Eris website](https://abal.moe/Eris)\n[GitHub repository](https://github.com/tttie/tttie-bot)",
-                    inline:true
+                    value: `<@${config.oid}> (${ownerMember ? ownerMember.username + "#"+ownerMember.discriminator : "Sorry, my owner isn't in my cache ;-;"})\n[Support server](https://discord.gg/pGN5dMq)\n[Eris website](https://abal.moe/Eris)\n[GitHub repository](https://github.com/tttie/tttie-bot)`,
+                    inline: true
                 }, {
                     name: "Versions:",
                     value: `Eris: ${require("eris/package.json").version}\nNode.js: ${process.versions.node}\nV8 engine: ${process.versions.v8}`

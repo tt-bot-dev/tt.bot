@@ -10,7 +10,7 @@ ex.loadAll = function () {
                 let cmFL = require("./commands/" + cmN + ".js")
                 if (cmFL.isCmd) {
                     console.log(`${__filename}      | Loading ${cmN} command, file ${cmF}`)
-                    cmds[cmN] = cmFL;
+                    cmds[cmN.toLowerCase()] = cmFL;
                 }
                 else console.log(__filename + "    | Skipping non-command " + cmF)
             } catch (err) {
@@ -24,18 +24,20 @@ ex.loadAll = function () {
 }
 ex.load = function (cmN) {
     if (fs.existsSync(`./commands/${cmN}.js`)) {
+        let cmFL
+let n = cmN.toString()
         try {
-            let cmFL = rld("./commands/" + cmN + ".js")
+            cmFL =require("./commands/" + cmN + ".js")
         } catch (err) {
             console.error(`Error while loading command ${cmN}: ${err}`)
         }
         if (cmFL.isCmd) {
-            console.log(`${__filename}      | Loading ${cmN} command, file ${cmF}`)
-            cmds[cmN] = cmFL;
+            console.log(`${__filename}      | Loading ${cmN} command, file ${cmN}`)
+            cmds[n.toLowerCase()] = cmFL;
         }
-        else console.log(__filename + "    | Skipping non-command " + cmF)
+        else console.log(__filename + "    | Skipping non-command " + cmN)
     } else {
-        console.log(__filename + "     | Skipping non-existent " + cmF)
+        console.log(__filename + "     | Skipping non-existent " + cmN)
     }
 }
 ex.reload = function (cmN) {

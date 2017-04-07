@@ -1,6 +1,6 @@
 module.exports = (guild) => {
-    bot.createMessage(guild.defaultChannel.id, `Thanks for adding me in the server!\nThe bot is in development, so expect bugs.\nOnce again, thank you for adding!\n-TTtie#4719`);
-    bot.createMessage("220177584548347905", {
+    bot.createMessage(guild.id, `Thanks for adding me in the server!\nThe bot uses ${config.prefix} prefix. You can change it anytime using ${config.prefix}config command.\nHope I can service you well.\nOnce again, thank you for adding!\n-TTtie#5937`);
+    bot.createMessage("236757363699220480", {
         embed: {
             author: {
                 name: `New server ${guild.name} (${guild.id})`,
