@@ -24,6 +24,7 @@ module.exports = {
                         }
                     } else if (fe.match(/(from:([^]{0,37}))/i)) {
                         if (!options.from) {
+                            if (fe.replace(/from:/, "").replace(" \\| ", " | ") == "bots") return options.from = "bots";
                             try {
                                 options.from = await userQuery(fe.replace(/from:/, "").replace(" \\| ", " | "), msg)
                             } catch (err) {
@@ -49,6 +50,7 @@ module.exports = {
                 }
                 function matchesCriteriaFrom(m) {
                     if (!options.from) return true;
+                    if (options.from == "bots" && m.author.bot) return true;
                     if (options.from && m.author.id == options.from.id) return true;
                     else return false;
                 }
