@@ -31,6 +31,9 @@ module.exports = {
                                 options.from = null
                             }
                         }
+                    } else if (fe.match(/(invert:)(true|false)/i)) {
+                        let invertion = fe.replace(/invert:/, "");
+                        if (invertion == "true") options.invert = true; else options.invert = false
                     } else {
                         console.log(fe + " doesn't match any regexes.")
                     }
@@ -54,7 +57,7 @@ module.exports = {
                     if (options.from && m.author.id == options.from.id) return true;
                     else return false;
                 }
-                let callAll = m => (matchesCriteriaContaining(m) && matchesCriteriaFrom(m) && matchesCriteriaMentions(m))
+                let callAll = m => options.invert ? !(matchesCriteriaContaining(m) && matchesCriteriaFrom(m) && matchesCriteriaMentions(m)) : (matchesCriteriaContaining(m) && matchesCriteriaFrom(m) && matchesCriteriaMentions(m))
                 let msgs = mss.filter(callAll);
                 let msgIDs = msgs.map(m => m.id);
                 let filteredMsgIDs = msgIDs.filter(fn => {
@@ -78,6 +81,6 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 3,
-    description: "Clears desired number of messages.\nThe command uses ` | ` as separators. Use ` \\| ` to escape the separation in your queries.\nPlease note the command clears messages from any switches it is used on.",
-    args: "<messages:<number|100>> | [from:<user>] | [mentions:user] | [contains:<query>]"
+    description: "Clears desired number of messages.\nThe command uses ` | ` as separators. Use ` \\| ` to escape the separation in your queries.\nThe order of the switches doesn't need to be followed.",
+    args: "<messages:<number|100>> | [from:<user>|bots] | [mentions:<user>] | [contains:<query>] | <invert:true|false>"
 }
