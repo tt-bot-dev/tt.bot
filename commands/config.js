@@ -1,7 +1,8 @@
 module.exports = {
     exec: async function (msg, args) {
-        if (args) {
-            if (await bot.isModerator(msg.member)) {
+        if (await bot.isModerator(msg.member)) {
+            if (args) {
+
                 let c = args.split(" ");
                 let setting = c[0]
                 let value = c.slice(1).join(" ")
@@ -22,21 +23,22 @@ module.exports = {
                     return await msg.channel.createMessage(`Unknown setting ${setting}`)
                 }
             }
-        } else {
-            let server = await db.table("configs").get(msg.guild.id).run();
-            if (!server) {
-                await db.table("configs").insert({
-                    id: msg.guild.id,
-                    modRole: "tt.bot mod",
-                    prefix: config.prefix
+            else {
+                let server = await db.table("configs").get(msg.guild.id).run();
+                if (!server) {
+                    await db.table("configs").insert({
+                        id: msg.guild.id,
+                        modRole: "tt.bot mod",
+                        prefix: config.prefix
+                    })
+                    server = await db.table("configs").get(msg.guild.id).run();
+                }
+                let items = []
+                Object.keys(server).forEach(item => {
+                    if (item != "id") items.push(`${item} - ${server[item]}`)
                 })
-                server = await db.table("configs").get(msg.guild.id).run();
+                return await bot.createMessage(msg.channel.id, `\`\`\`\nServer configuration for ${msg.guild.name}\n${items.join("\n")}\`\`\``)
             }
-            let items = []
-            Object.keys(server).forEach(item => {
-                if (item != "id")items.push(`${item} - ${server[item]}`)
-            })
-            return await bot.createMessage(msg.channel.id, `\`\`\`\nServer configuration for ${msg.guild.name}\n${items.join("\n")}\`\`\``)
         }
     },
     isCmd: true,
@@ -44,5 +46,5 @@ module.exports = {
     display: true,
     category: 3,
     description: "Configuration.",
-    args: "[item] [value]"
+    args: "[<item> <value>]"
 }
