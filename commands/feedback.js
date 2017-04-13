@@ -35,11 +35,10 @@ module.exports = {
                         } else {
                             bot.createMessage(obj.channel.id, `<@!${obj.submitter.id}>, here's response to your feedback (ID ${caseID}) from ${msg.author.username}#${msg.author.discriminator}\n${respondString}`)
                         }
-                        await db.table("feedback").get(caseID).delete().run();
                     } else {
-                        await db.table("feedback").get(caseID).delete().run();
                         msg.channel.createMessage("Seems like people at the guild removed me from there. Deleted the DB item.")
                     }
+                    await db.table("feedback").get(caseID).delete().run()
                 }
             } else {
                 let insertObject = await db.table("feedback").insert({
