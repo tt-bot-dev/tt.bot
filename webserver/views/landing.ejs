@@ -1,40 +1,32 @@
 <!doctype html>
 <html>
 <head>
+<title><%=bot.user.username%></title>
 </head>
 <body>
 <center>
 <h1><%=bot.user.username%></h1>
-Currently on <strong><%=bot.guilds.size%></strong> servers, with <strong><%=bot.users.size%></strong> cached users, with <strong><%=Object.keys(bot.channelGuildMap).length%></strong> channels
+Currently on <strong><%=bot.guilds.size%></strong> servers, with <strong><%=bot.users.size%></strong> cached users, with <strong><%=Object.keys(bot.channelGuildMap).length%></strong> channels<br>
+<%if (user) {%>
+Currently logged: <%=user.username%>#<%=user.discriminator%> | <a href="/logout">Log out</a>
+<%} else {%>
+    <a href="/login">Log in</a>
+<%}%>
 </center>
 <div style="float: left; width: 50vw">
 <strong>Guild list:</strong><br>
 <div id="glds">
-<script>
-<%
-var a = function() {
-try {
-    let arr = [];
-    bot.guilds.forEach(fe => {
-        arr.push(fe.name);
-    })
-    return arr
-}catch(err) {
-    ":eyes: A wild error has appeared, check console for more info"
-    console.log(err.stack)
-}
-}
-%>
-window.onload = function () {
-document.getElementById("glds").innerHTML = "<%=a().join("<br>")%>".replace(/\&lt\;br\&gt\;/g, "<br>");
-document.querySelector("#glds2").innerHTML = document.querySelector("#glds2").innerHTML.replace(/\&lt\;br\&gt\;/g, "<br>");
-}
+<% for(var i=0; i<guilds.length; i++) { %>
+    <%=guilds[i].name%> <% if (user && user.id == config.oid) {%> | <a href="/guilds/delete/<%=guilds[i].id%>">Delete</a><%}%><br>
+<%}%>
 </script>
 </div>
 <div style="float: right; width: 50vw">
 <strong>Bot collection guild list:</strong><br>
 <div id="glds2">
-<%=bot.listBotColls().join("<br>")%>
+<%for (var i = 0; i < bot.listBotColls().length; i++) {%>
+    <%=bot.listBotColls()[i]%><br>
+<%}%>
 </div>
 </div>
 </body>
