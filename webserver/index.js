@@ -53,12 +53,21 @@ app.get('/callback',
 );
 app.get("/guilds/delete/:id", checkOwner, (req, res) => {
     var guild = bot.guilds.get(req.params.id);
-    if (guild) {
-        guild.leave()
-        res.redirect("/")
+    if (req.query.yes == "true") {
+        if (guild) {
+            guild.leave()
+            res.redirect("/")
+        } else {
+            res.status(404);
+            res.send("invalid guild")
+        }
     } else {
-        res.status(404);
-        res.send("invalid guild")
+        res.render("delete", {guild:guild,        user: req.isAuthenticated() ? {
+            username: req.user.username,
+            discriminator: req.user.discriminator,
+            avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
+            id: req.user.id
+        } : null})
     }
 })
 

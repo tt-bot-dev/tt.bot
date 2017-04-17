@@ -1,33 +1,30 @@
 <!doctype html>
 <html>
-<head>
-<title><%=bot.user.username%></title>
-</head>
+<%-include("partials/head")%>
+<%-include("partials/links")%>
 <body>
-<center>
-<h1><%=bot.user.username%></h1>
-Currently on <strong><%=bot.guilds.size%></strong> servers, with <strong><%=bot.users.size%></strong> cached users, with <strong><%=Object.keys(bot.channelGuildMap).length%></strong> channels<br>
-<%if (user) {%>
-Currently logged: <%=user.username%>#<%=user.discriminator%> | <a href="/logout">Log out</a>
-<%} else {%>
-    <a href="/login">Log in</a>
-<%}%>
-</center>
-<div style="float: left; width: 50vw">
-<strong>Guild list:</strong><br>
-<div id="glds">
-<% for(var i=0; i<guilds.length; i++) { %>
-    <%=guilds[i].name%> <% if (user && user.id == config.oid) {%> | <a href="/guilds/delete/<%=guilds[i].id%>">Delete</a><%}%><br>
-<%}%>
-</script>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<%-include("partials/header")%>
+<main class="mdl-layout__content">
+    <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+      <div class="page-content">
+      <div class="mdl-list">
+      <%bot.guilds.forEach(guild => {%>
+  <div class="mdl-list__item">
+    <span class="mdl-list__item-primary-content">
+      <img class="mdl-list__item-avatar" src="<%=guild.dynamicIconURL('png', 1024) || 'https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_place_white_24px.svg'%>">
+      <span><%=guild.name%></span>
+    </span>
+    <% if (user && user.id == config.oid) {%>
+    <a class="mdl-list__item-secondary-action" href="/guilds/delete/<%=guild.id%>"><i class="material-icons">delete</i></a>
+    <%}%>
+  </div>
+  <%})%>
+  </div>
 </div>
-<div style="float: right; width: 50vw">
-<strong>Bot collection guild list:</strong><br>
-<div id="glds2">
-<%for (var i = 0; i < bot.listBotColls().length; i++) {%>
-    <%=bot.listBotColls()[i]%><br>
-<%}%>
-</div>
-</div>
+    </section>
+    </section>
+  </main>
+  </div>
 </body>
 </html>
