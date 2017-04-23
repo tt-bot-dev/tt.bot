@@ -39,9 +39,7 @@ class LibWUtil extends eris {
         if (serverHasModRole) return member.roles.includes(modRole.id);
     }
     listBotColls() {
-        let arraywithnames = [];
-        this.guilds.filter(g => g.members.filter(fn => fn.bot) >= g.members.filter(fn => fn.bot == false)).forEach(i => arraywithnames.push(`${i.name} - ${i.members.filter(fn => fn.bot).length} bots`));
-        return arraywithnames
+        return this.guilds.filter(g => g.members.filter(fn => fn.bot) >= g.members.filter(fn => fn.bot == false))
     }
     escapeMarkdown(string) {
         let replacedItallicsAndBold = string.replace("*", "\\*")

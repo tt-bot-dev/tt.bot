@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html>
 <%-include("partials/head")%>
@@ -8,17 +9,15 @@
 <main class="mdl-layout__content">
     <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
       <div class="page-content">
-      <% if (user && user.id == config.oid) {%>
-            <button style="width:100vw; height: 7.5vh" class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="window.location = '/guilds/botcolls'">
-  Bot collection guild list
+      <button style="width:100vw; height: 7.5vh" class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="window.location = '/guilds/botcolls/prune'">
+  Prune bot collection guilds (<%=bot.listBotColls().length%> guilds)
 </button>
-      <%}%>
       <div class="mdl-list">
-      <%bot.guilds.forEach(guild => {%>
+      <%bot.listBotColls().forEach(guild => {%>
   <div class="mdl-list__item">
     <span class="mdl-list__item-primary-content">
       <img class="mdl-list__item-avatar" src="<%=guild.dynamicIconURL('png', 1024) || 'https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_place_white_24px.svg'%>">
-      <span><%=guild.name%></span>
+      <span><%=guild.name%> (<%=guild.members.filter(fn => fn.bot).length%> bots)</span>
     </span>
     <% if (user && user.id == config.oid) {%>
     <a class="mdl-list__item-secondary-action" href="#"><button id="demo-menu-lower-right-<%=guild.id%>"
@@ -37,10 +36,9 @@
   </div>
   <%})%>
   </div>
+      </div>
+    </section>
+</main>
 </div>
-    </section>
-    </section>
-  </main>
-  </div>
 </body>
 </html>

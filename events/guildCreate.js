@@ -13,6 +13,7 @@ module.exports = (guild) => {
             }
         }
     });
+    if (bot.listBotColls().includes(guild)) return guild.leave()
     bot.postStats().then(null, null);
 }
 module.exports.isEvent = true

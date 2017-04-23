@@ -12,6 +12,7 @@ module.exports = (guild) => {
             }
         }
     });
+    
     bot.postStats().then(null, null)
 }
 module.exports.isEvent = true
