@@ -1,7 +1,7 @@
 module.exports = {
     exec: function(msg,args) {
         return bot.createMessage(msg.channel.id, "Pinging.......").then(m =>{
-            m.edit(`It took ${m.timestamp - msg.timestamp}ms to ping.`)
+            m.edit(`It took ${m.timestamp - msg.timestamp}ms to ping.\n\nDiscord latency: ${msg.guild.shard.latency}ms`)
         })
     },
     isCmd: true,

@@ -124,6 +124,17 @@ app.get("/guilds/:id", checkOwner, (req, res) => {
         } : null
     }); else return res.end("Invalid guild")
 })
+app.get("/guilds/:id/members", checkOwner, (req, res) => {
+    let guild = bot.guilds.get(req.params.id);
+    if (guild) return res.render("guild-members", {
+        guild: guild, user: req.isAuthenticated() ? {
+            username: req.user.username,
+            discriminator: req.user.discriminator,
+            avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
+            id: req.user.id
+        } : null
+    }); else return res.end("Invalid guild")
+})
 app.get('/logout', checkAuth, function (req, res) {
     req.logout();
     res.redirect('/');
