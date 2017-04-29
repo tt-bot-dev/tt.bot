@@ -82,5 +82,5 @@ module.exports = {
     display: true,
     category: 3,
     description: "Clears desired number of messages.\nThe command uses `\u200b | \u200b` as separators (note the spaces). Use ` \\| ` to escape the separation in your queries.\nThe order of the switches doesn't need to be followed.\n\nSwitch documentation:\nmessages - number of messages to fetch and delete. Defaults to 100.\nfrom - Specifies whose messages should be deleted.\nmentions - specifies messages which mention the specified user\ncontains - The string which is included in the messages, limit of the string is 500 characters.\ninvert - inverts all effects of all specified switches, for example: `from:TTtie#5937 | invert:true` will clear all messages which aren't made by TTtie#5937.",
-    args: "<messages:<number|100>> | [from:<user>|bots] | [mentions:<user>] | [contains:<query>] | <invert:true|false>"
+    args: "any text to clear 100 messages from everyone or [messages:<number|100>] | [from:<user>|bots] | [mentions:<user>] | [contains:<query>] | <invert:true|false>"
 }
