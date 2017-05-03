@@ -53,7 +53,7 @@ module.exports = {
     },
     isCmd: true,
     display: true,
-    category: 3,
+    category: 2,
     description: "Blacklist/whitelist a guild.",
     args: "<blacklist|whitelist>"
 }

@@ -3,8 +3,15 @@ const e = require("express"),
     bodyParser = require("body-parser"),
     ejs = require("ejs"),
     passport = require("passport"),
-    dStrategy = require("passport-discord").Strategy;
-session = require("express-session")
+    dStrategy = require("passport-discord").Strategy,
+    cookieparser = require("cookie-parser"),
+session = require("express-session"),
+appstore = require("express-session-rethinkdb")(session),
+store = new appstore({
+    connectOptions: {
+        db:"ttalpha"
+    }
+});
 app.enable("trust proxy");
 app.use(bodyParser.urlencoded({
     extended: true,
@@ -43,8 +50,10 @@ passport.use(new dStrategy({
 app.use(session({
     secret: config.clientSecret,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: store
 }));
+app.use(cookieparser())
 app.use(passport.initialize());
 app.use(passport.session());
 app.get('/login', checkAuthNeg, passport.authenticate('discord', { scope: scopes }), function (req, res) { });
@@ -167,6 +176,17 @@ app.get("/", (req, res) => {
             id: req.user.id
         } : null,
         guilds: bot.guilds.filter(fn => true)
+    })
+})
+
+app.use((req,res) => {
+    res.status(404).render("404", {
+                user: req.isAuthenticated() ? {
+            username: req.user.username,
+            discriminator: req.user.discriminator,
+            avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
+            id: req.user.id
+        } : null
     })
 })
 
