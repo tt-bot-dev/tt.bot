@@ -5,7 +5,7 @@ module.exports = async function(g, m) {
     }catch(err) {
         return;
     }
-    if (server && server.greetingChannelId && server.greetingMessage) {
+    if (server && server.farewellChannelId && server.farewellMessage) {
         function formatMessage() {
             return server.greetingMessage.replace(/{u\.mention}/g, `<@!${m.user.id}>`)
             .replace(/{g\.name}/g, g.name)
@@ -14,7 +14,7 @@ module.exports = async function(g, m) {
             .replace(/{u\.discrim}/g, m.user.discriminator)
             .replace(/{u\.id}/g, m.user.id)
         }
-        let channel = g.channels.get(server.greetingChannelId);
+        let channel = g.channels.get(server.farewellChannelId);
         if (channel) channel.createMessage(formatMessage())
         else {
             delete server.greetingChannelId;
