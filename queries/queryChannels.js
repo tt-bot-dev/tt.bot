@@ -62,7 +62,7 @@ module.exports = function (iQuery, msg) {
                 rj("Can't embed or send messages.") // if we can't send the message or embed it, we end
             })
         } else if (users.length == 0) { // else
-            bot.createMessage(msg.channel.id, "No such channeů!")  // we let user know that it doesn't exist
+            bot.createMessage(msg.channel.id, "No such channel!")  // we let user know that it doesn't exist
             rj("No such user.") // and end.
         }
     })
