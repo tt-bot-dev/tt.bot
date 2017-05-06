@@ -7,7 +7,7 @@ module.exports = async function(g, m) {
     }
     if (server && server.farewellChannelId && server.farewellMessage) {
         function formatMessage() {
-            return server.greetingMessage.replace(/{u\.mention}/g, `<@!${m.user.id}>`)
+            return server.farewellMessage.replace(/{u\.mention}/g, `<@!${m.user.id}>`)
             .replace(/{g\.name}/g, g.name)
             .replace(/{g\.id}/g, g.id)
             .replace(/{u\.name}/g, m.user.username)
