@@ -31,12 +31,17 @@ module.exports = function (iQuery, msg) {
             }
             bot.createMessage(msg.channel.id, { //then we send a message
                 embed: { // with an embed
-                    title: "Multiple users found!", // saying that there are multiple users
-                    description: `I've found ${users.length} users, displaying maximally 5 users.\n${listUsers()}\nChoose one from the users by reacting with the number next to the username.\nElse, react with ❌ to cancel.\nQuery will automatically expire in 5 minutes.` // and other additional information, and of course, the user listing function to let user know
+                    //title: "Multiple users found!", // saying that there are multiple users
+                    title: translations.getTranslationString(undefined, "userQuery-multipleusers"),
+                    //description: `I've found ${users.length} users, displaying maximally 5 users.\n${listUsers()}\nChoose one from the users by reacting with the number next to the username.\nElse, react with ❌ to cancel.\nQuery will automatically expire in 5 minutes.` // and other additional information, and of course, the user listing function to let user know
+                    description: format(translations.getTranslationString(undefined, "userQuery-multipleusersdesc"), users.length, listUsers())
                 }
             }).then(m => {
                 let tout = setTimeout(() => { // we have a timeout for 5 minutes
-                    bot.removeListener("messageReactionAdd", r); m.delete(); bot.createMessage(msg.channel.id, "Query canceled automatically after inactivity.") // which deletes the reaction listener and deletes message and let's user know
+                    bot.removeListener("messageReactionAdd", r); m.delete(); bot.createMessage(msg.channel.id, 
+                    //"Query canceled automatically after inactivity."
+                    translations.getTranslationString(undefined, "queries-autocancel")
+                    ) // which deletes the reaction listener and deletes message and let's user know
                     rj("Canceled automatically.")
                 }, 300000)
                 let numbers = ["\u0031\u20E3", "\u0032\u20E3", "\u0033\u20E3", "\u0034\u20E3", "\u0035\u20E3"]; // unicode emojis again
@@ -44,13 +49,19 @@ module.exports = function (iQuery, msg) {
                     let u = users[i]
                     if (u) // we again query the array
                         m.addReaction(numbers[i]) // we add the reaction
-                        .then(null, aa => { rj("Cannot add reactions");  bot.createMessage(msg.channel.id, "Can't add reactions here, query canceled."); m.delete(); clearTimeout(tout) }) // if we can't, then we delete the message and delete the timeout
+                        .then(null, aa => { rj("Cannot add reactions");  bot.createMessage(msg.channel.id, 
+                        //"Can't add reactions here, query canceled."
+                        translations.getTranslationString(undefined, "queries-cantaddreactions")
+                        ); m.delete(); clearTimeout(tout) }) // if we can't, then we delete the message and delete the timeout
                 }
                 m.addReaction("❌")
                 function r(me, e, u) {
                     if (u != msg.author.id) return; // ignoring other users
                     if (me.id != m.id) return; // ignoring other messages
-                    if (e.name == "❌") { bot.removeListener("messageReactionAdd", r); m.delete(); bot.createMessage(msg.channel.id, "Query canceled."); rj("Cancelled by user"); clearTimeout(tout) } //cance
+                    if (e.name == "❌") { bot.removeListener("messageReactionAdd", r); m.delete(); bot.createMessage(msg.channel.id, 
+                    //"Query canceled."
+                    translations.getTranslationString(undefined, "queries-cancel")
+                    ); rj("Cancelled by user"); clearTimeout(tout) } //cance
                     let bindUser = binds[e.name]; // this is the actual object
                     if (bindUser) { // if it exists
                         m.delete(); // we delete the message
@@ -65,7 +76,10 @@ module.exports = function (iQuery, msg) {
                 rj("Can't embed or send messages.") // if we can't send the message or embed it, we end
             })
         } else if (users.length == 0) { // else
-            bot.createMessage(msg.channel.id, "No such user!")  // we let user know that it doesn't exist
+            bot.createMessage(msg.channel.id, 
+            //"No such user!"
+            format(translations.getTranslationString(undefined, "queries-notfound"), "user")
+            )  // we let user know that it doesn't exist
             rj("No such user.") // and end.
         }
     })

@@ -28,7 +28,7 @@ module.exports = function (iQuery, msg) {
             }
             bot.createMessage(msg.channel.id, { //then we send a message
                 embed: { // with an embed
-                    title: "Multiple users found!", // saying that there are multiple users
+                    title: "Multiple guilds found!", // saying that there are multiple users
                     description: `I've found ${users.length} guilds, displaying maximally 5 guilds.\n${listUsers()}\nChoose one from the users by reacting with the number next to the username.\nElse, react with ❌ to cancel.\nQuery will automatically expire in 5 minutes.` // and other additional information, and of course, the user listing function to let user know
                 }
             }).then(m => {
