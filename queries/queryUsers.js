@@ -32,9 +32,9 @@ module.exports = function (iQuery, msg) {
             bot.createMessage(msg.channel.id, { //then we send a message
                 embed: { // with an embed
                     //title: "Multiple users found!", // saying that there are multiple users
-                    title: translations.getTranslationString(undefined, "userQuery-multipleusers"),
+                    title: format(translations.getTranslationString(undefined, "query-multiple"), "users"),
                     //description: `I've found ${users.length} users, displaying maximally 5 users.\n${listUsers()}\nChoose one from the users by reacting with the number next to the username.\nElse, react with ❌ to cancel.\nQuery will automatically expire in 5 minutes.` // and other additional information, and of course, the user listing function to let user know
-                    description: format(translations.getTranslationString(undefined, "userQuery-multipleusersdesc"), users.length, listUsers())
+                    description: format(translations.getTranslationString(undefined, "query-multipledesc"), users.length, "users", "users", listUsers())
                 }
             }).then(m => {
                 let tout = setTimeout(() => { // we have a timeout for 5 minutes
@@ -61,7 +61,7 @@ module.exports = function (iQuery, msg) {
                     if (e.name == "❌") { bot.removeListener("messageReactionAdd", r); m.delete(); bot.createMessage(msg.channel.id, 
                     //"Query canceled."
                     translations.getTranslationString(undefined, "queries-cancel")
-                    ); rj("Cancelled by user"); clearTimeout(tout) } //cance
+                    ); rj("Cancelled by user"); clearTimeout(tout) } //cancelled
                     let bindUser = binds[e.name]; // this is the actual object
                     if (bindUser) { // if it exists
                         m.delete(); // we delete the message
