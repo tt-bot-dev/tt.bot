@@ -1,4 +1,7 @@
-# tt.bot
+# tt.bot 
+[![Discord](https://img.shields.io/discord/195865382039453697.svg?style=flat-square)](https://discord.gg/pGN5dMq) [![Add me!](https://img.shields.io/badge/tt.bot-add%20to%20your%20server-brightgreen.svg?style=flat-square)](https://discordapp.com/oauth2/authorize?scope=bot&client_id=195506253806436353&permissions=-1&redirect_uri=https://tttie.ga/close.php&response_type=code)
+
+
 tt.bot is a bot with aim for moderation and fun, made in [Eris](https://github.com/abalabahaha/eris).<br>
 This bot uses some pieces of code from [blargbot](https://github.com/ratismal/blargbot), so here come the credits.
 
@@ -6,6 +9,8 @@ This bot uses some pieces of code from [blargbot](https://github.com/ratismal/bl
 <span style="color:red">The bot is being rewritten, so it lacks features it had before.</span>
 - Cross-server telephony
 - Getting user info and their avatar
+- Basic moderation
+- Welcome and farewell messages
 
 # Database
 The database is RethinkDB. It is a required backend that needs to mod commands to work.
