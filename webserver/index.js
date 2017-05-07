@@ -107,6 +107,6 @@ app.use((req,res) => {
     })
 })
 
-app.listen(8090, config.webserverip, () => {
+app.listen(config.webserverport || 8090, config.webserverip || "0.0.0.0", () => {
     console.log("Webserver is running.")
 })
