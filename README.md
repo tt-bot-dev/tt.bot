@@ -11,6 +11,7 @@ This bot uses some pieces of code from [blargbot](https://github.com/ratismal/bl
 - Getting user info and their avatar
 - Basic moderation
 - Welcome and farewell messages
+- Rerouting your command input into direct messages
 
 # Database
 The database is RethinkDB. It is a required backend that needs to mod commands to work.
