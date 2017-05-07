@@ -39,7 +39,7 @@ var scopes = ['identify'];
 passport.use(new dStrategy({
     clientID: config.clientID,
     clientSecret: config.clientSecret,
-    callbackURL: `http://${config.webserverip || "127.0.0.1"}:8090/callback`,
+    callbackURL: `http://${config.webserverip ? (config.webserverip == "0.0.0.0" ? "127.0.0.1": config.webserverip) : "127.0.0.1"}:${config.webserverport || "8090"}/callback`,
     scope: scopes
 }, function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
