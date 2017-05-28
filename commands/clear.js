@@ -38,34 +38,35 @@ module.exports = {
                         console.log(fe + " doesn't match any regexes.")
                     }
                 })
-                var oldestSnowflakeAllowed = (Date.now() - 1421280000000) * 4194304;
-                let msgCount = () => { if (options.messages) { if (isNaN(options.messages)) return 100; else return options.messages; } else return 100 }
-                let mss = await msg.channel.getMessages(msgCount())
-                function matchesCriteriaContaining(m) {
-                    if (!options.contains) return true;
-                    if (options.contains && m.content.includes(options.contains)) return true;
-                    else return false;
-                }
-                function matchesCriteriaMentions(m) {
-                    if (!options.mentions) return true;
-                    if (options.mentions && m.mentions.map(u => u.id).includes(options.mentions.id)) return true;
-                    else return false;
-                }
-                function matchesCriteriaFrom(m) {
-                    if (!options.from) return true;
-                    if (options.from == "bots" && m.author.bot) return true;
-                    if (options.from && m.author.id == options.from.id) return true;
-                    else return false;
-                }
-                let callAll = m => options.invert ? !(matchesCriteriaContaining(m) && matchesCriteriaFrom(m) && matchesCriteriaMentions(m)) : (matchesCriteriaContaining(m) && matchesCriteriaFrom(m) && matchesCriteriaMentions(m))
-                let msgs = mss.filter(callAll);
-                let msgIDs = msgs.map(m => m.id);
-                let filteredMsgIDs = msgIDs.filter(fn => {
-                    if (fn < oldestSnowflakeAllowed) return false;
-                    else return true;
-                })
+
                 try {
                     await msg.delete()
+                    var oldestSnowflakeAllowed = (Date.now() - 1421280000000) * 4194304;
+                    let msgCount = () => { if (options.messages) { if (isNaN(options.messages)) return 100; else return options.messages; } else return 100 }
+                    let mss = await msg.channel.getMessages(msgCount())
+                    function matchesCriteriaContaining(m) {
+                        if (!options.contains) return true;
+                        if (options.contains && m.content.toLowerCase().includes(options.contains.toLowerCase())) return true;
+                        else return false;
+                    }
+                    function matchesCriteriaMentions(m) {
+                        if (!options.mentions) return true;
+                        if (options.mentions && m.mentions.map(u => u.id).includes(options.mentions.id)) return true;
+                        else return false;
+                    }
+                    function matchesCriteriaFrom(m) {
+                        if (!options.from) return true;
+                        if (options.from == "bots" && m.author.bot) return true;
+                        if (options.from && m.author.id == options.from.id) return true;
+                        else return false;
+                    }
+                    let callAll = m => options.invert ? !(matchesCriteriaContaining(m) && matchesCriteriaFrom(m) && matchesCriteriaMentions(m)) : (matchesCriteriaContaining(m) && matchesCriteriaFrom(m) && matchesCriteriaMentions(m))
+                    let msgs = mss.filter(callAll);
+                    let msgIDs = msgs.map(m => m.id);
+                    let filteredMsgIDs = msgIDs.filter(fn => {
+                        if (fn < oldestSnowflakeAllowed) return false;
+                        else return true;
+                    })
                     await msg.channel.deleteMessages(filteredMsgIDs);
                     let msgOK = await msg.channel.createMessage(`:ok_hand: Deleted ${filteredMsgIDs.length} messages.`);
                     setTimeout(async () => await msgOK.delete(), 2000);
