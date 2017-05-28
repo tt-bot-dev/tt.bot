@@ -50,10 +50,13 @@ class LibWUtil extends eris {
     }
     //actually Client.getRESTUser, but bypasses the need of options.restMode
     getUserWithoutRESTMode(userID) {
-         return this.requestHandler.request("GET", ErisEndpoints.USER(userID), true).then((user) => new ErisO.User(user, this));
+        return this.requestHandler.request("GET", ErisEndpoints.USER(userID), true).then((user) => new ErisO.User(user, this));
     }
     getBaseObject(id) {
-        return  new (require("eris/lib/structures/Base"))(id)
+        return new (require("eris/lib/structures/Base"))(id)
+    }
+    getTag(user) {
+        return `${user.username}#${user.discriminator}`
     }
 }
 module.exports = LibWUtil
