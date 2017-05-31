@@ -9,7 +9,7 @@ module.exports = {
                     return msg.channel.createMessage("That user doesn't exist!")
                 }
                 try {
-                    await msg.guild.banMember(userToBan.id)
+                    await msg.guild.banMember(userToBan.id, 0, `Hackbanned by ${bot.getTag(msg.author)}`)
                     return msg.channel.createMessage(":ok_hand:")
                 }catch(err) {
                     return msg.channel.createMessage("Can't ban the user, do I lack the permission to?")

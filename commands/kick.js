@@ -4,7 +4,7 @@ module.exports = {
             if (await bot.isModerator(msg.member)) {
                 try {
                     let user = await userQuery(args, msg)
-                    await user.kick(`Banned by ${bot.getTag(msg.author)}`);
+                    await user.kick(`Kicked by ${bot.getTag(msg.author)}`);
                     await msg.channel.createMessage(`:ok_hand: Kicked ${bot.getTag(user)}.`)
                 } catch(err) {
                     bot.createMessage(msg.channel.id, "```xl\nError:\n" + err + "\n```").then(null, console.error)
