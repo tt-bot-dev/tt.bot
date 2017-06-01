@@ -6,21 +6,27 @@ class LibWUtil extends eris {
         //super(token,options);
     }
 
-    postStats() {
+    async postStats() {
         if (!config.dbotskey || config.dbotskey == "") return
-        return new Promise((rs, rj) => {
-            s.post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
+        let data;
+        try {
+            data = await s.post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
                 .set("Authorization", config.dbotskey)
                 .send({ "server_count": this.guilds.size })
-                .end((e, r) => {
-                    if (e || r.statusCode != 200) rj({
-                        message: "Can't post, access text or body property for more info.",
-                        text: r.text,
-                        body: r.body
-                    })
-                    else rs();
-                })
-        })
+        } catch (err) {
+            throw {
+                message: "Can't post, access text or body property for more info.",
+                text: r.text,
+                body: r.body
+            }
+        }
+        if (data.statusCode != 200) throw {
+            message: "Can't post, access text or body property for more info.",
+            text: r.text,
+            body: r.body
+        }
+        return;
+
     }
     async isModerator(member) {
         if (isO({ author: member.user })) return true;
