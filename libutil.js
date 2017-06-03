@@ -28,6 +28,27 @@ class LibWUtil extends eris {
         return;
 
     }
+    async postStats2() {
+        if (!config.dbots2key || config.dbots2key == "") return;
+                let data;
+        try {
+            data = await s.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
+                .set("Authorization", config.dbots2key)
+                .send({ "server_count": this.guilds.size })
+        } catch (err) {
+            throw {
+                message: "Can't post, access text or body property for more info.",
+                text: r.text,
+                body: r.body
+            }
+        }
+        if (data.statusCode != 200) throw {
+            message: "Can't post, access text or body property for more info.",
+            text: r.text,
+            body: r.body
+        }
+        return;
+    }
     async isModerator(member) {
         if (isO({ author: member.user })) return true;
         if (member.permission.json["administrator"]) return true;

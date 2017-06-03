@@ -20,5 +20,6 @@ module.exports = async (guild) => {
         if (fn.ownerID == guild.ownerID) return true;
     })) return guild.leave()
     bot.postStats().then(null, null);
+    bot.postStats2().then(null, null);
 }
 module.exports.isEvent = true
