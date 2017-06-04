@@ -3,7 +3,7 @@ module.exports = {
         if (isO(msg)) {
             let c = args.split(" ");
             let action = c[0];
-            let cmdToRld = c.slice(1);
+            let cmdToRld = c[1];
             if (action && cmdToRld) {
                 switch (action) {
                     case "unload":

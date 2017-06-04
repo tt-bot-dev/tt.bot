@@ -51,11 +51,13 @@ ex.load = function (cmN) {
 ex.reload = function (cmN) {
     if (cmds[cmN])
         try {
-            cmds[cmN].aliases.forEach(a => delete cmdAliases[a])
+            if (cmds[cmN].aliases) {
+                cmds[cmN].aliases.forEach(a => delete cmdAliases[a])
+            }
             let rel = rld(`./commands/${cmN}.js`);
             cmds[cmN] = rel
-            if (rel.aliases) {
-                rel.aliases.forEach(a => cmdAliases[a] = cmN.toLowerCase())
+            if (cmds[cmN].aliases) {
+                cmds[cmN].aliases.forEach(a => cmdAliases[a] = cmN)
             }
         } catch (err) {
             console.error(err);
