@@ -15,6 +15,7 @@ module.exports = function () {
     bot.connect()
     global.bot = bot;
     global.cmds = {};
+    global.cmdAliases = {};
     require("./msgdotguild")
     require("./evt")
 }

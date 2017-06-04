@@ -9,8 +9,10 @@ module.exports = async function (msg) {
         console.log("Received a command message from", msg.author.username, nameslice, "from guild", msg.channel.guild.name, `(${msg.channel.guild.id})`) // we log it, because why not
         let cmdName = nameslice.split(" ")[0]; //  we split the slice output by spaces and choosing the command from the first element
         let args = nameslice.slice(cmdName.length).slice(1); // we determine arguments
+        let cmdAlias = cmdAliases[cmdName.toLowerCase()]
         try {
             let cmd = cmds[cmdName.toLowerCase()]; // we load it from object
+            if (!cmd) cmd = cmds[cmdAlias]
             if (cmd) {
                 let e = cmd.exec(msg, args); // we execute it
             }

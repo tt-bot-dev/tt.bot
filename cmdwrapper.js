@@ -35,6 +35,9 @@ ex.load = function (cmN) {
         }
         if (cmFL.isCmd) {
             console.log(`${__filename}      | Loading ${cmN} command, file ${cmN}`)
+            if (cmFL.aliases) {
+                cmFL.aliases.forEach(a => cmdAliases[a] = n.toLowerCase() )
+            }
             cmds[n.toLowerCase()] = cmFL;
         }
         else console.log(__filename + "    | Skipping non-command " + cmN)
