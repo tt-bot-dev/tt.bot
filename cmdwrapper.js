@@ -57,7 +57,7 @@ ex.reload = function (cmN) {
             let rel = rld(`./commands/${cmN}.js`);
             cmds[cmN] = rel
             if (cmds[cmN].aliases) {
-                cmds[cmN].aliases.forEach(a => cmdAliases[a] = cmN)
+                cmds[cmN].aliases.forEach(a => cmdAliases[a] = cmN.toLowercase())
             }
         } catch (err) {
             console.error(err);

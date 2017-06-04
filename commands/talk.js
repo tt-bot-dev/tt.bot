@@ -9,17 +9,14 @@ module.exports = {
         try {
             let r = await s.get(`http://api.program-o.com/v2/chatbot/`)
                 .query({
-                    //?bot_id=6&say=${encodeURIComponent(args)}&convo_id=${msg.author.id}&format=json
                     bot_id: 6,
-                    say: encodeURIComponent(args),
+                    say: args,
                     convo_id: msg.author.id,
                     format: "json"
                 })
-               /* .set("Accept", "application/json")
-                .set("User-Agent", "tt.bot (https://github.com/tttie/tttie-bot)")*/
             r.body = JSON.parse(r.text)
             let resp = r.body.botsay.replace(/Program-O/g, bot.user.username).replace(/\<br\/\>/g, "\n")
-            
+
             await msg.channel.createMessage(resp)
         } catch (err) {
             msg.channel.createMessage(errMessages.cantTell)
@@ -30,5 +27,8 @@ module.exports = {
     display: true,
     category: 1,
     description: "Chat with the cleverbot!",
-    args: "<query>"
+    args: "<query>",
+    aliases: [
+        "cb"
+    ]
 }

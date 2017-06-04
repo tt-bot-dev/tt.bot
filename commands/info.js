@@ -38,5 +38,9 @@ module.exports = {
     name: "info",
     display: true,
     category: 1,
-    description: "Need help? Need to contact the owner? There, use this command"
+    description: "Need help? Need to contact the owner? There, use this command",
+    aliases: [
+        "aboutbot",
+        "about"
+    ]
 }

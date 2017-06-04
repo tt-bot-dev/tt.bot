@@ -55,18 +55,28 @@ module.exports = {
                 })
             })
         } else {
+            let c
+            let cname
+            if (cmdAliases[args]) { c = cmds[cmdAliases[args]]; cname = cmdAliases[args] }
+            else  {c = cmds[args]; cname = args}
             bot.getDMChannel(msg.author.id).then(dm => {
-                if (cmds[args]) {
-                    msg.channel.createMessage(`${msg.author.mention} Sent you a PM with help for ${args} command`)
+                if (c) {
+                    msg.channel.createMessage(`${msg.author.mention} Sent you a PM with help for ${cname} command`)
                     bot.createMessage(dm.id, {
                         embed: {
-                            author: {name:`Help for ${args}`},
+                            author: { name: `Help for ${cname}` },
                             fields: [{
                                 name: "Arguments",
-                                value: cmds[args].args || "None"
+                                value: c.args || "None",
+                                inline: true
+                            }, {
+                                name: "Aliases",
+                                value: c.aliases ? c.aliases.join(", ") : "None",
+                                inline: true
                             }, {
                                 name: "Description",
-                                value: cmds[args].description || "None"
+                                value: c.description || "None",
+                                inline: false
                             }],
                             color: 0x008800
                         }
@@ -80,5 +90,9 @@ module.exports = {
     category: 1,
     display: false,
     description: "Help?",
-    args: "[command]"
+    args: "[command]",
+    aliases: [
+        "cmds",
+        "commands"
+    ]
 }
