@@ -8,5 +8,12 @@ module.exports = {
     name: "ping",
     display: true,
     category: 1,
-    description: "Check if the bot is working."
+    description: "Check if the bot is working.",
+    aliases: [
+        "pang",
+        "pong",
+        "pung",
+        "pwng",
+        "peng"
+    ]
 }

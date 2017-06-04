@@ -11,6 +11,9 @@ ex.loadAll = function () {
                 if (cmFL.isCmd) {
                     console.log(`${__filename}      | Loading ${cmN} command, file ${cmF}`)
                     cmds[cmN.toLowerCase()] = cmFL;
+                    if (cmFL.aliases) {
+                        cmFL.aliases.forEach(a => cmdAliases[a] = cmN.toLowerCase())
+                    }
                 }
                 else console.log(__filename + "    | Skipping non-command " + cmF)
             } catch (err) {
@@ -36,7 +39,7 @@ ex.load = function (cmN) {
         if (cmFL.isCmd) {
             console.log(`${__filename}      | Loading ${cmN} command, file ${cmN}`)
             if (cmFL.aliases) {
-                cmFL.aliases.forEach(a => cmdAliases[a] = n.toLowerCase() )
+                cmFL.aliases.forEach(a => cmdAliases[a] = n.toLowerCase())
             }
             cmds[n.toLowerCase()] = cmFL;
         }
@@ -47,15 +50,24 @@ ex.load = function (cmN) {
 }
 ex.reload = function (cmN) {
     if (cmds[cmN])
-    try {
-        cmds[cmN] = rld(`./commands/${cmN}.js`);
-    }catch(err) {
-        console.error(err);
-    }
+        try {
+            cmds[cmN].aliases.forEach(a => delete cmdAliases[a])
+            let rel = rld(`./commands/${cmN}.js`);
+            cmds[cmN] = rel
+            if (rel.aliases) {
+                rel.aliases.forEach(a => cmdAliases[a] = cmN.toLowerCase())
+            }
+        } catch (err) {
+            console.error(err);
+        }
     else throw new Error("Command isn't loaded. Use cmdWrap.load to load the command.")
 }
 ex.unload = function (cmN) {
-    if (cmds[cmN])
+    if (cmds[cmN]) {
+        if (cmds[cmN].aliases) {
+            cmds[cmN].aliases.forEach(a => delete cmdAliases[a])
+        }
         delete cmds[cmN]
+    }
     else throw new Error("Command isn't loaded. Use cmdWrap.load to load the command.")
 }

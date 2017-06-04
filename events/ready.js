@@ -10,7 +10,9 @@ module.exports = async function () {
     bot.listBotColls().forEach(g => g.leave());
     let blacklist = await db.table("blacklist").run();
     blacklist.forEach(b => {
+        if (!b) return;
         let g = bot.guilds.get(b.id);
+        if (!g) return;
         if (g.id == b.id) return g.leave();
         if (b.ownerID && g.ownerID == b.ownerID) return g.leave()
         
