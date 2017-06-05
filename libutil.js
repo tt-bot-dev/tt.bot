@@ -88,7 +88,7 @@ class LibWUtil extends eris {
 
     embedToText(embed) {
         let txt = [];
-        if (embed.title) txt.push(`----------${embed.title}----------`)
+        if (embed.title) txt.push(`----------${embed.title} ${embed.url ? `- ${embed.url}` : ""}----------`)
         if (embed.author) txt.push(`${embed.title ? "(" : ""}${embed.author.name || "noname"} - ${embed.author.icon_url || "noiconuri"} - ${embed.author.url || "nouri"}${embed.title ? ")" : ""}`)
         if (embed.description) txt.push(embed.description)
         if (embed.fields) embed.fields.forEach(f => {
