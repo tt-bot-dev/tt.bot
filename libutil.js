@@ -85,5 +85,25 @@ class LibWUtil extends eris {
     getTag(user) {
         return `${user.username}#${user.discriminator}`
     }
+
+    embedToText(embed) {
+        let txt = [];
+        if (embed.title) txt.push(`----------${embed.title}----------`)
+        if (embed.author) txt.push(`${embed.title ? "(" : ""}${embed.author.name || "noname"} - ${embed.author.icon_url || "noiconuri"} - ${embed.author.url || "nouri"}${embed.title ? ")" : ""}`)
+        if (embed.description) txt.push(embed.description)
+        if (embed.fields) embed.fields.forEach(f => {
+            txt.push("--------------------")
+            txt.push(f.name)
+            txt.push("")
+            txt.push(f.value)
+            txt.push("--------------------")
+        })
+        if (embed.thumbnail) txt.push("THUMB: "+embed.thumbnail.url)
+        if (embed.image) txt.push(`IMAGE: ${embed.image.url}`)
+        if (embed.video) txt.push(`VIDEO: ${embed.video.url}`)
+        if (embed.provider) txt.push(`PROVIDER: ${embed.provider.name} ${embed.provider.url}`)
+        if (embed.footer) txt.push(`----------${embed.footer.text || "notext"} - ${embed.author.icon_url || "noiconuri"}----------`)
+        return txt.join("\n");
+    }
 }
 module.exports = LibWUtil
