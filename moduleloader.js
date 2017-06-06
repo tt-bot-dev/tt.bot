@@ -17,3 +17,4 @@ global.decimalToHex = function (d) {
 }
 global.translations = new (require("./translations/index"))()
 global.format = require("util").format;
+global.asyncStuff = new (require("./asyncstuff"))()
