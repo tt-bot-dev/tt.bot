@@ -12,7 +12,7 @@ module.exports = {
             inline: true
         }, {
             name: `The guild ID is ${inviteData.guild.id}`,
-            value: `You can also click [here](https://discord.gg/${inviteData.code}) to join the server.\nNote: The invite link placement is **NOT** for advertisement purposes. I, ${(await bot.getUserWithoutREST(config.oid)).username}, am not responsible for any advertisement problems caused by abuse of this command. I can log you at any time.`,
+            value: `You can also click [here](https://discord.gg/${inviteData.code}) to join the server.\nNote: The invite link placement is **NOT** for advertisement purposes. I, ${(await bot.getUserWithoutRESTMode(config.oid)).username}, am not responsible for any advertisement problems caused by abuse of this command. I can log you at any time.`,
             inline: true
         }]
         msg.channel.createMessage({
@@ -21,7 +21,7 @@ module.exports = {
                     name: `Inspected invite data from the guild ${inviteData.guild.name}`,
                     icon_url: inviteData.guild.icon ? `https://cdn.discordapp.com/icons/${inviteData.guild.id}/${inviteData.guild.icon}.webp` : ""
                 },
-                description: `Not all of these data are 100% accurate. These might change at any time.`,
+                description: `These information might change at any time.`,
                 fields: fields,
                 footer: inviteData.inviter ? {
                     text: `Invite made by ${inviteData.inviter.username}#${inviteData.inviter.discriminator}`,
