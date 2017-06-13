@@ -15,7 +15,6 @@ module.exports = {
                                 return m.edit(`Cannot unload the command ${cmdToRld} ${err}`)
                             }
                         })
-                        break;
                     case "load":
                         return bot.createMessage(msg.channel.id, `Loading ${cmdToRld == "all" ? "all commands" : `command ${cmdToRld}`}`).then(m => {
                                 if (cmdToRld == "all") {
@@ -31,7 +30,6 @@ module.exports = {
                                 }
 
                             })
-                        break;
                     case "reload":
                         return bot.createMessage(msg.channel.id, `Reloading command ${cmdToRld}`).then(m => {
                             try {
@@ -41,10 +39,8 @@ module.exports = {
                                 return m.edit(`Cannot reload the command ${cmdToRld} ${err}`)
                             }
                         })
-                        break;
                     default:
                         return bot.createMessage(msg.channel.id, "You haven't chosen a valid command management command.")
-                        break;
                 }
             } else {
                 return bot.createMessage(msg.channel.id, "You haven't chosen a valid command management command or you are missing required arguments.")

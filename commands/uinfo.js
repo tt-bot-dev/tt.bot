@@ -63,5 +63,6 @@ module.exports = {
     name: "uinfo",
     display: true,
     category: 1,
-    description: "User information."
+    description: "User information.",
+aliases: ["userinfo"]
 }

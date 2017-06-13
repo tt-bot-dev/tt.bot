@@ -1,6 +1,5 @@
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
-
 process.stdin.on('data', (chu) => {
     var chunk = chu.toString();
     if (chunk.startsWith("shutdown")) {
