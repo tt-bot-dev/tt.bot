@@ -17,7 +17,7 @@ This bot uses some pieces of code from [blargbot](https://github.com/ratismal/bl
 The database is RethinkDB. It is a required backend that needs to mod commands, feedback and blacklist to work.
 
 # How to set up
-1. Install all the dependencies using this command: (no, i don't need a package.json) `npm i moment rethinkdbdash eris superagent require-reload express body-parser ejs passport passport-discord cookie-parser express-session express-session-rethinkdb pmx`
+1. Install all the dependencies using this command: `npm i`
 1. Rename `exampleconfig.json` to `config.json`
 2. Edit token, oid, prefix and optional, but if you need, dbotskey properties.
 3. Run `run.js`
