@@ -1,7 +1,7 @@
 module.exports = {
     exec: async function (msg, args) {
-        if (!args) return cmds["help"].exec(msg, "profile")
         let action = args.split(" ")[0];
+        if (!action) return msg.channel.createMessage(" WHAT THE HECK DO I DO?1??1?1??!!!!!1!1!1")
         switch (action) {
             case "remove":
                 let d = await db.table("profile").get(msg.author.id);
@@ -22,9 +22,10 @@ module.exports = {
                 let optar = args.slice((action.length + 1));
                 let num;
                 if (optar) num = new Number(`0x${optar.substring(0, 6)}`);
-                if (isNaN(num)) return msg.channel.createMessage(`That's not a valid hex color.`)
-                da.color = num.toString();
+                if (num && isNaN(num)) return msg.channel.createMessage(`That's not a valid hex color.`)
+                da.color = num ? num.toString() : "";
                 await db.table("profile").insert(da)
+                await msg.channel.createMessage("Created a profile.")
                 break;
             case "show": {
                 let optargs = args.slice((action.length + 1));
@@ -60,7 +61,7 @@ module.exports = {
                 if (!opta) return msg.channel.createMessage("No arguments provided.");
                 let n;
                 if (opta) n = new Number(`0x${opta.substring(0, 6)}`);
-                if (isNaN(n)) return msg.channel.createMessage(`That's not a valid hex color.`)
+                if (n && isNaN(n)) return msg.channel.createMessage(`That's not a valid hex color.`)
                 dat.color = n.toString();
                 await db.table("profile").get(msg.author.id).update(dat);
                 msg.channel.createMessage({
@@ -75,7 +76,7 @@ module.exports = {
                     }
                 })
                 break;
-            /*case "fields": {
+            case "fields": {
                 let dat1 = await db.table("profile").get(msg.author.id);
                 if (!dat1) return msg.channel.createMessage(`You don't have a profile yet!`)
                 let optar = args.slice((action.length + 1));
@@ -86,19 +87,19 @@ module.exports = {
                 let fielddata = fieldsargs.slice(1).join("|");
                 switch (act) {
                     default:
-                        return msg.channel.createMessage(`Usage: fields <add|del> <<name>|[data]>`)
+                        msg.channel.createMessage(`Usage: fields <add|del> <<name>|[data]>`)
                         break;
                     case "del":
                         if (dat1.profileFields.length == 0) return msg.channel.createMessage("You haven't got any field!")
                         let f = dat1.profileFields.find(f => f.name == fieldname);
-                        if (f) dat1.profileFields[fieldname] = undefined;
-                        else return msg.channel.createMessgae("No such field :/")
+                        if (f) dat1.profileFields.splice(dat1.profileFields.indexOf(f), 1);
+                        else return msg.channel.createMessage("No such field :/")
                         await db.table("profile").get(msg.author.id).update(dat1);
                         msg.channel.createMessage("Deleted the field " + fieldname)
                         break;
                     case "add":
                         if (dat1.profileFields.length > 5) return msg.channel.createMessage(`There's a limit of 5 fields. Please remove the unneeded ones.`)
-                        if (dat1.profileFields.find(f => f.name == fieldname)) return msg.channel.createMessage("That field already exists.")
+                        if (dat1.profileFields.find(f => f.name.toLowerCase() == fieldname.toLowerCase())) return msg.channel.createMessage("That field already exists.")
                         dat1.profileFields.push({
                             name: fieldname,
                             value: fielddata,
@@ -107,17 +108,13 @@ module.exports = {
                         await db.table("profile").get(msg.author.id).update(dat1);
                         msg.channel.createMessage(`Made a field \`${fieldname}\` with this data \`\`\`\n${fielddata}\`\`\``)
                         break;
-                
-                break;
-            }*/
-            default:
-                return cmds["help"].exec(msg, "profile")
-                break;
+                }
+            }
         }
     },
     isCmd: true,
     display: true,
     category: 1,
-    description: "Shows the profile of the user (NOT USER DATA).\nfields subcommand is broken at the time.",
-    args: "<show [user]|setup [color]|~~fields <del|add>~~ <<name>|[data]>|remove|color <color>>"
+    description: "Shows the profile of the user (NOT USER DATA).",
+    args: "<show [user]|setup [color]fields <del|add> <<name>|[data]>|remove|color <color>>"
 }
