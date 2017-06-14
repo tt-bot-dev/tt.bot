@@ -22,7 +22,7 @@ module.exports = {
                     inline: true
                 }, {
                     name: "Versions:",
-                    value: `Eris: ${require("eris/package.json").version}\nNode.js: ${process.versions.node}\nV8 engine: ${process.versions.v8}`,
+                    value: `This bot: ${require("../package.json").version}\nEris: ${require("eris/package.json").version}\nNode.js: ${process.versions.node}\nV8 engine: ${process.versions.v8}`,
                     inline: true
                 },
                 {
