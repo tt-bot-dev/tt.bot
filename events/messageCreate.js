@@ -2,6 +2,7 @@ module.exports = async function (msg) {
     if (msg.channel instanceof ErisO.PrivateChannel) return; // ignore DMs
     if (!msg.author) return; // Message.author is occasionally undefined. abal plz fix
     if (msg.author.bot) return; // ignore bots
+    if (msg.channel.topic && msg.channel.topic.includes("[tt.bot block]")) return // we ignore the channel when [tt.bot block] is anywhere in the message.
     let server = await db.table("configs").get(msg.guild.id).run();
     msg.guildConfig = server;
     if ((server && msg.content.startsWith(server.prefix)) || msg.content.startsWith(config.prefix)) { // if the content starts with the prefix
