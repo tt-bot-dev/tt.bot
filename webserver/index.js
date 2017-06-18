@@ -5,13 +5,14 @@ const e = require("express"),
     passport = require("passport"),
     dStrategy = require("passport-discord").Strategy,
     cookieparser = require("cookie-parser"),
-session = require("express-session"),
-appstore = require("express-session-rethinkdb")(session),
-store = new appstore({
-    connectOptions: {
-        db:"ttalpha"
-    }
-});
+    session = require("express-session"),
+    appstore = require("express-session-rethinkdb")(session),
+    store = new appstore({
+        connectOptions: {
+            db: "ttalpha"
+        }
+    });
+
 app.enable("trust proxy");
 app.use(bodyParser.urlencoded({
     extended: true,
@@ -39,7 +40,7 @@ var scopes = ['identify'];
 passport.use(new dStrategy({
     clientID: config.clientID,
     clientSecret: config.clientSecret,
-    callbackURL: `http://${config.webserverip ? (config.webserverip == "0.0.0.0" ? "127.0.0.1": config.webserverip) : "127.0.0.1"}:${config.webserverport || "8090"}/callback`,
+    callbackURL: `http://${config.webserverip ? (config.webserverip == "0.0.0.0" ? "127.0.0.1" : config.webserverip) : "127.0.0.1"}:${config.webserverport || "8090"}/callback`,
     scope: scopes
 }, function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
@@ -96,9 +97,22 @@ app.get("/", (req, res) => {
     })
 })
 app.use("/guilds", require("./routes/guild"));
-app.use((req,res) => {
+app.use((err, req, res, next) => {
+    if (err) {
+        res.status(500).render("500", {
+            user: req.isAuthenticated() ? {
+                username: req.user.username,
+                discriminator: req.user.discriminator,
+                avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
+                id: req.user.id
+            } : null,
+            error: err.message
+        })
+    }
+})
+app.use((req, res) => {
     res.status(404).render("404", {
-                user: req.isAuthenticated() ? {
+        user: req.isAuthenticated() ? {
             username: req.user.username,
             discriminator: req.user.discriminator,
             avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
@@ -106,7 +120,6 @@ app.use((req,res) => {
         } : null
     })
 })
-
 app.listen(config.webserverport || 8090, config.webserverip || "0.0.0.0", () => {
     console.log("Webserver is running.")
 })

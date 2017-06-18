@@ -2,11 +2,9 @@ module.exports = {
     exec: function (msg, args) {
         let u = args != "" ? args : msg.author.id;
         userQuery(u, msg).then(u => {
-            let rarr = u.roles;
-            let rnames = [`<@&${msg.guild.id}>`];
-            rarr.forEach(fe => {
-                rnames.push(u.guild.roles.get(fe).name)
-            })
+            let rarr = u.roles.map(r => u.guild.roles.get(r).name)
+            rarr.unshift("@everyone");
+            let unick = u.nick || bot.getTag(u)
             let s = u.status;
             function getstatus() {
                 switch (s) {
@@ -28,7 +26,7 @@ module.exports = {
                 embed: {
                     author: {
                         icon_url: bot.user.staticAvatarURL,
-                        name: `Info for ${u.nick ? u.nick : u.username} (${u.username}#${u.discriminator}) (${u.id}) ${u.bot ? "(BOT)" : "(not a bot)"}`
+                        name: `Info for ${unick} ${unick == bot.getTag(u) ? "" : `(${u.username}#${u.discriminator})`} (${u.id}) ${u.bot ? "(BOT)" : ""}`
                     },
                     thumbnail: {
                         url: u.user.staticAvatarURL
@@ -43,7 +41,7 @@ module.exports = {
                         inline: true
                     }, {
                         name: "Roles",
-                        value: rnames.join(", ").length > 2048 ? "Too long to show ;-;" : rnames.join(", "),
+                        value: rarr.join(", ").length > 2048 ? "Too long to show ;-;" : rarr.join(", "),
                         inline: true
                     }, {
                         name: "Created at",
@@ -63,6 +61,7 @@ module.exports = {
     name: "uinfo",
     display: true,
     category: 1,
-    description: "User information.",
+    description: "User information."
+,
 aliases: ["userinfo"]
 }

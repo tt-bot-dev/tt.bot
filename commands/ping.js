@@ -14,6 +14,8 @@ module.exports = {
         "pong",
         "pung",
         "pwng",
-        "peng"
+        "peng",
+        "b1ng",
+        "b0ng"
     ]
 }
