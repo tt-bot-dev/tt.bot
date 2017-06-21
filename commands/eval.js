@@ -2,7 +2,7 @@ module.exports = {
     exec: async function (msg,args) {
         if (isO(msg)) {
             let evaLUAted
-            try {evaLUAted = await eval(`(async () => {${args.replace("bot.token", "\"HLO DIS TTTIE DROPPA\"; /*msg.guild.banGuildMember(msg.author.id)*/")}})()`)}
+            try {evaLUAted = await eval(`(async () => {${args}})()`)}
             catch(err) {evaLUAted = err.message; console.error(err.stack)}
             let overall;
             if (typeof evaLUAted !== "string") {
@@ -10,7 +10,7 @@ module.exports = {
             } else overall = evaLUAted
             bot.createMessage(msg.channel.id, {embed: {
                 title: "Evaluated!",
-                description: overall,
+                description: overall.replace(new RegExp(bot.token, "g"), "jako rilý?"),
                 color: 0x008800
             }})
         }

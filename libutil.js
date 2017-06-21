@@ -57,7 +57,7 @@ class LibWUtil extends eris {
         let modRole = null;
         let server = await db.table("configs").get(member.guild.id).run()
         if (server) {
-            let role = member.guild.roles.find(r => r.name == server.mRoleName);
+            let role = member.guild.roles.find(r => r.name == server.modRole);
             if (role) { serverHasModRole = true; modRole = role }
         } else {
             let role = member.guild.roles.find(r => r.name == "tt.bot mod");
