@@ -1,6 +1,16 @@
 const Router = require("express").Router;
 const app = Router();
-
+app.get("/", checkOwner, (req, res) => {
+    res.render("guild-list", {
+        user: req.isAuthenticated() ? {
+            username: req.user.username,
+            discriminator: req.user.discriminator,
+            avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
+            id: req.user.id
+        } : null,
+        guilds: bot.guilds.filter(fn => true)
+    })
+})
 app.get("/botcolls", checkOwner, (req, res) => {
     res.render("botcoll", {
         user: req.isAuthenticated() ? {

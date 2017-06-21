@@ -92,8 +92,7 @@ app.get("/", (req, res) => {
             discriminator: req.user.discriminator,
             avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
             id: req.user.id
-        } : null,
-        guilds: bot.guilds.filter(fn => true)
+        } : null
     })
 })
 app.use("/guilds", require("./routes/guild"));
@@ -106,7 +105,7 @@ app.use((err, req, res, next) => {
                 avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
                 id: req.user.id
             } : null,
-            error: err.message
+            error: (req.user && isO({author: req.user})) ? err.stack : err.message
         })
     }
 })

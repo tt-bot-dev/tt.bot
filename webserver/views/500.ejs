@@ -16,7 +16,7 @@
         <center>
         <h1 class="404">500</h1>
         <h2>This doesn't seem well.....</h2>
-        <h2><code><%=error%></code></h2>
+        <h2><code><%-error.replace(/</g, "&lt").replace(/>/g, "&gt").replace(/[\r\n]/g, "<br>")%></code></h2>
         <a href="/">Go back to the main page</a>
         </center>
       </div>
