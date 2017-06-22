@@ -37,10 +37,10 @@ module.exports = async function (msg) {
             if (cmd) {
                 console.log(
 `Received a command message
-    From ${this.getTag(msg.author)} (${msg.author.id})
-    Guild ${msg.guild.name} (${msg.guild.id})
-    Command ${cmdName}
-${args ? `    Arguments ${args}` : ""}
+    From        ${this.getTag(msg.author)} (${msg.author.id})
+    Guild       ${msg.guild.name} (${msg.guild.id})
+    Command     ${cmdName}
+${args ? `    Arguments   ${args}` : ""}
 `
                 )
                 let e = cmd.exec(msg, args); // we execute it
