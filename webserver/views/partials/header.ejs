@@ -2,7 +2,7 @@
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
       <!-- Title -->
-      <a href="/"><span class="mdl-layout-title"><%=bot.user.username%></span></a>
+      <span class="mdl-layout-title"><%=bot.user.username%></span>
             <span style="margin:auto"></span>
       <%if (user) {%>
         <img height="32" width="32" style="border-radius:32px" src="<%-user.avatar%>" alt="rip">
@@ -13,9 +13,11 @@
       <%} else {%>
         <a href="/login"><i class="material-icons">lock_open</i></a>
       <%}%>
+      <a href="https://discordapp.com/oauth2/authorize?client_id=195506253806436353&amp;scope=bot" style="margin-left: 5px"><i class="material-icons">add</i></a>
     </div>
     <!-- Tabs -->
     <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+      <a href="/" class="mdl-layout__tab">Home</a>
       <%if (user && isO({author:user})) {%>
       <a href="/guilds" class="mdl-layout__tab">Server manager</a>
       <%}%>
