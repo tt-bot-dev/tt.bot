@@ -30,14 +30,14 @@ module.exports = {
                 value: lastEntry.reason,
                 inline: true
             });
-            let target = lastEntry.target || await bot.getUserWithoutRESTMode(lastEntry.targetID)
+            let target = lastEntry.actionType !== 21 ? (lastEntry.target || await bot.getUserWithoutRESTMode(lastEntry.targetID)) : null
             switch (lastEntry.actionType) {
                 case 20:
                     base.description = base.description.replace("%EMOJI%", ":boot:").replace("%ACTION%", "Kicked").replace("%USERTAG%", bot.getTag(target))
                     base.color = 0xf6ff00
                     break;
                 case 21:
-                    base.description = base.description.replace("%EMOJI%", ":trash:").replace("%ACTION%", "Pruned").replace("%USERTAG%", "the server")
+                    base.description = base.description.replace("%EMOJI%", ":wastebasket:").replace("%ACTION%", "Pruned").replace("%USERTAG%", "the server")
                     base.fields.push({
                         name: `Members pruned`,
                         value: `${lastEntry.membersRemoved} members`,
