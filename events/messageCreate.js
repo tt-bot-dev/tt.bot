@@ -21,6 +21,7 @@ module.exports = async function (msg) {
                 console.log(this.embedToText(embed))
             }
         }
+        if (msg.content.startsWith(config.prefix)) msg.channel.createMessage(`Hello ${this.getTag(msg.author)}, I think you're trying to execute some of my commands here in PMs. That won't work unfortunately. Try using the command in a server.`)
         return; // ignore DMs
     }
     if (msg.channel.topic && msg.channel.topic.includes("[tt.bot block]")) return // we ignore the channel when [tt.bot block] is anywhere in the message.
