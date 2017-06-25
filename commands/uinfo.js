@@ -25,7 +25,7 @@ module.exports = {
             bot.createMessage(msg.channel.id, {
                 embed: {
                     author: {
-                        icon_url: bot.user.staticAvatarURL,
+                        icon_url: u.staticAvatarURL,
                         name: `Info for ${unick} ${unick == bot.getTag(u) ? "" : `(${u.username}#${u.discriminator})`} (${u.id}) ${u.bot ? "(BOT)" : ""}`
                     },
                     thumbnail: {

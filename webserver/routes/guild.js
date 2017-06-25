@@ -26,6 +26,8 @@ app.get("/botcolls/prune", checkOwner, (req,res) => {
         if (bot.listBotColls().length > 0) {
             bot.listBotColls().forEach(g => g.leave())
             res.redirect("/guilds/botcolls")
+        } else {
+            res.redirect("/guilds/botcolls")
         }
     } else {
         res.render("delete", {
