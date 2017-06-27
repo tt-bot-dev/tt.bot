@@ -6,6 +6,16 @@ class LibWUtil extends eris {
         //super(token,options);
     }
 
+    passesRoleHierarchy(member1, member2) {
+        if (member1.guild != member2.guild) throw new TypeError(`Members aren't in the same guild`);
+        if (member1.roles.length == 0) return false;
+        if (member2.roles.length == 0) return true;
+        let member1Roles = member1.roles.map(r => member1.guild.roles.get(r))
+        let member2Roles = member2.roles.map(r => member2.guild.roles.get(r))
+        member1Roles = member1Roles.sort((a, b) => b.position - a.position);
+        member2Roles = member2Roles.sort((a, b) => b.position - a.position);
+        return member1Roles[0].position > member2Roles[0].position
+    }
     async postStats() {
         if (!config.dbotskey || config.dbotskey == "") return
         let data;
@@ -30,7 +40,7 @@ class LibWUtil extends eris {
     }
     async postStats2() {
         if (!config.dbots2key || config.dbots2key == "") return;
-                let data;
+        let data;
         try {
             data = await s.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
                 .set("Authorization", config.dbots2key)
@@ -98,7 +108,7 @@ class LibWUtil extends eris {
             txt.push(f.value)
             txt.push("--------------------")
         })
-        if (embed.thumbnail) txt.push("THUMB: "+embed.thumbnail.url)
+        if (embed.thumbnail) txt.push("THUMB: " + embed.thumbnail.url)
         if (embed.image) txt.push(`IMAGE: ${embed.image.url}`)
         if (embed.video) txt.push(`VIDEO: ${embed.video.url}`)
         if (embed.provider) txt.push(`PROVIDER: ${embed.provider.name} ${embed.provider.url}`)

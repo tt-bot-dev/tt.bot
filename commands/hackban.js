@@ -4,13 +4,16 @@ module.exports = {
             if (await bot.isModerator(msg.member)) {
                 async function doBan(id, doMessage, isMass) {
                     let userToBan
+                    let member
                     try {
                         userToBan = await bot.getUserWithoutRESTMode(args)
                     } catch (err) {
                         if (doMessage) await msg.channel.createMessage("That user doesn't exist!")
                         return false;
                     }
+                    if (msg.guild.members.get(userToBan.id)) member = msg.guild.members.get(userToBan.id)
                     try {
+                        if (member && !bot.passesRoleHierarchy(msg.member, member)) {msg.channel.createMessage(`You can't hackban that user!`); return false;}
                         await msg.guild.banMember(userToBan.id, 0, `${isMass == false ? "Hackbanned" : "Masshackbanned"} by ${bot.getTag(msg.author)}`)
                         if (doMessage) await msg.channel.createMessage(":ok_hand:")
                         return true;

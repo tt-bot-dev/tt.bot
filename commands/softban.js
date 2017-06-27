@@ -4,10 +4,15 @@ module.exports = {
             if (await bot.isModerator(msg.member)) {
                 try {
                     let user = await userQuery(args, msg)
-                    await user.ban(1, `Softbanned by ${bot.getTag(msg.author)}`);
-                    await user.unban()
-                    await msg.channel.createMessage(`:ok_hand: Softbanned ${bot.getTag(user)}`)
-                } catch(err) {
+                    if (bot.passesRoleHierarchy(msg.member, user)) {
+                        await user.ban(1, `Softbanned by ${bot.getTag(msg.author)}`);
+                        await user.unban()
+                        await msg.channel.createMessage(`:ok_hand: Softbanned ${bot.getTag(user)}`)
+                    } else {
+                        msg.channel.createMessage(`You can't softban that user!`)
+                        return;
+                    }
+                } catch (err) {
                     bot.createMessage(msg.channel.id, "```xl\nError:\n" + err + "\n```").then(null, console.error)
                     console.error(err)
                 }
