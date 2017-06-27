@@ -7,7 +7,7 @@
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.6",
-    "eris": "^0.7.0",
+    "eris": "github:abalabahaha/eris#dev",
     "express": "^4.15.3",
     "express-session": "^1.15.3",
     "express-session-rethinkdb": "^0.4.1",
