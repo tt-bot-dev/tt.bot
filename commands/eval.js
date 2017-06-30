@@ -8,7 +8,7 @@ module.exports = {
             if (typeof evaLUAted !== "string") {
                 overall = require("util").inspect(evaLUAted)
             } else overall = evaLUAted
-            let data = `\`\`\`js\n${overall.replace(new RegExp(bot.token, "g"), "jako rilý?")}\n\`\`\``
+            let data = `\`\`\`js\n${overall.replace(new RegExp(`${bot.token}|${config.token}|${config.dbots2key}|${config.dbotskey}|${config.clientSecret}`, "g"), "jako rilý?")}\n\`\`\``
             if (data.length > 2048) {
                 let gist
                 try {
@@ -36,7 +36,7 @@ module.exports = {
             bot.createMessage(msg.channel.id, {
                 embed: {
                     title: "Evaluated!",
-                    description: overall.replace(new RegExp(bot.token, "g"), "jako rilý?"),
+                    description: data,
                     color: 0x008800
                 }
             })
