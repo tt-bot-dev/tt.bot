@@ -8,6 +8,7 @@ class LibWUtil extends eris {
 
     passesRoleHierarchy(member1, member2) {
         if (member1.guild != member2.guild) throw new TypeError(`Members aren't in the same guild`);
+        if (member1.guild.ownerID == member1.id) return true;
         if (member1.roles.length == 0) return false;
         if (member2.roles.length == 0) return true;
         let member1Roles = member1.roles.map(r => member1.guild.roles.get(r))
