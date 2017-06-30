@@ -17,7 +17,7 @@ module.exports = {
                 } else if (fe.match(/(channel:([^]{2,32}))/i)) {
                     if (!options.channel) {
                         try {
-                            options.channel = await queries.channel(fe.replace(/channel:/, "").replace(/ \\| "/g " | "), msg);
+                            options.channel = await queries.channel(fe.replace(/channel:/, "").replace(/ \\\| "/g, " | "), msg);
                         } catch (err) {
                             options.channel = msg.channel;
                         }
