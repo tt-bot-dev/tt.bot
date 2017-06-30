@@ -11,12 +11,12 @@ module.exports = {
                         }
                     } else if (fe.match(/(contains:([^]{0,500}))/i)) {
                         if (!options.contains) {
-                            options.contains = fe.replace(/contains:/, "").replace(" \\| ", " | ");
+                            options.contains = fe.replace(/contains:/, "").replace(/ \\| /g, " | ");
                         }
                     } else if (fe.match(/(mentions:([^]{0,37}))/i)) {
                         if (!options.mentions) {
                             try {
-                                options.mentions = await userQuery(fe.replace(/mentions:/, "").replace(" \\| ", " | "), msg)
+                                options.mentions = await userQuery(fe.replace(/mentions:/, "").replace(/ \\| /g, " | "), msg)
 
                             } catch (err) {
                                 options.mentions = null;
@@ -24,9 +24,9 @@ module.exports = {
                         }
                     } else if (fe.match(/(from:([^]{0,37}))/i)) {
                         if (!options.from) {
-                            if (fe.replace(/from:/, "").replace(" \\| ", " | ") == "bots") return options.from = "bots";
+                            if (fe.replace(/from:/, "").replace(/ \\| /g, " | ") == "bots") return options.from = "bots";
                             try {
-                                options.from = await userQuery(fe.replace(/from:/, "").replace(" \\| ", " | "), msg)
+                                options.from = await userQuery(fe.replace(/from:/, "").replace(/ \\| /g, " | "), msg)
                             } catch (err) {
                                 options.from = null
                             }
