@@ -1,15 +1,10 @@
 const Router = require("express").Router;
 const app = Router();
 app.get("/", checkOwner, (req, res) => {
-    res.render("guild-list", {
-        user: req.isAuthenticated() ? {
-            username: req.user.username,
-            discriminator: req.user.discriminator,
-            avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
-            id: req.user.id
-        } : null,
+    res.render("guild-list", req.makeTemplatingData({
         guilds: bot.guilds.filter(() => true)
-    });
+    }));
+
 });
 app.get("/botcolls", checkOwner, (req, res) => {
     res.render("botcoll", {
@@ -21,7 +16,7 @@ app.get("/botcolls", checkOwner, (req, res) => {
         } : null
     });
 });
-app.get("/botcolls/prune", checkOwner, (req,res) => {
+app.get("/botcolls/prune", checkOwner, (req, res) => {
     if (req.query.yes == "true") {
         if (bot.listBotColls().length > 0) {
             bot.listBotColls().forEach(g => g.leave());
@@ -30,16 +25,11 @@ app.get("/botcolls/prune", checkOwner, (req,res) => {
             res.redirect("/guilds/botcolls");
         }
     } else {
-        res.render("delete", {
-            guild: {
-                name: "All bot collection servers"
-            }, user: req.isAuthenticated() ? {
-                username: req.user.username,
-                discriminator: req.user.discriminator,
-                avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
-                id: req.user.id
-            } : null
-        });
+        res.render("delete",
+            req.makeTemplatingData({
+                guild: {
+                    name: "All bot collection servers"
+                }}));
     }
 });
 app.get("/delete/:id", checkOwner, (req, res) => {
@@ -53,14 +43,7 @@ app.get("/delete/:id", checkOwner, (req, res) => {
             res.send("invalid guild");
         }
     } else {
-        res.render("delete", {
-            guild: guild, user: req.isAuthenticated() ? {
-                username: req.user.username,
-                discriminator: req.user.discriminator,
-                avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
-                id: req.user.id
-            } : null
-        });
+        res.render("delete", req.makeTemplatingData({guild}));
     }
 });
 app.get("/invite/:id", checkOwner, async (req, res) => {
@@ -77,25 +60,11 @@ app.get("/invite/:id", checkOwner, async (req, res) => {
 });
 app.get("/:id", checkOwner, (req, res) => {
     let guild = bot.guilds.get(req.params.id);
-    if (guild) return res.render("guild", {
-        guild: guild, user: req.isAuthenticated() ? {
-            username: req.user.username,
-            discriminator: req.user.discriminator,
-            avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
-            id: req.user.id
-        } : null
-    }); else return res.end("Invalid guild");
+    if (guild) return res.render("guild", req.makeTemplatingData({guild})); else return res.end("Invalid guild");
 });
 app.get("/:id/members", checkOwner, (req, res) => {
     let guild = bot.guilds.get(req.params.id);
-    if (guild) return res.render("guild-members", {
-        guild: guild, user: req.isAuthenticated() ? {
-            username: req.user.username,
-            discriminator: req.user.discriminator,
-            avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
-            id: req.user.id
-        } : null
-    }); else return res.end("Invalid guild");
+    if (guild) return res.render("guild-members", req.makeTemplatingData({guild})); else return res.end("Invalid guild");
 });
 
 function checkOwner(req, res, next) {

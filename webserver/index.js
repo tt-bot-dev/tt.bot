@@ -57,9 +57,25 @@ app.use(session({
 app.use(cookieparser());
 app.use(passport.initialize());
 app.use(passport.session());
-app.get("/login", checkAuthNeg, passport.authenticate("discord", { scope: scopes }), function (req,res) { req;res;return;});
+app.use((rq, rs, nx) => {
+    rs;
+    rq.makeTemplatingData = function (...objects) {
+        let obj = {
+            user: req.isAuthenticated() ? {
+                username: req.user.username,
+                discriminator: req.user.discriminator,
+                avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
+                id: req.user.id
+            } : null
+        }
+        if (objects == 0) return obj
+        return Object.assign(obj, ...objects)
+    }
+    nx()
+})
+app.get("/login", checkAuthNeg, passport.authenticate("discord", { scope: scopes }), function (req, res) { req; res; return; });
 app.get("/callback",
-    passport.authenticate("discord", { failureRedirect: "/" }), function (req, res) { req;res.redirect("/"); } // auth success
+    passport.authenticate("discord", { failureRedirect: "/" }), function (req, res) { req; res.redirect("/"); } // auth success
 );
 
 app.get("/logout", checkAuth, function (req, res) {
@@ -80,39 +96,19 @@ function checkAuthNeg(req, res, next) {
 
 
 app.get("/", (req, res) => {
-    res.render("landing", {
-        user: req.isAuthenticated() ? {
-            username: req.user.username,
-            discriminator: req.user.discriminator,
-            avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
-            id: req.user.id
-        } : null
-    });
+    res.render("landing", req.makeTemplatingData());
 });
 app.use("/guilds", require("./routes/guild"));
 app.use((err, req, res, next) => {
     if (err) {
-        res.status(500).render("500", {
-            user: req.isAuthenticated() ? {
-                username: req.user.username,
-                discriminator: req.user.discriminator,
-                avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
-                id: req.user.id
-            } : null,
-            error: (req.user && isO({author: req.user})) ? err.stack : err.message
-        });
+        res.status(500).render("500", req.makeTemplatingData({
+            error: (req.user && isO({ author: req.user })) ? err.stack : err.message
+        }));
     }
     next;
 });
 app.use((req, res) => {
-    res.status(404).render("404", {
-        user: req.isAuthenticated() ? {
-            username: req.user.username,
-            discriminator: req.user.discriminator,
-            avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
-            id: req.user.id
-        } : null
-    });
+    res.status(404).render("404", req.makeTemplatingData());
 });
 app.listen(config.webserverport || 8090, config.webserverip || "0.0.0.0", () => {
     console.log("Webserver is running.");
