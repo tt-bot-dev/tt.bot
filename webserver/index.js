@@ -61,11 +61,11 @@ app.use((rq, rs, nx) => {
     rs;
     rq.makeTemplatingData = function (...objects) {
         let obj = {
-            user: req.isAuthenticated() ? {
-                username: req.user.username,
-                discriminator: req.user.discriminator,
-                avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
-                id: req.user.id
+            user: rq.isAuthenticated() ? {
+                username: rq.user.username,
+                discriminator: rq.user.discriminator,
+                avatar: `https://cdn.discordapp.com/avatars/${rq.user.id}/${rq.user.avatar}.png`,
+                id: rq.user.id
             } : null
         }
         if (objects == 0) return obj

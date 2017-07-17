@@ -7,14 +7,7 @@ app.get("/", checkOwner, (req, res) => {
 
 });
 app.get("/botcolls", checkOwner, (req, res) => {
-    res.render("botcoll", {
-        user: req.isAuthenticated() ? {
-            username: req.user.username,
-            discriminator: req.user.discriminator,
-            avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
-            id: req.user.id
-        } : null
-    });
+    res.render("botcoll", req.makeTemplatingData());
 });
 app.get("/botcolls/prune", checkOwner, (req, res) => {
     if (req.query.yes == "true") {
