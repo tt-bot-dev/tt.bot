@@ -67,12 +67,12 @@ app.use((rq, rs, nx) => {
                 avatar: `https://cdn.discordapp.com/avatars/${rq.user.id}/${rq.user.avatar}.png`,
                 id: rq.user.id
             } : null
-        }
-        if (objects == 0) return obj
-        return Object.assign(obj, ...objects)
-    }
-    nx()
-})
+        };
+        if (objects == 0) return obj;
+        return Object.assign(obj, ...objects);
+    };
+    nx();
+});
 app.get("/login", checkAuthNeg, passport.authenticate("discord", { scope: scopes }), function (req, res) { req; res; return; });
 app.get("/callback",
     passport.authenticate("discord", { failureRedirect: "/" }), function (req, res) { req; res.redirect("/"); } // auth success
