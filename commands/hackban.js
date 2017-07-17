@@ -2,7 +2,7 @@ module.exports = {
     exec: async function (msg, args) {
         if (args) {
             if (await bot.isModerator(msg.member)) {
-                async function doBan(id, doMessage, isMass) {
+                async function dohackBan(id, doMessage, isMass) {
                     let userToBan;
                     let member;
                     try {
@@ -25,20 +25,20 @@ module.exports = {
                 if (args.split(" ").length > 1) {
                     let bans = [];
                     await args.split(" ").forEach(async u => {
-                        let ban = await doBan(u, false, true);
+                        let ban = await dohackBan(u, false, true);
                         bans.push(ban);
                     });
                     msg.channel.createMessage(`:ok_hand: Banned ${bans.filter(b => b == true).length} users.`);
                 } else {
-                    await doBan(args, true, false);
+                    await dohackBan(args, true, false);
                 }
             }
         } else {
-            return await bot.createMessage(msg.channel.id, `**${msg.author.username}**, you miss required arguments.`);
+            return await bot.createMessage(msg.channel.id, `**${msg.author.username}**, you miss required arguments (Who should I hackban?).`);
         }
     },
     isCmd: true,
-    name: "ban",
+    name: "hackban",
     display: true,
     category: 3,
     description: "Bans a user by ID.",
