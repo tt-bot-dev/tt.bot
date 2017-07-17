@@ -60,4 +60,5 @@ module.exports = {
     description: "User information."
     ,
     aliases: ["userinfo"]
+
 };
