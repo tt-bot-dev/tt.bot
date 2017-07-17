@@ -4,23 +4,23 @@ module.exports = {
             if (args) {
 
                 let c = args.split(" ");
-                let setting = c[0]
-                let value = c.slice(1).join(" ")
+                let setting = c[0];
+                let value = c.slice(1).join(" ");
                 let server = await db.table("configs").get(msg.guild.id).run();
                 if (!server) {
                     await db.table("configs").insert({
                         id: msg.guild.id,
                         modRole: "tt.bot mod",
                         prefix: config.prefix
-                    })
+                    });
                     server = await db.table("configs").get(msg.guild.id).run();
                 }
                 if (setting && value && server[setting]) {
                     server[setting] = value;
                     await db.table("configs").get(msg.guild.id).update(server).run();
-                    return await msg.channel.createMessage(`Updated ${setting} to ${value}`)
+                    return await msg.channel.createMessage(`Updated ${setting} to ${value}`);
                 } else {
-                    return await msg.channel.createMessage(`Unknown setting ${setting}`)
+                    return await msg.channel.createMessage(`Unknown setting ${setting}`);
                 }
             }
             else {
@@ -30,14 +30,14 @@ module.exports = {
                         id: msg.guild.id,
                         modRole: "tt.bot mod",
                         prefix: config.prefix
-                    })
+                    });
                     server = await db.table("configs").get(msg.guild.id).run();
                 }
-                let items = []
+                let items = [];
                 Object.keys(server).forEach(item => {
-                    if (item != "id") items.push(`${item} - ${server[item]}`)
-                })
-                return await bot.createMessage(msg.channel.id, `\`\`\`\nServer configuration for ${msg.guild.name}\n${items.join("\n")}\`\`\``)
+                    if (item != "id") items.push(`${item} - ${server[item]}`);
+                });
+                return await bot.createMessage(msg.channel.id, `\`\`\`\nServer configuration for ${msg.guild.name}\n${items.join("\n")}\`\`\``);
             }
         }
     },
@@ -47,4 +47,4 @@ module.exports = {
     category: 3,
     description: "Configuration.",
     args: "[<item> <value>]"
-}
+};

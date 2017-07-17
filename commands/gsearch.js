@@ -15,11 +15,11 @@ module.exports = {
                 }
             });
 
-        })
+        });
     },
     isCmd: true,
     name: "gsearch",
     display: true,
     category: 2,
     description: "Search for a guild."
-}
+};

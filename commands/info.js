@@ -1,10 +1,10 @@
 module.exports = {
-    exec: function (msg, args) {
+    exec: function (msg) {
         let ownerMember = bot.users.get(config.oid);
         function getUptime(moment1, moment2) {
             var diff = moment.duration(moment1.diff(moment2));
-            var diffString = `${diff.days() > 0 ? diff.days() + ' days, ' : ''}${diff.hours() > 0 ? diff.hours() + ' hours, ' : ''}${diff.minutes()} minutes, and ${diff.seconds()} seconds`;
-            return diffString
+            var diffString = `${diff.days() > 0 ? diff.days() + " days, " : ""}${diff.hours() > 0 ? diff.hours() + " hours, " : ""}${diff.minutes()} minutes, and ${diff.seconds()} seconds`;
+            return diffString;
         }
         return bot.createMessage(msg.channel.id, {
             embed: {
@@ -32,7 +32,7 @@ module.exports = {
                 }],
                 color: 0x008800
             }
-        })
+        });
     },
     isCmd: true,
     name: "info",
@@ -43,4 +43,4 @@ module.exports = {
         "aboutbot",
         "about"
     ]
-}
+};

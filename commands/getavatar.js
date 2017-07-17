@@ -11,14 +11,14 @@ module.exports = {
                     image: {
                         url: u.avatarURL
                     },
-description: `[Image not loading?](${u.avatarURL})`
+                    description: `[Image not loading?](${u.avatarURL})`
                 }
-            })
-        }).catch(console.error)
+            });
+        }).catch(console.error);
     },
     isCmd: true,
     name: "getavatar",
     display: true,
     category: 1,
     description: "Get someone's avatar!"
-}
+};
