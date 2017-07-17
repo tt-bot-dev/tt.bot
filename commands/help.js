@@ -3,40 +3,40 @@ module.exports = {
         if (args == "") {
             let gencmds = [];
             let ocmds = [];
-            let modcmds = []
+            let modcmds = [];
             function doShit(fe) {
                 let cat = cmds[fe].category;
                 if (cat && cmds[fe].display) {
                     if (cat == 1) gencmds.push(fe);
                     else if (cat == 2) ocmds.push(fe);
-                    else if (cat == 3) modcmds.push(fe)
+                    else if (cat == 3) modcmds.push(fe);
                 }
             }
 
 
-            Object.keys(cmds).forEach(doShit)
+            Object.keys(cmds).forEach(doShit);
             let tosnd = [];
             if (gencmds.length > 0) {
                 tosnd.push({
                     name: "General commands",
                     value: gencmds.join(", ")
-                })
+                });
             }
             if (await bot.isModerator(msg.member) && modcmds.length > 0) {
                 tosnd.push({
                     name: "Moderator commands",
                     value: modcmds.join(", ")
-                })
+                });
             }
             if (isO(msg) && ocmds.length > 0) {
                 tosnd.push({
                     name: "Owner commands",
                     value: ocmds.join(", ")
-                })
+                });
             }
 
             bot.getDMChannel(msg.author.id).then(dm => {
-                msg.channel.createMessage(msg.author.mention + " Sent you a PM with help.")
+                msg.channel.createMessage(msg.author.mention + " Sent you a PM with help.");
                 return bot.createMessage(dm.id, {
                     embed: {
                         author: {
@@ -52,16 +52,16 @@ module.exports = {
                             text: `You can do ${config.prefix}help <command> to get additional command help. | Powered by tt.bot`
                         }
                     }
-                })
-            })
+                });
+            });
         } else {
-            let c
-            let cname
-            if (cmdAliases[args]) { c = cmds[cmdAliases[args]]; cname = cmdAliases[args] }
-            else  {c = cmds[args]; cname = args}
+            let c;
+            let cname;
+            if (cmdAliases[args]) { c = cmds[cmdAliases[args]]; cname = cmdAliases[args]; }
+            else  {c = cmds[args]; cname = args;}
             bot.getDMChannel(msg.author.id).then(dm => {
                 if (c) {
-                    msg.channel.createMessage(`${msg.author.mention} Sent you a PM with help for ${cname} command`)
+                    msg.channel.createMessage(`${msg.author.mention} Sent you a PM with help for ${cname} command`);
                     bot.createMessage(dm.id, {
                         embed: {
                             author: { name: `Help for ${cname}` },
@@ -80,9 +80,9 @@ module.exports = {
                             }],
                             color: 0x008800
                         }
-                    })
+                    });
                 }
-            })
+            });
         }
     },
     name: "help",
@@ -95,4 +95,4 @@ module.exports = {
         "cmds",
         "commands"
     ]
-}
+};

@@ -1,75 +1,75 @@
 let ex = module.exports = {};
-global.rld = require("require-reload")(require)
+global.rld = require("require-reload")(require);
 ex.loadAll = function () {
     let fa = fs.readdirSync("./commands");
     for (let i = 0; i < fa.length; i++) {
         let cmF = fa[i];
         if (/.+\.js$/.test(cmF)) {
-            let cmN = cmF.match(/(.+)\.js$/)[1]
+            let cmN = cmF.match(/(.+)\.js$/)[1];
             try {
-                let cmFL = require("./commands/" + cmN + ".js")
+                let cmFL = require("./commands/" + cmN + ".js");
                 if (cmFL.isCmd) {
-                    console.log(`${__filename}      | Loading ${cmN} command, file ${cmF}`)
+                    console.log(`${__filename}      | Loading ${cmN} command, file ${cmF}`);
                     cmds[cmN.toLowerCase()] = cmFL;
                     if (cmFL.aliases) {
-                        cmFL.aliases.forEach(a => cmdAliases[a] = cmN.toLowerCase())
+                        cmFL.aliases.forEach(a => cmdAliases[a] = cmN.toLowerCase());
                     }
                 }
-                else console.log(__filename + "    | Skipping non-command " + cmF)
+                else console.log(__filename + "    | Skipping non-command " + cmF);
             } catch (err) {
-                console.error(`Error while loading command ${cmN}: ${err}`)
-                console.error(err)
+                console.error(`Error while loading command ${cmN}: ${err}`);
+                console.error(err);
             }
 
         } else {
-            console.log(__filename + "     | Skipping non-JS " + cmF)
+            console.log(__filename + "     | Skipping non-JS " + cmF);
         }
     }
-}
+};
 ex.load = function (cmN) {
     if (fs.existsSync(`./commands/${cmN}.js`)) {
-        let cmFL
-        let n = cmN.toString()
+        let cmFL;
+        let n = cmN.toString();
         try {
-            cmFL = require("./commands/" + cmN + ".js")
+            cmFL = require("./commands/" + cmN + ".js");
         } catch (err) {
-            console.error(`Error while loading command ${cmN}: ${err}`)
-            console.error(err)
+            console.error(`Error while loading command ${cmN}: ${err}`);
+            console.error(err);
         }
         if (cmFL.isCmd) {
-            console.log(`${__filename}      | Loading ${cmN} command, file ${cmN}`)
+            console.log(`${__filename}      | Loading ${cmN} command, file ${cmN}`);
             if (cmFL.aliases) {
-                cmFL.aliases.forEach(a => cmdAliases[a] = n.toLowerCase())
+                cmFL.aliases.forEach(a => cmdAliases[a] = n.toLowerCase());
             }
             cmds[n.toLowerCase()] = cmFL;
         }
-        else console.log(__filename + "    | Skipping non-command " + cmN)
+        else console.log(__filename + "    | Skipping non-command " + cmN);
     } else {
-        console.log(__filename + "     | Skipping non-existent " + cmN)
+        console.log(__filename + "     | Skipping non-existent " + cmN);
     }
-}
+};
 ex.reload = function (cmN) {
     if (cmds[cmN])
         try {
             if (cmds[cmN].aliases) {
-                cmds[cmN].aliases.forEach(a => delete cmdAliases[a])
+                cmds[cmN].aliases.forEach(a => delete cmdAliases[a]);
             }
             let rel = rld(`./commands/${cmN}.js`);
-            cmds[cmN] = rel
+            cmds[cmN] = rel;
             if (cmds[cmN].aliases) {
-                cmds[cmN].aliases.forEach(a => cmdAliases[a] = cmN.toLowerCase())
+                cmds[cmN].aliases.forEach(a => cmdAliases[a] = cmN.toLowerCase());
             }
         } catch (err) {
             console.error(err);
         }
-    else throw new Error("Command isn't loaded. Use cmdWrap.load to load the command.")
-}
+    else throw new Error("Command isn't loaded. Use cmdWrap.load to load the command.");
+};
 ex.unload = function (cmN) {
     if (cmds[cmN]) {
         if (cmds[cmN].aliases) {
-            cmds[cmN].aliases.forEach(a => delete cmdAliases[a])
+            cmds[cmN].aliases.forEach(a => delete cmdAliases[a]);
         }
-        delete cmds[cmN]
+        delete cmds[cmN];
     }
-    else throw new Error("Command isn't loaded. Use cmdWrap.load to load the command.")
-}
+    else throw new Error("Command isn't loaded. Use cmdWrap.load to load the command.");
+};

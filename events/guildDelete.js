@@ -13,7 +13,7 @@ module.exports = (guild) => {
         }
     });
     
-    bot.postStats().then(null, null)
+    bot.postStats().then(null, null);
     bot.postStats2().then(null, null);
-}
-module.exports.isEvent = true
+};
+module.exports.isEvent = true;

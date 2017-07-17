@@ -5,4 +5,4 @@ module.exports = {
     "queries-cantaddreactions": "Can't add reactions here, query canceled.",
     "queries-cancel": "Query canceled.",
     "queries-notfound":"No such %s!"
-}
+};

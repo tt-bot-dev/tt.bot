@@ -35,7 +35,7 @@ passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
 
-var scopes = ['identify'];
+var scopes = ["identify"];
 
 passport.use(new dStrategy({
     clientID: config.clientID,
@@ -54,25 +54,19 @@ app.use(session({
     saveUninitialized: false,
     store: store
 }));
-app.use(cookieparser())
+app.use(cookieparser());
 app.use(passport.initialize());
 app.use(passport.session());
-app.get('/login', checkAuthNeg, passport.authenticate('discord', { scope: scopes }), function (req, res) { });
-app.get('/callback',
-    passport.authenticate('discord', { failureRedirect: '/' }), function (req, res) { res.redirect('/') } // auth success
+app.get("/login", checkAuthNeg, passport.authenticate("discord", { scope: scopes }), function (req,res) { req;res;return;});
+app.get("/callback",
+    passport.authenticate("discord", { failureRedirect: "/" }), function (req, res) { req;res.redirect("/"); } // auth success
 );
 
-app.get('/logout', checkAuth, function (req, res) {
+app.get("/logout", checkAuth, function (req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect("/");
 });
 
-function checkOwner(req, res, next) {
-    if (req.isAuthenticated()) {
-        if (req.user.id == config.oid) return next()
-    }
-    res.send("You're not owner.")
-}
 
 function checkAuth(req, res, next) {
     if (req.isAuthenticated()) return next();
@@ -81,7 +75,7 @@ function checkAuth(req, res, next) {
 
 function checkAuthNeg(req, res, next) {
     if (!req.isAuthenticated()) return next();
-    res.send('you\'re logged in already:)');
+    res.send("you're logged in already:)");
 }
 
 
@@ -93,8 +87,8 @@ app.get("/", (req, res) => {
             avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
             id: req.user.id
         } : null
-    })
-})
+    });
+});
 app.use("/guilds", require("./routes/guild"));
 app.use((err, req, res, next) => {
     if (err) {
@@ -106,9 +100,10 @@ app.use((err, req, res, next) => {
                 id: req.user.id
             } : null,
             error: (req.user && isO({author: req.user})) ? err.stack : err.message
-        })
+        });
     }
-})
+    next;
+});
 app.use((req, res) => {
     res.status(404).render("404", {
         user: req.isAuthenticated() ? {
@@ -117,8 +112,8 @@ app.use((req, res) => {
             avatar: `https://cdn.discordapp.com/avatars/${req.user.id}/${req.user.avatar}.png`,
             id: req.user.id
         } : null
-    })
-})
+    });
+});
 app.listen(config.webserverport || 8090, config.webserverip || "0.0.0.0", () => {
-    console.log("Webserver is running.")
-})
+    console.log("Webserver is running.");
+});

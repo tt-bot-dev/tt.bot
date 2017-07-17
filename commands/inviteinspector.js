@@ -3,9 +3,9 @@ module.exports = {
         let inviteData;
         let ownerMember = bot.users.get(config.oid);
         try {
-            inviteData = await bot.getInvite(args, true)
+            inviteData = await bot.getInvite(args, true);
         } catch (err) {
-            return msg.channel.createMessage("I cannot get the invite data? Maybe I've been banné from there or it's revoked?")
+            return msg.channel.createMessage("I cannot get the invite data? Maybe I've been banné from there or it's revoked?");
         }
         let fields = [{
             name: `Invite is for ${inviteData.channel.type == 0 ? "text" : "voice"} channel #${inviteData.channel.name}`,
@@ -16,16 +16,16 @@ module.exports = {
             value: `You can also click [here](https://discord.gg/${inviteData.code}) to join the server.\nNote: The invite link placement is **NOT** for advertisement purposes. I, ${ownerMember ? ownerMember.username : (await bot.getUserWithoutRESTMode(config.oid)).username}, am not responsible for any advertisement problems caused by abuse of this command. I can log you at any time.`,
             inline: true
         }, {
-            name: `More information`,
+            name: "More information",
             value: `In the server, there are totally ${inviteData.guild.textChannelCount + inviteData.guild.voiceChannelCount} channels (${inviteData.guild.textChannelCount} text, ${inviteData.guild.voiceChannelCount} voice). There is approximately ${inviteData.memberCount} members, from which ${inviteData.presenceCount} are online.`
-        }]
+        }];
         msg.channel.createMessage({
             embed: {
                 author: {
                     name: `Inspected invite data from the guild ${inviteData.guild.name}`,
                     icon_url: inviteData.guild.icon ? `https://cdn.discordapp.com/icons/${inviteData.guild.id}/${inviteData.guild.icon}.webp` : ""
                 },
-                description: `These information might change at any time.`,
+                description: "These information might change at any time.",
                 fields: fields,
                 footer: inviteData.inviter ? {
                     text: `Invite made by ${inviteData.inviter.username}#${inviteData.inviter.discriminator}`,
@@ -33,7 +33,7 @@ module.exports = {
                 } : undefined,
                 color: 0x008800
             }
-        })
+        });
     },
     isCmd: true,
     display: true,
@@ -43,4 +43,4 @@ module.exports = {
     aliases: [
         "iinspector"
     ]
-}
+};

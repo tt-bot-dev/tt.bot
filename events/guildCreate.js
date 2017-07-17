@@ -13,13 +13,13 @@ module.exports = async (guild) => {
             }
         }
     });
-    if (bot.listBotColls().includes(guild)) return guild.leave()
+    if (bot.listBotColls().includes(guild)) return guild.leave();
     let blacklist = await db.table("blacklist").run();
     if (blacklist.find(fn=> {
         if (fn.id == guild.id) return true;
         if (fn.ownerID == guild.ownerID) return true;
-    })) return guild.leave()
+    })) return guild.leave();
     bot.postStats().then(null, null);
     bot.postStats2().then(null, null);
-}
-module.exports.isEvent = true
+};
+module.exports.isEvent = true;

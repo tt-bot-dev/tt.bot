@@ -13,7 +13,7 @@ module.exports = class Translations {
             } catch (err) {
                 console.error(`Error while parsing JSON of ${i}`);
             }
-        })
+        });
     }
     unload(lang) {
         if (this._locales[lang]) delete this._locales[lang];
@@ -24,10 +24,10 @@ module.exports = class Translations {
         else throw new Error("The translation is nonexistant");
     }
     getTranslationString(lang, context) {
-        if (!(this._locales[lang] ? this._locales[lang][context] : this._locales["en"][context])) throw new Error("That definition doesn't exist.")
-        return this._locales[lang]  ? this._locales[lang][context] : this._locales["en"][context]
+        if (!(this._locales[lang] ? this._locales[lang][context] : this._locales["en"][context])) throw new Error("That definition doesn't exist.");
+        return this._locales[lang]  ? this._locales[lang][context] : this._locales["en"][context];
     }
     checkLanguage(lang) {
         return this._locales[lang] !== undefined;
     }
-}
+};
