@@ -3,10 +3,30 @@ const s = require("superagent");
 const ErisEndpoints = require("eris/lib/rest/Endpoints");
 class LibWUtil extends eris {
     /*eslint-disable no-unused-vars*/
-    constuctor(token, options) { 
+    constuctor(token, options) {
         //super(token,options);
     }
-
+    async _doPost(key = "", url = "", pld = {server_count: this.guilds.size}) {
+        if (!key || !url || !pld) return;
+        let data;
+        try {
+            data = await s.post("url")
+                .set("Authorization", key)
+                .send(pld);
+        } catch (err) {
+            throw {
+                message: "Can't post, access text or body property for more info.",
+                text: err.text,
+                body: err.body
+            };
+        }
+        if (data.statusCode != 200) throw {
+            message: "Can't post, access text or body property for more info.",
+            text: data.text,
+            body: data.body
+        };
+        return;
+    }
     passesRoleHierarchy(member1, member2) {
         if (member1.guild != member2.guild) throw new TypeError("Members aren't in the same guild");
         if (member1.guild.ownerID == member1.id) return true;
@@ -20,46 +40,20 @@ class LibWUtil extends eris {
     }
     async postStats() {
         if (!config.dbotskey || config.dbotskey == "") return;
-        let data;
         try {
-            data = await s.post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
-                .set("Authorization", config.dbotskey)
-                .send({ "server_count": this.guilds.size });
-        } catch (err) {
-            throw {
-                message: "Can't post, access text or body property for more info.",
-                text: err.text,
-                body: err.body
-            };
+            return await this._doPost(config.dbotskey, `https://bots.discord.pw/api/bots/${this.user.id}/stats`);
+        } catch(err) {
+            throw err;
         }
-        if (data.statusCode != 200) throw {
-            message: "Can't post, access text or body property for more info.",
-            text: data.text,
-            body: data.body
-        };
-        return;
 
     }
     async postStats2() {
         if (!config.dbots2key || config.dbots2key == "") return;
-        let data;
         try {
-            data = await s.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
-                .set("Authorization", config.dbots2key)
-                .send({ "server_count": this.guilds.size });
-        } catch (err) {
-            throw {
-                message: "Can't post, access text or body property for more info.",
-                text: err.text,
-                body: err.body
-            };
+            return await this._doPost(config.dbots2key, `https://discordbots.org/api/bots/${this.user.id}/stats`);
+        } catch(err) {
+            throw err;
         }
-        if (data.statusCode != 200) throw {
-            message: "Can't post, access text or body property for more info.",
-            text: data.text,
-            body: data.body
-        };
-        return;
     }
     async isModerator(member) {
         if (isO({ author: member.user })) return true;
