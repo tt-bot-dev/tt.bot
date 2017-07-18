@@ -7,7 +7,7 @@ module.exports = async function(g, m) {
     }
     if (server && server.farewellChannelId && server.farewellMessage) {
         let channel = g.channels.get(server.farewellChannelId);
-        if (channel) channel.createMessage(bot.parseMsg(server.farewellMessage));
+        if (channel) channel.createMessage(bot.parseMsg(server.farewellMessage, m, g));
         else {
             delete server.greetingChannelId;
             delete server.greetingMessage;

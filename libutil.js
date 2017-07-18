@@ -112,7 +112,7 @@ class LibWUtil extends eris {
         if (embed.footer) txt.push(`----------${embed.footer.text || "notext"} - ${embed.author.icon_url || "noiconuri"}----------`);
         return txt.join("\n");
     }
-    parseMsg(string) {
+    parseMsg(string, m, g) {
         return string.replace(/{u\.mention}/g, `<@!${m.user.id}>`)
             .replace(/{g\.name}/g, g.name)
             .replace(/{g\.id}/g, g.id)
