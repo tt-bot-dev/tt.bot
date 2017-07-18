@@ -6,7 +6,7 @@ class LibWUtil extends eris {
     constuctor(token, options) {
         //super(token,options);
     }
-    async _doPost(key = "", url = "", pld = {server_count: this.guilds.size}) {
+    async _doPost(key = "", url = "", pld = { server_count: this.guilds.size }) {
         if (!key || !url || !pld) return;
         let data;
         try {
@@ -42,7 +42,7 @@ class LibWUtil extends eris {
         if (!config.dbotskey || config.dbotskey == "") return;
         try {
             return await this._doPost(config.dbotskey, `https://bots.discord.pw/api/bots/${this.user.id}/stats`);
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
 
@@ -51,7 +51,7 @@ class LibWUtil extends eris {
         if (!config.dbots2key || config.dbots2key == "") return;
         try {
             return await this._doPost(config.dbots2key, `https://discordbots.org/api/bots/${this.user.id}/stats`);
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }
@@ -111,6 +111,14 @@ class LibWUtil extends eris {
         if (embed.provider) txt.push(`PROVIDER: ${embed.provider.name} ${embed.provider.url}`);
         if (embed.footer) txt.push(`----------${embed.footer.text || "notext"} - ${embed.author.icon_url || "noiconuri"}----------`);
         return txt.join("\n");
+    }
+    parseMsg(string) {
+        return string.replace(/{u\.mention}/g, `<@!${m.user.id}>`)
+            .replace(/{g\.name}/g, g.name)
+            .replace(/{g\.id}/g, g.id)
+            .replace(/{u\.name}/g, m.user.username)
+            .replace(/{u\.discrim}/g, m.user.discriminator)
+            .replace(/{u\.id}/g, m.user.id);
     }
 }
 module.exports = LibWUtil;

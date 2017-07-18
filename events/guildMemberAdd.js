@@ -6,16 +6,8 @@ module.exports = async function(g, m) {
         return;
     }
     if (server && server.greetingChannelId && server.greetingMessage) {
-        function formatMessage() {
-            return server.greetingMessage.replace(/{u\.mention}/g, `<@!${m.user.id}>`)
-                .replace(/{g\.name}/g, g.name)
-                .replace(/{g\.id}/g, g.id)
-                .replace(/{u\.name}/g, m.user.username)
-                .replace(/{u\.discrim}/g, m.user.discriminator)
-                .replace(/{u\.id}/g, m.user.id);
-        }
         let channel = g.channels.get(server.greetingChannelId);
-        if (channel) channel.createMessage(formatMessage());
+        if (channel) channel.createMessage(bot.parseMsg(server.greetingMessage));
         else {
             delete server.greetingChannelId;
             delete server.greetingMessage;
