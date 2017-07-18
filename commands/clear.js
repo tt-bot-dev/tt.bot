@@ -76,7 +76,7 @@ module.exports = {
                 }
             }
         } else {
-            return await bot.createMessage(msg.channel.id, `**${msg.author.username}**, you miss required arguments.`);
+            return await bot.createMessage(msg.channel.id, `**${msg.author.username}**, you miss required arguments. (What should I clear?)`);
         }
     },
     isCmd: true,
