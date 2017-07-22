@@ -14,7 +14,7 @@ ex.loadAll = function () {
                         cmFL.aliases.forEach(a => cmdAliases[a] = cmN.toLowerCase());
                     }
                 }
-                else console.log(__filename + "    | Skipping non-command " + cmF);
+                else console.log(__filename + "      | Skipping non-command " + cmF);
             } catch (err) {
                 console.error(`Error while loading command ${cmN}: ${err}`);
                 console.error(err);
