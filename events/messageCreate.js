@@ -45,7 +45,10 @@ module.exports = async function (msg) {
 ${args ? `    Arguments   ${args}` : ""}
 `
                 );
-                cmd.exec(msg, args); // we execute it
+                let exec = await cmd.exec(msg, args); // we execute it
+                if (typeof exec == "string" || typeof exec == "object") {
+                    msg.channel.createMessage(exec)
+                }
             }
         } catch (err) {
             console.error(err); // if an error is thrown, we log it.
