@@ -47,7 +47,7 @@ ${args ? `    Arguments   ${args}` : ""}
                 );
                 let exec = await cmd.exec(msg, args); // we execute it
                 if (typeof exec == "string" || typeof exec == "object") {
-                    msg.channel.createMessage(exec)
+                    msg.channel.createMessage(exec);
                 }
             }
         } catch (err) {
