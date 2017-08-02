@@ -10,7 +10,7 @@ class LibWUtil extends eris {
         if (!key || !url || !pld) return;
         let data;
         try {
-            data = await s.post("url")
+            data = await s.post(url)
                 .set("Authorization", key)
                 .send(pld);
         } catch (err) {
