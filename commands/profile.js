@@ -4,18 +4,19 @@ module.exports = {
         if (!action) return msg.channel.createMessage("WHAT THE HECK DO I DO?1??1?1??!!!!!1!1!1");
         switch (action) {
         case "remove": {
-            (async function () {
+            async function remove() {
                 let d = await db.table("profile").get(msg.author.id);
                 if (!d) return msg.channel.createMessage("You haven't created a profile.");
                 else {
                     await db.table("profile").get(msg.author.id).delete();
                     msg.channel.createMessage("Deleted your profile.");
                 }
-            })();
+            }
+            await remove();
             break;
         }
         case "setup": {
-            (async function () {
+            async function setup() {
                 let pdata = await db.table("profile").get(msg.author.id);
                 if (pdata) return msg.channel.createMessage("You have a profile already :^)");
                 let da = {
@@ -31,11 +32,12 @@ module.exports = {
                 da.color = num ? num.toString() : "";
                 await db.table("profile").insert(da);
                 await msg.channel.createMessage("Created a profile.");
-            })();
+            }
+            await setup();
             break;
         }
         case "show": {
-            (async function () {
+            async function show() {
                 let optargs = args.slice((action.length + 1));
                 let user;
                 try {
@@ -60,11 +62,12 @@ module.exports = {
                         color: parseInt(profileData.color)
                     }
                 });
-            })();
+            }
+            await show();
             break;
         }
         case "color": {
-            (async function () {
+            async function color() {
                 let dat = await db.table("profile").get(msg.author.id);
                 if (!dat) return msg.channel.createMessage("You don't have a profile yet!");
                 let opta = args.slice((action.length + 1));
@@ -86,11 +89,12 @@ module.exports = {
                     }
                 });
 
-            })();
+            }
+            await color();
             break;
         }
         case "fields": {
-            (async function () {
+            async function fields() {
                 let dat1 = await db.table("profile").get(msg.author.id);
                 if (!dat1) return msg.channel.createMessage("You don't have a profile yet!");
                 let optar = args.slice((action.length + 1));
@@ -126,18 +130,20 @@ module.exports = {
                     break;
                 }
                 }
-            })();
+            }
+            await fields();
             break;
         }
         case "timezone": {
-            (async function () {
+            async function timezone() {
                 let dat1 = await db.table("profile").get(msg.author.id);
                 if (!dat1) return msg.channel.createMessage("You don't have a profile yet!");
                 let tzValue = args.split(" ").slice(1).join(" ");
                 if (!momentTz.tz.zone(tzValue)) return msg.channel.createMessage("Sorry, but your time zone is not in the list provided by moment-timezone.\nThat list can be found at <https://cdn.rawgit.com/TTtie/TTtie-Bot/master/tz.txt>.");
                 dat1.timezone = tzValue;
                 await db.table("profile").get(msg.author.id).update(dat1);
-            })();
+            }
+            await timezone();
             break;
         }
         }
