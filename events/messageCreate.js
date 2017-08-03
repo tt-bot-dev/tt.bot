@@ -27,7 +27,9 @@ module.exports = async function (msg) {
     }
     if (msg.channel.topic && msg.channel.topic.includes("[tt.bot block]")) return; // we ignore the channel when [tt.bot block] is anywhere in the message.
     let server = await db.table("configs").get(msg.guild.id).run();
+    let user = await db.table("profile").get(msg.author.id).run();
     msg.guildConfig = server;
+    msg.userProfile = user;
     if ((server && msg.content.startsWith(server.prefix)) || msg.content.startsWith(config.prefix)) { // if the content starts with the prefix
         let nameslice = (server && msg.content.startsWith(server.prefix)) ? msg.content.slice(server.prefix.length) : msg.content.slice(config.prefix.length); // we slice it so we can get the command
         let cmdName = nameslice.split(" ")[0]; //  we split the slice output by spaces and choosing the command from the first element

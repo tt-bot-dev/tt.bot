@@ -12,6 +12,7 @@
     "express-session": "^1.15.3",
     "express-session-rethinkdb": "^0.4.1",
     "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
     "passport": "^0.3.2",
     "passport-discord": "^0.1.2",
     "pmx": "^1.2.0",

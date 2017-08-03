@@ -41,7 +41,7 @@ module.exports = {
                         inline: true
                     }, {
                         name: "Created at",
-                        value: new Date(u.createdAt).toString(),
+                        value: (msg.userProfile && msg.userProfile.timezone) ? momentTz(new Date(u.createdAt), msg.userProfile.timezone).format(config.tzDateFormat) : moment(new Date(u.createdAt)).format(config.normalDateFormat),
                         inline: true
                     }, {
                         name: "Is in a voice channel?",

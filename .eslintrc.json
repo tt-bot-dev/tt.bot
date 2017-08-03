@@ -48,6 +48,7 @@
         "db": true,
         "moment": true,
         "queries": true,
-        "rld":true
+        "rld": true,
+        "momentTz": true
     }
 }
