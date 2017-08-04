@@ -99,7 +99,7 @@ app.get("/", (req, res) => {
     res.render("landing", req.makeTemplatingData());
 });
 app.use("/guilds", require("./routes/guild"));
-app.use("/tags", require("./routes/tag"))
+app.use("/tags", require("./routes/tag"));
 app.use((err, req, res, next) => {
     if (err) {
         res.status(500).render("500", req.makeTemplatingData({

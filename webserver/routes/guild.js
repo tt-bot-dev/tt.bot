@@ -34,7 +34,7 @@ app.get("/delete/:id", checkOwner, (req, res) => {
             res.redirect("/");
         } else {
             res.status(404);
-            res.render("404", req.makeTemplatingData())
+            res.render("404", req.makeTemplatingData());
         }
     } else {
         res.render("delete", req.makeTemplatingData({ guild }));
@@ -52,21 +52,21 @@ app.get("/invite/:id", checkOwner, async (req, res) => {
         res.send(invite.error ? `Error while creating an invite: ${invite.error}` : `The invite code is ${invite.code}`);
     } else {
         res.status(404);
-        res.render("404", req.makeTemplatingData())
+        res.render("404", req.makeTemplatingData());
     }
 });
 app.get("/:id", checkOwner, (req, res) => {
     let guild = bot.guilds.get(req.params.id);
     if (guild) return res.render("guild", req.makeTemplatingData({ guild })); else {
         res.status(404);
-        res.render("404", req.makeTemplatingData())
+        res.render("404", req.makeTemplatingData());
     }
 });
 app.get("/:id/members", checkOwner, (req, res) => {
     let guild = bot.guilds.get(req.params.id);
     if (guild) return res.render("guild-members", req.makeTemplatingData({ guild })); else {
         res.status(404);
-        res.render("404", req.makeTemplatingData())
+        res.render("404", req.makeTemplatingData());
     }
 });
 
