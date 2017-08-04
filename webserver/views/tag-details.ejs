@@ -18,7 +18,7 @@
             <h2><%=tag.id%></h2>
             <h3>Owned by <%=bot.users.get(tag.owner) ? bot.getTag(bot.users.get(tag.owner)) : "Unknown User#0000"%></h3>
             <h2>Content: (this might look else than on Discord)</h2>
-            <%=tag.content%>
+            <%-tag.content.replace(/</g, "&lt").replace(/>/g, "&gt").replace(/[\r\n]/g, "<br>")%>
           </div>
                     </div>
       </div>
