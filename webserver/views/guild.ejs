@@ -25,7 +25,7 @@
 <main class="mdl-layout__content">
     <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
       <div class="page-content">
-      <center>
+      <div class="center">
       <button style="width:100vw; height: 7.5vh" class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="window.location = '/guilds/delete/<%=guild.id%>'">
   Delete <%=guild.name%>
 </button>
@@ -41,7 +41,7 @@
             <p class="big"><b><%=guild.memberCount%></b> members (<b><%=guild.members.filter(m => m.user.bot).length%></b> bots)</p>
 
           </div>
-                    </center>
+                    </div>
                        <button style="width:100vw; height: 7.5vh" class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="window.location = '/guilds/<%=guild.id%>/members'">
   List <%=guild.name%> members
 </button>

@@ -26,13 +26,13 @@ div.page-content {
     <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
       <div class="page-content">
         <div class="pad"></span>
-        <center>
+        <div class="center">
             <img src="<%=bot.user.dynamicAvatarURL('png', 2048)%>" class="pfp">
             <h1><%=bot.user.username%></h1>
             <h2>A multipurpose bot with aim for moderation and fun, made in Eris by TTtie.</h2>
             <hr></hr>
             <h2>Features</h2>
-            </center>
+            </div>
             This is being included but not limited to:
             <ul>
             <li>Inspecting invites</li>
@@ -43,12 +43,12 @@ div.page-content {
             <li>Cleverbot</li>
             </ul>
             <hr></hr>
-            <center><h2>Our stats</h2></center>
+            <div class="center"><h2>Our stats</h2></div>
             <b><%=bot.user.username%></b> is on <b><%=bot.guilds.size%></b> servers, with <b><%=bot.users.size%></b> cached unique users. Its uptime is <b><%=getUptime(moment(), moment(Date.now() - bot.uptime))%></b>.
             <hr></hr>
-            <center><h3>So why are you waiting?</h3>
+            <div class="center"><h3>So why are you waiting?</h3>
                 <h3><a href="https://discordapp.com/oauth2/authorize?client_id=195506253806436353&amp;scope=bot">Add <%=bot.user.username%> to your server today!</a></h3>
-            </center>
+            </div>
       </div>
     </section>
 </main>
