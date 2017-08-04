@@ -1,4 +1,4 @@
-const Router = require("express").Router;
+const { Router } = require("express");
 const app = Router();
 app.get("/", checkOwner, (req, res) => {
     res.render("guild-list", req.makeTemplatingData({
@@ -22,7 +22,8 @@ app.get("/botcolls/prune", checkOwner, (req, res) => {
             req.makeTemplatingData({
                 guild: {
                     name: "All bot collection servers"
-                }}));
+                }
+            }));
     }
 });
 app.get("/delete/:id", checkOwner, (req, res) => {
@@ -33,10 +34,10 @@ app.get("/delete/:id", checkOwner, (req, res) => {
             res.redirect("/");
         } else {
             res.status(404);
-            res.send("invalid guild");
+            res.render("404", req.makeTemplatingData())
         }
     } else {
-        res.render("delete", req.makeTemplatingData({guild}));
+        res.render("delete", req.makeTemplatingData({ guild }));
     }
 });
 app.get("/invite/:id", checkOwner, async (req, res) => {
@@ -49,15 +50,24 @@ app.get("/invite/:id", checkOwner, async (req, res) => {
             invite = { error: err };
         }
         res.send(invite.error ? `Error while creating an invite: ${invite.error}` : `The invite code is ${invite.code}`);
-    } else return res.end("Invalid guild");
+    } else {
+        res.status(404);
+        res.render("404", req.makeTemplatingData())
+    }
 });
 app.get("/:id", checkOwner, (req, res) => {
     let guild = bot.guilds.get(req.params.id);
-    if (guild) return res.render("guild", req.makeTemplatingData({guild})); else return res.end("Invalid guild");
+    if (guild) return res.render("guild", req.makeTemplatingData({ guild })); else {
+        res.status(404);
+        res.render("404", req.makeTemplatingData())
+    }
 });
 app.get("/:id/members", checkOwner, (req, res) => {
     let guild = bot.guilds.get(req.params.id);
-    if (guild) return res.render("guild-members", req.makeTemplatingData({guild})); else return res.end("Invalid guild");
+    if (guild) return res.render("guild-members", req.makeTemplatingData({ guild })); else {
+        res.status(404);
+        res.render("404", req.makeTemplatingData())
+    }
 });
 
 function checkOwner(req, res, next) {
