@@ -9,9 +9,10 @@ module.exports = {
             return false;
         }
         async function show(tagName) {
+            if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!")
             let data = await db.table("tags").get(tagName);
-            let profile = await db.table("profile").get(data.owner);
             if (!data) return await msg.channel.createMessage("No such tag.");
+            let profile = await db.table("profile").get(data.owner);
             msg.channel.createMessage({
                 embed: {
                     author: {
@@ -23,6 +24,7 @@ module.exports = {
             });
         }
         async function create(tagName, content) {
+            if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!")
             let data = await db.table("tags").get(tagName);
             if (data) return await msg.channel.createMessage("That tag already exists!");
             await db.table("tags").insert({
@@ -33,6 +35,7 @@ module.exports = {
             await msg.channel.createMessage(`Created the tag ${tagName} successfully.`);
         }
         async function edit(tagName, content) {
+            if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!")
             let data = await db.table("tags").get(tagName);
             if (!data) return await msg.channel.createMessage("No such tag.");
             if (isTagOwner(msg.author.id, data)) {
@@ -48,6 +51,7 @@ module.exports = {
             }
         }
         async function del(tagName) {
+            if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!")
             let data = await db.table("tags").get(tagName);
             if (!data) return await msg.channel.createMessage("No such tag.");
             if (isTagOwner(msg.author.id, data)) {
