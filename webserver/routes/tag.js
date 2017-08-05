@@ -13,6 +13,7 @@ app.get("/delete/:id", checkOwner, async (req, res) => {
     }
     if (req.query.yes == "true") {
         await db.table("tags").get(req.params.id).delete();
+        res.redirect("/tags/");
     }
     res.render("delete", req.makeTemplatingData({
         guild: {
