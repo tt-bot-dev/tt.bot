@@ -6,10 +6,10 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
-    "ejs": "^2.5.6",
+    "ejs": "^2.5.7",
     "eris": "github:abalabahaha/eris#dev",
     "express": "^4.15.3",
-    "express-session": "^1.15.3",
+    "express-session": "^1.15.5",
     "express-session-rethinkdb": "^0.4.1",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
@@ -17,7 +17,7 @@
     "passport-discord": "^0.1.2",
     "pmx": "^1.2.0",
     "require-reload": "^0.2.2",
-    "rethinkdbdash": "^2.3.29",
+    "rethinkdbdash": "^2.3.31",
     "superagent": "^3.5.2"
   },
   "devDependencies": {},
