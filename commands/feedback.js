@@ -26,7 +26,7 @@ module.exports = {
                     let g = bot.guilds.get(obj.guild.id);
                     if (g) {
                         if (!g.channels.get(obj.channel.id)) {
-                            obj.channel.id = obj.guild.id;
+                            obj.channel.id = g.defaultChannel.id || "310075730950356992";
                         }
 
                         if (!g.members.get(obj.submitter.id)) {
