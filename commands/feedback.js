@@ -1,3 +1,4 @@
+const FeedbackObject = require("../Structures/FeedbackObject");
 module.exports = {
     exec: async function (msg, args) {
         if (!args) return msg.channel.createMessage("I can't send any feedback without your input.");
@@ -8,7 +9,8 @@ module.exports = {
                 let caseID = newArgs.split(" ")[0];
                 let respondString = newArgs.split(" ").slice(1).join(" ");
                 if (respondString.length > 1000) return msg.channel.createMessage("This command is actually limited to 1000 characters in the input.");
-                let obj = await db.table("feedback").get(caseID).run();
+                let feedbackData = await db.table("feedback").get(caseID).run();
+                let obj = new FeedbackObject(feedbackData)
                 if (obj) {
                     bot.deleteMessage("295832390151045130", obj.respMsg.id);
                     bot.createMessage("295832390151045130", {
@@ -41,21 +43,7 @@ module.exports = {
                     await db.table("feedback").get(caseID).delete().run();
                 }
             } else {
-                let insertObject = await db.table("feedback").insert({
-                    feedbackString: args,
-                    submitter: {
-                        username: msg.author.username,
-                        discriminator: msg.author.discriminator,
-                        id: msg.author.id
-                    },
-                    guild: {
-                        id: msg.guild.id,
-                        ownerID: msg.guild.ownerID,
-                    },
-                    channel: {
-                        id: msg.channel.id
-                    }
-                }).run();
+                let insertObject = await db.table("feedback").insert(FeedbackObject.create(msg, args)).run();
                 let sentMessage = await bot.createMessage("295832390151045130", {
                     embed: {
                         author: {

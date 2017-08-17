@@ -1,3 +1,4 @@
+const UserProfileStructure = require(`../Structures/UserProfile`)
 module.exports = async function (msg) {
     if (!msg.author) return; // Message.author is occasionally undefined. abal plz fix
     if (msg.author.bot) return; // ignore bots
@@ -27,7 +28,8 @@ module.exports = async function (msg) {
     }
     if (msg.channel.topic && msg.channel.topic.includes("[tt.bot block]")) return; // we ignore the channel when [tt.bot block] is anywhere in the message.
     let server = await db.table("configs").get(msg.guild.id).run();
-    let user = await db.table("profile").get(msg.author.id).run();
+    let userData = await db.table("profile").get(msg.author.id).run();
+    let user = userData ? new UserProfileStructure(userData) : null
     msg.guildConfig = server;
     msg.userProfile = user;
     if ((server && msg.content.toLowerCase().startsWith(server.prefix.toLowerCase())) || msg.content.toLowerCase().startsWith(config.prefix.toLowerCase())) { // if the content starts with the prefix

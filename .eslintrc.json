@@ -49,6 +49,8 @@
         "moment": true,
         "queries": true,
         "rld": true,
-        "momentTz": true
+        "momentTz": true,
+        "encryptData": true,
+        "decryptData": true
     }
 }
