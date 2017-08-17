@@ -30,7 +30,7 @@ module.exports = async function (msg) {
     let user = await db.table("profile").get(msg.author.id).run();
     msg.guildConfig = server;
     msg.userProfile = user;
-    if ((server && msg.content.startsWith(server.prefix)) || msg.content.startsWith(config.prefix)) { // if the content starts with the prefix
+    if ((server && msg.content.toLowerCase().startsWith(server.prefix.toLowerCase())) || msg.content.toLowerCase().startsWith(config.prefix.toLowerCase())) { // if the content starts with the prefix
         let nameslice = (server && msg.content.startsWith(server.prefix)) ? msg.content.slice(server.prefix.length) : msg.content.slice(config.prefix.length); // we slice it so we can get the command
         let cmdName = nameslice.split(" ")[0]; //  we split the slice output by spaces and choosing the command from the first element
         let args = nameslice.slice(cmdName.length).slice(1); // we determine arguments

@@ -25,6 +25,7 @@ module.exports = {
         }
         async function create(tagName, content) {
             if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!");
+            if (!content) return await msg.channel.createMessage("I'm missing out the tag content!")
             let data = await db.table("tags").get(tagName);
             if (data) return await msg.channel.createMessage("That tag already exists!");
             await db.table("tags").insert({
