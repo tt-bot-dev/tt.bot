@@ -4,8 +4,9 @@ module.exports = {
             if (args == "disable") {
                 delete msg.guildConfig.farewellChannelId;
                 delete msg.guildConfig.farewellMessage;
-                await db.table("configs").get(msg.guild.id).update(msg.guildConfig).run();
+                await db.table("configs").get(msg.guild.id).replace(msg.guildConfig).run();
                 await msg.channel.createMessage("Reset the farewells.");
+                return
             }
             let splitargs = args.split(" | ");
             let options = {};
