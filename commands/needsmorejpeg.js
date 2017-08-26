@@ -5,7 +5,7 @@ module.exports = {
             return
         }
         const URLRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/
-        const ImageExtensionRegex = /(\.png|\.jpg|\.bmp)$/
+        const ImageExtensionRegex = /(\.png|\.jpg|\.bmp)$/i
         const url = (function getURL() {
             if (msg.attachments.filter(i => i.height && i.width).length > 0 && msg.attachments.filter(i => i.height && i.width)[0].url.match(ImageExtensionRegex)) {
                 return msg.attachments.filter(i => i.height && i.width)[0].url
