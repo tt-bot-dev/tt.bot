@@ -8,9 +8,7 @@ const e = require("express"),
     session = require("express-session"),
     appstore = require("express-session-rethinkdb")(session),
     store = new appstore({
-        connectOptions: {
-            db: "ttalpha"
-        }
+        connectOptions: config.connectionOpts
     });
 
 app.enable("trust proxy");

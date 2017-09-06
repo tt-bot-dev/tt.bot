@@ -5,9 +5,7 @@ global.userQuery = queries.user;
 require("./checkConfig")();
 require("./discord")();
 global.web = require("./webserver/index");
-global.db = require("rethinkdbdash")({
-    db: "ttalpha"
-});
+global.db = require("rethinkdbdash")(config.connectionOpts);
 global.keymetrics = require("./keymetrics/index.js");
 global.moment = require("moment");
 global.momentTz = require("moment-timezone");

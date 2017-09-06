@@ -10,5 +10,8 @@
     "clientSecret": "9a9a99e89a8e92dg4df6s6s6",
     "reroutePMs": true,
     "normalDateFormat": "D[.] M[.] YYYY [at] H:mm",
-    "tzDateFormat": "D[.] M[.] YYYY [at] H:mm [(]Z[)]"
+    "tzDateFormat": "D[.] M[.] YYYY [at] H:mm [(]Z[)]",
+    "connectionOpts": {
+        "db": "ttalpha"
+    }
 }
