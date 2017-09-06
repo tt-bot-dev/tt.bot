@@ -2,7 +2,7 @@ let db
 try {
     db = require("rethinkdbdash")(require("./config.json").connectionOpts);
 } catch (err) {
-    console.error("You haven't installed rethinkdbdash npm module! Please do so.");
+    console.error("You haven't installed rethinkdbdash npm module or you don't have configured the bot yet! Please do so.");
 };
 (async function () {
     const dbs = await db.tableList();
@@ -11,5 +11,6 @@ try {
     if (!dbs.includes("configs")) await db.tableCreate("configs");
     if (!dbs.includes("feedback")) await db.tableCreate("feedback");
     if (!dbs.includes("tags")) await db.tableCreate("tags")
+    if (!dbs.includes("profile")) await db.tableCreate("profile")
     return console.log("All set up!")
 })();
