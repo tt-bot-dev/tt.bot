@@ -19,7 +19,7 @@ module.exports = {
     isCmd: true,
     name: "say",
     display: true,
-    category: 2,
+    category: 1,
     description: "Make emoji render as a picture. Has a limit of 5 emotes.",
     args: "<emoji> [...emoji]"
 };

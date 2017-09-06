@@ -8,7 +8,7 @@ module.exports = class UserProfile {
                 name: decryptData(profileField.name),
                 value: decryptData(profileField.value)
             };
-        }) : null;
+        }) : [];
         this.timezone = data.timezone ? decryptData(data.timezone) : null;
     }
     toEncryptedObject() {
@@ -24,7 +24,7 @@ module.exports = class UserProfile {
                     name: encryptData(profileField.name),
                     value: encryptData(profileField.value)
                 };
-            }),
+            }) || [],
             timezone: encryptData(data.timezone)
         };
     }

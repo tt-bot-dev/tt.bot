@@ -35,13 +35,13 @@ passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
 
-var scopes = ["identify"];
+const scope = ["identify", "guilds"];
 
 passport.use(new dStrategy({
     clientID: config.clientID,
     clientSecret: config.clientSecret,
     callbackURL: `http://${config.webserverip ? (config.webserverip == "0.0.0.0" ? "127.0.0.1" : config.webserverip) : "127.0.0.1"}:${config.webserverport || "8090"}/callback`,
-    scope: scopes
+    scope
 }, function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
         return done(null, profile);
@@ -73,7 +73,7 @@ app.use((rq, rs, nx) => {
     };
     nx();
 });
-app.get("/login", checkAuthNeg, passport.authenticate("discord", { scope: scopes }), function (req, res) { req; res; return; });
+app.get("/login", checkAuthNeg, passport.authenticate("discord", { scope }), function (req, res) { req; res; return; });
 app.get("/callback",
     passport.authenticate("discord", { failureRedirect: "/" }), function (req, res) { req; res.redirect("/"); } // auth success
 );
@@ -91,9 +91,37 @@ function checkAuth(req, res, next) {
 
 function checkAuthNeg(req, res, next) {
     if (!req.isAuthenticated()) return next();
-    res.send("you're logged in already:)");
+    res.send("you're logged in already :)");
 }
 
+async function getGuildData(req, res) {
+    if (!req.user) return res.redirect("/login");
+    if (!req.user.guilds) return res.redirect("/login");
+    return req.user.guilds.map(async g => {
+        const bg = bot.guilds.get(g.id);
+        const u = bot.users.get(req.user.id);
+        if (!bg && (!((parseInt(g.permissions) >> 5) & 1) || !((parseInt(g.permissions) >> 3) & 1))) {
+            return { show: false };
+        }
+        let data = {
+            name: g.name,
+            id: g.id,
+            icon: g.icon ? (`https://cdn.discordapp.com/icons/${g.id}/${g.icon}.jpg`) :
+            "https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_place_black_24px.svg",
+            botIsInGuild: !!bg,
+            isMod: false,
+            show: true
+        };
+        if (u && bg) {
+            const m = bg.members.get(u.id);
+            if (!m) return data;
+            else {
+                data.isMod = await bot.isModerator(m);
+                return data
+            }
+        };
+    });
+}
 
 app.get("/", (req, res) => {
     res.render("landing", req.makeTemplatingData());

@@ -56,7 +56,7 @@ module.exports = {
                             name: `${user.user.username}#${user.user.discriminator}'s profile`,
                             icon_url: user.user.staticAvatarURL
                         },
-                        fields: profile.profileFields.length > 0 ? profile.profileFields : [{
+                        fields: (profile.profileFields && profile.profileFields.length > 0) ? profile.profileFields : [{
                             name: "<:xmark:314349398824058880>",
                             value: "No profile fields",
                             inline: true
@@ -109,7 +109,7 @@ module.exports = {
                 let fielddata = fieldsargs.slice(1).join("|");
                 switch (act) {
                 default: {
-                    msg.channel.createMessage("Usage: fields <add|del> <<name>|[data]>");
+                    msg.channel.createMessage("Usage: fields <add|del> <<name><|data, not required for del>>");
                     break;
                 }
                 case "del": {
@@ -122,8 +122,8 @@ module.exports = {
                     break;
                 }
                 case "add": {
-                    if (newdat1.profileFields.length > 10) return msg.channel.createMessage("There's a limit of 10 fields. Please remove the unneeded ones.");
-                    if (newdat1.profileFields.find(f => f.name.toLowerCase() == fieldname.toLowerCase())) return msg.channel.createMessage("That field already exists.");
+                    if (newdat1.profileFields && newdat1.profileFields.length > 10) return msg.channel.createMessage("There's a limit of 10 fields. Please remove the unneeded ones.");
+                    if (newdat1.profileFields && newdat1.profileFields.find(f => f.name.toLowerCase() == fieldname.toLowerCase())) return msg.channel.createMessage("That field already exists.");
                     newdat1.profileFields.push({
                         name: fieldname,
                         value: fielddata,
@@ -157,5 +157,5 @@ module.exports = {
     display: true,
     category: 1,
     description: "Shows the profile of the user (NOT USER DATA).",
-    args: "<show [user]|setup [color]fields <del|add> <<name>|[data]>|remove|color <color>>"
+    args: "<show [user]|setup [color]fields <del|add> <<name><|data, not required for del>>|remove|color <color>>"
 };

@@ -44,7 +44,7 @@ module.exports = {
     isCmd: true,
     name: "say",
     display: true,
-    category: 2,
+    category: 1,
     description: "Does your thing need more JPEG? :eyes: Give it to us and we'll handle it for you!",
     aliases: [
         "jpeg",
