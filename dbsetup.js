@@ -11,4 +11,5 @@ try {
     if (!dbs.includes("configs")) await db.tableCreate("configs");
     if (!dbs.includes("feedback")) await db.tableCreate("feedback");
     if (!dbs.includes("tags")) await db.tableCreate("tags")
+    return console.log("All set up!")
 })();
