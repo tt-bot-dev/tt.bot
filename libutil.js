@@ -55,6 +55,14 @@ class LibWUtil extends eris {
             throw err;
         }
     }
+    async postStats3() {
+        if (!config.novokey || config.novokey == "") return;
+        try {
+            return await this._doPost(config.novokey, `https://novo.archbox.pro/api/bots/${this.user.id}`);
+        } catch (err) {
+            throw err;
+        }
+    }
     async isModerator(member) {
         if (isO({ author: member.user })) return true;
         if (member.permission.json["administrator"]) return true;

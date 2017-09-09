@@ -6,6 +6,7 @@ module.exports = async function () {
     bot.editStatus("online", { name: `Type ${config.prefix}help`, type: 0 });
     bot.postStats().then(console.log(__filename + "     | Successfully posted!"), r => console.log(r.body));
     bot.postStats2().then(console.log(__filename + "     | Successfully posted 2!"), r => console.log(r.body));
+    bot.postStats3().then(console.log(__filename + "     | Successfully posted 3!"), r => console.log(r.body));
     global.keymetricsMetrics = new keymetrics();
     bot.listBotColls().forEach(g => g.leave());
     let blacklist = await db.table("blacklist").run();
