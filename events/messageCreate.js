@@ -50,7 +50,7 @@ ${args ? `    Arguments   ${args}` : ""}
 `
                 );
                 let exec = await cmd.exec(msg, args); // we execute it
-                if (typeof exec == "string" || typeof exec == "object") {
+                if (typeof exec == "string" || (typeof exec == "object" && exec.constructor.name === "Object" /* Check if the object passed is really an instance of JS object using the lazy way.*/) ) {
                     msg.channel.createMessage(exec);
                 }
             }
