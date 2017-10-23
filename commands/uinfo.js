@@ -29,7 +29,7 @@ module.exports = {
                     },
                     fields: [{
                         name: "Playing",
-                        value: u.game ? u.game.name : "Nothing",
+                        value: u.game ? (u.game.name.trim() || "This user likely uses only one character that is trimmed.") : "Nothing",
                         inline: true
                     }, {
                         name: "Status",
@@ -41,7 +41,7 @@ module.exports = {
                         inline: true
                     }, {
                         name: "Created at",
-                        value: (msg.userProfile && msg.userProfile.timezone) ? momentTz(new Date(u.createdAt), msg.userProfile.timezone).format(config.tzDateFormat) : moment(new Date(u.createdAt)).format(config.normalDateFormat),
+                        value: (msg.userProfile && msg.userProfile.timezone) ? moment(new Date(u.createdAt)).tz(msg.userProfile.timezone).format(config.tzDateFormat) : moment(new Date(u.createdAt)).format(config.normalDateFormat),
                         inline: true
                     }, {
                         name: "Is in a voice channel?",
