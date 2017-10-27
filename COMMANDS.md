@@ -20,6 +20,7 @@ module.exports = {
 
 If you're going to do any moderator commands, please follow this command structure:
 ```js
+module.exports = {
     exec: async function(msg,args) {
         if (await bot.isModerator(msg.member)) {
             //code
@@ -35,6 +36,7 @@ If you're going to do any moderator commands, please follow this command structu
 ```
 or this: 
 ```js
+module.exports = {
     exec:function(msg,args) {
         bot.isModerator(msg.member).then(isMod =>{
             if (isMod) {
@@ -48,5 +50,5 @@ or this:
     display:true, // can be either true or false and is optional
     name:"command name",
     args: "something" // can be ommited
-    }
+}
 ```
