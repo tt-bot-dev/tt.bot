@@ -68,7 +68,6 @@ const doit = async (arg = "") => {
         }
     });
     let result = await Promise.all(spl.map(getemot));
-    console.log(result);
     const Jimp = require("jimp");
     const { read, AUTO, MIME_PNG } = Jimp;
     let imgs = await Promise.all(result.map(r => read(r.url)));
@@ -95,7 +94,6 @@ const doit = async (arg = "") => {
     for (let i = 0; i < imgs.length; i++) {
         let item = imgs[i];
         bigImage.composite(item,
-            //(i == (imgs.length - 1) ? i * 72 : getPixl(i))
             getPixl(i)
             , 0);
     }
