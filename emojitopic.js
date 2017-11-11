@@ -1,5 +1,5 @@
 const doit = async (arg = "") => {
-    let spl = arg.split(" ");
+    let spl = arg.split(" ").map(s => s.trim()).filter(i => i !== "");
     if (spl.length > 5) spl = spl.slice(0, 5);
     let getemot = (arg) => new Promise(rs => {
         const EmojiRegex = /<:.*?:(.*?)>/;
