@@ -55,14 +55,6 @@ class LibWUtil extends eris {
             throw err;
         }
     }
-    async postStats3() {
-        if (!config.novokey || config.novokey == "") return;
-        try {
-            return await this._doPost(config.novokey, `https://novo.archbox.pro/api/bots/${this.user.id}`);
-        } catch (err) {
-            throw err;
-        }
-    }
     async isModerator(member) {
         if (isO({ author: member.user })) return true;
         if (member.permission.json["administrator"]) return true;
@@ -117,7 +109,7 @@ class LibWUtil extends eris {
         if (embed.image) txt.push(`IMAGE: ${embed.image.url}`);
         if (embed.video) txt.push(`VIDEO: ${embed.video.url}`);
         if (embed.provider) txt.push(`PROVIDER: ${embed.provider.name} ${embed.provider.url}`);
-        if (embed.footer) txt.push(`----------${embed.footer.text || "notext"} - ${embed.author.icon_url || "noiconuri"}----------`);
+        if (embed.footer) txt.push(`----------${embed.footer.text || "notext"} - ${embed.footer.icon_url || "noiconuri"}----------`);
         return txt.join("\n");
     }
     parseMsg(string, m, g) {
