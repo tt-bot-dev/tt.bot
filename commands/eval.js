@@ -1,3 +1,4 @@
+const CensorBuilder = require("../CensorBuilder")
 module.exports = {
     exec: async function (msg, args) {
         if (isO(msg)) {
@@ -8,7 +9,8 @@ module.exports = {
             if (typeof evaLUAted !== "string") {
                 overall = require("util").inspect(evaLUAted);
             } else overall = evaLUAted;
-            let data = `\`\`\`js\n${overall.replace(new RegExp(`${bot.token}|${config.token}|${config.dbots2key}|${config.dbotskey}|${config.clientSecret}${(config.connectionOpts && config.connectionOpts.password) ? `|${config.connectionOpts.password}`:""}`, "g"), "jako rilý?")}\n\`\`\``;
+            const censor = new CensorBuilder()
+            let data = `\`\`\`js\n${overall.replace(censor.build(), "jako rilý?")}\n\`\`\``;
             if (data.length > 2048) {
                 let gist;
                 try {
