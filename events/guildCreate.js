@@ -21,6 +21,5 @@ module.exports = async (guild) => {
     })) return guild.leave();
     bot.postStats().then(null, null);
     bot.postStats2().then(null, null);
-    bot.postStats3().then(null, null);
 };
 module.exports.isEvent = true;
