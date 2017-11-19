@@ -4,7 +4,7 @@ module.exports = {
             let splitargs = args.split(" | ");
             let options = {};
             splitargs.forEach(async fe => {
-                if (fe.match(/(user:([^]{0,36}))/i)) {
+                if (fe.match(/(user:([^]{0,37}))/i)) {
                     if (!options.user) {
                         options.user = fe.replace(/user:/, "").replace(/ \\\| /g, " | ");
                     }
