@@ -69,8 +69,8 @@ class LibWUtil extends eris {
             throw err;
         }
     }
-    async isModerator(member) {
-        if (this.isAdmin(member)) return true;
+    async isModerator(member, botOwnerIsMod = true) {
+        if (this.isAdmin(member, botOwnerIsMod)) return true;
         let serverHasModRole = false;
         let modRole = null;
         let server = await db.table("configs").get(member.guild.id).run();
@@ -84,8 +84,8 @@ class LibWUtil extends eris {
         if (serverHasModRole) return member.roles.includes(modRole.id);
     }
 
-    isAdmin(member) {
-        if (isO({ author: member.user })) return true;
+    isAdmin(member, botOwnerIsAdmin = true) {
+        if (botOwnerIsAdmin && isO({ author: member.user })) return true;
         if (member.permission.json["administrator"]) return true;
         if (member.guild.ownerID == member.id) return true;
     }
