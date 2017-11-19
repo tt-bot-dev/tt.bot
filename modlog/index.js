@@ -7,7 +7,7 @@ class ModLog {
     async makeLogMessage(userID, key, type, msg, reason, obj) {
         const user = await bot.getUserWithoutRESTMode(userID); // just if a cunt decided to leave the guild while getting the data
         if (!msg.guild.channels.get(msg.guildConfig.modlogChannel)) return;
-        return await bot.createMessage(msg.guildConfig.modlogChannel, {embed: message(type, key, user, msg.author, reason, obj)});
+        return await bot.createMessage(msg.guildConfig.modlogChannel, {content:key, embed: message(type, key, user, msg.author, reason, obj)});
     }
     async addStrike(userID, msg, reason) {
         if ((await bot.isModerator(msg.guild.members.get(userID)))) throw "Are you stupid? You cannot strike a moderator.";
