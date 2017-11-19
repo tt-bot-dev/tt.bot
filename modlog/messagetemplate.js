@@ -20,5 +20,5 @@ module.exports = function generateMessage(type, id, user, issuer, reason, obj) {
         name: "Strike ID",
         value: obj.id
     })
-    return 
+    return obje
 };
