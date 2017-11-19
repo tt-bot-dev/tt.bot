@@ -1,6 +1,5 @@
 module.exports = {
     exec: function (msg, args) {
-        if (!isO(msg)) return;
         queries.guild(args, msg).then(g => {
             bot.createMessage(msg.channel.id, {
                 embed: {

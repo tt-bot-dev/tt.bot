@@ -1,4 +1,4 @@
-const {PunishTexts, PunishColors, PunishTypes} = require("./constants")
+const {PunishTexts, PunishColors} = require("./constants");
 module.exports = function generateMessage(type, id, user, issuer, reason) {
     return {
         title: `${PunishTexts[type] ? PunishTexts[type] : "Unknown type"} ${id ? `| ${id}` : ""}`,
@@ -15,5 +15,5 @@ module.exports = function generateMessage(type, id, user, issuer, reason) {
             icon_url: issuer.avatarURL
         },
         color: PunishColors[type] || null
-    }
-}
+    };
+};

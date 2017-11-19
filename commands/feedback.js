@@ -10,7 +10,7 @@ module.exports = {
                 let respondString = newArgs.split(" ").slice(1).join(" ");
                 if (respondString.length > 1000) return msg.channel.createMessage("This command is actually limited to 1000 characters in the input.");
                 let feedbackData = await db.table("feedback").get(caseID).run();
-                let obj = new FeedbackObject(feedbackData)
+                let obj = new FeedbackObject(feedbackData);
                 if (obj) {
                     bot.deleteMessage("295832390151045130", obj.respMsg.id);
                     bot.createMessage("295832390151045130", {

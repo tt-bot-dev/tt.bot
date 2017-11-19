@@ -9,4 +9,4 @@ Object.defineProperty(ErisO.Guild.prototype, "defaultChannel", {
         return this.channels.get(defaultChannel.id);
     },
     set: function() {}
-})
+});

@@ -92,6 +92,7 @@ function checkAuthNeg(req, res, next) {
     res.send("you're logged in already :)");
 }
 
+/*
 async function getGuildData(req, res) {
     if (!req.user) return res.redirect("/login");
     if (!req.user.guilds) return res.redirect("/login");
@@ -105,7 +106,7 @@ async function getGuildData(req, res) {
             name: g.name,
             id: g.id,
             icon: g.icon ? (`https://cdn.discordapp.com/icons/${g.id}/${g.icon}.jpg`) :
-            "https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_place_black_24px.svg",
+                "https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_place_black_24px.svg",
             botIsInGuild: !!bg,
             isMod: false,
             show: true
@@ -115,11 +116,11 @@ async function getGuildData(req, res) {
             if (!m) return data;
             else {
                 data.isMod = await bot.isModerator(m);
-                return data
+                return data;
             }
-        };
+        }
     });
-}
+}*/
 
 app.get("/", (req, res) => {
     res.render("landing", req.makeTemplatingData());

@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const app = Router();
-const tagStruct = require("../../Structures/TagObject")
+const tagStruct = require("../../Structures/TagObject");
 app.get("/", checkOwner, async (req, res) => {
     res.render("tag-list", req.makeTemplatingData({
         tags: (await db.table("tags").run()).map(t => new tagStruct(t))
@@ -16,7 +16,7 @@ app.get("/delete/:id", checkOwner, async (req, res) => {
         await db.table("tags").get(encryptData(req.params.id)).delete();
         res.redirect("/tags/");
     }
-    data = new tagStruct(data)
+    data = new tagStruct(data);
     res.render("delete", req.makeTemplatingData({
         guild: {
             name: `tag named ${data.id}`

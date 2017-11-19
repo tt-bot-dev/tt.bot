@@ -1,16 +1,25 @@
 const eris = require("eris").Client;
 const s = require("superagent");
 const ErisEndpoints = require("eris/lib/rest/Endpoints");
-const ModLog = require("./modlog/index")
-const _ModLog = new ModLog() // js is a cunt
+const ModLog = require("./modlog/index");
+const _ModLog = new ModLog(); // js is a cunt
 class LibWUtil extends eris {
     /*eslint-disable no-unused-vars*/
     constuctor(token, options) {
         //super(token,options);
     }
     get modLog() {
-        return _ModLog
+        return _ModLog;
     }
+
+    async canUseCommand(user, command) {
+        if (command.category == 4 && this.isAdmin(user)) return true;
+        if (command.category == 3 && (await this.isModerator(user))) return true;
+        if (command.category == 2 && isO(user)) return true;
+        if (command.category == 1) return true;
+        return false;
+    }
+
     async _doPost(key = "", url = "", pld = { server_count: this.guilds.size }) {
         if (!key || !url || !pld) return;
         let data;
@@ -61,7 +70,7 @@ class LibWUtil extends eris {
         }
     }
     async isModerator(member) {
-        if (this.isAdmin(member)) return true
+        if (this.isAdmin(member)) return true;
         let serverHasModRole = false;
         let modRole = null;
         let server = await db.table("configs").get(member.guild.id).run();

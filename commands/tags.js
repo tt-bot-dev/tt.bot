@@ -1,5 +1,5 @@
-const TagObject = require("../Structures/TagObject")
-const UserProfile = require("../Structures/UserProfile")
+const TagObject = require("../Structures/TagObject");
+const UserProfile = require("../Structures/UserProfile");
 module.exports = {
     exec: async function (msg, args) {
         let split = args.split(" ");
@@ -14,9 +14,9 @@ module.exports = {
             if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!");
             let tagData = await db.table("tags").get(encryptData(tagName));
             if (!tagData) return await msg.channel.createMessage("No such tag.");
-            let data = new TagObject(tagData)
+            let data = new TagObject(tagData);
             let profileData = await db.table("profile").get(data.owner);
-            let profile = new UserProfile(profileData)
+            let profile = new UserProfile(profileData);
             msg.channel.createMessage({
                 embed: {
                     author: {
@@ -29,7 +29,7 @@ module.exports = {
         }
         async function create(tagName, content) {
             if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!");
-            if (!content) return await msg.channel.createMessage("I'm missing out the tag content!")
+            if (!content) return await msg.channel.createMessage("I'm missing out the tag content!");
             let data = await db.table("tags").get(encryptData(tagName));
             if (data) return await msg.channel.createMessage("That tag already exists!");
             await db.table("tags").insert(TagObject.create({
@@ -43,11 +43,11 @@ module.exports = {
             if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!");
             let tdata = await db.table("tags").get(encryptData(tagName));
             if (!tdata) return await msg.channel.createMessage("No such tag.");
-            let data = new TagObject(tdata)
+            let data = new TagObject(tdata);
             if (isTagOwner(msg.author.id, data)) {
                 if (!content) return msg.channel.createMessage("I don't have anything to update!");
                 else {
-                    data.content = content
+                    data.content = content;
                     await db.table("tags").get(tagName).update(data.toEncryptedObject());
                     msg.channel.createMessage(`Updated the tag ${tagName}.`);
                 }

@@ -1,12 +1,12 @@
 module.exports = {
     exec: async function (msg, args) {
-        if (await bot.isModerator(msg.member) && args) {
+        if (args) {
             if (args == "disable") {
                 delete msg.guildConfig.greetingChannelId;
                 delete msg.guildConfig.greetingMessage;
                 await db.table("configs").get(msg.guild.id).replace(msg.guildConfig).run();
                 await msg.channel.createMessage("Reset the greetings.");
-                return
+                return;
             }
             let splitargs = args.split(" | ");
             let options = {};

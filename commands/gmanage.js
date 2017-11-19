@@ -1,6 +1,6 @@
 module.exports = {
     exec: async function (msg, args) {
-        if (isO(msg) && args) {
+        if (args) {
             let action = args.split(" ")[0];
             if (action) {
                 let flags = args.split(" ").slice(1).join(" ");

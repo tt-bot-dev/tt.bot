@@ -21,6 +21,6 @@ global.getUptime = function getUptime(moment1, moment2) {
     var diffString = `${diff.days() > 0 ? diff.days() + " days, " : ""}${diff.hours() > 0 ? diff.hours() + " hours, " : ""}${diff.minutes()} minutes, and ${diff.seconds()} seconds`;
     return diffString;
 };
-const {encrypt, decrypt} = require("./dataMan")
+const {encrypt, decrypt} = require("./dataMan");
 global.encryptData = encrypt;
 global.decryptData = decrypt;

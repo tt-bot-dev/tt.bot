@@ -36,4 +36,4 @@ const Constants = {
         [5]:            "Removed strike"
     }
 };
-module.exports = Constants
+module.exports = Constants;
