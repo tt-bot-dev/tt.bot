@@ -1,6 +1,5 @@
 const {PunishTexts, PunishColors, PunishTypes} = require("./constants")
 module.exports = function generateMessage(type, id, user, issuer, reason) {
-    if (!Object.values(PunishTypes).find(t => t == type)) throw new Error("Invalid punishment type")
     return {
         title: `${PunishTexts[type] ? PunishTexts[type] : "Unknown type"} ${id ? `| ${id}` : ""}`,
         author: {
