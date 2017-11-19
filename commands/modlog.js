@@ -3,7 +3,7 @@ module.exports = {
         if (!msg.guildConfig) return msg.channel.createMessage(`Please create a config using ${config.prefix}config command before proceeding.`)
         if (args.toLowerCase() == "remove") {
             if (!msg.guildConfig.modlogChannel) return msg.channel.createMessage(`You don't have a modlog channel set.`)
-            msg.guildConfig.modlogChannel = undefined
+            delete msg.guildConfig.modlogChannel
             await db.table("configs").get(msg.guild.id).replace(msg.guildConfig).run()
             msg.channel.createMessage(":ok_hand: Removed the modlog channel")
             return
