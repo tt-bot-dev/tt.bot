@@ -4,10 +4,10 @@ const uuidregex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[
 class ModLog {
     constructor() {
     }
-    async makeLogMessage(userID, key, type, msg, reason) {
+    async makeLogMessage(userID, key, type, msg, reason, obj) {
         const user = await bot.getUserWithoutRESTMode(userID); // just if a cunt decided to leave the guild while getting the data
         if (!msg.guild.channels.get(msg.guildConfig.modlogChannel)) return;
-        return await bot.createMessage(msg.guildConfig.modlogChannel, {embed: message(type, key, user, msg.author, reason)});
+        return await bot.createMessage(msg.guildConfig.modlogChannel, {embed: message(type, key, user, msg.author, reason, obj)});
     }
     async addStrike(userID, msg, reason) {
         if ((await bot.isModerator(msg.guild.members.get(userID)))) throw "Are you stupid? You cannot strike a moderator.";
@@ -109,7 +109,7 @@ class ModLog {
             messageID: null
         };
         items.push(newDataobj);
-        const m = await this.makeLogMessage(dataobj.userID, newDataobj.id, PunishTypes.STRIKE_REMOVE, msg, reason);
+        const m = await this.makeLogMessage(dataobj.userID, newDataobj.id, PunishTypes.STRIKE_REMOVE, msg, reason, dataobj);
         newDataobj.messageID = m.id;
         await db.table("modlog").get(guildID).update({items});
     }
