@@ -122,7 +122,7 @@ class ModLog {
             guildStrikes = await db.table("modlog").get(guildID)
         }
         let {items} = guildStrikes;
-        const dataobj = items.find(k => k.id == strikeID && k.type == PunishTypes.STRIKE);
+        const dataobj = items.find(k => k.id == itemID);
         const dataobjIndex = items.indexOf(dataobj) // store the index for replacement
         if (!dataobj) throw "Item not found"
         dataobj.reason = newReason;
