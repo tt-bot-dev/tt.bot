@@ -1,6 +1,6 @@
 const message = require("./messagetemplate");
 const {PunishTypes} = require("./constants");
-const uuidregex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+const uuidregex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 class ModLog {
     constructor() {
     }
@@ -10,7 +10,7 @@ class ModLog {
         return await bot.createMessage(msg.guildConfig.modlogChannel, {embed: message(type, key, user, msg.author, reason)});
     }
     async addStrike(userID, msg, reason) {
-        if ((await bot.isModerator(msg.guild.members.get(userID)))) throw "Are you stupid? You cannot strike a moderator."
+        if ((await bot.isModerator(msg.guild.members.get(userID)))) throw "Are you stupid? You cannot strike a moderator.";
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
         if (!guildStrikes) {
@@ -85,7 +85,7 @@ class ModLog {
     }
 
     async removeStrike(strikeID, msg, reason) {
-        if (!uuidregex.test(strikeID)) throw "Invalid case ID"
+        if (!uuidregex.test(strikeID)) throw "Invalid case ID";
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
         if (!guildStrikes) {
@@ -115,7 +115,7 @@ class ModLog {
     }
 
     async updateReason(itemID, msg, newReason) {
-        if (!uuidregex.test(strikeID)) throw "Invalid case ID"
+        if (!uuidregex.test(itemID)) throw "Invalid case ID";
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
         if (!guildStrikes) {

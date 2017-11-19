@@ -14,19 +14,19 @@ module.exports = {
             } else {
                 console.log(fe + " doesn't match any regexes.");
             }
-            if (!options.user) return msg.channel.createMessage("You're missing a user to strike.")
+            if (!options.user) return msg.channel.createMessage("You're missing a user to strike.");
             let user;
             try {
-                user = await userQuery(options.user, msg)
+                user = await userQuery(options.user, msg);
             } catch(err) {
-                return
+                return;
             }
             try {
-                bot.modLog.addStrike(user.id, msg, options.reason)
+                bot.modLog.addStrike(user.id, msg, options.reason);
             } catch(err) {
-                msg.channel.createMessage(`Cannot strike the user for this reason: ${err.toString()}`)
+                msg.channel.createMessage(`Cannot strike the user for this reason: ${err.toString()}`);
             }
-        })
+        });
     },
     isCmd: true,
     display: true,

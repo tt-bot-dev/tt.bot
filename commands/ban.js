@@ -18,13 +18,13 @@ module.exports = {
             });
             try {
                 if (!options.user) {
-                    msg.channel.createMessage("You need to specify an user!")
-                    return
+                    msg.channel.createMessage("You need to specify an user!");
+                    return;
                 }
                 let user = await userQuery(options.user, msg);
                 if (bot.passesRoleHierarchy(msg.member, user)) {
                     await user.ban(1, `${bot.getTag(msg.author)}: ${options.reason || "no reason"}`);
-                    bot.modLog.addBan(user.id, msg, options.reason, false)
+                    bot.modLog.addBan(user.id, msg, options.reason, false);
                     await msg.channel.createMessage(`:ok_hand: Banned ${bot.getTag(user)}.`);
                 } else {
                     msg.channel.createMessage("You can't ban that user.");

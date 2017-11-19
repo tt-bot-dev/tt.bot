@@ -1,5 +1,5 @@
 module.exports = {
-    exec: function (msg, args) {
+    exec: async function (msg, args) {
         const [caseID, ...reason] = args.split(" ");
         if (!caseID || reason.length == 0) return msg.channel.createMessage("You are missing either the case ID or the reason.")
         try {

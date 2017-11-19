@@ -15,17 +15,17 @@ module.exports = {
                 } else {
                     console.log(fe + " doesn't match any regexes.");
                 }
-            })
+            });
             try {
                 if (!options.user) {
-                    msg.channel.createMessage("You need to specify an user!")
-                    return
+                    msg.channel.createMessage("You need to specify an user!");
+                    return;
                 }
                 let user = await userQuery(options.user, msg);
                 if (bot.passesRoleHierarchy(msg.member, user)) {
                     await user.ban(1, `${bot.getTag(msg.author)}: ${options.reason || "no reason"}`);
                     await user.unban();
-                    bot.modLog.addBan(user.id, msg, options.reason, true)
+                    bot.modLog.addBan(user.id, msg, options.reason, true);
                     await msg.channel.createMessage(`:ok_hand: Softbanned ${bot.getTag(user)}`);
                 } else {
                     msg.channel.createMessage("You can't softban that user!");

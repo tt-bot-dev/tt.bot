@@ -14,13 +14,13 @@ module.exports = {
             } else {
                 console.log(fe + " doesn't match any regexes.");
             }
-            if (!options.punishmentID) return msg.channel.createMessage("You're missing a case ID.")
+            if (!options.punishmentID) return msg.channel.createMessage("You're missing a case ID.");
             try {
-                bot.modLog.removeStrike(options.punishmentID, msg, options.reason)
+                bot.modLog.removeStrike(options.punishmentID, msg, options.reason);
             } catch(err) {
-                msg.channel.createMessage(`Cannot remove the strike for this reason: ${err.toString()}`)
+                msg.channel.createMessage(`Cannot remove the strike for this reason: ${err.toString()}`);
             }
-        })
+        });
     },
     isCmd: true,
     display: true,

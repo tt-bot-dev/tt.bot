@@ -19,13 +19,13 @@ module.exports = {
             try {
                 
                 if (!options.user) {
-                    msg.channel.createMessage("You need to specify an user!")
-                    return
+                    msg.channel.createMessage("You need to specify an user!");
+                    return;
                 }
                 let user = await userQuery(options.user, msg);
                 if (bot.passesRoleHierarchy(msg.member, user)) {
                     await user.kick(`${bot.getTag(msg.author)}: ${options.reason || "no reason"}`);
-                    bot.modLog.addKick(user.id, msg, options.reason)
+                    bot.modLog.addKick(user.id, msg, options.reason);
                     await msg.channel.createMessage(`:ok_hand: Kicked ${bot.getTag(user)}.`);
                 } else {
                     msg.channel.createMessage("You can't kick that user!");
