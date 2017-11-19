@@ -15,7 +15,7 @@ class LibWUtil extends eris {
     async canUseCommand(user, command) {
         if (command.category == 4 && this.isAdmin(user)) return true;
         if (command.category == 3 && (await this.isModerator(user))) return true;
-        if (command.category == 2 && isO(user)) return true;
+        if (command.category == 2 && isO({author: user})) return true;
         if (command.category == 1) return true;
         return false;
     }
