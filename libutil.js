@@ -1,10 +1,12 @@
 const eris = require("eris").Client;
 const s = require("superagent");
 const ErisEndpoints = require("eris/lib/rest/Endpoints");
+const ModLog = require("./modlog/index")
 class LibWUtil extends eris {
     /*eslint-disable no-unused-vars*/
     constuctor(token, options) {
-        //super(token,options);
+        super(token,options);
+        this.modLog = new ModLog()
     }
     async _doPost(key = "", url = "", pld = { server_count: this.guilds.size }) {
         if (!key || !url || !pld) return;
@@ -56,9 +58,7 @@ class LibWUtil extends eris {
         }
     }
     async isModerator(member) {
-        if (isO({ author: member.user })) return true;
-        if (member.permission.json["administrator"]) return true;
-        if (member.guild.ownerID == member.id) return true;
+        if (this.isAdmin(member)) return true
         let serverHasModRole = false;
         let modRole = null;
         let server = await db.table("configs").get(member.guild.id).run();
@@ -70,6 +70,12 @@ class LibWUtil extends eris {
             if (role) { serverHasModRole = true; modRole = role; }
         }
         if (serverHasModRole) return member.roles.includes(modRole.id);
+    }
+
+    isAdmin(member) {
+        if (isO({ author: member.user })) return true;
+        if (member.permission.json["administrator"]) return true;
+        if (member.guild.ownerID == member.id) return true;
     }
     listBotColls() {
         return this.guilds.filter(g => ((g.members.filter(fn => fn.bot).length) / g.memberCount * 100) >= 75);
