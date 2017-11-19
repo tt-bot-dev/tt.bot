@@ -19,6 +19,17 @@ module.exports = {
         if (!options.punishmentID) return msg.channel.createMessage("You're missing a case ID.");
         try {
             await bot.modLog.removeStrike(options.punishmentID, msg, options.reason);
+            const dm = await user.user.getDMChannel()
+            dm.createMessage({
+                embed: {
+                    title: "Your strike was removed!",
+                    description: `The strike removal was issued by ${bot.getTag(msg.author)} for reason \`${options.reason || "No reason"}\`.`,
+                    footer: {
+                        text: "Beware on what you're doing!"
+                    },
+                    timestamp: new Date()
+                }
+            })
         } catch(err) {
             msg.channel.createMessage(`Cannot remove the strike for this reason: ${err.toString()}`);
         }
