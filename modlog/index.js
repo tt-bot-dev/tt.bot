@@ -9,26 +9,29 @@ class ModLog {
         if (!msg.guild.channels.get(msg.guildConfig.modlogChannel)) return;
         return await bot.createMessage(msg.guildConfig.modlogChannel, {content:key, embed: message(type, key, user, msg.author, reason, obj)});
     }
+
+    async insertNew(guildID) {
+        await db.table("modlog").insert({
+            id: guildID,
+            items: []
+        });
+        return await db.table("modlog").get(guildID);
+    }
+
+    async generateObj(userID, reason, type) {
+        return {
+            id: (await db.uuid()),
+            userID, reason, type,
+            messageID: null
+        }
+    }
     async addStrike(userID, msg, reason) {
         if ((await bot.isModerator(msg.guild.members.get(userID)))) throw "Are you stupid? You cannot strike a moderator.";
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
-        if (!guildStrikes) {
-            await db.table("modlog").insert({
-                id: guildID,
-                items: []
-            });
-            guildStrikes = await db.table("modlog").get(guildID);
-        }
+        if (!guildStrikes) guildStrikes = await this.insertNew(guildID)
         let {items} = guildStrikes;
-        const dataobj = {
-            id: (await db.uuid()),
-            userID,
-            reason,
-            type: PunishTypes.STRIKE,
-            messageID: null
-        };
-
+        const dataobj = await this.generateObj(userID, reason, type)
         const m = await this.makeLogMessage(userID, dataobj.id, PunishTypes.STRIKE, msg, reason);
         dataobj.messageID = m.id;
         items.push(dataobj);
@@ -39,21 +42,9 @@ class ModLog {
         const t = isSoft? PunishTypes.SOFTBAN : PunishTypes.BAN;
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
-        if (!guildStrikes) {
-            await db.table("modlog").insert({
-                id: guildID,
-                items: []
-            });
-            guildStrikes = await db.table("modlog").get(guildID);
-        }
+        if (!guildStrikes) guildStrikes = await this.insertNew(guildID)
         let {items} = guildStrikes;
-        const dataobj = {
-            id: (await db.uuid()),
-            userID,
-            reason,
-            type:t,
-            messageID: null
-        };
+        const dataobj = await this.generateObj(userID, reason, type)
         const m = await this.makeLogMessage(userID, dataobj.id, t, msg, reason);
         dataobj.messageID = m.id;
         items.push(dataobj);
@@ -63,21 +54,9 @@ class ModLog {
     async addKick(userID, msg, reason) {
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
-        if (!guildStrikes) {
-            await db.table("modlog").insert({
-                id: guildID,
-                items: []
-            });
-            guildStrikes = await db.table("modlog").get(guildID);
-        }
+        if (!guildStrikes) guildStrikes = await this.insertNew(guildID)
         let {items} = guildStrikes;
-        const dataobj = {
-            id: (await db.uuid()),
-            userID,
-            reason,
-            type: PunishTypes.KICK,
-            messageID: null
-        };
+        const dataobj = await this.generateObj(userID, reason, PunishTypes.KICK)
         const m = await this.makeLogMessage(userID, dataobj.id, PunishTypes.KICK, msg, reason);
         dataobj.messageID = m.id;
         items.push(dataobj);
@@ -88,26 +67,14 @@ class ModLog {
         if (!uuidregex.test(strikeID)) throw "Invalid case ID";
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
-        if (!guildStrikes) {
-            await db.table("modlog").insert({
-                id: guildID,
-                items: []
-            });
-            guildStrikes = await db.table("modlog").get(guildID);
-        }
+        if (!guildStrikes) guildStrikes = await this.insertNew(guildID)
         let {items} = guildStrikes;
         const dataobj = items.find(k => k.id == strikeID && k.type == PunishTypes.STRIKE);
         const dataobjIndex = items.indexOf(dataobj); // store the index for replacement
         if (!dataobj) throw "Strike not found";
         dataobj.type = PunishTypes.REMOVED_STRIKE;
         items[dataobjIndex] = dataobj;
-        const newDataobj = {
-            id: (await db.uuid()),
-            userID: dataobj.userID,
-            reason,
-            type: PunishTypes.STRIKE_REMOVE,
-            messageID: null
-        };
+        const newDataobj = await this.generateObj(userID, reason, PunishTypes.STRIKE_REMOVE)
         items.push(newDataobj);
         const m = await this.makeLogMessage(dataobj.userID, newDataobj.id, PunishTypes.STRIKE_REMOVE, msg, reason, dataobj);
         newDataobj.messageID = m.id;
