@@ -2,11 +2,14 @@ const eris = require("eris").Client;
 const s = require("superagent");
 const ErisEndpoints = require("eris/lib/rest/Endpoints");
 const ModLog = require("./modlog/index")
+const _ModLog = new ModLog() // js is a cunt
 class LibWUtil extends eris {
     /*eslint-disable no-unused-vars*/
     constuctor(token, options) {
         //super(token,options);
-        this.modLog = new ModLog()
+    }
+    get modLog() {
+        return _ModLog
     }
     async _doPost(key = "", url = "", pld = { server_count: this.guilds.size }) {
         if (!key || !url || !pld) return;
