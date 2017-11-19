@@ -5,7 +5,7 @@ const ModLog = require("./modlog/index")
 class LibWUtil extends eris {
     /*eslint-disable no-unused-vars*/
     constuctor(token, options) {
-        super(token,options);
+        //super(token,options);
         this.modLog = new ModLog()
     }
     async _doPost(key = "", url = "", pld = { server_count: this.guilds.size }) {
