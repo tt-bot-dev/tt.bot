@@ -35,7 +35,7 @@ module.exports = {
     isCmd: true,
     name: "config",
     display: true,
-    category: 3,
+    category: 4,
     description: "Configuration.",
     args: "[<item> <value>]"
 };

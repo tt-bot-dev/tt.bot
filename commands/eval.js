@@ -50,13 +50,3 @@ module.exports = {
     name: "eval",
     args: "<code>"
 };
-/*
-require("superagent").post("https://api.github.com/gists").send({
-                description: "Evaluated code",
-                public: true,
-                files: {
-                    "exec.md": {
-                        content: data
-                    }
-                }
-            })*/

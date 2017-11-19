@@ -38,7 +38,7 @@ module.exports = {
     },
     isCmd: true,
     display: true,
-    category: 3,
+    category: 4,
     description: "Greeting messages.",
     args: "<disable|<message:[ttMsg compatible message](https://github.com/TTtie/TTtie-Bot/wiki/ttMsg) without newlines> | channel:<channel query>>"
 };

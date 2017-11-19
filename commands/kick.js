@@ -1,10 +1,31 @@
 module.exports = {
     exec: async function (msg, args) {
         if (args) {
+            let splitargs = args.split(" | ");
+            let options = {};
+            splitargs.forEach(async fe => {
+                if (fe.match(/(user:([^]{0,36}))/i)) {
+                    if (!options.user) {
+                        options.user = fe.replace(/user:/, "").replace(/ \\\| /g, " | ");
+                    }
+                } else if (fe.match(/(reason:([^]{0,400}))/i)) {
+                    if (!options.reason) {
+                        options.reason = fe.replace(/reason:/, "").replace(/ \\\| /g, " | ");
+                    }
+                } else {
+                    console.log(fe + " doesn't match any regexes.");
+                }
+            });
             try {
-                let user = await userQuery(args, msg);
+                
+                if (!options.user) {
+                    msg.channel.createMessage("You need to specify an user!")
+                    return
+                }
+                let user = await userQuery(options.user, msg);
                 if (bot.passesRoleHierarchy(msg.member, user)) {
-                    await user.kick(`Kicked by ${bot.getTag(msg.author)}`);
+                    await user.kick(`${bot.getTag(msg.author)}: ${options.reason || "no reason"}`);
+                    bot.modLog.addKick(user.id, msg, options.reason)
                     await msg.channel.createMessage(`:ok_hand: Kicked ${bot.getTag(user)}.`);
                 } else {
                     msg.channel.createMessage("You can't kick that user!");
@@ -21,6 +42,6 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 3,
-    description: "Kicks a user.",
-    args: "<user>"
+    description: "Kicks a user.\nThe command uses `\u200b | \u200b` as separators (note the spaces). Use ` \\| ` to escape the separation in your queries.\nThe order of the switches doesn't need to be followed.",
+    args: "<user:<user>>[ | <reason:<reason>>]"
 };

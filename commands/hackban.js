@@ -40,5 +40,5 @@ module.exports = {
     display: true,
     category: 3,
     description: "Bans a user by ID.",
-    args: "<user id>"
+    args: "<user id> [<user id> <user id>...]"
 };
