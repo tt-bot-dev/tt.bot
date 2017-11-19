@@ -33,5 +33,6 @@ module.exports = {
     display: true,
     category: 3,
     description: "Strike someone",
-    args: "<user:<user>>[ | <reason:<reason>>]"
+    args: "<user:<user>>[ | <reason:<reason>>]",
+    aliases: ["warn"]
 };
