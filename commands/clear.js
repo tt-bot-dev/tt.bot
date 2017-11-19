@@ -41,7 +41,7 @@ module.exports = {
             try {
                 await msg.delete();
                 if (options.from && options.from != "bots") options.from = await userQuery(options.from, msg)
-                if (options.mentions) options.mentions = await userQuery(options.mentions)
+                if (options.mentions) options.mentions = await userQuery(options.mentions, msg)
                 var oldestSnowflakeAllowed = (Date.now() - 1421280000000) * 4194304;
                 let msgCount = () => { if (options.messages) { if (isNaN(options.messages)) return 100; else return options.messages; } else return 100; };
                 let mss = await msg.channel.getMessages(msgCount());
