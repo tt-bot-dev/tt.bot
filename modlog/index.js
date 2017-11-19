@@ -107,7 +107,7 @@ class ModLog {
         }
         items.push(newDataobj)
         const m = await this.makeLogMessage(dataobj.userID, newDataobj.id, PunishTypes.STRIKE_REMOVE, msg, reason)
-        dataobj.messageID = m.id
+        newDataobj.messageID = m.id
         await db.table("modlog").get(guildID).update({items})
     }
 
