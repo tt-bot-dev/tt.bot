@@ -1,5 +1,5 @@
 module.exports = {
-    exec: function (msg, args) {
+    exec: async function (msg, args) {
         let splitargs = args.split(" | ");
         let options = {};
         splitargs.forEach(async fe => {

@@ -1,5 +1,5 @@
 module.exports = {
-    exec: function (msg, args) {
+    exec: async function (msg, args) {
         let splitargs = args.split(" | ");
         let options = {};
         splitargs.forEach(async fe => {
@@ -18,7 +18,7 @@ module.exports = {
         
         if (!options.punishmentID) return msg.channel.createMessage("You're missing a case ID.");
         try {
-            bot.modLog.removeStrike(options.punishmentID, msg, options.reason);
+            await bot.modLog.removeStrike(options.punishmentID, msg, options.reason);
         } catch(err) {
             msg.channel.createMessage(`Cannot remove the strike for this reason: ${err.toString()}`);
         }
