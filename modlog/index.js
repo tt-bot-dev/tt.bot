@@ -133,9 +133,10 @@ class ModLog {
     async updateMessage(messageID, obj, msg) {
         if (!msg.guild.channels.get(msg.guildConfig.modlogChannel)) return;
         const m = await msg.guild.channels.get(msg.guildConfig.modlogChannel).getMessage(messageID)
-        const [embed] = m.embeds
-        embed.fields[0].value = obj.reason
-        await m.edit({embed})
+        //const [embed] = m.embeds
+        //embed.fields[0].value = obj.reason
+        const e = message(obj.type, obj.id, obj.userID, msg.author, obj.reason)
+        await m.edit({embed: e})
     }
     fuckingNukeThis(){return Promise.reject("no")} //please we are missing some humor
 }
