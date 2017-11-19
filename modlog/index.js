@@ -139,3 +139,4 @@ class ModLog {
     }
     fuckingNukeThis(){return Promise.reject("no")} //please we are missing some humor
 }
+module.exports = ModLog
