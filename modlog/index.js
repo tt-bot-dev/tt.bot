@@ -74,7 +74,7 @@ class ModLog {
         if (!dataobj) throw "Strike not found";
         dataobj.type = PunishTypes.REMOVED_STRIKE;
         items[dataobjIndex] = dataobj;
-        const newDataobj = await this.generateObj(userID, reason, PunishTypes.STRIKE_REMOVE)
+        const newDataobj = await this.generateObj(dataobj.userID, reason, PunishTypes.STRIKE_REMOVE)
         items.push(newDataobj);
         const m = await this.makeLogMessage(dataobj.userID, newDataobj.id, PunishTypes.STRIKE_REMOVE, msg, reason, dataobj);
         newDataobj.messageID = m.id;
