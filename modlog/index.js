@@ -31,7 +31,7 @@ class ModLog {
         let guildStrikes = await db.table("modlog").get(guildID);
         if (!guildStrikes) guildStrikes = await this.insertNew(guildID)
         let {items} = guildStrikes;
-        const dataobj = await this.generateObj(userID, reason, type)
+        const dataobj = await this.generateObj(userID, reason, PunishTypes.STRIKE)
         const m = await this.makeLogMessage(userID, dataobj.id, PunishTypes.STRIKE, msg, reason);
         dataobj.messageID = m.id;
         items.push(dataobj);
@@ -44,7 +44,7 @@ class ModLog {
         let guildStrikes = await db.table("modlog").get(guildID);
         if (!guildStrikes) guildStrikes = await this.insertNew(guildID)
         let {items} = guildStrikes;
-        const dataobj = await this.generateObj(userID, reason, type)
+        const dataobj = await this.generateObj(userID, reason, t)
         const m = await this.makeLogMessage(userID, dataobj.id, t, msg, reason);
         dataobj.messageID = m.id;
         items.push(dataobj);
