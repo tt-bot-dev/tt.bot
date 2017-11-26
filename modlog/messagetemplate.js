@@ -19,6 +19,6 @@ module.exports = function generateMessage(type, id, user, issuer, reason, obj) {
     if (type == PunishTypes.STRIKE_REMOVE) obje.fields.push({
         name: "Strike ID",
         value: obj.id
-    })
-    return obje
+    });
+    return obje;
 };

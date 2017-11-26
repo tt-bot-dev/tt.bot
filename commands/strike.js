@@ -25,7 +25,7 @@ module.exports = {
         }
         try {
             await bot.modLog.addStrike(user.id, msg, options.reason);
-            const dm = await user.user.getDMChannel()
+            const dm = await user.user.getDMChannel();
             dm.createMessage({
                 embed: {
                     title: "It seems like you got striked.",
@@ -35,7 +35,7 @@ module.exports = {
                     },
                     timestamp: new Date()
                 }
-            })
+            });
         } catch(err) {
             msg.channel.createMessage(`Cannot strike the user for this reason: ${err.toString()}`);
         }

@@ -15,7 +15,7 @@ module.exports = {
                 } else if (fe.match(/(mentions:([^]{0,37}))/i)) {
                     if (!options.mentions) {
                         try {
-                            options.mentions = fe.replace(/mentions:/, "").replace(/ \\| /g, " | ")
+                            options.mentions = fe.replace(/mentions:/, "").replace(/ \\| /g, " | ");
 
                         } catch (err) {
                             options.mentions = null;
@@ -25,7 +25,7 @@ module.exports = {
                     if (!options.from) {
                         if (fe.replace(/from:/, "").replace(/ \\| /g, " | ") == "bots") return options.from = "bots";
                         try {
-                            options.from = fe.replace(/from:/, "").replace(/ \\\| /g, " | ")
+                            options.from = fe.replace(/from:/, "").replace(/ \\\| /g, " | ");
                         } catch (err) {
                             options.from = null;
                         }
@@ -40,8 +40,8 @@ module.exports = {
 
             try {
                 await msg.delete();
-                if (options.from && options.from != "bots") options.from = await userQuery(options.from, msg)
-                if (options.mentions) options.mentions = await userQuery(options.mentions, msg)
+                if (options.from && options.from != "bots") options.from = await userQuery(options.from, msg);
+                if (options.mentions) options.mentions = await userQuery(options.mentions, msg);
                 var oldestSnowflakeAllowed = (Date.now() - 1421280000000) * 4194304;
                 let msgCount = () => { if (options.messages) { if (isNaN(options.messages)) return 100; else return options.messages; } else return 100; };
                 let mss = await msg.channel.getMessages(msgCount());

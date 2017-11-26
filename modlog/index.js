@@ -23,15 +23,15 @@ class ModLog {
             id: (await db.uuid()),
             userID, reason, type,
             messageID: null
-        }
+        };
     }
     async addStrike(userID, msg, reason) {
         if ((await bot.isModerator(msg.guild.members.get(userID), false))) throw "Are you stupid? You cannot strike a moderator.";
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
-        if (!guildStrikes) guildStrikes = await this.insertNew(guildID)
+        if (!guildStrikes) guildStrikes = await this.insertNew(guildID);
         let {items} = guildStrikes;
-        const dataobj = await this.generateObj(userID, reason, PunishTypes.STRIKE)
+        const dataobj = await this.generateObj(userID, reason, PunishTypes.STRIKE);
         const m = await this.makeLogMessage(userID, dataobj.id, PunishTypes.STRIKE, msg, reason);
         dataobj.messageID = m.id;
         items.push(dataobj);
@@ -42,9 +42,9 @@ class ModLog {
         const t = isSoft? PunishTypes.SOFTBAN : PunishTypes.BAN;
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
-        if (!guildStrikes) guildStrikes = await this.insertNew(guildID)
+        if (!guildStrikes) guildStrikes = await this.insertNew(guildID);
         let {items} = guildStrikes;
-        const dataobj = await this.generateObj(userID, reason, t)
+        const dataobj = await this.generateObj(userID, reason, t);
         const m = await this.makeLogMessage(userID, dataobj.id, t, msg, reason);
         dataobj.messageID = m.id;
         items.push(dataobj);
@@ -54,9 +54,9 @@ class ModLog {
     async addKick(userID, msg, reason) {
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
-        if (!guildStrikes) guildStrikes = await this.insertNew(guildID)
+        if (!guildStrikes) guildStrikes = await this.insertNew(guildID);
         let {items} = guildStrikes;
-        const dataobj = await this.generateObj(userID, reason, PunishTypes.KICK)
+        const dataobj = await this.generateObj(userID, reason, PunishTypes.KICK);
         const m = await this.makeLogMessage(userID, dataobj.id, PunishTypes.KICK, msg, reason);
         dataobj.messageID = m.id;
         items.push(dataobj);
@@ -67,14 +67,14 @@ class ModLog {
         if (!uuidregex.test(strikeID)) throw "Invalid case ID";
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
-        if (!guildStrikes) guildStrikes = await this.insertNew(guildID)
+        if (!guildStrikes) guildStrikes = await this.insertNew(guildID);
         let {items} = guildStrikes;
         const dataobj = items.find(k => k.id == strikeID && k.type == PunishTypes.STRIKE);
         const dataobjIndex = items.indexOf(dataobj); // store the index for replacement
         if (!dataobj) throw "Strike not found";
         dataobj.type = PunishTypes.REMOVED_STRIKE;
         items[dataobjIndex] = dataobj;
-        const newDataobj = await this.generateObj(dataobj.userID, reason, PunishTypes.STRIKE_REMOVE)
+        const newDataobj = await this.generateObj(dataobj.userID, reason, PunishTypes.STRIKE_REMOVE);
         items.push(newDataobj);
         const m = await this.makeLogMessage(dataobj.userID, newDataobj.id, PunishTypes.STRIKE_REMOVE, msg, reason, dataobj);
         newDataobj.messageID = m.id;

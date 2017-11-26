@@ -1,3 +1,5 @@
+import { setTimeout } from "timers";
+
 const eris = require("eris").Client;
 const s = require("superagent");
 const ErisEndpoints = require("eris/lib/rest/Endpoints");
@@ -15,7 +17,7 @@ class LibWUtil extends eris {
     async canUseCommand(user, command) {
         if (command.category == 4 && this.isAdmin(user)) return true;
         if (command.category == 3 && (await this.isModerator(user))) return true;
-        if (command.category == 2 && isO({author: user})) return true;
+        if (command.category == 2 && isO({ author: user })) return true;
         if (command.category == 1) return true;
         return false;
     }
@@ -137,6 +139,29 @@ class LibWUtil extends eris {
             .replace(/{u\.name}/g, m.user.username)
             .replace(/{u\.discrim}/g, m.user.discriminator)
             .replace(/{u\.id}/g, m.user.id);
+    }
+    
+    waitForEvent(event, timeout, check) {
+        let t;
+        if (!check || typeof check !== "function") check = () => true;
+        return new Promise((rs, rj) => {
+            const listener = (...args) => {
+                if (check && typeof check == "function" && check(...args) === true) {
+                    dispose();
+                    rs([...args]);
+                    return; 
+                }
+            };
+            const dispose = () => {
+                this.removeListener(event, listener);
+            };
+    
+            if (timeout) t = setTimeout(() => {
+                dispose();
+                rj("timeout");
+            }, timeout);
+            this.on(event, listener);
+        });
     }
 }
 module.exports = LibWUtil;
