@@ -4,12 +4,14 @@ module.exports = {
             let gencmds = [];
             let ocmds = [];
             let modcmds = [];
+            let admincmds = []
             function doShit(fe) {
                 let cat = cmds[fe].category;
                 if (cat && cmds[fe].display) {
                     if (cat == 1) gencmds.push(fe);
                     else if (cat == 2) ocmds.push(fe);
                     else if (cat == 3) modcmds.push(fe);
+                    else if (cat == 4) admincmds.push(fe)
                 }
             }
 
@@ -35,6 +37,12 @@ module.exports = {
                 });
             }
 
+            if (bot.isAdmin(msg.member) && admincmds.length > 0) {
+                tosnd.push({
+                    name: "Administrator commands",
+                    value: admincmds.join(", ")
+                });
+            }
             bot.getDMChannel(msg.author.id).then(dm => {
                 msg.channel.createMessage(msg.author.mention + " Sent you a PM with help.");
                 return bot.createMessage(dm.id, {
