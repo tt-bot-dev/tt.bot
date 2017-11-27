@@ -1,5 +1,3 @@
-import { setTimeout } from "timers";
-
 const eris = require("eris").Client;
 const s = require("superagent");
 const ErisEndpoints = require("eris/lib/rest/Endpoints");
