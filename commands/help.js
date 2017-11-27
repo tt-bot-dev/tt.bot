@@ -4,14 +4,14 @@ module.exports = {
             let gencmds = [];
             let ocmds = [];
             let modcmds = [];
-            let admincmds = []
+            let admincmds = [];
             function doShit(fe) {
                 let cat = cmds[fe].category;
                 if (cat && cmds[fe].display) {
                     if (cat == 1) gencmds.push(fe);
                     else if (cat == 2) ocmds.push(fe);
                     else if (cat == 3) modcmds.push(fe);
-                    else if (cat == 4) admincmds.push(fe)
+                    else if (cat == 4) admincmds.push(fe);
                 }
             }
 
