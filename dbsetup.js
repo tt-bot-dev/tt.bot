@@ -14,6 +14,6 @@ try {
     if (!dbs.includes("tags")) await db.tableCreate("tags");
     if (!dbs.includes("profile")) await db.tableCreate("profile");
     if (!dbs.includes("modlog")) await db.tableCreate("modlog");
-    if (!dbs.includes("extensions")) await db.tableCreate("extensions")
+    if (!dbs.includes("extensions")) await db.tableCreate("extensions");
     return console.log("All set up!");
 })();
