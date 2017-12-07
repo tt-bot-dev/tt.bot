@@ -7,6 +7,14 @@ class Client {
         origGuild = guild;
     }
 
+    get guilds() {
+        return origBot.guilds.size
+    }
+
+    get users() {
+        return origBot.users.size
+    }
+
     waitForMessage(authorId, channelId, timeout, check) {
         if (!authorId || !channelId) return Promise.reject("Missing author/channel ID");
         if (!check || typeof check !== "function") check = () => true;
