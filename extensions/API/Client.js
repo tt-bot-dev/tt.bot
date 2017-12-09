@@ -5,14 +5,18 @@ class Client {
     constructor(bot, guild) {
         origBot = bot;
         origGuild = guild;
+        // TODO: sandboxed user
+        // this.user = bot.user
+        // TODO: sandboxed guild
+        // this.currentGuild = guild;
     }
 
     get guilds() {
-        return origBot.guilds.size
+        return origBot.guilds.size;
     }
 
     get users() {
-        return origBot.users.size
+        return origBot.users.size;
     }
 
     waitForMessage(authorId, channelId, timeout, check) {
