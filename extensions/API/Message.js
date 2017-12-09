@@ -1,5 +1,6 @@
 let origMsg = null;
 const User = require("./User");
+const resolveId = require("./Utils/ResolveUserID")
 class Message {
     constructor(msg) {
         origMsg = msg;
@@ -43,6 +44,11 @@ class Message {
 
     addReaction(reaction) {
         return origMsg.addReaction(reaction).then(() => true).catch(() => false);
+    }
+
+    removeReaction(reaction, user) {
+        user = resolveId(user)
+        return origMsg.removeReaction(reaction, user).then(() => true).catch(() => false);
     }
 }
 module.exports = Message;
