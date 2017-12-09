@@ -40,5 +40,9 @@ class Message {
         if (before && after) return Promise.reject("Cannot specify both before and after");
         return origMsg.getReaction(reaction, limit, before, after).then(u => u.map(user => new User(user))).catch(() => false);
     }
+
+    addReaction(reaction) {
+        return origMsg.addReaction(reaction).then(() => true).catch(() => false);
+    }
 }
 module.exports = Message;
