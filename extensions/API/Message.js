@@ -25,7 +25,15 @@ class Message {
     }
 
     delete(reason) {
-        return origMsg.delete().then(() => "Message sent").catch(() => "There was an error deleting the message.")
+        return origMsg.delete().then(() => true).catch(() => false);
+    }
+
+    pin() {
+        return origMsg.pin().then(() => true).catch(() => false);
+    }
+
+    unpin() {
+        return origMsg.pin().then(() => true).catch(() => false)
     }
 }
 module.exports = Message;
