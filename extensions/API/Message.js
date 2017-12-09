@@ -1,4 +1,4 @@
-let origMsg = null
+let origMsg = null;
 const User = require("./User");
 class Message {
     constructor(msg) {
@@ -18,10 +18,14 @@ class Message {
         // this.mentionsMembers = msg.mentions.map(u => this.guild.members.get(u))
         this.pinned = msg.pinned;
         this.reactions = msg.reactions;
-        // this.roleMentions msg.roleMentions.map(r => this.guild.roles.get(r));
+        // this.roleMentions = msg.roleMentions.map(r => this.guild.roles.get(r));
         this.timestamp = msg.timestamp;
         this.tts = msg.tts;
         this.type = msg.type;
+    }
+
+    delete(reason) {
+        return origMsg.delete().then(() => "Message sent").catch(() => "There was an error deleting the message.")
     }
 }
 module.exports = Message;
