@@ -1,11 +1,11 @@
 let origBot = null, origGuild = null;
-const Message = require("./Message")
+const Message = require("./Message");
+const User = require("./User");
 class Client {
     constructor(bot, guild) {
         origBot = bot;
         origGuild = guild;
-        // TODO: sandboxed user
-        // this.user = bot.user
+        this.user = new User(bot.user);
         // TODO: sandboxed guild
         // this.currentGuild = guild;
     }
