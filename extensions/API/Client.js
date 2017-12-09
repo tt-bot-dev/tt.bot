@@ -1,4 +1,4 @@
-let origBot, origGuild;
+let origBot = null, origGuild = null;
 // A dummy message object so ESLint doesn't complain
 class Message {}
 class Client {
