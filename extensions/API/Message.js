@@ -25,7 +25,7 @@ class Message {
     }
 
     delete(reason) {
-        return origMsg.delete().then(() => true).catch(() => false);
+        return origMsg.delete(reason).then(() => true).catch(() => false);
     }
 
     pin() {
@@ -33,7 +33,7 @@ class Message {
     }
 
     unpin() {
-        return origMsg.pin().then(() => true).catch(() => false)
+        return origMsg.pin().then(() => true).catch(() => false);
     }
 
     getReaction(reaction, limit, before, after) {
