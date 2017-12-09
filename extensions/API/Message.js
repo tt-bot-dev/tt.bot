@@ -35,5 +35,10 @@ class Message {
     unpin() {
         return origMsg.pin().then(() => true).catch(() => false)
     }
+
+    getReaction(reaction, limit, before, after) {
+        if (before && after) return Promise.reject("Cannot specify both before and after");
+        return origMsg.getReaction(reaction, limit, before, after).then(u => u.map(user => new User(user))).catch(() => false);
+    }
 }
 module.exports = Message;
