@@ -50,5 +50,9 @@ class Message {
         user = resolveId(user)
         return origMsg.removeReaction(reaction, user).then(() => true).catch(() => false);
     }
+
+    edit(content) {
+        return origMsg.edit(content).then(m => new Message(m)).catch(() => false);
+    }
 }
 module.exports = Message;
