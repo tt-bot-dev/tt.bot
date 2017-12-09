@@ -25,7 +25,7 @@ class User {
             code: 50017,
             message: "Cannot send messages to this user"
         });
-        return origUser.getDMChannel().then(dm => dm.createMessage(content, file)).then(m => new Message(m)).catch(() => "Error sending the message");
+        return origUser.getDMChannel().then(dm => dm.createMessage(content, file)).then(m => new Message(m)).catch(() => false);
     }
 }
 module.exports = User;
