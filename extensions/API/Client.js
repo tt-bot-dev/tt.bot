@@ -1,6 +1,5 @@
 let origBot = null, origGuild = null;
-// A dummy message object so ESLint doesn't complain
-class Message {}
+const Message = require("./Message")
 class Client {
     constructor(bot, guild) {
         origBot = bot;
