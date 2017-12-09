@@ -1,5 +1,5 @@
 let origUser = null;
-const Message = require("./Message")
+const Message = require("./Message");
 class User {
     constructor(user) {
         origUser = user;
@@ -25,7 +25,7 @@ class User {
             code: 50017,
             message: "Cannot send messages to this user"
         });
-        return origUser.getDMChannel().then(dm => dm.createMessage(content, file)).then(m => new Message(m))
+        return origUser.getDMChannel().then(dm => dm.createMessage(content, file)).then(m => new Message(m)).catch(e => "Error sending the message");
     }
 }
 module.exports = User;
