@@ -1,6 +1,6 @@
 let origMsg = null;
 const User = require("./User");
-const resolveId = require("./Utils/ResolveUserID")
+const resolveId = require("./Utils/ResolveUserID");
 class Message {
     constructor(msg) {
         origMsg = msg;
@@ -47,7 +47,7 @@ class Message {
     }
 
     removeReaction(reaction, user) {
-        user = resolveId(user)
+        user = resolveId(user);
         return origMsg.removeReaction(reaction, user).then(() => true).catch(() => false);
     }
 

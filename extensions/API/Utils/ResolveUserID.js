@@ -9,4 +9,4 @@ function resolveUserId(object) {
     if (object instanceof User) return object.id;
     return object;
 }
-module.exports = resolveUserId
+module.exports = resolveUserId;
