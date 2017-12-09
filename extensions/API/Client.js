@@ -25,7 +25,7 @@ class Client {
         let c = msg => {
             if (msg.author.id == authorId && msg.channel.id == channelId
                 && msg.channel.guild && msg.channel.guild.id == origGuild.id
-                && check()) return true;
+                && check(msg)) return true;
             else return false;
         };
         origBot.waitForEvent("messageCreate", timeout, c)
