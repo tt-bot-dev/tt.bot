@@ -1,5 +1,6 @@
 let origMsg = null;
 const User = require("./User");
+const Guild = require("./Guild")
 const resolveId = require("./Utils/ResolveUserID");
 class Message {
     constructor(msg) {
@@ -12,6 +13,7 @@ class Message {
         this.content = msg.content;
         this.editedTimestamp = msg.editedTimestamp;
         this.embeds = msg.embeds;
+        this.guild = new Guild(msg.guild);
         this.id = msg.id;
         // this.member = msg.member;
         this.mentionEveryone = msg.mentionEveryone;
@@ -25,32 +27,39 @@ class Message {
         this.type = msg.type;
     }
 
+    // noinspection JSMethodCanBeStatic
     delete(reason) {
         return origMsg.delete(reason).then(() => true).catch(() => false);
     }
 
+    // noinspection JSMethodCanBeStatic
     pin() {
         return origMsg.pin().then(() => true).catch(() => false);
     }
 
+    // noinspection JSMethodCanBeStatic
     unpin() {
         return origMsg.pin().then(() => true).catch(() => false);
     }
 
+    // noinspection JSMethodCanBeStatic
     getReaction(reaction, limit, before, after) {
         if (before && after) return Promise.reject("Cannot specify both before and after");
         return origMsg.getReaction(reaction, limit, before, after).then(u => u.map(user => new User(user))).catch(() => false);
     }
 
+    // noinspection JSMethodCanBeStatic
     addReaction(reaction) {
         return origMsg.addReaction(reaction).then(() => true).catch(() => false);
     }
 
+    // noinspection JSMethodCanBeStatic
     removeReaction(reaction, user) {
         user = resolveId(user);
         return origMsg.removeReaction(reaction, user).then(() => true).catch(() => false);
     }
 
+    // noinspection JSMethodCanBeStatic
     edit(content) {
         return origMsg.edit(content).then(m => new Message(m)).catch(() => false);
     }

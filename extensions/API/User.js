@@ -16,6 +16,7 @@ class User {
         this.username = user.username;
     }
 
+    // noinspection JSMethodCanBeStatic
     dynamicAvatarURL(format, size) {
         return origUser.dynamicAvatarURL(format, size);
     }
