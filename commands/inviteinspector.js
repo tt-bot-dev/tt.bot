@@ -15,10 +15,13 @@ module.exports = {
             name: `The guild ID is ${inviteData.guild.id}`,
             value: `You can also click [here](https://discord.gg/${inviteData.code}) to join the server.\nNote: The invite link placement is **NOT** for advertisement purposes. I, ${ownerMember ? ownerMember.username : (await bot.getUserWithoutRESTMode(config.oid)).username}, am not responsible for any advertisement problems caused by abuse of this command. I can log you at any time.`,
             inline: true
-        }, {
-            name: "More information",
-            value: `In the server, there are totally ${inviteData.guild.textChannelCount + inviteData.guild.voiceChannelCount} channels (${inviteData.guild.textChannelCount} text, ${inviteData.guild.voiceChannelCount} voice). There is approximately ${inviteData.memberCount} members, from which ${inviteData.presenceCount} are online.`
         }];
+        if (inviteData.guild.textChannelCount && inviteData.guild.voiceChannelCount) {
+            fields.push({
+                name: "More information",
+                value: `In the server, there are totally ${inviteData.guild.textChannelCount + inviteData.guild.voiceChannelCount} channels (${inviteData.guild.textChannelCount} text, ${inviteData.guild.voiceChannelCount} voice). There is approximately ${inviteData.memberCount} members, from which ${inviteData.presenceCount} are online.`
+            });
+        }
         msg.channel.createMessage({
             embed: {
                 author: {
@@ -26,7 +29,7 @@ module.exports = {
                     icon_url: inviteData.guild.icon ? `https://cdn.discordapp.com/icons/${inviteData.guild.id}/${inviteData.guild.icon}.webp` : ""
                 },
                 description: "These information might change at any time.",
-                fields: fields,
+                fields,
                 footer: inviteData.inviter ? {
                     text: `Invite made by ${inviteData.inviter.username}#${inviteData.inviter.discriminator}`,
                     icon_url: inviteData.inviter.staticAvatarURL
@@ -38,7 +41,7 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 1,
-    description: "Spy on the invites",
+    description: "~~Spy~~ Get information on the invites",
     args: "<invite code>",
     aliases: [
         "iinspector"

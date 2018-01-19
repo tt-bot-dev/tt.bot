@@ -1,6 +1,6 @@
 let origMsg = null;
 const User = require("./User");
-const Guild = require("./Guild")
+const Guild = require("./Guild");
 const resolveId = require("./Utils/ResolveUserID");
 class Message {
     constructor(msg) {
