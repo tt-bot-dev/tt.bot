@@ -2,7 +2,7 @@ module.exports = async function(g, m) {
     let server;
     try {
         server = await db.table("configs").get(g.id).run();
-    }catch(err) {
+    } catch(err) {
         return;
     }
     if (server && server.farewellChannelId && server.farewellMessage) {
