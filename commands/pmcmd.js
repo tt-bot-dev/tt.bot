@@ -21,7 +21,7 @@ module.exports = {
             msg.channel.createMessage("What command I should PM you?");
         }
     },
-    isCmd: true,
+    isCmd: false,
     display: true,
     category: 1,
     description: "PMs you the command output.",

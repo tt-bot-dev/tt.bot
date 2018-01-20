@@ -1,6 +1,5 @@
 module.exports = {
     exec: function (msg, args) {
-
         let c = args.split(" ");
         let action = c[0];
         let cmdToRld = c[1];

@@ -1,7 +1,7 @@
 module.exports = {
     exec: function (msg, args) {
         let u = args != "" ? args : msg.author.id;
-        userQuery(u, msg).then(u => {
+        userQuery(u, msg, true).then(u => {
             let rarr = u.roles.map(r => u.guild.roles.get(r).name);
             rarr.unshift("@everyone");
             let unick = u.nick || bot.getTag(u);
