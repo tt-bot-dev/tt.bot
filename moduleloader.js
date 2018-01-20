@@ -14,7 +14,6 @@ global.decimalToHex = function (d) {
     hex = "000000".substr(0, 6 - hex.length) + hex;
     return hex;
 };
-global.translations = new (require("./translations/index"))();
 global.format = require("util").format;
 global.getUptime = function getUptime(moment1, moment2) {
     var diff = moment.duration(moment1.diff(moment2));
