@@ -19,7 +19,7 @@ class CensorBuilder {
 
             this.values = values;
         }
-        this.values = this.values.filter(c => c !== null || c !== undefined);
+        this.values = this.values.filter(c => c !== null || c !== undefined || c !== "");
     }
     build() {
         return new RegExp(this.values.join("|"), "g");
