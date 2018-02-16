@@ -2,7 +2,7 @@ module.exports = {
     exec: async function (msg) {
         const { agreeChannel, memberRole } = msg.guildConfig;
         if (agreeChannel && memberRole) {
-            msg.channel.createMessage("The agree feature was already set up on this server. Do you want to disable it?\nType y or yes for disabling it. n or no otherwise. To respond, you have 10 seconds.");
+            msg.channel.createMessage("The agreement feature was already set up on this server. Do you want to disable it?\nType y or yes for disabling it. n or no otherwise. To respond, you have 10 seconds.");
             try {
                 let [resp] = bot.waitForEvent("messageCreate", 10000, (m) => {
                     if (m.author.id != msg.author.id) return false;
@@ -22,11 +22,26 @@ module.exports = {
                 if (err == "timeout") return msg.channel.createMessage("Operation cancelled.");
             }
         } else {
-            // TODO: setting up 
+            msg.channel.createMessage("So, here we go! Please type your search query to choose the channel you want to set up the agreement feature.")
+            try {
+                let [resp] = bot.waitForEvent("messageCreate", 30000, (m) => {
+                    if (m.author.id != msg.author.id) return false;
+                    if (m.channel.id != msg.channel.id) return false;
+                    return true;
+                });
+                let channel;
+                try {
+                    channel = await queries.channel(resp.content, msg, true);
+                } catch(err) {
+                    return msg.channel.createMessage("Sorry, but I didn't get this right. Please rerun the command.")
+                }
+            } catch (err) {
+                if (err == "timeout") return msg.channel.createMessage("Operation cancelled.");
+            }
         }
     },
     isCmd: true,
     display: true,
     category: 1,
-    description: "Sets up the agree feature.",
+    description: "Sets up the agreement feature.",
 };
