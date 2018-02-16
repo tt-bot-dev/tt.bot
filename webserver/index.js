@@ -40,10 +40,8 @@ passport.use(new dStrategy({
     clientSecret: config.clientSecret,
     callbackURL: `http://${config.webserverip ? (config.webserverip == "0.0.0.0" ? "127.0.0.1" : config.webserverip) : "127.0.0.1"}:${config.webserverport || "8090"}/callback`,
     scope
-}, function (accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-        return done(null, profile);
-    });
+}, (accessToken, refreshToken, profile, done) => {
+    process.nextTick(() => done(null, profile));
 }));
 
 app.use(session({
