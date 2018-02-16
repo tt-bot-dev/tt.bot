@@ -33,7 +33,7 @@ passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
 
-const scope = ["identify", "guilds"];
+const scope = ["identify"/*, "guilds"*/];
 
 passport.use(new dStrategy({
     clientID: config.clientID,
