@@ -22,19 +22,23 @@ module.exports = {
                 if (err == "timeout") return msg.channel.createMessage("Operation cancelled.");
             }
         } else {
-            msg.channel.createMessage("So, here we go! Please type your search query to choose the channel you want to set up the agreement feature.")
+            msg.channel.createMessage("So, here we go! Please type your search query to choose the role you want to set up the agreement feature.");
             try {
                 let [resp] = bot.waitForEvent("messageCreate", 30000, (m) => {
                     if (m.author.id != msg.author.id) return false;
                     if (m.channel.id != msg.channel.id) return false;
                     return true;
                 });
-                let channel;
+                let role;
                 try {
-                    channel = await queries.channel(resp.content, msg, true);
+                    role = await queries.role(msg, resp.content, true);
                 } catch(err) {
-                    return msg.channel.createMessage("Sorry, but I didn't get this right. Please rerun the command.")
+                    return msg.channel.createMessage("Sorry, but I didn't get this right. Please rerun the command.");
                 }
+                msg.guildConfig.agreeChannel = msg.channel.id;
+                msg.guildConfig.memberRole = role.id;
+                await db.table("configs").get(msg.guild.id).update(msg.guildConfig);
+                msg.channel.createMessage(`The setup is done! Now, when somebody types ${config.prefix}agree here, I'll give them the role.`)
             } catch (err) {
                 if (err == "timeout") return msg.channel.createMessage("Operation cancelled.");
             }

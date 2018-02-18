@@ -14,7 +14,7 @@ module.exports = {
         if (!data && user) return "That user doesn't have a profile.";
         let profile = data ? new UserProfile(data) : msg.userProfile;
         if (!profile.timezone) return "That user doesn't have a timezone set.";
-        return `It's ${momentTz(new Date(), profile.timezone).format(config.tzDateFormat)} for ${user ? bot.getTag(user) : bot.getTag(msg.author)}.`;
+        return `It's ${moment(new Date()).tz(profile.timezone).format(config.tzDateFormat)} for ${user ? bot.getTag(user) : bot.getTag(msg.author)}.`;
     },
     isCmd: true,
     display: true,

@@ -35,7 +35,7 @@ module.exports = class Query {
                         description: `I've found ${this._items.length} items, displaying maximally 5 of them.\n${listUsers()}\nChoose one from the users by reacting with the number next to the username.\nElse, react with ❌ to cancel.\nQuery will automatically expire in 5 minutes.`
                     }
                 });
-                return new Promise((rs, rj) => {
+                return new Promise(async (rs, rj) => {
                     let tout = setTimeout(() => {
                         bot.removeListener("messageReactionAdd", r);
                         m.delete();
@@ -43,7 +43,7 @@ module.exports = class Query {
                         rj("Canceled automatically.");
                     }, 300000);
                     try {
-                        Promise.all(Object.keys(binds).map(r => m.addReaction(r)));
+                        await Promise.all(Object.keys(binds).map(r => m.addReaction(r)));
                     } catch (err) {
                         bot.createMessage(msg.channel.id, "Cannot add reactions; query cancelled.");
                         rj("Cannot add reactions");
@@ -52,7 +52,12 @@ module.exports = class Query {
                     function r(me, e, u) {
                         if (u != msg.author.id) return;
                         if (me.id != m.id) return;
-                        if (e.name == "❌") { bot.removeListener("messageReactionAdd", r); m.delete(); bot.createMessage(msg.channel.id, "Query canceled."); rj("Cancelled by user"); clearTimeout(tout); }
+                        if (e.name == "❌") {
+                            bot.removeListener("messageReactionAdd", r);
+                            m.delete(); bot.createMessage(msg.channel.id, "Query canceled.");
+                            rj("Cancelled by user");
+                            clearTimeout(tout);
+                        }
                         let bindUser = binds[e.name];
                         if (bindUser) {
                             m.delete();

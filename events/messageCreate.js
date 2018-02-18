@@ -6,7 +6,6 @@ module.exports = async function (msg) {
         if (config.reroutePMs) {
             if (isO(msg)) return;
             let pm = await this.getDMChannel(config.oid);
-            let embedString = msg.embeds.map(a => `\`\`\`\n${this.embedToText(a)}\`\`\`\n`).join("\n");
             let attachmentString = msg.attachments.map(a => a.url).join("\n");
             let embed = {
                 author: {
