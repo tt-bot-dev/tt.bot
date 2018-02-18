@@ -38,7 +38,7 @@ module.exports = {
                 msg.guildConfig.agreeChannel = msg.channel.id;
                 msg.guildConfig.memberRole = role.id;
                 await db.table("configs").get(msg.guild.id).update(msg.guildConfig);
-                msg.channel.createMessage(`The setup is done! Now, when somebody types ${config.prefix}agree here, I'll give them the role.`)
+                msg.channel.createMessage(`The setup is done! Now, when somebody types ${config.prefix}agree here, I'll give them the role.`);
             } catch (err) {
                 if (err == "timeout") return msg.channel.createMessage("Operation cancelled.");
             }

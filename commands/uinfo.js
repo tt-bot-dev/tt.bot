@@ -9,12 +9,12 @@ module.exports = {
             function getStatusType() {
                 if (!u.game) return "Playing";
                 switch (u.game.type) {
-                    case 0:
-                        return "Playing";
-                    case 1:
-                        return "Streaming";
-                    case 2:
-                        return "Listening to";
+                case 0:
+                    return "Playing";
+                case 1:
+                    return "Streaming";
+                case 2:
+                    return "Listening to";
                 }
             }
             function getstatus() {
@@ -46,7 +46,7 @@ module.exports = {
                             str += u.game.name + "\n";
                             if (u.game.details) str += u.game.details + "\n";
                             if (u.game.state) str += u.game.state;
-                            return str.trim() || "with an universe of spaces.\nGood luck, you found an easter egg :eyes:"
+                            return str.trim() || "with an universe of spaces.\nGood luck, you found an easter egg :eyes:";
                         })(),
                         inline: true
                     }, {

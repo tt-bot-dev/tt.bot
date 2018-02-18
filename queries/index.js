@@ -9,11 +9,11 @@ module.exports = {
                 if (fn.id == query || `<@&${fn.id}>` == query || fn.name == query || fn.name.startsWith(query)) return true;
                 else if (fn.name.toLowerCase() == query || fn.name.toLowerCase().startsWith(query)) return true;
                 else return false;
-            }
+            };
         }, r => {
-            let str = `${r.name} (${r.id /*ar*/})`
-            if (r.mentionable) str += ` (${r.mention})`
-            return str
+            let str = `${r.name} (${r.id /*ar*/})`;
+            if (r.mentionable) str += ` (${r.mention})`;
+            return str;
         });
         if (start) return q.start(msg);
         return q;

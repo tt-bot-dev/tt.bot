@@ -1,5 +1,5 @@
-const dmReply = require("../util/sendReplyToDMs")
-const errString = (owner) => `Sorry, but I'm not able to give you the role. Please tell the server owner (${bot.getTag(owner)}) about this.`
+const dmReply = require("../util/sendReplyToDMs");
+const errString = (owner) => `Sorry, but I'm not able to give you the role. Please tell the server owner (${bot.getTag(owner)}) about this.`;
 module.exports = {
     exec: async function (msg) {
         const {agreeChannel, memberRole} = msg.guildConfig;
@@ -19,7 +19,7 @@ module.exports = {
         try {
             await msg.delete();
         } catch(_) {
-            return
+            return;
         }
     },
     isCmd: true,

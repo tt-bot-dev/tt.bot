@@ -12,7 +12,7 @@ module.exports = async function (msg) {
                     name: `${this.getTag(msg.author)} sent a PM to me!`,
                     icon_url: msg.author.avatarURL
                 },
-                description: `${msg.content}\n${attachmentString}\n${embedString}`
+                description: `${msg.content}\n${attachmentString}`
             };
             try {
                 await this.createMessage(pm.id, {
