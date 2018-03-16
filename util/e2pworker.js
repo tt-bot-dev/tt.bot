@@ -11,4 +11,4 @@ pp.on("generateImage", async ({input}, cb) => {
     pp.send("ready", {
         id: WORKER_ID
     });
-})()
+})();

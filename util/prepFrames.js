@@ -12,19 +12,18 @@ module.exports = async (result, b) => {
     } else if (b instanceof GifWrap.GifFrame) {
         frames = [b];
     } else throw new Error("The buffer must be a GifFrame or a Buffer");
-    frames.map(g => new Promise((rs, rj) =>{
-        const image = new Jimp(g.bitmap.width, g.bitmap.height, (e, image) => {
-            if (e) rj(e);
-            let bImg = new GifWrap.BitmapImage(g)
-            image.bitmap = bImg.bitmap;
-            let w = result.type == "unicodeEmote" ? 72 : 128;
-            image.resize(w,AUTO);
-            rs(new GifWrap.GifFrame(bImg));
-        });
-    }));
+    frames.map(g => new Promise((rs, rj) => new Jimp(g.bitmap.width, g.bitmap.height, (e, image) => {
+        if (e) rj(e);
+        let bImg = new GifWrap.BitmapImage(g);
+        image.bitmap = bImg.bitmap;
+        let w = result.type == "unicodeEmote" ? 72 : 128;
+        image.resize(w,AUTO);
+        rs(new GifWrap.GifFrame(bImg));
+    })
+    ));
     return {
         frames: await Promise.all(frames),
         ogGif
     };
     
-}
+};

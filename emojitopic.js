@@ -1,5 +1,5 @@
 const Jimp = require("jimp");
-const { read, AUTO, MIME_PNG } = Jimp;
+const { read, MIME_PNG } = Jimp;
 const GifWrap = require("gifwrap");
 const prepareFrames = require("./util/prepFrames");
 const endFrame = require("./util/prepTotalFrame");
@@ -86,11 +86,11 @@ const doit = async (arg = "") => {
     if (result.length === 1) return {
         image: await httpGet(result[0].url),
         animated: result[0].animated
-    }
+    };
     let data = await Promise.all(result.map(r => {
         if (r.animated) return httpGet(r.url).then(e => {
-            return prepareFrames(r, e)
-        })
+            return prepareFrames(r, e);
+        });
         return read(r.url).then(i => prepareFrames(r, new GifWrap.GifFrame(new GifWrap.BitmapImage(i.bitmap))));
     }));
     let imgs = data.map(d => d.frames);
@@ -98,11 +98,10 @@ const doit = async (arg = "") => {
     // How to create a gif with frames of different size :thinking:
     let height = imgs.slice().sort((a, b) => b[0].bitmap.height - a[0].bitmap.height)[0][0].bitmap.height;
     let frames = imgs.slice().sort((a, b) => b.length - a.length)[0].length;
-    let centiSecDelay = (frames / 60) / 100
     const modifyImg = f => {
         GifWrap.GifUtil.quantizeDekker(f, 256);
         f.interlaced = false;
-    }
+    };
     imgs.forEach(f => f.forEach(f =>f.interlaced = false));
     for (let i = 0; i < imgs.length; i++) {
         if (i == 0) total += imgs[i][0].bitmap.width;
@@ -112,7 +111,7 @@ const doit = async (arg = "") => {
     let qFrames = imgs.slice();
     let totalFrames = await endFrame(total, height, /*imgs*/ qFrames, frames);
     const gifCodec = new GifWrap.GifCodec();
-    totalFrames.forEach(modifyImg)
+    totalFrames.forEach(modifyImg);
     const gif = await gifCodec.encodeGif(totalFrames);
     let image = gif.buffer;
     if (gif.frames.length === 1) {

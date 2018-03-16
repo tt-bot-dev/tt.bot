@@ -9,7 +9,7 @@ module.exports = class Emitter extends EventEmitter {
         let chan2id = channel2.id;
         const getSpeakerPhoneMessage = (author, text) => {
             return `${this._phoneEmoji} ${bot.getTag(author)}: ${text}`;
-        }
+        };
         channel1.createMessage(this.getMessage(channel2));
         channel2.createMessage(this.getMessage(channel1));
         const bindingFunction = function (msg) {
@@ -37,8 +37,14 @@ module.exports = class Emitter extends EventEmitter {
         bot.on("messageCreate", bindingFunction);
         this.once("EndSpeakerphone", (endChannel) => {
             bot.removeListener("messageCreate", bindingFunction);
-            if (endChannel == channel1) { channel2.createMessage(_phoneEmoji + " The other side has ended the communication."); endChannel.createMessage(_phoneEmoji + " You ended the communication."); }
-            else if (endChannel == channel2) { channel1.createMessage(_phoneEmoji + " The other side has ended the communication."); endChannel.createMessage(_phoneEmoji + " You ended the communication."); }
+            if (endChannel == channel1) {
+                channel2.createMessage(this._phoneEmoji + " The other side has ended the communication."); 
+                endChannel.createMessage(this._phoneEmoji + " You ended the communication."); 
+            }
+            else if (endChannel == channel2) { 
+                channel1.createMessage(this._phoneEmoji + " The other side has ended the communication.");
+                endChannel.createMessage(this._phoneEmoji + " You ended the communication."); 
+            }
         });
     }
     getMessage(channel) {

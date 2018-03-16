@@ -138,6 +138,7 @@ class LibWUtil extends eris {
     }
     
     waitForEvent(event, timeout, check) {
+        //eslint-disable-next-line no-unused-vars
         let t;
         if (!check || typeof check !== "function") check = () => true;
         return new Promise((rs, rj) => {

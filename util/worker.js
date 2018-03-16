@@ -2,11 +2,11 @@ const pp = require("process-as-promised");
 const { fork } = require("child_process");
 const WorkerTypes = {
     E2P: 0
-}
+};
 function getFileName(workerType) {
     switch(workerType) {
-        case WorkerTypes.E2P:
-            return "e2pworker.js"
+    case WorkerTypes.E2P:
+        return "e2pworker.js";
     }
 }
 class WorkerManager {
@@ -26,18 +26,18 @@ class WorkerManager {
         const ipc = new pp(p);
         ipc.once("ready", ({id}) => {
             console.log(`Worker ${id} is running!`);
-        })
+        });
         ipc.on("isWorking", ({id, working}) => {
             const obj = this.workers.get(id);
             obj.working = working;
-        })
+        });
         const obj = {
             process: p,
             ipc,
             id: this.nextWorkerId,
             workerType
-        }
-        this.workers.set(this.nextWorkerId, obj)
+        };
+        this.workers.set(this.nextWorkerId, obj);
         this.nextWorkerId++;
         return obj;
     }
@@ -54,7 +54,7 @@ class WorkerManager {
     }
 
     send(id, command, args) {
-        if (!this.workers.get(id)) return
+        if (!this.workers.get(id)) return;
         const { ipc, working } = this.workers.get(id);
         if (working) return; // let's not give more work to already working workers
         return ipc.send(command, args);

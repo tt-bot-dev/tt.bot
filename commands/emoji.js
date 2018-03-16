@@ -1,4 +1,3 @@
-const e2p = rld("./emojitopic");
 module.exports = {
     exec: async function (msg, input) {
         if (!input) {
@@ -10,7 +9,7 @@ module.exports = {
         try {
             b = await bot.workers.sendToRandom(0, "generateImage", {input});
         } catch(err) {
-            msg.channel.createMessage(`Oops! I can't generate the image! Give my owner these error information\n\`\`\`\n${err.toString()}\n\`\`\``)
+            msg.channel.createMessage(`Oops! I can't generate the image! Give my owner these error information\n\`\`\`\n${err.toString()}\n\`\`\``);
             return;
         }
         if (!b) {
@@ -20,7 +19,7 @@ module.exports = {
         m.delete();
         msg.channel.createMessage({
             embed:{
-                description: `Enjoy!`,
+                description: "Enjoy!",
                 color: 0x008800,
                 image: {
                     url: `attachment://${b.animated ? "image.gif" : "image.png"}`
