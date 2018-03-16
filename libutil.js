@@ -2,14 +2,12 @@ const eris = require("eris").Client;
 const s = require("superagent");
 const ErisEndpoints = require("eris/lib/rest/Endpoints");
 const ModLog = require("./modlog/index");
-const _ModLog = new ModLog(); // js is a cunt
+const WorkerManager = require("./util/worker");
 class LibWUtil extends eris {
-    /*eslint-disable no-unused-vars*/
-    constuctor(token, options) {
-        //super(token,options);
-    }
-    get modLog() {
-        return _ModLog;
+    constructor(token, options) {
+        super(token,options);
+        this.modLog = new ModLog();
+        this.workers = new WorkerManager();
     }
 
     async canUseCommand(user, command) {
