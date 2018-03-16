@@ -13,13 +13,13 @@ module.exports = {
             inline: true
         }, {
             name: `The guild ID is ${inviteData.guild.id}`,
-            value: `You can also click [here](https://discord.gg/${inviteData.code}) to join the server.\nNote: The invite link placement is **NOT** for advertisement purposes. I, ${ownerMember ? ownerMember.username : (await bot.getUserWithoutRESTMode(config.oid)).username}, am not responsible for any advertisement problems caused by abuse of this command. I can log you at any time.`,
+            value: `You can also click [here](https://discord.gg/${inviteData.code}) to join the server.\nNote: The invite link placement is **NOT** for advertisement purposes. I, ${ownerMember ? ownerMember.username : (await bot.getUserWithoutRESTMode(config.oid)).username}, am not responsible for any advertisement problems caused by abuse of this command.`,
             inline: true
         }];
-        if (inviteData.guild.textChannelCount && inviteData.guild.voiceChannelCount) {
+        if (inviteData.memberCount && inviteData.presenceCount) {
             fields.push({
                 name: "More information",
-                value: `In the server, there are totally ${inviteData.guild.textChannelCount + inviteData.guild.voiceChannelCount} channels (${inviteData.guild.textChannelCount} text, ${inviteData.guild.voiceChannelCount} voice). There is approximately ${inviteData.memberCount} members, from which ${inviteData.presenceCount} are online.`
+                value: `There is approximately ${inviteData.memberCount} members, from which ${inviteData.presenceCount} are online.`
             });
         }
         msg.channel.createMessage({
