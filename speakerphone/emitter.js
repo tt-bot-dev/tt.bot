@@ -19,7 +19,7 @@ module.exports = class Emitter extends EventEmitter {
                     if (!msg.author) return;
                     if (msg.author.bot) return;
                     else {
-                        function listAttacments() {
+                        function listAttachments() {
                             if (msg.attachments.length > 0) {
                                 let urlA = [];
                                 msg.attachments.forEach(item => {
@@ -31,8 +31,8 @@ module.exports = class Emitter extends EventEmitter {
                         if (!msg.content.startsWith("^")) return;
                         let mToSend = msg.content.slice(1);
                         if (mToSend || listAttacments()) {
-                            if (msg.channel.id == channel1.id) bot.createMessage(channel2.id, getSpeakerPhoneMessage(msg.author, `${mToSend}${listAttacments()}`));
-                            else if (msg.channel.id == channel2.id) bot.createMessage(channel1.id, getSpeakerPhoneMessage(msg.author, `${mToSend}${listAttacments()}`));
+                            if (msg.channel.id == channel1.id) bot.createMessage(channel2.id, getSpeakerPhoneMessage(msg.author, `${mToSend}${listAttachments()}`));
+                            else if (msg.channel.id == channel2.id) bot.createMessage(channel1.id, getSpeakerPhoneMessage(msg.author, `${mToSend}${listAttachments()}`));
                         }
                     }
                 }
