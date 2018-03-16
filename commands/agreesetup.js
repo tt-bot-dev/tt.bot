@@ -4,7 +4,7 @@ module.exports = {
         if (agreeChannel && memberRole) {
             msg.channel.createMessage("The agreement feature was already set up on this server. Do you want to disable it?\nType y or yes for disabling it. n or no otherwise. To respond, you have 10 seconds.");
             try {
-                let [resp] = bot.waitForEvent("messageCreate", 10000, (m) => {
+                let [resp] = await bot.waitForEvent("messageCreate", 10000, (m) => {
                     if (m.author.id != msg.author.id) return false;
                     if (m.channel.id != msg.channel.id) return false;
                     if (m.content.toLowerCase() != "y" || m.content.toLowerCase() != "yes" || m.content.toLowerCase() != "n" || m.content.toLowerCase() != "no") return false;
@@ -24,7 +24,7 @@ module.exports = {
         } else {
             msg.channel.createMessage("So, here we go! Please type your search query to choose the role you want to set up the agreement feature.");
             try {
-                let [resp] = bot.waitForEvent("messageCreate", 30000, (m) => {
+                let [resp] = await bot.waitForEvent("messageCreate", 30000, (m) => {
                     if (m.author.id != msg.author.id) return false;
                     if (m.channel.id != msg.channel.id) return false;
                     return true;

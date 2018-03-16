@@ -6,6 +6,7 @@ module.exports = {
         if (!agreeChannel || !memberRole) return;
         if (msg.channel.id !== agreeChannel) return;
         if (!msg.guild.roles.get(memberRole)) return;
+        if (msg.member.roles.includes(memberRole)) return;
         try {
             await msg.member.addRole(memberRole, "Agreement to server's rules");
         } catch(_) {
