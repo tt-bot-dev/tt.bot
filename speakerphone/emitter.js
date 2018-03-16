@@ -7,9 +7,8 @@ module.exports = class Emitter extends EventEmitter {
         this._chan2 = channel2;
         let chan1id = channel1.id;
         let chan2id = channel2.id;
-        let _phoneEmoji = "\u260e";
-        function getSpeakerPhoneMessage(author, text) {
-            return `${_phoneEmoji} ${bot.getTag(author)}: ${text}`;
+        const getSpeakerPhoneMessage = (author, text) => {
+            return `${this._phoneEmoji} ${bot.getTag(author)}: ${text}`;
         }
         channel1.createMessage(this.getMessage(channel2));
         channel2.createMessage(this.getMessage(channel1));
@@ -21,16 +20,12 @@ module.exports = class Emitter extends EventEmitter {
                     else {
                         function listAttachments() {
                             if (msg.attachments.length > 0) {
-                                let urlA = [];
-                                msg.attachments.forEach(item => {
-                                    urlA.push(item.url);
-                                });
-                                return `\n${urlA.join("\n")}`;
+                                return `\n${msg.attachments.map(a => a.url).join("\n")}`;
                             } else return "";
                         }
                         if (!msg.content.startsWith("^")) return;
                         let mToSend = msg.content.slice(1);
-                        if (mToSend || listAttacments()) {
+                        if (mToSend || listAttachments()) {
                             if (msg.channel.id == channel1.id) bot.createMessage(channel2.id, getSpeakerPhoneMessage(msg.author, `${mToSend}${listAttachments()}`));
                             else if (msg.channel.id == channel2.id) bot.createMessage(channel1.id, getSpeakerPhoneMessage(msg.author, `${mToSend}${listAttachments()}`));
                         }
