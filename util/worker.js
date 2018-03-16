@@ -44,7 +44,11 @@ class WorkerManager {
 
     sendToRandom(type, command, args) {
         const val = this.workers.values();
-        const arr = [...val].filter(w => w.workerType === type && !w.working);
+        let arr = [...val].filter(w => w.workerType === type && !w.working);
+        if (arr.length === 0) {
+            // assign the work to a random worker and hope nothing goes boom
+            arr = [...val].filter(w => w.workerType === type);
+        }
         const worker = Math.floor(Math.random() * arr.length); // workers are zero indexed.
         return this.send(worker, command, args);
     }
