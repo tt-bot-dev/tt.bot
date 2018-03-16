@@ -40,7 +40,7 @@ module.exports = async function (msg) {
             let cmd = cmds[cmdName.toLowerCase()]; // we load it from object
             if (!cmd) cmd = cmds[cmdAlias];
             if (cmd) {
-                if (!(await bot.canUseCommand(msg.member, cmd))) return;
+                if (!(await this.canUseCommand(msg.member, cmd))) return;
                 console.log(
                     `Received a command message
     From        ${this.getTag(msg.author)} (${msg.author.id})
@@ -49,10 +49,7 @@ module.exports = async function (msg) {
 ${args ? `    Arguments   ${args}` : ""}
 `
                 );
-                let exec = await cmd.exec(msg, args); // we execute it
-                if (typeof exec == "string" || (typeof exec == "object" && exec.constructor.name === "Object" /* Check if the object passed is really an instance of JS object using the lazy way.*/) ) {
-                    msg.channel.createMessage(exec);
-                }
+                return cmd.exec(msg, args);
             }
         } catch (err) {
             console.error(err); // if an error is thrown, we log it.

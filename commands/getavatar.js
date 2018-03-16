@@ -1,7 +1,6 @@
 module.exports = {
     exec: function (msg, args) {
-        let u = args != "" ? args : msg.author.id;
-        userQuery(u, msg, true).then(u => {
+        userQuery(args || msg.author.id, msg, true).then(u => {
             bot.createMessage(msg.channel.id, {
                 embed: {
                     author: {
