@@ -3,19 +3,19 @@ const e2p = require("../emojitopic");
 const WORKER_ID = Number(process.env.WORKER_ID);
 let workingCount = 0;
 pp.on("generateImage", async ({input}, cb) => {
-    workingCount++
+    workingCount++;
     pp.send("workingCount", {id: WORKER_ID, working: workingCount});
     let o;
     try {
         o = await e2p(input, pp);
         if (!o) return cb();
     } catch(err) {
-        console.error(err)
+        console.error(err);
         return cb({ err });
     }
     
     const {generated, animated, image} = o;
-    workingCount--
+    workingCount--;
     pp.send("workingCount", {id: WORKER_ID, working: workingCount});
     cb({generated, animated, image: image.toString("base64")});
 });

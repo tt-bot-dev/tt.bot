@@ -6,17 +6,17 @@ const WorkerTypes = {
 };
 function getFileName(workerType) {
     switch (workerType) {
-        case WorkerTypes.E2P:
-            return "e2pworker.js";
-        case WorkerTypes.E2P_QUANTIZE:
-            return "quantizeWorker.js"
+    case WorkerTypes.E2P:
+        return "e2pworker.js";
+    case WorkerTypes.E2P_QUANTIZE:
+        return "quantizeWorker.js";
     }
 }
 class WorkerManager {
     constructor() {
         this.workers = new Map();
         this.nextWorkerId = 0;
-        process.setMaxListeners(0)
+        process.setMaxListeners(0);
     }
 
     async startWorker(workerType) {
@@ -31,18 +31,18 @@ class WorkerManager {
             const ipc = new pp(p);
             const workerId = this.nextWorkerId;
             ipc.once("ready", ({ id }) => {
-                console.log(`Worker ${id} is running!`)
+                console.log(`Worker ${id} is running!`);
                 rs(obj);
             });
             ipc.on("workingCount", ({ id, working }) => {
                 const obj = this.workers.get(id);
                 obj.working = working;
             });
-            ipc.on("debug", (d,c) => {console.log(d); c()})
+            ipc.on("debug", (d,c) => {console.log(d); c();});
             if (workerType === WorkerTypes.E2P) ipc.on("e2pquantize", async ({ frames }, cb) => {
                 cb(await Promise.all(frames.map(d => 
-                this.sendToRandom(WorkerTypes.E2P_QUANTIZE, "quantizeImage", d).promise
-                )))
+                    this.sendToRandom(WorkerTypes.E2P_QUANTIZE, "quantizeImage", d).promise
+                )));
             });
             const obj = {
                 process: p,
@@ -53,7 +53,7 @@ class WorkerManager {
             };
             this.workers.set(workerId, obj);
             this.nextWorkerId++;
-        })
+        });
     }
 
     sendToRandom(type, command, args) {
@@ -69,7 +69,7 @@ class WorkerManager {
         return {
             id: arr[worker].id,
             promise: this.send(arr[worker].id, command, args)
-        }
+        };
     }
 
     send(id, command, args) {

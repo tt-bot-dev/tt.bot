@@ -125,7 +125,7 @@ const doit = async (arg = "", pp) => {
                 data: Buffer.from(i.data, "base64")
             }, {
                 delayCentisecs: 2
-            }))});
+            }));});
         }
         return resultImages;
     }

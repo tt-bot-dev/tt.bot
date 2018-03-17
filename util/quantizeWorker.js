@@ -4,11 +4,11 @@ const GifWrap = require("gifwrap");
 let workingCount = 0;
 process.setMaxListeners(0);
 pp.on("quantizeImage", async ({data, width, height}, cb) => {
-    workingCount++
+    workingCount++;
     pp.send("workingCount", {id: WORKER_ID, working: workingCount});
-    const f = new GifWrap.GifFrame({width, height, data: Buffer.from(data, "base64")})
+    const f = new GifWrap.GifFrame({width, height, data: Buffer.from(data, "base64")});
     GifWrap.GifUtil.quantizeDekker([f]);
-    workingCount--
+    workingCount--;
     pp.send("workingCount", {id: WORKER_ID, working: workingCount});
     cb({width: f.bitmap.width, height: f.bitmap.height, data: f.bitmap.data.toString("base64")});
 });
