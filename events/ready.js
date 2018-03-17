@@ -8,7 +8,6 @@ module.exports = async function () {
     this.editStatus("online", { name: `Type ${config.prefix}help`, type: 0 });
     this.postStats().then(console.log(__filename + "     | Successfully posted!"), r => console.log(r.body));
     this.postStats2().then(console.log(__filename + "     | Successfully posted 2!"), r => console.log(r.body));
-    global.keymetricsMetrics = new keymetrics();
     this.listBotColls().forEach(g => g.leave());
     let blacklist = await db.table("blacklist").run();
     blacklist.forEach(b => {

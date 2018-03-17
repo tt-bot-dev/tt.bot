@@ -6,7 +6,6 @@ require("./checkConfig")();
 require("./discord")();
 global.web = require("./webserver/index");
 global.db = require("rethinkdbdash")(config.connectionOpts);
-global.keymetrics = require("./keymetrics/index.js");
 global.moment = require("moment");
 global.momentTz = require("moment-timezone");
 global.decimalToHex = function (d) {
