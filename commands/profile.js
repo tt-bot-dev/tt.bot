@@ -42,7 +42,7 @@ module.exports = {
                 let optargs = args.slice((action.length + 1));
                 let user;
                 try {
-                    user = await userQuery(optargs || msg.author.id, msg);
+                    user = await userQuery(optargs || msg.author.id, msg, true);
                 } catch (e) {
                     return msg.channel.createMessage("I guess, we end here.");
                 }

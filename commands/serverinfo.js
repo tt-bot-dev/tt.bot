@@ -89,9 +89,9 @@ module.exports = {
             value: msg.guild.channels.get(msg.guild.afkChannelID).name,
             inline:true
         });
-        return {
+        msg.channel.createMessage({
             embed
-        };
+        });
     },
     category: 1,
     description: "Display the server info.",

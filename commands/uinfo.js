@@ -1,11 +1,22 @@
 module.exports = {
     exec: function (msg, args) {
         let u = args != "" ? args : msg.author.id;
-        userQuery(u, msg).then(u => {
+        userQuery(u, msg, true).then(u => {
             let rarr = u.roles.map(r => u.guild.roles.get(r).name);
             rarr.unshift("@everyone");
             let unick = u.nick || bot.getTag(u);
             let s = u.status;
+            function getStatusType() {
+                if (!u.game) return "Playing";
+                switch (u.game.type) {
+                case 0:
+                    return "Playing";
+                case 1:
+                    return "Streaming";
+                case 2:
+                    return "Listening to";
+                }
+            }
             function getstatus() {
                 switch (s) {
                 case "online":
@@ -28,8 +39,15 @@ module.exports = {
                         url: u.user.staticAvatarURL
                     },
                     fields: [{
-                        name: "Playing",
-                        value: u.game ? (u.game.name.trim() || "This user likely uses only one character that is trimmed.") : "Nothing",
+                        name: getStatusType(),
+                        value: (() => {
+                            if (!u.game) return "Nothing";
+                            let str;
+                            str += u.game.name + "\n";
+                            if (u.game.details) str += u.game.details + "\n";
+                            if (u.game.state) str += u.game.state;
+                            return str.trim() || "with an universe of spaces.\nGood luck, you found an easter egg :eyes:";
+                        })(),
                         inline: true
                     }, {
                         name: "Status",

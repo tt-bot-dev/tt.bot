@@ -22,7 +22,7 @@ module.exports = {
                     msg.channel.createMessage("You need to specify an user!");
                     return;
                 }
-                let user = await userQuery(options.user, msg);
+                let user = await userQuery(options.user, msg, true);
                 if (bot.passesRoleHierarchy(msg.member, user)) {
                     await user.kick(`${bot.getTag(msg.author)}: ${options.reason || "no reason"}`);
                     bot.modLog.addKick(user.id, msg, options.reason);

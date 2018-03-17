@@ -4,17 +4,17 @@ module.exports = {
         let user;
         if (args) {
             try {
-                user = await userQuery(args, msg);
+                user = await userQuery(args, msg, true);
             } catch(e) {
                 return;
             }
         }
         let data;
         if (args && user) data = await db.table("profile").get(user.id);
-        if (!data && user) return "That user doesn't have a profile.";
+        if (!data && user) return msg.channel.createMessage("That user doesn't have a profile.");
         let profile = data ? new UserProfile(data) : msg.userProfile;
-        if (!profile.timezone) return "You don't have a timezone set.";
-        return `It's ${momentTz(new Date(), profile.timezone).format(config.tzDateFormat)} for ${user ? bot.getTag(user) : bot.getTag(msg.author)}.`;
+        if (!profile.timezone) return msg.channel.createMessage("That user doesn't have a timezone set.");
+        return msg.channel.createMessage(`It's ${moment(new Date()).tz(profile.timezone).format(config.tzDateFormat)} for ${user ? bot.getTag(user) : bot.getTag(msg.author)}.`);
     },
     isCmd: true,
     display: true,
