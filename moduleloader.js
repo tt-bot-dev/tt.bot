@@ -9,8 +9,8 @@ global.db = require("rethinkdbdash")(config.connectionOpts);
 global.moment = require("moment");
 global.momentTz = require("moment-timezone");
 global.decimalToHex = function (d) {
-    var hex = Number(d).toString(16);
-    hex = "000000".substr(0, 6 - hex.length) + hex;
+    let hex = Number(d).toString(16);
+    hex = hex.padStart(6, "0")
     return hex;
 };
 global.format = require("util").format;
