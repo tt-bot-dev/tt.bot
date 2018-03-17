@@ -3,6 +3,7 @@ module.exports = async function () {
     console.log(`${__filename}      | Connected as ${this.user.username}#${this.user.discriminator}`);
     global.connected = true;
     global.cmdWrap = require("../cmdwrapper");
+    for (let i = 0; i< config.workerCount; i++) await Promise.all(Object.values(WorkerTypes).map(w => this.workers.startWorker(w)));
     cmdWrap.loadAll();
     this.editStatus("online", { name: `Type ${config.prefix}help`, type: 0 });
     this.postStats().then(console.log(__filename + "     | Successfully posted!"), r => console.log(r.body));
@@ -17,6 +18,5 @@ module.exports = async function () {
         if (g.id == b.id) return g.leave();
         if (b.ownerID && g.ownerID == b.ownerID) return g.leave();
     });
-    for (let i = 0; i< config.workerCount; i++) Object.values(WorkerTypes).forEach(w => this.workers.startWorker(w));
 };
 module.exports.isEvent = true;

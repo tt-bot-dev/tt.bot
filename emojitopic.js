@@ -18,7 +18,7 @@ const httpGet = (url) =>
             r.on("error", rj);
         });
     });
-const doit = async (arg = "") => {
+const doit = async (arg = "", pp) => {
     let spl = arg.split(" ").map(s => s.trim()).filter(i => i !== "");
     if (spl.length > 5) spl = spl.slice(0, 5);
     let getemot = (arg) => new Promise(rs => {
@@ -34,7 +34,7 @@ const doit = async (arg = "") => {
                 rs({ type: "discordCustomEmoji", url: `https://cdn.discordapp.com/emojis/${m[2]}${animated ? ".gif" : ".png"}`, animated });
             } else {
                 let e = function (uS, sep) {
-                    if (!uS) { console.log(uS); return ""; }
+                    if (!uS) return "";
                     var r = [], c = 0, p = 0, i = 0;
                     while (i < uS.length) {
                         c = uS.charCodeAt(i++);
@@ -98,11 +98,8 @@ const doit = async (arg = "") => {
     // How to create a gif with frames of different size :thinking:
     let height = imgs.slice().sort((a, b) => b[0].bitmap.height - a[0].bitmap.height)[0][0].bitmap.height;
     let frames = imgs.slice().sort((a, b) => b.length - a.length)[0].length;
-    const modifyImg = f => {
-        GifWrap.GifUtil.quantizeDekker(f, 256);
-        f.interlaced = false;
-    };
-    imgs.forEach(f => f.forEach(f =>f.interlaced = false));
+
+    imgs.forEach(f => f.forEach(f => f.interlaced = false));
     for (let i = 0; i < imgs.length; i++) {
         if (i == 0) total += imgs[i][0].bitmap.width;
         else total += (imgs[i][0].bitmap.width + 8);
@@ -111,14 +108,37 @@ const doit = async (arg = "") => {
     let qFrames = imgs.slice();
     let totalFrames = await endFrame(total, height, /*imgs*/ qFrames, frames);
     const gifCodec = new GifWrap.GifCodec();
-    totalFrames.forEach(modifyImg);
-    const gif = await gifCodec.encodeGif(totalFrames);
+    async function quantizeImages() {
+        const resultImages = [];
+        for (let i = 0; i < totalFrames.length; i++) {
+            let frame = totalFrames[i];
+            const r = await pp.send("e2pquantize", {
+                frames: [{
+                    width: frame.bitmap.width,
+                    height: frame.bitmap.height,
+                    data: frame.bitmap.data.toString("base64")
+                }]
+            });
+            r.forEach(i => {resultImages.push(new GifWrap.GifFrame({
+                width: i.width,
+                height: i.height,
+                data: Buffer.from(i.data, "base64")
+            }, {
+                delayCentisecs: 2
+            }))});
+        }
+        return resultImages;
+    }
+    const f = await quantizeImages();
+    const gif = await gifCodec.encodeGif(f, {
+        colorScope: 2
+    });
     let image = gif.buffer;
     if (gif.frames.length === 1) {
         let frame = gif.frames[0];
-        const img = new Jimp(0,0,1);
+        const img = new Jimp(0, 0, 1);
         img.bitmap = new GifWrap.BitmapImage(frame).bitmap;
-        image = (await new Promise((rs,rj) => img.getBuffer(MIME_PNG, (e, b) => e ? rj(e) : rs(b))));
+        image = (await new Promise((rs, rj) => img.getBuffer(MIME_PNG, (e, b) => e ? rj(e) : rs(b))));
     }
     return {
         image,

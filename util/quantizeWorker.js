@@ -1,23 +1,16 @@
 const pp = new (require("process-as-promised"))();
-const e2p = require("../emojitopic");
 const WORKER_ID = Number(process.env.WORKER_ID);
+const GifWrap = require("gifwrap");
 let workingCount = 0;
-pp.on("generateImage", async ({input}, cb) => {
+process.setMaxListeners(0);
+pp.on("quantizeImage", async ({data, width, height}, cb) => {
     workingCount++
     pp.send("workingCount", {id: WORKER_ID, working: workingCount});
-    let o;
-    try {
-        o = await e2p(input, pp);
-        if (!o) return cb();
-    } catch(err) {
-        console.error(err)
-        return cb({ err });
-    }
-    
-    const {generated, animated, image} = o;
+    const f = new GifWrap.GifFrame({width, height, data: Buffer.from(data, "base64")})
+    GifWrap.GifUtil.quantizeDekker([f]);
     workingCount--
     pp.send("workingCount", {id: WORKER_ID, working: workingCount});
-    cb({generated, animated, image: image.toString("base64")});
+    cb({width: f.bitmap.width, height: f.bitmap.height, data: f.bitmap.data.toString("base64")});
 });
 (async () => {
     pp.send("ready", {
