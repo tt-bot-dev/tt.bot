@@ -10,7 +10,7 @@ global.moment = require("moment");
 global.momentTz = require("moment-timezone");
 global.decimalToHex = function (d) {
     let hex = Number(d).toString(16);
-    hex = hex.padStart(6, "0")
+    hex = hex.padStart(6, "0");
     return hex;
 };
 global.format = require("util").format;
