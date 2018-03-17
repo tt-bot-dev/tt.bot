@@ -19,7 +19,7 @@ module.exports = {
         if (!options.user) return msg.channel.createMessage("You're missing a user to strike.");
         let user;
         try {
-            user = await userQuery(options.user, msg);
+            user = await userQuery(options.user, msg, true);
         } catch(err) {
             return;
         }

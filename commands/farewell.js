@@ -1,3 +1,17 @@
+const qBase = require("../queries/query");
+function qC(msg, iQuery) {
+    return new qBase(iQuery, msg.guild.channels.filter(c => c.type == 0), query => fn => {
+        // saving all users in an array where it finds these formats
+        // username, id, mention (<@!id> or <@id>), nickname, username#1234 or nickname#1234 - case insensitive
+        if (fn.name == query || fn.id == query || `<#${fn.id}>` == query || fn.name.startsWith(query)) return true;
+        else if (fn.name.toLowerCase() == query.toLowerCase() || fn.name.toLowerCase().startsWith(query.toLowerCase())) return true;
+        else return false; // we ignore other users
+    }, c => {
+        let str = `${c.name} (${c.id})`;
+        if (c.type == 0) str += ` (${c.mention})`;
+        return str;
+    });
+}
 module.exports = {
     exec: async function (msg, args) {
         if (args) {
@@ -17,11 +31,7 @@ module.exports = {
                     }
                 } else if (fe.match(/(channel:([^]{2,32}))/i)) {
                     if (!options.channel) {
-                        try {
-                            options.channel = await queries.channel(fe.replace(/channel:/, "").replace(/ \\\| /g, " | "), msg);
-                        } catch (err) {
-                            options.channel = msg.channel;
-                        }
+                        options.channel = fe.replace(/channel:/, "").replace(/ \\\| /g, " | ");
                     }
                 } else {
                     console.log(fe + " doesn't match any regexes.");
@@ -29,6 +39,11 @@ module.exports = {
             });
 
             if (options.channel) {
+                try {
+                    options.channel = await qC(msg, options.channel).start(msg);
+                } catch (err) {
+                    options.channel = msg.channel;
+                }
                 msg.guildConfig.farewellChannelId = options.channel.id;
                 msg.guildConfig.farewellMessage = options.message || "{u.mention} has left **{g.name}**.";
                 await db.table("configs").get(msg.guild.id).update(msg.guildConfig).run();

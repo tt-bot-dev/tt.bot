@@ -13,5 +13,6 @@
     "tzDateFormat": "D[.] M[.] YYYY [at] H:mm [(]Z[)]",
     "connectionOpts": {
         "db": "ttalpha"
-    }
+    },
+    "serverLogChannel": "236757363699220480"
 }

@@ -1,10 +1,8 @@
 *.exe
-#Actual files you don't need amirite
+#no
 db
 config.json
 node_modules
 *.asc
-# for some reason i didn't delete it, for backup reason when configs are developed + selfbot
-config
 #Todo
 TODO.txt

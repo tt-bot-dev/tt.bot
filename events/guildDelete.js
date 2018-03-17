@@ -1,5 +1,5 @@
 module.exports = (guild) => {
-    bot.createMessage("236757363699220480", {
+    bot.createMessage(config.serverLogChannel, {
         embed: {
             author: {
                 name: `Bot was removed from ${guild.name} (${guild.id})`,

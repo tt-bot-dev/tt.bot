@@ -6,15 +6,13 @@ require("./checkConfig")();
 require("./discord")();
 global.web = require("./webserver/index");
 global.db = require("rethinkdbdash")(config.connectionOpts);
-global.keymetrics = require("./keymetrics/index.js");
 global.moment = require("moment");
 global.momentTz = require("moment-timezone");
 global.decimalToHex = function (d) {
-    var hex = Number(d).toString(16);
-    hex = "000000".substr(0, 6 - hex.length) + hex;
+    let hex = Number(d).toString(16);
+    hex = hex.padStart(6, "0");
     return hex;
 };
-global.translations = new (require("./translations/index"))();
 global.format = require("util").format;
 global.getUptime = function getUptime(moment1, moment2) {
     var diff = moment.duration(moment1.diff(moment2));
