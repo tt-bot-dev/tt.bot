@@ -1,5 +1,5 @@
 module.exports = {
-    exec: function (msg) {
+    exec: async function (msg) {
         const configs = (await db.table("configs")).filter(({id}) => !bot.guilds.get(id));
         const modlogItems = (await db.table("modlog")).filter(({id}) => !bot.guilds.get(id));
         configs.forEach(async ({id}) => await db.table("configs").get(id).delete());
