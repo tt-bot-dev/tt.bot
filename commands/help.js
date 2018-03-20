@@ -16,7 +16,7 @@ class HelpMenu extends ReactionMenu {
         const arr = [HelpMenu.HOME, ReactionMenu.STOP];
         const permissiveArr = [HelpMenu.PUBLIC, HelpMenu.OWNER, HelpMenu.MOD, HelpMenu.ADMIN].filter((_, i) => this.permissions[i]);
         const toAdd = [...arr, ...permissiveArr];
-        await Promise.all(toAdd.map(e => this.pgMsg.addReaction(e)));
+        await Promise.all(toAdd.map(e => new Promise(rs => setTimeout(() => this.pgMsg.addReaction(e).then(rs), 100))));
     }
 
     stopCallback(reason) {
