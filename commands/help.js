@@ -33,6 +33,7 @@ class HelpMenu extends ReactionMenu {
     }
 
     hasPermission(emoji) {
+        if (emoji === HelpMenu.HOME) return true;
         if (emoji === HelpMenu.PUBLIC) return true;
         if (emoji === HelpMenu.OWNER) return this.permissions[1];
         if (emoji === HelpMenu.MOD) return this.permissions[2];
