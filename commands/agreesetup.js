@@ -46,6 +46,6 @@ module.exports = {
     },
     isCmd: true,
     display: true,
-    category: 1,
+    category: 4,
     description: "Sets up the agreement feature.",
 };
