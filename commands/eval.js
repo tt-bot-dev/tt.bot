@@ -17,7 +17,7 @@ module.exports = {
                 try {
                     gist = await require("superagent").post("https://api.github.com/gists").set("Authorization", `Token ${config.gistKey}`).send({
                         description: "Evaluated code",
-                        public: true,
+                        public: false,
                         files: {
                             "exec.md": {
                                 content: data
