@@ -44,6 +44,7 @@ module.exports = {
                     }
                 })
                 console.log(overall);
+                return;
             }
         }
         bot.createMessage(msg.channel.id, {
