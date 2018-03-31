@@ -6,7 +6,7 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
-    "ejs": "^2.5.7",
+    "ejs": "^2.5.8",
     "eris": "github:abalabahaha/eris#dev",
     "erlpack": "github:discordapp/erlpack",
     "express": "^4.16.2",
