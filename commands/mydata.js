@@ -32,7 +32,7 @@ module.exports = {
         })
         if (tags && tags.length > 0) fields.push({
             name: `Your tags`,
-            value: `${tags.map(f => decryptData(f.id).join("\n"))}`
+            value: `${tags.map(f => decryptData(f.id)).join("\n")}`
         })
         await m.edit({
             embed: {
