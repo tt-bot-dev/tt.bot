@@ -20,7 +20,7 @@ module.exports = {
         const fields = [];
         if (profile) fields.push({
             name: `Profile`,
-            value: `Profile fields: ${profile.fields.length}\nTimezone: ${profile.timezone || "None"}`
+            value: `Profile fields: ${profile.profileFields.length}\nTimezone: ${profile.timezone || "None"}`
         })
         if (servers && servers.length > 0) fields.push({
             name: `Your servers`,
