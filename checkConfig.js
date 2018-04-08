@@ -1,5 +1,5 @@
 module.exports = function () {
-    global.config = require("./config.json");
+    global.config = require("./config");
     if (!config.token) {
         console.log(__filename + "     | ERR: Missing token");
         process.exit(1);

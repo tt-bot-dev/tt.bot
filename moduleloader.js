@@ -22,3 +22,6 @@ global.getUptime = function getUptime(moment1, moment2) {
 const {encrypt, decrypt} = require("./dataMan");
 global.encryptData = encrypt;
 global.decryptData = decrypt;
+const Sentry = require("./util/sentry");
+const SentryClient = global.sentry = new Sentry();
+SentryClient.enable();

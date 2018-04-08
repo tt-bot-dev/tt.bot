@@ -53,6 +53,7 @@ ${args ? `    Arguments   ${args}` : ""}
             }
         } catch (err) {
             console.error(err); // if an error is thrown, we log it.
+            if (sentry.enabled) sentry.raven.captureException(err);
         }
     }
 };

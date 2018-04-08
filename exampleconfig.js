@@ -1,0 +1,21 @@
+module.exports = {
+    token: "(Bot) AAAAAAAAAAAAAAAAAAaaaaaaaaaa.g3gf35gf3df3",
+    oid: "123456789012345678",
+    dbotskey: "Heekajkga.s,gkjaůsgkiosdhgirf6g5f655d6d5s9s58s98",
+    dbots2key: "/tbalealelalajioe,e.gokaoklelgoekejfoekeoeke",
+    prefix: "AAAAAAAaa",
+    webserverip: "0.0.0.0",
+    webserverport: 8443,
+    clientID: "111111111111111111",
+    clientSecret: "9a9a99e89a8e92dg4df6s6s6",
+    reroutePMs: true,
+    normalDateFormat: "D[.] M[.] YYYY [at] H:mm",
+    tzDateFormat: "D[.] M[.] YYYY [at] H:mm [(]Z[)]",
+    connectionOpts: {
+        db: "ttalpha"
+    },
+    serverLogChannel: "236757363699220480",
+    workerCount: 5,
+    gistKey: "a6ge954rb0zzt29ub897jf9b81t77a67erfv9",
+    sentry: {}
+}
