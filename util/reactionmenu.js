@@ -20,7 +20,7 @@ class ReactionMenu {
         bot.removeListener("channelDelete", this.handleChannelDelete.bind(this));
     }
 
-    start(timeout = 0) {
+    start(/*timeout = 0*/) {
         this.bind();
     }
 
@@ -55,7 +55,7 @@ class ReactionMenu {
                 return this.options.stopCallback(ReactionMenu.MANUAL_EXIT);
             }
             else throw new Error("The stop callback is missing.");
-        };
+        }
         return true;
     }
 }

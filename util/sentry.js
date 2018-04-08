@@ -12,7 +12,7 @@ class Sentry {
         
         if (this.enabled) {
             this.config = Object.assign(config.sentry.config || {}, {
-                name: `ttbot`,
+                name: "ttbot",
                 release: require("../package.json").version,
                 captureUnhandledRejections: true,
                 stacktrace: true,

@@ -51,6 +51,7 @@
         "rld": true,
         "momentTz": true,
         "encryptData": true,
-        "decryptData": true
+        "decryptData": true,
+        "sentry": true
     }
 }

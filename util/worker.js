@@ -6,10 +6,10 @@ const WorkerTypes = {
 };
 function getFileName(workerType) {
     switch (workerType) {
-        case WorkerTypes.E2P:
-            return "e2pworker.js";
-        case WorkerTypes.E2P_QUANTIZE:
-            return "quantizeWorker.js";
+    case WorkerTypes.E2P:
+        return "e2pworker.js";
+    case WorkerTypes.E2P_QUANTIZE:
+        return "quantizeWorker.js";
     }
 }
 class WorkerManager {
@@ -41,12 +41,10 @@ class WorkerManager {
             ipc.on("debug", (d, c) => { console.log(d); c(); });
             if (workerType === WorkerTypes.E2P) ipc.on("e2pquantize", async ({ frames }, cb) => {
                 const r = [];
-                frames.forEach((d, i) => new Promise(rs => {
-                    this.sendToRandom(WorkerTypes.E2P_QUANTIZE, "quantizeImage", d).promise.then(res => r[i] = res);
-                }));
+                frames.forEach((d, i) => this.sendToRandom(WorkerTypes.E2P_QUANTIZE, "quantizeImage", d).promise.then(res => r[i] = res));
                 const t = setInterval(() => {
                     if (r.filter(r => !!r).length === frames.length) {
-                        clearInterval(t)
+                        clearInterval(t);
                         return cb(r);
                     }
                 }, 10);

@@ -1,10 +1,10 @@
 const ReactionMenu = require("../util/reactionmenu");
 class HelpMenu extends ReactionMenu {
     constructor(msg, msg2, commands, permissions) {
-        super(msg2.id, msg.channel.id, msg.author.id, {})
+        super(msg2.id, msg.channel.id, msg.author.id, {});
         this.options = {
             stopCallback: this.stopCallback.bind(this)
-        }
+        };
         this.commands = commands;
         this.permissions = permissions;
         this.ogMsg = msg;
@@ -23,13 +23,13 @@ class HelpMenu extends ReactionMenu {
         this.pgMsg.delete();
         console.log(reason);
         if (reason === ReactionMenu.MANUAL_EXIT)
-            this.ogMsg.channel.createMessage(`You have exited the menu.`).then(m => setTimeout(() => m.delete(), 5000));
+            this.ogMsg.channel.createMessage("You have exited the menu.").then(m => setTimeout(() => m.delete(), 5000));
         /*case ReactionMenu.TIMEOUT:
             this.ogMsg.channel.createMessage(`The menu has expired.`)*/
         else if (reason === ReactionMenu.MESSAGE_DELETE)
-            this.ogMsg.channel.createMessage(`Exited the menu because the message was deleted.`).then(m => setTimeout(() => m.delete(), 5000));
+            this.ogMsg.channel.createMessage("Exited the menu because the message was deleted.").then(m => setTimeout(() => m.delete(), 5000));
         else if (reason === ReactionMenu.CHANNEL_DELETE)
-            bot.users.get(this.authorID).getDMChannel().then(dm => dm.createMessage(`Exited the menu because the channel was deleted.`));
+            bot.users.get(this.authorID).getDMChannel().then(dm => dm.createMessage("Exited the menu because the channel was deleted."));
     }
 
     hasPermission(emoji) {
@@ -45,7 +45,7 @@ class HelpMenu extends ReactionMenu {
         if (this.stopped) return;
         let catName = this.getCategoryName(emoji.name);
         if (catName === 1) {
-            console.log(`${emoji.name} isn't a category`)
+            console.log(`${emoji.name} isn't a category`);
             return;
         }
         if (!this.hasPermission(emoji.name)) return;
@@ -59,7 +59,7 @@ class HelpMenu extends ReactionMenu {
             name: `${name}`,
             value: obj.description || "No description",
             inline: true
-        }))
+        }));
         this.pgMsg.edit({
             embed: {
                 color: 0x008800,
@@ -71,7 +71,7 @@ class HelpMenu extends ReactionMenu {
                     text: `Use ${config.prefix}help <command> to see more information about it.`
                 }
             }
-        })
+        });
     }
 
     getCommands(e) {
@@ -79,7 +79,7 @@ class HelpMenu extends ReactionMenu {
         else if (e === HelpMenu.OWNER) return this.commands.owner;
         else if (e === HelpMenu.MOD) return this.commands.mod;
         else if (e === HelpMenu.ADMIN) return this.commands.admin;
-        else console.log("I got here for some reason")
+        else console.log("I got here for some reason");
     }
 
     getCategoryName(e) {
@@ -93,13 +93,13 @@ class HelpMenu extends ReactionMenu {
 
     getCb(e) {
         switch (e) {
-            case HelpMenu.ADMIN:
-            case HelpMenu.PUBLIC:
-            case HelpMenu.MOD:
-            case HelpMenu.OWNER:
-                return this.listCommands.bind(this);
-            case HelpMenu.HOME:
-                return () => this.pgMsg.edit(HelpMenu.DEFAULT_OBJ(this.permissions, HelpMenu.MESSAGES));
+        case HelpMenu.ADMIN:
+        case HelpMenu.PUBLIC:
+        case HelpMenu.MOD:
+        case HelpMenu.OWNER:
+            return this.listCommands.bind(this);
+        case HelpMenu.HOME:
+            return () => this.pgMsg.edit(HelpMenu.DEFAULT_OBJ(this.permissions, HelpMenu.MESSAGES));
         }
     }
 
@@ -113,7 +113,7 @@ class HelpMenu extends ReactionMenu {
                 description: `Welcome to tt.bot's help! Please use reactions to access the help for the command categories.\n:stop_button: Stop\n:house: Home (this page)\n${HelpMenu.MESSAGES.filter((_, idx) => permissions[idx]).join("\n")}`,
                 color: 0x008800
             }
-        }
+        };
     }
 
 }
@@ -123,9 +123,9 @@ HelpMenu.OWNER = "\u{1F6AB}";
 HelpMenu.PUBLIC = "\u{1F465}";
 HelpMenu.HOME = "🏠";
 HelpMenu.MESSAGES = [`${HelpMenu.PUBLIC} Public commands`,
-`${HelpMenu.OWNER} Owner commands`,
-`${HelpMenu.MOD} Moderator commands`,
-`${HelpMenu.ADMIN} Administrator commands`];
+    `${HelpMenu.OWNER} Owner commands`,
+    `${HelpMenu.MOD} Moderator commands`,
+    `${HelpMenu.ADMIN} Administrator commands`];
 module.exports = {
     exec: async function (msg, args) {
         if (args == "") {
@@ -164,7 +164,7 @@ module.exports = {
                 owner: ocmds,
                 mod: modcmds,
                 admin: admincmds
-            }, permissions)
+            }, permissions);
             helpMenu.start();
         } else {
             let c;

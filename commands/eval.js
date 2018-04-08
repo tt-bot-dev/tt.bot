@@ -40,9 +40,9 @@ module.exports = {
                     embed: {
                         title: "Evaluated!",
                         color: 0x008800,
-                        description: `Unfortunately, we can't provide the data here because they're too long and you haven't provided a GitHub Gist API key.\nThereby, the output has been logged in the console.`
+                        description: "Unfortunately, we can't provide the data here because they're too long and you haven't provided a GitHub Gist API key.\nThereby, the output has been logged in the console."
                     }
-                })
+                });
                 console.log(overall);
                 return;
             }

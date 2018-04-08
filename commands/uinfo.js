@@ -11,24 +11,24 @@ module.exports = {
             function getStatusType() {
                 if (!m.game) return "Playing";
                 switch (m.game.type) {
-                    case 0:
-                        return "Playing";
-                    case 1:
-                        return "Streaming";
-                    case 2:
-                        return "Listening to";
+                case 0:
+                    return "Playing";
+                case 1:
+                    return "Streaming";
+                case 2:
+                    return "Listening to";
                 }
             }
             function getstatus() {
                 switch (s) {
-                    case "online":
-                        return "Online";
-                    case "idle":
-                        return "Idle";
-                    case "dnd":
-                        return "Do not disturb";
-                    case "offline":
-                        return "Invisible/offline";
+                case "online":
+                    return "Online";
+                case "idle":
+                    return "Idle";
+                case "dnd":
+                    return "Do not disturb";
+                case "offline":
+                    return "Invisible/offline";
                 }
             }
             bot.createMessage(msg.channel.id, {
@@ -62,8 +62,8 @@ module.exports = {
                     }, {
                         name: "Created on",
                         value: (msg.userProfile && msg.userProfile.timezone) ? 
-                                moment(new Date(m.createdAt)).tz(msg.userProfile.timezone).format(config.tzDateFormat) :
-                                moment(new Date(m.createdAt)).format(config.normalDateFormat),
+                            moment(new Date(m.createdAt)).tz(msg.userProfile.timezone).format(config.tzDateFormat) :
+                            moment(new Date(m.createdAt)).format(config.normalDateFormat),
                         inline: true
                     }, {
                         name: "Is in a voice channel?",
@@ -91,15 +91,15 @@ module.exports = {
                     fields: [{
                         name: "Created on",
                         value: (msg.userProfile && msg.userProfile.timezone) ? 
-                                moment(new Date(u.createdAt)).tz(msg.userProfile.timezone).format(config.tzDateFormat) : 
-                                moment(new Date(u.createdAt)).format(config.normalDateFormat),
+                            moment(new Date(u.createdAt)).tz(msg.userProfile.timezone).format(config.tzDateFormat) : 
+                            moment(new Date(u.createdAt)).format(config.normalDateFormat),
                         inline: true
                     }],
                     footer: {
                         text: "This is all I can provide. Sorry for that."
                     }
                 }
-            })
+            });
         }
     },
     isCmd: true,
