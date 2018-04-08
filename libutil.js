@@ -28,11 +28,11 @@ class LibWUtil extends eris {
         } catch (err) {
             throw {
                 message: "Can't post, access text or body property for more info.",
-                text: err.text,
-                body: err.body
+                text: err.response.text,
+                body: err.response.body
             };
         }
-        if (data.statusCode != 200) throw {
+        if (data.status <= 200 && data.status <300) throw {
             message: "Can't post, access text or body property for more info.",
             text: data.text,
             body: data.body
