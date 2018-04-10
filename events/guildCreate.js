@@ -1,5 +1,11 @@
 module.exports = async (guild) => {
-    if (guild.defaultChannel) bot.createMessage(guild.defaultChannel.id, `Thanks for adding me in the server!\nThe bot uses ${config.prefix} prefix. You can change it anytime using ${config.prefix}config command.\nHope I can service you well.\nWant to send any feedback? Use \`${config.prefix}feedback\` command. Please note that this command takes some info about you, do \`${config.prefix}help feedback\` to view what data do I collect.\nOnce again, thank you for adding!\n-TTtie#4900`);
+    if (guild.defaultChannel) {
+        try {
+            bot.createMessage(guild.defaultChannel.id, `Thanks for adding me in the server!\nThe bot uses ${config.prefix} prefix. You can change it anytime using ${config.prefix}config command.\nHope I can service you well.\nWant to send any feedback? Use \`${config.prefix}feedback\` command. Please note that this command takes some info about you, do \`${config.prefix}help feedback\` to view what data do I collect.\nOnce again, thank you for adding!\n-TTtie#4900`);
+        } catch(_) {
+            // Do nothing. For now, give the people a little bit of lack of knowledge.
+        }
+    }
     bot.createMessage(config.serverLogChannel, {
         embed: {
             author: {

@@ -9,6 +9,7 @@ class HelpMenu extends ReactionMenu {
         this.permissions = permissions;
         this.ogMsg = msg;
         this.pgMsg = msg2;
+        this.reactionErrored = false;
         this.prepareEmoji();
     }
 
@@ -20,10 +21,10 @@ class HelpMenu extends ReactionMenu {
     }
 
     stopCallback(reason) {
-        this.pgMsg.delete();
-        console.log(reason);
-        if (reason === ReactionMenu.MANUAL_EXIT)
+        if (reason === ReactionMenu.MANUAL_EXIT) {
+            this.pgMsg.delete();
             this.ogMsg.channel.createMessage("You have exited the menu.").then(m => setTimeout(() => m.delete(), 5000));
+        }
         /*case ReactionMenu.TIMEOUT:
             this.ogMsg.channel.createMessage(`The menu has expired.`)*/
         else if (reason === ReactionMenu.MESSAGE_DELETE)
@@ -49,7 +50,13 @@ class HelpMenu extends ReactionMenu {
             return;
         }
         if (!this.hasPermission(emoji.name)) return;
-        this.pgMsg.removeReaction(emoji.name, id);
+        try {
+            this.pgMsg.removeReaction(emoji.name, id);
+        } catch(_) {
+            if (this.reactionErrored) return;
+            this.reactionErrored = true;
+            this.pgMsg.channel.createMessage("Error: Cannot remove your reaction because I'm very likely lacking the Manage Messages permission.\nIf you give to me, I'll remove your reaction for your convenience.")
+        }
         this.getCb(emoji.name)(emoji, id);
     }
 
