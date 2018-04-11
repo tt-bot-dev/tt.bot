@@ -14,7 +14,7 @@ class Sentry {
             this.config = Object.assign(config.sentry.config || {}, {
                 name: "ttbot",
                 release: require("../package.json").version,
-                captureUnhandledRejections: true,
+                //captureUnhandledRejections: true,
                 stacktrace: true,
                 dataCallback: r => {
                     r.user.id = bot.user ? bot.user.id : "none";
