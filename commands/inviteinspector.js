@@ -1,7 +1,6 @@
 module.exports = {
     exec: async function (msg, args) {
         let inviteData;
-        let ownerMember = bot.users.get(config.oid);
         try {
             inviteData = await bot.getInvite(args, true);
         } catch (err) {
@@ -13,7 +12,7 @@ module.exports = {
             inline: true
         }, {
             name: `The guild ID is ${inviteData.guild.id}`,
-            value: `You can also click [here](https://discord.gg/${inviteData.code}) to join the server.\nNote: The invite link placement is **NOT** for advertisement purposes. I, ${ownerMember ? ownerMember.username : (await bot.getUserWithoutRESTMode(config.oid)).username}, am not responsible for any advertisement problems caused by abuse of this command.`,
+            value: `You can also click [here](https://discord.gg/${inviteData.code}) to join the server.\nNote: The invite link placement is **NOT** for advertisement purposes. We are not responsible for any advertisement problems caused by abuse of this command.`,
             inline: true
         }];
         if (inviteData.memberCount && inviteData.presenceCount) {

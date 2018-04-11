@@ -9,7 +9,8 @@ module.exports = function () {
         defaultImageFormat: "webp"
     });
     global.isO = function(msg) {
-        return msg.author.id == config.oid;
+        if (!Array.isArray(config.oid)) return msg.author.id == config.oid;
+        else return config.oid.includes(msg.author.id)
     };
     global.connected = false;
     bot.connect();
