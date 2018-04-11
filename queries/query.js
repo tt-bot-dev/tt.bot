@@ -18,7 +18,7 @@ module.exports = class Query {
             let uarr = [];
             let numbers = [":one:", ":two:", ":three:", ":four:", ":five:"];
             let numbersUnicode = ["\u0031\u20E3", "\u0032\u20E3", "\u0033\u20E3", "\u0034\u20E3", "\u0035\u20E3"];
-            function listUsers() {
+            const listUsers = () => {
                 for (let i = 0; i <= 4; i++) {
                     let u = this._items[i];
                     if (u) {
@@ -69,6 +69,7 @@ module.exports = class Query {
                     bot.on("messageReactionAdd", r);
                 });
             } catch (err) {
+                console.error(err)
                 throw "Cannot embed/send messages";
             }
         }
