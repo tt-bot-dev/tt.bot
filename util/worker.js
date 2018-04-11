@@ -16,6 +16,7 @@ class WorkerManager {
     constructor() {
         this.workers = new Map();
         this.nextWorkerId = 0;
+        this.workersRan = false;
         process.setMaxListeners(0);
     }
 

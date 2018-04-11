@@ -3,7 +3,12 @@ module.exports = async function () {
     console.log(`${__filename}      | Connected as ${this.user.username}#${this.user.discriminator}`);
     global.connected = true;
     global.cmdWrap = require("../cmdwrapper");
-    for (let i = 0; i< config.workerCount; i++) await Promise.all(Object.values(WorkerTypes).map(w => this.workers.startWorker(w)));
+    if (!this.workers.workersRan) {
+        for (let i = 0; i< config.workerCount; i++) {
+            await Promise.all(Object.values(WorkerTypes).map(w => this.workers.startWorker(w)));
+            this.workers.workersRan = true;
+        }
+    }
     cmdWrap.loadAll();
     this.editStatus("online", { name: `Type ${config.prefix}help`, type: 0 });
     this.postStats().then(console.log(__filename + "     | Successfully posted!"), r => console.log(r.body));
