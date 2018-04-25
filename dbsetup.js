@@ -1,6 +1,6 @@
 let db;
 try {
-    db = require("rethinkdbdash")(require("./config.json").connectionOpts);
+    db = require("rethinkdbdash")(require("./config").connectionOpts);
 } catch (err) {
     console.error("You haven't installed rethinkdbdash npm module or you don't have configured the bot yet! Please do so.");
 }
