@@ -48,7 +48,7 @@ module.exports = {
                 if (!content) return msg.channel.createMessage("I don't have anything to update!");
                 else {
                     data.content = content;
-                    await db.table("tags").get(tagName).update(data.toEncryptedObject());
+                    await db.table("tags").get(encryptData(tagName)).update(data.toEncryptedObject());
                     msg.channel.createMessage(`Updated the tag ${tagName}.`);
                 }
             } else {
@@ -60,7 +60,7 @@ module.exports = {
             let data = await db.table("tags").get(encryptData(tagName));
             if (!data) return await msg.channel.createMessage("No such tag.");
             if (isTagOwner(msg.author.id, data)) {
-                await db.table("tags").get(tagName).delete();
+                await db.table("tags").get(encryptData(tagName)).delete();
                 msg.channel.createMessage(`Deleted the tag ${tagName}.`);
             } else {
                 return await msg.channel.createMessage("You're not an owner of this tag.");
