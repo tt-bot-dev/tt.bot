@@ -1,6 +1,7 @@
 module.exports = class FeedbackObject {
     constructor(data) {
         this.id = data.id;
+        this.feedbackString = decryptData(data.feedbackString);
         this.guild = {};
         this.guild.id = data.guild.id;
         this.guild.ownerID = data.guild.ownerID;
