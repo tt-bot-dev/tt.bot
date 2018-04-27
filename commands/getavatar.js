@@ -10,7 +10,7 @@ module.exports = {
                     image: {
                         url: u.avatarURL
                     },
-                    description: `[Image not loading?](${u.dynamicAvatarURL("png", 2048)})`
+                    description: `[Image not loading?](${u.user.dynamicAvatarURL("png", 2048)})`
                 }
             });
         }).catch(console.error);
