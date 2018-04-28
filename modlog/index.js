@@ -11,6 +11,7 @@ class ModLog {
     }
 
     async getUserStrikes(userID, msg) {
+        const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
         if (!guildStrikes) guildStrikes = await this.insertNew(guildID);
         let {items} = guildStrikes;
