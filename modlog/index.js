@@ -10,6 +10,13 @@ class ModLog {
         return await bot.createMessage(msg.guildConfig.modlogChannel, {content:key, embed: message(type, key, user, msg.author, reason, obj)});
     }
 
+    async getUserStrikes(userID, msg) {
+        let guildStrikes = await db.table("modlog").get(guildID);
+        if (!guildStrikes) guildStrikes = await this.insertNew(guildID);
+        let {items} = guildStrikes;
+        return guildStrikes.filter(s => s.type === PunishTypes.STRIKE && s.userID === userID);
+    }
+
     async insertNew(guildID) {
         await db.table("modlog").insert({
             id: guildID,
