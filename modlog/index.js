@@ -15,7 +15,7 @@ class ModLog {
         let guildStrikes = await db.table("modlog").get(guildID);
         if (!guildStrikes) guildStrikes = await this.insertNew(guildID);
         let {items} = guildStrikes;
-        return guildStrikes.filter(s => s.type === PunishTypes.STRIKE && s.userID === userID);
+        return items.filter(s => s.type === PunishTypes.STRIKE && s.userID === userID);
     }
 
     async insertNew(guildID) {
