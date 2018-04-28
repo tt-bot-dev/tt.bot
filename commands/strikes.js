@@ -8,6 +8,7 @@ module.exports = {
         }
         if (user.bot) {
             msg.channel.createMessage(`Sorry, bots cannot be striked. Therefore, I can't display them.`)
+            return
         }
         try {
             const strikes = await bot.modLog.getUserStrikes(user.id, msg);
@@ -17,6 +18,7 @@ module.exports = {
                     file: Buffer.from(strikeStr.join("\r\n")),
                     name: `strikes.txt`
                 })
+                return
             }
             msg.channel.createMessage({
                 embed: {
