@@ -23,7 +23,7 @@
     "raven": "^2.6.0",
     "require-reload": "^0.2.2",
     "rethinkdbdash": "^2.3.31",
-    "superagent": "^3.8.2"
+    "superagent": "^3.8.3"
   },
   "devDependencies": {},
   "scripts": {
