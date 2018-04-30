@@ -17,5 +17,6 @@ module.exports = {
     serverLogChannel: "236757363699220480",
     workerCount: 5,
     gistKey: "a6ge954rb0zzt29ub897jf9b81t77a67erfv9",
-    sentry: {}
+    sentry: {},
+    encryptionIv: ""
 };
