@@ -10,7 +10,11 @@ class HelpMenu extends ReactionMenu {
         this.ogMsg = msg;
         this.pgMsg = msg2;
         this.reactionErrored = false;
-        this.prepareEmoji();
+        try {
+            this.prepareEmoji();
+        } catch(_) {
+            // Do nothing. It will show the user a list of reactions, so they have no problem with it.
+        }
     }
 
     async prepareEmoji() {
