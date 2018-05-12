@@ -76,9 +76,9 @@ const doit = async (arg = "", pp) => {
                             } else { if (!parse[arg.replace(/:/g, "")]) return ""; return parse[arg.replace(/:/g, "")]; }
                         }
                         let exec = stripOut();
-                        rs({ type: "unicodeEmote", url: `https://twemoji.maxcdn.com/2/72x72/${e(exec)}.png` });
+                        rs({ type: "unicodeEmote", url: `https://twitter.github.io/twemoji/2/72x72/${e(exec)}.png` });
                     });
-                } else rs({ type: "unicodeEmote", url: `https://twemoji.maxcdn.com/2/72x72/${e(arg)}.png` });
+                } else rs({ type: "unicodeEmote", url: `https://twitter.github.io/twemoji/2/72x72/${e(arg)}.png` });
             }
         }
     });
