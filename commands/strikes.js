@@ -37,8 +37,7 @@ module.exports = {
     },
     isCmd: true,
     display: true,
-    category: 3,
-    description: "Strike someone",
-    args: "<user:<user>>[ | <reason:<reason>>]",
-    aliases: ["warn"]
+    category: 1,
+    description: "Get user's strikes.",
+    args: "[user]",
 };
