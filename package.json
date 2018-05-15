@@ -4,7 +4,7 @@
   "description": "A bot with aim for fun and moderation made in Eris.",
   "main": "run.js",
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.6.1",
     "eris": "github:abalabahaha/eris#dev",
