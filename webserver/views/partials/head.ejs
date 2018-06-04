@@ -1,34 +1,23 @@
 <head>
-<title><%=bot.user.username%></title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-light_green.min.css">
-<script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<title><%=bot.user.username%> <%= pageTitle ? `- ${pageTitle}` : "" %></title>
+<meta charset="utf-8">
+  <meta name="description" content="tt.bot web panel. Might not work for some. If you wish to configure your server and it doesn't. Please use tt.config.">
+  <meta property="og:title" content="tt.bot web panel">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="<%=host%>/tttie-icon.png">
+  <meta property="og:url" content="<%=host%>">
+  <meta property="og:description" content="tt.bot web panel. Might not work for some. If you wish to configure your server and it doesn't. Please use tt.config.">
+  <meta property="og:site_name" content="tt.bot">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="tt.bot web panel.">
+  <link rel="apple-touch-icon-precomposed" href="/static/tttie-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="apple-touch-icon" href="/static/tttie-icon.png" />
+  <link rel="icon" sizes="192x192" href="/static/tttie-icon.png">
+  <link rel="shortcut icon" href="/static/tttie-icon.png">
+<meta name="theme-color" content="#101111">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://twemoji.maxcdn.com/2/twemoji.min.js?2.2.3"></script>
-<script>
-window.parseContent = function() {
-    var e = document.querySelectorAll("#scroll-tab-1 .page-content")[0];
-    if (e) {
-        twemoji.parse(e,{
-            callback: function(icon,opts) {
-                return "https://twemoji.maxcdn.com/2/svg/" + icon + ".svg"
-            }
-        })
-    }
-}
-
-</script>
-<script>
-window.onload = parseContent
-</script>
-<style>
-.emoji {
-    height: 32px !important;
-    width: 32px !important;
-}
-.center {
-    margin:auto;
-    text-align:center;
-}
-</style>
+<link rel="stylesheet" href="/static/css/tttie.css">
 </head>

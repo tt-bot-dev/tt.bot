@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<%- include("./partials/head") %>
+<body>
+<div class="tttie-container">
+<div class="tttie-body">
+<div class="tttie-center">
+<div>
+<h1>Hey there!</h1>
+Before we start, we need some sort of consent from you for us to collect the data.<br>
+Here is what do we collect about you:<br>
+<ul>
+<li>Your authentication data, pretty straightforward, isn't it?</li>
+<%if (isHTTP) { %>
+<li>You are accessing this web page insecurely. This means, anyone can intercept your traffic. If you want, use HTTPS instead.</li>
+<%}%>
+<li>Some more data that the instance owner(s) might collect. Please contact these for more info about it.</li>
+</ul>
+
+Do you agree with this?<br>
+
+<p>Also sorry IE/Edge users, you won't be able to access this :(</p>
+<p>Your browser doesn't support serverside cookie setting, which we use to give the consent.</p>
+
+<div class="tttie-center"><a class="tttie-linkbutton" id="yes"><div class="tttie-button">Yes</div></a>
+<a class="tttie-linkbutton" id="no"><div class="tttie-button">Eh no.</div></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="/static/js/data-consent.js"></script>
+</body>
+</html>

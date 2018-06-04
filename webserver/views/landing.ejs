@@ -1,57 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<%-include("partials/head")%>
-<%-include("partials/links")%>
-<style>
-body {
-    line-height: initial !important;
-}
-.pfp {
-    height: 15vh;
-    width: 15vh;
-    border-radius: 15vh;
-    margin-bottom: 1.5vh;
-}
-div.pad {
-    margin-top: 10px;
-}
-div.page-content {
-    margin-left: 1.5vw;
-}
-</style>
+<%- include("./partials/head") %>
 <body>
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-<%-include("partials/header")%>
-<main class="mdl-layout__content">
-    <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
-      <div class="page-content">
-        <div class="pad"></span>
-        <div class="center">
-            <img src="<%=bot.user.dynamicAvatarURL('png', 2048)%>" class="pfp">
-            <h1><%=bot.user.username%></h1>
-            <h2>A multipurpose bot with aim for moderation and fun, made in Eris by TTtie.</h2>
-            <hr></hr>
-            <h2>Features</h2>
-            </div>
-            This is being included but not limited to:
-            <ul>
-            <li>Inspecting invites</li>
-            <li>Getting the last kick/ban/unban/prune from audit logs</li>
-            <li>Basic moderation commands</li>
-            <li>Profiles with custom fields</li>
-            <li>Getting user data</li>
-            <li>Cleverbot</li>
-            </ul>
-            <hr></hr>
-            <div class="center"><h2>Our stats</h2></div>
-            <b><%=bot.user.username%></b> is on <b><%=bot.guilds.size%></b> servers, with <b><%=bot.users.size%></b> cached unique users. Its uptime is <b><%=getUptime(moment(), moment(Date.now() - bot.uptime))%></b>.
-            <hr></hr>
-            <div class="center"><h3>So why are you waiting?</h3>
-                <h3><a href="https://discordapp.com/oauth2/authorize?client_id=195506253806436353&amp;scope=bot">Add <%=bot.user.username%> to your server today!</a></h3>
-            </div>
-      </div>
-    </section>
-</main>
+<div class="tttie-container">
+<%- include("./partials/header") %>
+<div class="tttie-body">
+<div class="tttie-center text">
+<div>
+<h1>Hey there!</h1>
+<p>This is the dashboard of <%=bot.user.username%>, an instance of tt.bot.</p>
+<div class="tttie-center"><a href="https://tttie.github.io/ttbot" class="tttie-linkbutton"><div class="tttie-button">View tt.bot's features</div></a></div>
+<p>This tt.bot instance currently knows <b><%=bot.guilds.size%></b> servers and <b><%=bot.users.size%></b> users.</p>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

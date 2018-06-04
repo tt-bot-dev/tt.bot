@@ -73,10 +73,10 @@ class LibWUtil extends eris {
         let modRole = null;
         let server = await db.table("configs").get(member.guild.id).run();
         if (server) {
-            let role = member.guild.roles.find(r => r.name == server.modRole);
+            let role = member.guild.roles.find(r => r.name.toLowerCase() === server.modRole.toLowerCase());
             if (role) { serverHasModRole = true; modRole = role; }
         } else {
-            let role = member.guild.roles.find(r => r.name == "tt.bot mod");
+            let role = member.guild.roles.find(r => r.name.toLowerCase() === "tt.bot mod");
             if (role) { serverHasModRole = true; modRole = role; }
         }
         if (serverHasModRole) return member.roles.includes(modRole.id);
@@ -129,12 +129,19 @@ class LibWUtil extends eris {
         return txt.join("\n");
     }
     parseMsg(string, m, g) {
-        return string.replace(/{u\.mention}/g, `<@!${m.user.id}>`)
-            .replace(/{g\.name}/g, g.name)
-            .replace(/{g\.id}/g, g.id)
-            .replace(/{u\.name}/g, m.user.username)
-            .replace(/{u\.discrim}/g, m.user.discriminator)
-            .replace(/{u\.id}/g, m.user.id);
+        const replacers = {
+            "{g.name}": g.name,
+            "{g.id}": g.id,
+            "{g.channels}": g.channels.size,
+            "{g.members}": g.members.size,
+            "{u.mention}": `<@!${m.user.id}>`,
+            "{u.name}": m.username,
+            "{u.discrim}": m.discriminator,
+            "{u.id}": m.user.id,
+            "{u.tag}": bot.getTag(m),
+        }
+        const regex = new RegExp(Object.keys(replacers).map(t => t.replace(/\./g, `\\.`)).join("|"), "gi")
+        return string.replace(regex, m => replacers[m]);
     }
     
     waitForEvent(event, timeout, check) {

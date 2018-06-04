@@ -29,13 +29,13 @@ module.exports = {
             Object.keys(server).forEach(item => {
                 if (item != "id") items.push(`${item} - ${server[item]}`);
             });
-            return await bot.createMessage(msg.channel.id, `\`\`\`\nServer configuration for ${msg.guild.name}\n${items.join("\n")}\`\`\``);
+            return await bot.createMessage(msg.channel.id, `\`\`\`\nServer configuration for ${msg.guild.name}\n${items.join("\n")}\`\`\`\nEven though the config names are selfexplanatory, it is possible that your settings might bork the configuration.\n`);
         }
     },
     isCmd: true,
     name: "config",
     display: true,
     category: 4,
-    description: "Configuration.",
+    description: "This lets you configure your server.",
     args: "[<item> <value>]"
 };

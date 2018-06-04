@@ -1,26 +1,24 @@
-
-  <header class="mdl-layout__header">
-    <div class="mdl-layout__header-row">
-      <!-- Title -->
-      <span class="mdl-layout-title"><%=bot.user.username%></span>
-            <span style="margin:auto"></span>
-      <%if (user) {%>
-        <img height="32" width="32" style="border-radius:32px" src="<%-user.avatar%>" alt="rip">
+  <div class="tttie-double-navbar-holder"><div class="tttie-navbar">
+  <ul class="tttie-navbar-list">
+  <li class="tttie-navbar-item has-icon">
+  <a class="tttie-navbar-link" href="/"><img class="tttie-navbar-tttie-icon" src="/static/tttie-icon.png" alt="<%=bot.user.username%>, an instance of tt.bot"></a>
+  <% if(user) {%><li class="tttie-navbar-item"><a class="tttie-navbar-link" href="/dashboard">Dashboard</a></li><%}%>
+  </ul>
+  </div>
+  <div class="tttie-navbar">
+  <ul class="tttie-navbar-list">
+  
+  <%if (user){ %>
+    <li class="tttie-navbar-item has-icon"><img class="tttie-navbar-tttie-icon rounded" src="<%=user.avatar%>" alt="<%=bot.getTag(user)%>"></li>
+    
         <span style="margin-left: 8px"></span>
-        <span><%=user.username%>#<%=user.discriminator%></span>
+        <li class="tttie-navbar-item"><%=bot.getTag(user)%></li>
         <span style="margin-left: 8px"></span>
-        <a href="/logout"><i class="material-icons">lock_outline</i></a>
-      <%} else {%>
-        <a href="/login"><i class="material-icons">lock_open</i></a>
-      <%}%>
-      <a href="https://discordapp.com/oauth2/authorize?client_id=195506253806436353&amp;scope=bot" style="margin-left: 5px"><i class="material-icons">add</i></a>
-    </div>
-    <!-- Tabs -->
-    <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-      <a href="/" class="mdl-layout__tab">Home</a>
-      <%if (user && isO({author:user})) {%>
-      <a href="/guilds" class="mdl-layout__tab">Server manager</a>
-      <a href="/tags" class="mdl-layout__tab">Tag manager</a>
-      <%}%>
-    </div>
-  </header>
+        <li class="tttie-navbar-item"><a class="tttie-navbar-link" href="/logout">Logout</a></li>
+  <%} else {%>
+    <li class="tttie-navbar-item has-icon"><img class="tttie-navbar-tttie-icon rounded" src="/static/unknown.png" alt="Unknown person"></li>
+    <li class="tttie-navbar-item"><a class="tttie-navbar-link" href="/login">Log in</a></li>
+  <%}%>
+  </ul>
+  </div>
+  </div>

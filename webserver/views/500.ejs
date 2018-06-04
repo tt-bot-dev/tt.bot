@@ -1,27 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<%-include("partials/head")%>
-<%-include("partials/links")%>
-<style>
-.404 {
-    font-size: 32px;
-}
-</style>
+<%- include("./partials/head") %>
 <body>
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-<%-include("partials/header")%>
-<main class="mdl-layout__content">
-    <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
-      <div class="page-content">
-        <div class="center">
-        <h1 class="404">500</h1>
-        <h2>This doesn't seem well.....</h2>
-        <h2><code><%-error.replace(/</g, "&lt").replace(/>/g, "&gt").replace(/[\r\n]/g, "<br>")%></code></h2>
-        <a href="/">Go back to the main page</a>
-        </div>
-      </div>
-    </section>
-</main>
+<div class="tttie-container">
+<%- include("./partials/header") %>
+<div class="tttie-body">
+<div class="tttie-center text">
+<div>
+<h1>500</h1>
+<p>I'm sorry, but something bad has occured.</p>
+<div class="tttie-center">
+<pre><%=error%></pre>
+</div>
+<div class="tttie-center">
+<a class="tttie-linkbutton" href="/"><div class="tttie-button">Go home</div></a>
+</div>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

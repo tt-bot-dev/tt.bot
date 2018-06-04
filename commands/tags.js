@@ -16,14 +16,14 @@ module.exports = {
             if (!tagData) return await msg.channel.createMessage("No such tag.");
             let data = new TagObject(tagData);
             let profileData = await db.table("profile").get(data.owner);
-            let profile = new UserProfile(profileData);
+            let profile = profileData? new UserProfile(profileData) : undefined;
             msg.channel.createMessage({
                 embed: {
                     author: {
                         name: `Tag ${tagName}`
                     },
-                    description: data.content.replace(/\[/g, "\\[").replace(/\]/g, "\\]").replace(/\(/g, "\\(").replace(/\)/g, "\\)"),
-                    color: profile ? profile.color : ""
+                    description: bot.parseMsg(data.content.replace(/\[/g, "\\[").replace(/\]/g, "\\]").replace(/\(/g, "\\(").replace(/\)/g, "\\)"), msg.member, msg.guild),
+                    color: profile ? profile.color : null
                 }
             });
         }

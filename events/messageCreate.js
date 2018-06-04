@@ -1,26 +1,30 @@
 const UserProfileStructure = require("../Structures/UserProfile");
+async function dmOwner(owner, msg) {
+    let pm = await this.getDMChannel(owner);
+    let attachmentString = msg.attachments.map(a => a.url).join("\n");
+    let embed = {
+        author: {
+            name: `${this.getTag(msg.author)} sent a PM to me!`,
+            icon_url: msg.author.avatarURL
+        },
+        description: `${msg.content}\n${attachmentString}`
+    };
+    try {
+        await this.createMessage(pm.id, {
+            embed
+        });
+    } catch (err) {
+        console.log(this.embedToText(embed));
+    }
+}
 module.exports = async function (msg) {
     if (!msg.author) return; // Message.author is occasionally undefined. abal plz fix
     if (msg.author.bot) return; // ignore bots
     if (msg.channel instanceof ErisO.PrivateChannel) {
         if (config.reroutePMs) {
             if (isO(msg)) return;
-            let pm = await this.getDMChannel(config.oid);
-            let attachmentString = msg.attachments.map(a => a.url).join("\n");
-            let embed = {
-                author: {
-                    name: `${this.getTag(msg.author)} sent a PM to me!`,
-                    icon_url: msg.author.avatarURL
-                },
-                description: `${msg.content}\n${attachmentString}`
-            };
-            try {
-                await this.createMessage(pm.id, {
-                    embed
-                });
-            } catch (err) {
-                console.log(this.embedToText(embed));
-            }
+            if (!Array.isArray(config.oid)) await dmOwner.bind(this)(config.oid, msg);
+            else config.oid.forEach(async o => await dmOwner.bind(this)(o, msg))
         }
         if (msg.content.startsWith(config.prefix)) msg.channel.createMessage(`Hello ${this.getTag(msg.author)}, I think you're trying to execute some of my commands here in PMs. That won't work unfortunately. Try using the command in a server.`);
         return; // ignore DMs

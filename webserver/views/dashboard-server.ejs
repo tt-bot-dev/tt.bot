@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<%- include("./partials/head") %>
+<body onload="window.ttbot.guildId = '<%=guild.id%>'">
+<div class="tttie-container">
+<%- include("./partials/header") %>
+<div class="tttie-body">
+<div class="tttie-center">
+<div>
+
+<div class="tttie-changes-buttons">
+<a class="tttie-linkbutton" id="save"><div class="tttie-button">Save changes</div></a>
+<a class="tttie-linkbutton" id="reset"><div class="tttie-button red">Reset</div></a>
+</div>
+<div class="tttie-center text">
+<div>
+<img class="tttie-server-dash-icon" src="<%=erisGuild.dynamicIconURL('png', 256) || '/static/unknown.png'%>"><br>
+<h1><%=erisGuild.name%> Dashboard</h1>
+
+<p>Here's what you can modify:</p>
+</div>
+</div>
+<div>
+<h1>Moderator role, prefix</h1>
+<p>This section is about the basics of the bot. You can set the prefix you want to use (<code><%=config.prefix%></code> will still work).<br>
+Also, you can set the case insensitive name of your moderator role (You. Yeah, you. You're one of them)</p>
+
+<h3>Prefix</h3>
+<textarea type="text" value="..." disabled id="tttie-dash-p"></textarea>
+
+<h3>Moderator role</h3>
+<input type="text" value="..." disabled id="tttie-dash-mod">
+</div>
+
+<div>
+<h1>Farewell and welcome messages</h1>
+<p>These are farewell and welcome messages the bot can send to a specific channel. Both of the events are seperately handled.</p>
+
+<h2>Farewell</h2>
+<h3>Message</h3>
+<textarea value="..." disabled id="tttie-dash-fm"></textarea>
+<h3>Channel</h3>
+<select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-fc">
+<option value="DASH_LOADING">...</option>
+</select>
+
+
+<h2>Welcome</h2>
+<h3>Message</h3>
+<textarea value="..." disabled id="tttie-dash-wm"></textarea>
+<h3>Channel</h3>
+<select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-wc">
+<option value="DASH_LOADING">...</option>
+</select>
+</div>
+
+<div>
+<h1>Server rule agreement feature</h1>
+<p>This adds a requirement for users to use the <code>agree</code> command in order to view the rest of your server. You will need to set the permissions yourself though.</p>
+<h3>Channel</h3>
+<select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-ac">
+<option value="DASH_LOADING">...</option>
+</select>
+
+<h3>Role</h3>
+<select class="tttie-dashboard-role-picker" disabled id="tttie-dash-mr">
+<option value="DASH_LOADING">...</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<script src="/static/js/ttbotapi.js"></script>
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>

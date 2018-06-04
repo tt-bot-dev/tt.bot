@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<%- include("./partials/head") %>
+<body>
+<div class="tttie-container">
+<%- include("./partials/header") %>
+<div class="tttie-body">
+<div class="tttie-center text">
+<div><h1>Dashboard</h1>
+<p>Huh... you got here? Great! Now you can tweak your server's settings as usual.</p>
+<div class="tttie-server-list">
+<%guilds.map(g => {%>
+<div class="tttie-center text">
+<div class="tttie-server-box">
+<img class="tttie-server-icon" src="<%=g.icon?`https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=256`:'/static/unknown.png'%>"><br>
+    <b><%=g.name%> (<%=g.id%>)</b><br>
+    <%if (!g.isOnServer) {%>
+    <a href="<%=`https://discordapp.com/oauth2/authorize?client_id=${config.clientID}&amp;scope=bot&amp;guild_id=${g.id}`%>">Add</a>
+    <%} else {%>
+    <a href="/dashboard/<%=g.id%>">Dashboard</a>
+    <%}%>
+    </div>
+    </div>
+<%})%>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

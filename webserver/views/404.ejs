@@ -1,26 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<%-include("partials/head")%>
-<%-include("partials/links")%>
-<style>
-.404 {
-    font-size: 32px;
-}
-</style>
+<%- include("./partials/head") %>
 <body>
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-<%-include("partials/header")%>
-<main class="mdl-layout__content">
-    <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
-      <div class="page-content">
-        <div class="center">
-        <h1 class="404">404</h1>
-        <h2>Welcome to the nothingness 😅</h2>
-        <a href="/">Go back to the main page</a>
-        </div>
-      </div>
-    </section>
-</main>
+<div class="tttie-container">
+<%- include("./partials/header") %>
+<div class="tttie-body">
+<div class="tttie-center text">
+<div>
+<h1>404</h1>
+<p>I'm sorry, but there's no path like this.</p>
+
+<div class="tttie-center">
+<a class="tttie-linkbutton" href="/"><div class="tttie-button">Go home</div></a>
+</div>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>
