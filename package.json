@@ -14,7 +14,7 @@
     "express-session-rethinkdb": "^0.4.1",
     "gifwrap": "^0.7.5",
     "jimp": "^0.2.28",
-    "moment": "^2.22.1",
+    "moment": "^2.22.2",
     "moment-timezone": "^0.5.17",
     "passport": "^0.4.0",
     "passport-discord": "^0.1.3",
