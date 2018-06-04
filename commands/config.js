@@ -29,7 +29,7 @@ module.exports = {
             Object.keys(server).forEach(item => {
                 if (item != "id") items.push(`${item} - ${server[item]}`);
             });
-            return await bot.createMessage(msg.channel.id, `\`\`\`\nServer configuration for ${msg.guild.name}\n${items.join("\n")}\`\`\`\nEven though the config names are selfexplanatory, it is possible that your settings might bork the configuration.\nIf you want to use the web version instead, go to ${config.webserverDisplayUrl("/")}`);
+            return await bot.createMessage(msg.channel.id, `\`\`\`\nServer configuration for ${msg.guild.name}\n${items.join("\n")}\`\`\`\nEven though the config names are selfexplanatory, it is possible that your settings might bork the configuration.\nIf you want to use the web version instead, go to ${config.webserverDisplay("/")}`);
         }
     },
     isCmd: true,
