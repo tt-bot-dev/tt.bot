@@ -33,10 +33,19 @@ app.get("/dashboard", checkAuth, (rq, rs) => {
 })
 
 app.get("/dashboard/:id", checkAuth, async (rq, rs) => {
+    
+    async function makeCfg() {
+        await db.table("configs").insert({
+            id: rq.params.id,
+            modRole: "tt.bot mod",
+            prefix: config.prefix
+        });
+        return await db.table("configs").get(msg.guild.id).run();
+    }
     const guilds = getGuilds(rq, rs);
     if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
     else {
-        const data = await db.table("configs").get(rq.params.id);
+        const data = await db.table("configs").get(rq.params.id) || await makeCfg();
         const g = bot.guilds.get(rq.params.id);
         return rs.render("dashboard-server", rq.makeTemplatingData({
             guild: data,
