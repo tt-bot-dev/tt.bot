@@ -1,8 +1,6 @@
 const e = require("express"),
     bodyParser = require("body-parser"),
     ejs = require("ejs"),
-    passport = require("passport"),
-    dStrategy = require("passport-discord").Strategy,
     cookieparser = require("cookie-parser"),
     session = require("express-session"),
     appstore = require("express-session-rethinkdb")(session),
@@ -12,11 +10,10 @@ const e = require("express"),
     util = require("./"),
     scope = ["identify", "guilds"],
     cookies = require("./cookies"),
-    body = require("body-parser");
+    body = require("body-parser"),
+    auth = require("./auth");
 module.exports = app => {
-    app.use("/static", e.static(`${__dirname}/../static`, {
-
-    }))
+    app.use("/static", e.static(`${__dirname}/../static`))
     app.enable("trust proxy");
     app.use(body.urlencoded({
         extended: true,
@@ -53,26 +50,14 @@ module.exports = app => {
         nx();
     });
     app.use(cookies)
-    passport.serializeUser(function (user, done) {
-        done(null, user);
-    });
-    passport.deserializeUser(function (obj, done) {
-        done(null, obj);
-    });
-    passport.use(new dStrategy({
-        clientID: config.clientID,
-        clientSecret: config.clientSecret,
-        callbackURL: `${config.webserverDisplayUrl}/callback`,
-        scope
-    }, (accessToken, refreshToken, profile, done) => {
-        process.nextTick(() => done(null, profile));
-    }));
     app.use(session({
         secret: config.clientSecret,
         resave: false,
         saveUninitialized: false,
-        store: store
+        store: store,
+        cookie: {
+            maxAge: 8064e5
+        }
     }));
-    app.use(passport.initialize());
-    app.use(passport.session());
+    app.use(auth.checkAuth);
 };

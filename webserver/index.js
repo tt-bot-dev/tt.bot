@@ -1,10 +1,11 @@
 const e = require("express"),
     app = e(),
     util = require("./util"),
-    {checkAuth, checkAuthNeg, loadMiddleware, getGuilds, getHost} = util,
+    { checkAuth, checkAuthNeg, loadMiddleware, getGuilds, getHost } = util,
     passport = require("passport"),
     scope = ["identify", "guilds"],
-    {createServer: httpsServer} = require("https");
+    { createServer: httpsServer } = require("https"),
+    { getAccessToken, logout } = require("./util/auth");
 
 loadMiddleware(app);
 app.get("/", (rq, rs) => {
@@ -13,14 +14,14 @@ app.get("/", (rq, rs) => {
 
 app.get("/acceptcookie", (rq, rs) => {
     const p = rq.query.redir || "/";
-    const {host} = rq.headers;
+    const { host } = rq.headers;
     const domain = getHost(host);
     if (rq.signedCookies.dataOk !== "ok") rs.cookie("dataOk", "ok", { //yeah dont
         signed: true,
         expires: new Date("Fri, 31 Dec 9999 23:59:59 GMT"),
         domain
     });
-    rs.redirect(p.startsWith("/") ? p : "/").end(); // prevent redirecting somewhere we are not suposed to
+    rs.redirect(p.startsWith("/") ? p : "/") // prevent redirecting somewhere we are not supposed to
 })
 
 app.get("/dashboard", checkAuth, (rq, rs) => {
@@ -44,21 +45,28 @@ app.get("/dashboard/:id", checkAuth, async (rq, rs) => {
         }))
     }
 })
-app.get("/login", checkAuthNeg, passport.authenticate("discord", { scope }), function (req, res) { req; res; return; });
-app.get("/callback",
-    passport.authenticate("discord", { failureRedirect: "/" }), function (req, res) { req; res.redirect("/"); } // auth success
-);
+app.get("/login", checkAuthNeg, function (req, res) {
+    return res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${config.clientID}&scope=${encodeURIComponent(scope.join(" "))}&response_type=code&redirect_uri=${encodeURIComponent(`${req.protocol}://${req.headers.host}/callback`)}`)
+})
+app.get("/callback", async function (req, res) {
+    if (!req.query.code) return res.redirect("/login");
+    else {
+        try {
+            await getAccessToken(req.query.code, req);
+        } catch (err) {
+            console.error(err)
+            return res.redirect("/login")
+        }
+        return res.redirect("/");
+    }
+});
 
 app.get("/logout", checkAuth, function (req, res) {
-    req.logout();
+    logout(req, res);
     res.redirect("/");
 });
 
 app.use("/api", require("./routes/api"))
-
-
-app.get("/error", (rq,rs) => {throw new Error("Intentional error")})
-
 
 app.use((err, req, res, next) => {
     if (err) {
@@ -75,6 +83,6 @@ app.listen(config.httpPort || 8090, config.webserverip || "0.0.0.0", () => {
 });
 
 if (config.httpsPort) httpsServer(config.httpsSettings)
-                      .listen(config.httpsPort, config.webserverip || "0.0.0.0", () => {
-                          console.log("HTTPS webserver is running")
-                      });
+    .listen(config.httpsPort, config.webserverip || "0.0.0.0", () => {
+        console.log("HTTPS webserver is running")
+    });

@@ -18,7 +18,7 @@ module.exports = {
     dbotskey: "Heekajkga.s,gkjaůsgkiosdhgirf6g5f655d6d5s9s58s98",
 
     /**
-     * A key to post to https://discordbotlist.net. This is also optional.
+     * A key to post to https://discordbots.org. This is also optional.
      * @type {string}
      */
     dbots2key: "/tbalealelalajioe,e.gokaoklelgoekejfoekeoeke",

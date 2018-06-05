@@ -1,11 +1,11 @@
 module.exports = {
     checkAuth(req, res, next) {
-        if (req.isAuthenticated()) return next();
+        if (req.user) return next();
         res.redirect("/login");
     },
 
     checkAuthNeg(req, res, next) {
-        if (!req.isAuthenticated()) return next();
+        if (!req.user) return next();
         res.send("you're logged in already :)");
     },
     loadMiddleware: require("./loadMiddleware"),
