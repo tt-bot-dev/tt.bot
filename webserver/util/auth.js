@@ -20,6 +20,7 @@ const auth = {
                 return nx();
             }
             rq.user = d;
+            rq.signedIn = true;
             nx();
         }
     },
