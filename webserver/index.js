@@ -82,7 +82,7 @@ app.listen(config.httpPort || 8090, config.webserverip || "0.0.0.0", () => {
     console.log("HTTP webserver is running.");
 });
 
-if (config.httpsPort) httpsServer(config.httpsSettings)
+if (config.httpsPort) httpsServer(config.httpsSettings, app)
     .listen(config.httpsPort, config.webserverip || "0.0.0.0", () => {
         console.log("HTTPS webserver is running")
     });
