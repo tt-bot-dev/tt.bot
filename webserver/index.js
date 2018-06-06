@@ -6,7 +6,7 @@ const e = require("express"),
     scope = ["identify", "guilds"],
     { createServer: httpsServer } = require("https"),
     { getAccessToken, logout } = require("./util/auth");
-
+    
 loadMiddleware(app);
 app.get("/", (rq, rs) => {
     rs.render("landing", rq.makeTemplatingData())
@@ -65,6 +65,12 @@ app.get("/callback", async function (req, res) {
         } catch (err) {
             console.error(err)
             return res.redirect("/login")
+        }
+
+        try{
+            await (new Promise((rs, rj) => req.session.save(e => e?rj(e):rs())));
+        } catch(err) {
+            throw err;
         }
         return res.redirect("/");
     }

@@ -119,5 +119,20 @@ module.exports = {
      * The initialization vector for encryption. You can either use your own 16 bytes or let the bot generate this.
      * @type {string}
      */
-    encryptionIv: ""
+    encryptionIv: "",
+
+    /**
+     * If to enable the /api/dblvotes endpoint or not
+     * @type {boolean}
+     */
+    dblVoteHook: false,
+
+    /**
+     * If the above is enabled, these are the options for that feature.
+     * dblVoteHookGuild and dblVoteHookRole are the guild/role IDs.
+     * dblVoteHookSecret should be some piece of random entropy.
+     */
+    dblVoteHookGuild: "",
+    dblVoteHookRole: "",
+    dblVoteHookSecret: ""
 };

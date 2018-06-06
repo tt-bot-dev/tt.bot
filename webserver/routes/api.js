@@ -66,4 +66,41 @@ app.post("/config/:guild", checkAuth, async (rq, rs) => {
     }
 })
 
+if (config.dblVoteHook) {
+    app.post("/dblvotes", async (rq, rs) => {
+        const pass = async () => {
+            bot.createMessage(config.serverLogChannel, {
+                content: `<@!${rq.body.user}> (${bot.getTag(await bot.getUserWithoutRESTMode(rq.body.user))}), thank you!\nIf you are here, you should be given a vote role reward if it exists!`,
+                embed: {
+                    color: 0x008800,
+                    author: {
+                        name: `Vote feed`
+                    },
+                    description: `Oh wait, you didn't vote for me yet? Go ahead and do that [here](https://discordbots.org/bot/${bot.user.id}/vote), if you wish!`,
+                    timestamp: new Date()
+                }
+            })
+            rs.send({status: "OK"})
+        }
+        if (!rq.headers.authorization || rq.headers.authorization !== config.dblVoteHookSecret) return rs.status(403).send({
+            error: "Forbidden"
+        })
+
+        if (rq.body.type === "test") {
+            console.log("Test passed.");
+            pass();
+            return;
+        }
+
+        const guild = bot.guilds.get(config.dblVoteHookGuild);
+        if (!guild) return pass();
+        const role = guild.roles.get(config.dblVoteHookRole);
+        if (!role) return pass();
+        const member = guild.members.get(rq.body.user);
+        if (!member) return pass();
+        if (!member.roles.includes(role.id)) await member.addRole(role.id, `Voting on discordbots.org`)
+        return pass();
+    })
+}
+
 module.exports = app;
