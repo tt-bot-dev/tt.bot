@@ -82,7 +82,7 @@ if (config.dblVoteHook) {
             })
             rs.send({status: "OK"})
         }
-        if (!rq.headers.authorization || rq.headers.authorization !== config.dblVoteHookSecret) return rs.status(403).send({
+        if (!rq.headers.authorization || (rq.headers.authorization !== config.dblVoteHookSecret)) return rs.status(403).send({
             error: "Forbidden"
         })
 
