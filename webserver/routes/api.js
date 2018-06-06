@@ -69,7 +69,7 @@ app.post("/config/:guild", checkAuth, async (rq, rs) => {
 if (config.dblVoteHook) {
     app.post("/dblvotes", async (rq, rs) => {
         const pass = async () => {
-            bot.createMessage(config.serverLogChannel, {
+            if (rq.body.type !== "test") bot.createMessage(config.serverLogChannel, {
                 content: `<@!${rq.body.user}> (${bot.getTag(await bot.getUserWithoutRESTMode(rq.body.user))}), thank you!\nIf you are here, you should be given a vote role reward if it exists!`,
                 embed: {
                     color: 0x008800,

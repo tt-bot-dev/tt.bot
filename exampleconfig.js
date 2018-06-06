@@ -130,7 +130,7 @@ module.exports = {
     /**
      * If the above is enabled, these are the options for that feature.
      * dblVoteHookGuild and dblVoteHookRole are the guild/role IDs.
-     * dblVoteHookSecret should be some piece of random entropy.
+     * dblVoteHookSecret should be some piece of random entropy. This one is required.
      */
     dblVoteHookGuild: "",
     dblVoteHookRole: "",
