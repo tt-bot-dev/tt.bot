@@ -15,7 +15,7 @@
 <img class="tttie-server-icon" src="<%=g.icon?`https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=256`:'/static/unknown-user.png'%>"><br>
     <b><%=g.name%> (<%=g.id%>)</b><br>
     <%if (!g.isOnServer) {%>
-    <a href="<%=`https://discordapp.com/oauth2/authorize?client_id=${config.clientID}&amp;scope=bot&amp;guild_id=${g.id}`%>">Add</a>
+    <a href="<%=`https://discordapp.com/oauth2/authorize?client_id=${config.clientID}&scope=bot&guild_id=${g.id}`%>">Add</a>
     <%} else {%>
     <a href="/dashboard/<%=g.id%>">Dashboard</a>
     <%}%>
