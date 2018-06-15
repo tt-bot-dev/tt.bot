@@ -16,7 +16,7 @@
     "jimp": "^0.2.28",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.17",
-    "pmx": "^1.6.4",
+    "pmx": "^1.6.7",
     "process-as-promised": "^1.0.1",
     "raven": "^2.6.2",
     "require-reload": "^0.2.2",
