@@ -1,4 +1,4 @@
-const { Router, json } = require("express");
+const { Router } = require("express");
 const app = Router();
 const { checkAuth, getGuilds } = require("../util/index");
 /* 
@@ -16,7 +16,7 @@ app.get("/channels/:guild", checkAuth, (rq, rs) => {
             id: c.id
         })));
     }
-})
+});
 
 app.get("/config/:guild", checkAuth, async (rq, rs) => {
     const guilds = getGuilds(rq, rs);
@@ -25,7 +25,7 @@ app.get("/config/:guild", checkAuth, async (rq, rs) => {
         const data = await db.table("configs").get(rq.params.guild);
         return rs.send(data);
     }
-})
+});
 
 app.get("/roles/:guild", checkAuth, (rq, rs) => {
     const guilds = getGuilds(rq, rs);
@@ -53,7 +53,9 @@ app.post("/config/:guild", checkAuth, async (rq, rs) => {
             "greetingMessage",
             "greetingChannelId",
             "agreeChannel",
-            "memberRole"]; // filter out the nonsense
+            "memberRole",
+            "logChannel",
+            "logEvents"]; // filter out the nonsense
         const filteredBody = {};
         Object.keys(rq.body).filter(k => props.includes(k)).forEach(k => {
             filteredBody[k] = rq.body[k] || undefined;
@@ -62,9 +64,9 @@ app.post("/config/:guild", checkAuth, async (rq, rs) => {
         filteredBody.id = rq.params.guild;
 
         await db.table("configs").get(rq.params.guild).replace(filteredBody);
-        return rs.send(await db.table("configs").get(rq.params.guild))
+        return rs.send(await db.table("configs").get(rq.params.guild));
     }
-})
+});
 
 if (config.dblVoteHook) {
     app.post("/dblvotes", async (rq, rs) => {
@@ -74,17 +76,17 @@ if (config.dblVoteHook) {
                 embed: {
                     color: 0x008800,
                     author: {
-                        name: `Vote feed`
+                        name: "Vote feed"
                     },
                     description: `Oh wait, you didn't vote for me yet? Go ahead and do that [here](https://discordbots.org/bot/${bot.user.id}/vote), if you wish!`,
                     timestamp: new Date()
                 }
-            })
-            rs.send({status: "OK"})
-        }
+            });
+            rs.send({status: "OK"});
+        };
         if (!rq.headers.authorization || (rq.headers.authorization !== config.dblVoteHookSecret)) return rs.status(403).send({
             error: "Forbidden"
-        })
+        });
 
         if (rq.body.type === "test") {
             console.log("Test passed.");
@@ -98,9 +100,9 @@ if (config.dblVoteHook) {
         if (!role) return pass();
         const member = guild.members.get(rq.body.user);
         if (!member) return pass();
-        if (!member.roles.includes(role.id)) await member.addRole(role.id, `Voting on discordbots.org`)
+        if (!member.roles.includes(role.id)) await member.addRole(role.id, "Voting on discordbots.org");
         return pass();
-    })
+    });
 }
 
 module.exports = app;

@@ -1,4 +1,4 @@
-const s = require("superagent");
+const s = require("snekfetch");
 module.exports = {
     exec: async function (msg, args) {
         let errMessages = {

@@ -1,7 +1,7 @@
 {
   "name": "tt.bot",
-  "version": "2.2.1",
-  "description": "A bot with aim for fun and moderation made in Eris.",
+  "version": "2.3.0",
+  "description": "A bot with aim for fun and moderation made in JS using Eris.",
   "main": "run.js",
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -19,9 +19,8 @@
     "pmx": "^1.6.7",
     "process-as-promised": "^1.0.1",
     "raven": "^2.6.2",
-    "require-reload": "^0.2.2",
     "rethinkdbdash": "^2.3.31",
-    "superagent": "^3.8.3"
+    "snekfetch": "^4.0.2"
   },
   "devDependencies": {},
   "scripts": {

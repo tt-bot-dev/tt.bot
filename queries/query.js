@@ -27,7 +27,7 @@ module.exports = class Query {
                     }
                 }
                 return uarr.join("\n");
-            }
+            };
             try {
                 const m = await bot.createMessage(msg.channel.id, {
                     embed: {
@@ -69,7 +69,7 @@ module.exports = class Query {
                     bot.on("messageReactionAdd", r);
                 });
             } catch (err) {
-                console.error(err)
+                console.error(err);
                 throw "Cannot embed/send messages";
             }
         }

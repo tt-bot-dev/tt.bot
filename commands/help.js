@@ -59,7 +59,7 @@ class HelpMenu extends ReactionMenu {
         } catch(_) {
             if (this.reactionErrored) return;
             this.reactionErrored = true;
-            this.pgMsg.channel.createMessage("Error: Cannot remove your reaction because I'm very likely lacking the Manage Messages permission.\nIf you give to me, I'll remove your reaction for your convenience.")
+            this.pgMsg.channel.createMessage("Error: Cannot remove your reaction because I'm very likely lacking the Manage Messages permission.\nIf you give to me, I'll remove your reaction for your convenience.");
         }
         this.getCb(emoji.name)(emoji, id);
     }

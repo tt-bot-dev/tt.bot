@@ -25,7 +25,7 @@ module.exports = {
         }
         try {
             if (user.bot) {
-                msg.channel.createMessage(`Bots are not the best subjects to strike. Trust me. :thinking:`)
+                msg.channel.createMessage("Bots are not the best subjects to strike. Trust me. :thinking:");
                 return;
             }
             await bot.modLog.addStrike(user.id, msg, options.reason);

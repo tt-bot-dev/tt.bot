@@ -5,4 +5,4 @@ module.exports = function checkCookieConsent(rq, rs, nx) {
     if (!rq.signedCookies) return rs.render("landing-consent", rq.makeTemplatingData());
     if (rq.signedCookies.dataOk !== "ok") return rs.render("landing-consent", rq.makeTemplatingData());
     return nx();
-}
+};

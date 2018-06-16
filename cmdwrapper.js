@@ -1,5 +1,8 @@
 let ex = module.exports = {};
-global.rld = require("require-reload")(require);
+global.rld = (rq => p => {
+    delete rq.cache[rq.resolve(p)];
+    return rq(p);
+})(require);
 ex.loadAll = function () {
     let fa = fs.readdirSync("./commands");
     fa.forEach(cmF => {

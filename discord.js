@@ -10,7 +10,7 @@ module.exports = function () {
     });
     global.isO = function(msg) {
         if (!Array.isArray(config.oid)) return msg.author.id == config.oid;
-        else return config.oid.includes(msg.author.id)
+        else return config.oid.includes(msg.author.id);
     };
     global.connected = false;
     bot.connect();

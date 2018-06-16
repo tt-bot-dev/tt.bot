@@ -4,7 +4,10 @@ global.queries = require("./queries/index");
 global.userQuery = queries.user;
 require("./checkConfig")();
 require("./discord")();
-if (typeof config.webserverDisplay !== "function") config.webserverDisplay = url => `${config.webserverDisplay}${url}`
+if (typeof config.webserverDisplay !== "function") {
+    const oldDisplay = config.webserverDisplay;
+    config.webserverDisplay = url => `${oldDisplay}${url}`;
+}
 global.web = require("./webserver/index");
 global.db = require("rethinkdbdash")(config.connectionOpts);
 global.moment = require("moment");

@@ -14,12 +14,10 @@ This bot uses (and probably used) some pieces of code from [blargbot](https://gi
 - Rerouting your command input into direct messages
 - Emoji to picture 
 - Many more commands that I am lazy to list
+- Logging deleted messages
 
-# How to set up
-1. Install all the dependencies using this command: `npm i`
-2. Rename `exampleconfig.json` to `config.json`
-3. Edit the properties
-4. Run `run.js`
+# How to selfhost
+Go [here](https://github.com/TTtie/TTtie-Bot/wiki/Selfhosting)
 
 # Creating events/commands
 Refer to [EVENTS.md](./EVENTS.md) or [COMMANDS.md](./COMMANDS.md).

@@ -7,18 +7,18 @@ module.exports = {
             return;
         }
         if (user.bot) {
-            msg.channel.createMessage(`Sorry, bots cannot be striked. Therefore, I can't display them.`)
-            return
+            msg.channel.createMessage("Sorry, bots cannot be striked. Therefore, I can't display them.");
+            return;
         }
         try {
             const strikes = await bot.modLog.getUserStrikes(user.id, msg);
             if (strikes > 25) {
                 let strikeStr = strikes.map(s => `${s.id} - ${s.reason}`);
-                msg.channel.createMessage(`You have too much strikes for me to display in an embed. Here's a text file instead:`, {
+                msg.channel.createMessage("You have too much strikes for me to display in an embed. Here's a text file instead:", {
                     file: Buffer.from(strikeStr.join("\r\n")),
-                    name: `strikes.txt`
-                })
-                return
+                    name: "strikes.txt"
+                });
+                return;
             }
             msg.channel.createMessage({
                 embed: {

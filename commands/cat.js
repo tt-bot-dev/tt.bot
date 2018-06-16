@@ -1,6 +1,6 @@
 module.exports = {
     exec: async function (msg) {
-        let data = await require("superagent").get("http://aws.random.cat/meow");
+        let data = await require("snekfetch").get("http://aws.random.cat/meow");
         msg.channel.createMessage({embed:{image:{url: data.body.file}, color: 0x008800}});
     },
     isCmd: true,

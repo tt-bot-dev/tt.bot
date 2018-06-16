@@ -1,5 +1,4 @@
 const e = require("express"),
-    bodyParser = require("body-parser"),
     ejs = require("ejs"),
     cookieparser = require("cookie-parser"),
     session = require("express-session"),
@@ -7,13 +6,11 @@ const e = require("express"),
     store = new appstore({
         connectOptions: config.connectionOpts
     }),
-    util = require("./"),
-    scope = ["identify", "guilds"],
     cookies = require("./cookies"),
     body = require("body-parser"),
     auth = require("./auth");
 module.exports = app => {
-    app.use("/static", e.static(`${__dirname}/../static`))
+    app.use("/static", e.static(`${__dirname}/../static`));
     app.enable("trust proxy");
     app.use(body.urlencoded({
         extended: true,
@@ -34,7 +31,7 @@ module.exports = app => {
     app.use((rq, rs, nx) => {
         rq.makeTemplatingData = function (...objects) {
             let obj = {
-                user: rq.isAuthenticated() ? {
+                user: rq.signedIn ? {
                     username: rq.user.username,
                     discriminator: rq.user.discriminator,
                     avatar: `https://cdn.discordapp.com/avatars/${rq.user.id}/${rq.user.avatar}.png`,
@@ -49,7 +46,7 @@ module.exports = app => {
         };
         nx();
     });
-    app.use(cookies)
+    app.use(cookies);
     app.use(session({
         secret: config.clientSecret,
         resave: false,

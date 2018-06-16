@@ -19,10 +19,10 @@ module.exports = function () {
         console.error("CRITICAL: Initialization vector is missing.\nPlease open your configuration and set the initialization vector to anything you want.\nIf you want it to be random, use this:");
         const {randomBytes} = require("crypto");
         console.error(randomBytes(8).toString("hex"));
-        process.exit(1)
+        process.exit(1);
     }
     if (config.encryptionIv.length > 16) {
-        console.error("CRITICAL: Initialization vector is too long. It must be smaller than 16 bytes.")
+        console.error("CRITICAL: Initialization vector is too long. It must be smaller than 16 bytes.");
     }
     return;
 };

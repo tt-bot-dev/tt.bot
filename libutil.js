@@ -1,5 +1,5 @@
 const eris = require("eris").Client;
-const s = require("superagent");
+const s = require("snekfetch");
 const ErisEndpoints = require("eris/lib/rest/Endpoints");
 const ModLog = require("./modlog/index");
 const WorkerManager = require("./util/worker");
@@ -139,8 +139,8 @@ class LibWUtil extends eris {
             "{u.discrim}": m.discriminator,
             "{u.id}": m.user.id,
             "{u.tag}": bot.getTag(m),
-        }
-        const regex = new RegExp(Object.keys(replacers).map(t => t.replace(/\./g, `\\.`)).join("|"), "gi")
+        };
+        const regex = new RegExp(Object.keys(replacers).map(t => t.replace(/\./g, "\\.")).join("|"), "gi");
         return string.replace(regex, m => replacers[m]);
     }
     

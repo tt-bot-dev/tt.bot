@@ -24,7 +24,7 @@ module.exports = async function (msg) {
         if (config.reroutePMs) {
             if (isO(msg)) return;
             if (!Array.isArray(config.oid)) await dmOwner.bind(this)(config.oid, msg);
-            else config.oid.forEach(async o => await dmOwner.bind(this)(o, msg))
+            else config.oid.forEach(async o => await dmOwner.bind(this)(o, msg));
         }
         if (msg.content.startsWith(config.prefix)) msg.channel.createMessage(`Hello ${this.getTag(msg.author)}, I think you're trying to execute some of my commands here in PMs. That won't work unfortunately. Try using the command in a server.`);
         return; // ignore DMs
