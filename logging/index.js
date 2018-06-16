@@ -13,6 +13,10 @@ const logging = {
             const cfg = await db.table("configs").get(guildId);
             if (!cfg) return {logChannel: null, logEvents: []};
             else {
+                if (!cfg.logChannel || !cfg.logEvents) return {
+                    logChannel: null,
+                    logEvents: []
+                }
                 if (cfg.logEvents.split(";").includes("all")) return {
                     logChannel: cfg.logChannel, logEvents: logging.availableTypes
                 };
