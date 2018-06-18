@@ -20,7 +20,7 @@
     "process-as-promised": "^1.0.1",
     "raven": "^2.6.2",
     "rethinkdbdash": "^2.3.31",
-    "snekfetch": "^4.0.2"
+    "snekfetch": "^4.0.3"
   },
   "devDependencies": {},
   "scripts": {
