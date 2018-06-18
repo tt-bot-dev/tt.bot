@@ -15,7 +15,7 @@ module.exports = {
             if (config.gistKey) {
                 let gist;
                 try {
-                    gist = await require("superagent").post("https://api.github.com/gists").set("Authorization", `Token ${config.gistKey}`).send({
+                    gist = await require("snekfetch").post("https://api.github.com/gists").set("Authorization", `Token ${config.gistKey}`).send({
                         description: "Evaluated code",
                         public: false,
                         files: {
