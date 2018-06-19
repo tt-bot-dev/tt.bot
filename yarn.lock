@@ -713,9 +713,9 @@ shimmer@^1.0.0, shimmer@^1.1.0, shimmer@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/shimmer/-/shimmer-1.2.0.tgz#f966f7555789763e74d8841193685a5e78736665"
 
-snekfetch@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/snekfetch/-/snekfetch-4.0.3.tgz#1198fb95941ac8aa3b44264cfc8520c1fdecb8fb"
+snekfetch@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/snekfetch/-/snekfetch-4.0.4.tgz#e76a03b8476699a1f0c036d6567e386ce5fbde8e"
 
 stack-trace@0.0.10:
   version "0.0.10"
