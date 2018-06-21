@@ -18,7 +18,7 @@
     "moment-timezone": "^0.5.20",
     "pmx": "^1.6.7",
     "process-as-promised": "^1.0.1",
-    "raven": "^2.6.2",
+    "raven": "^2.6.3",
     "rethinkdbdash": "^2.3.31",
     "snekfetch": "^4.0.4"
   },
