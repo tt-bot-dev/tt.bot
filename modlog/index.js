@@ -34,6 +34,7 @@ class ModLog {
         };
     }
     async addStrike(userID, msg, reason) {
+        if (!msg.guild.channels.get(msg.guildConfig.modlogChannel)) return;
         if ((await bot.isModerator(msg.guild.members.get(userID), false))) throw "Are you stupid? You cannot strike a moderator.";
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
@@ -41,12 +42,14 @@ class ModLog {
         let {items} = guildStrikes;
         const dataobj = await this.generateObj(userID, reason, PunishTypes.STRIKE);
         const m = await this.makeLogMessage(userID, dataobj.id, PunishTypes.STRIKE, msg, reason);
+        if (!m) throw "Cannot make modlog message"
         dataobj.messageID = m.id;
         items.push(dataobj);
         await db.table("modlog").get(guildID).update({items});
     }
     
     async addBan(userID, msg, reason, isSoft) {
+        if (!msg.guild.channels.get(msg.guildConfig.modlogChannel)) return;
         const t = isSoft? PunishTypes.SOFTBAN : PunishTypes.BAN;
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
@@ -60,6 +63,7 @@ class ModLog {
     }
 
     async addKick(userID, msg, reason) {
+        if (!msg.guild.channels.get(msg.guildConfig.modlogChannel)) return;
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
         if (!guildStrikes) guildStrikes = await this.insertNew(guildID);
@@ -72,6 +76,7 @@ class ModLog {
     }
 
     async removeStrike(strikeID, msg, reason) {
+        if (!msg.guild.channels.get(msg.guildConfig.modlogChannel)) return;
         if (!uuidregex.test(strikeID)) throw "Invalid case ID";
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);

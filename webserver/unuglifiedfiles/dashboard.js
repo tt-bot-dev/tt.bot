@@ -32,16 +32,21 @@
         for (var opt of document.querySelectorAll("select.tttie-dashboard-role-picker#tttie-dash-mr option")) if (opt.selected == true) mr = opt.value
         var loc;
         for (var opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-loc option")) if (opt.selected == true) loc = opt.value
-        cb({prefix: p,
+        var ml;
+        for (var opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-ml option")) if (opt.value === cfg.modlogChannel) ml = opt.value;
+        cb({
+            prefix: p,
             modRole: m,
             farewellMessage: fm,
             farewellChannelId: fc,
             greetingMessage: wm,
             greetingChannelId: wc,
-            agreeChannel:ac,
-            memberRole:mr,
-            logEvents:le,
-        logChannel: loc});
+            agreeChannel: ac,
+            memberRole: mr,
+            logEvents: le,
+            logChannel: loc,
+            modlogChannel: ml
+        });
     }
     function setValues(cfg) {
         var inputP = document.querySelector("#tttie-dash-p");
@@ -63,6 +68,7 @@
         for (var opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-ac option")) if (opt.value === cfg.agreeChannel) opt.selected = true;
         for (var opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-loc option")) if (opt.value === cfg.logChannel) opt.selected = true;
         for (var opt of document.querySelectorAll("select.tttie-dashboard-role-picker#tttie-dash-mr option")) if (opt.value === cfg.memberRole) opt.selected = true;
+        for (var opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-ml option")) if (opt.value === cfg.modlogChannel) opt.selected = true;
         inputP.disabled = false;
         inputMod.disabled = false;
         inputFm.disabled = false;
@@ -80,7 +86,7 @@
             return w.ttbot.getAvailableRoles()
         }).then(function (r) {
             rPickers.forEach(loadPickers(false, r.filter(function (r) {
-                return r.id!==w.ttbot.guildId;
+                return r.id !== w.ttbot.guildId;
             })));
         }).then(function () {
             w.ttbot.getConfig().then(setValues);
