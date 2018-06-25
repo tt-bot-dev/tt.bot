@@ -15,7 +15,7 @@
     "gifwrap": "^0.7.5",
     "jimp": "github:oliver-moran/jimp",
     "moment": "^2.22.2",
-    "moment-timezone": "^0.5.20",
+    "moment-timezone": "^0.5.21",
     "pmx": "^1.6.7",
     "process-as-promised": "^1.0.1",
     "raven": "^2.6.3",
