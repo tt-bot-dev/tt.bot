@@ -82,6 +82,11 @@ app.get("/logout", checkAuth, function (req, res) {
 
 app.use("/api", require("./routes/api"));
 
+app.use((rq, rs, nx) => {
+    rs.status(404).render("404", rq.makeTemplatingData({
+        pageTitle: `404`
+    }))
+})
 app.use((err, req, res, next) => {
     if (err) {
         console.error(err);
@@ -90,7 +95,6 @@ app.use((err, req, res, next) => {
             pageTitle: "Error"
         }));
     }
-    next;
 });
 app.listen(config.httpPort || 8090, config.webserverip || "0.0.0.0", () => {
     console.log("HTTP webserver is running.");
