@@ -82,11 +82,13 @@ app.get("/logout", checkAuth, function (req, res) {
 
 app.use("/api", require("./routes/api"));
 
+//eslint-disable-next-line no-unused-vars
 app.use((rq, rs, nx) => {
     rs.status(404).render("404", rq.makeTemplatingData({
         pageTitle: `404`
     }))
 })
+//eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
     if (err) {
         console.error(err);
