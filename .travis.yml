@@ -8,5 +8,7 @@ cache:
 jobs:
   include:
     - stage: test
-
-script: bash ./travis/test.sh
+      script: bash ./travis/test.sh
+    - stage: build
+      if: type = push
+      script: bash ./travis/build.sh
