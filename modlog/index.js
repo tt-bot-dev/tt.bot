@@ -42,7 +42,7 @@ class ModLog {
         let {items} = guildStrikes;
         const dataobj = await this.generateObj(userID, reason, PunishTypes.STRIKE);
         const m = await this.makeLogMessage(userID, dataobj.id, PunishTypes.STRIKE, msg, reason);
-        if (!m) throw "Cannot make modlog message"
+        if (!m) throw "Cannot make modlog message";
         dataobj.messageID = m.id;
         items.push(dataobj);
         await db.table("modlog").get(guildID).update({items});

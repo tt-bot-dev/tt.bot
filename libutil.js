@@ -3,9 +3,10 @@ const s = require("snekfetch");
 const ErisEndpoints = require("eris/lib/rest/Endpoints");
 const ModLog = require("./modlog/index");
 const WorkerManager = require("./util/worker");
+const resolveInvite = require("./util/resolveInvite");
 class LibWUtil extends eris {
     constructor(token, options) {
-        super(token,options);
+        super(token, options);
         this.modLog = new ModLog();
         this.workers = new WorkerManager();
     }
@@ -32,7 +33,7 @@ class LibWUtil extends eris {
                 body: err.response.body
             };
         }
-        if (data.status <= 200 && data.status <300) throw {
+        if (data.status <= 200 && data.status < 300) throw {
             message: "Can't post, access text or body property for more info.",
             text: data.text,
             body: data.body
@@ -143,7 +144,7 @@ class LibWUtil extends eris {
         const regex = new RegExp(Object.keys(replacers).map(t => t.replace(/\./g, "\\.")).join("|"), "gi");
         return string.replace(regex, m => replacers[m]);
     }
-    
+
     waitForEvent(event, timeout, check) {
         //eslint-disable-next-line no-unused-vars
         let t;
@@ -153,19 +154,24 @@ class LibWUtil extends eris {
                 if (check && typeof check == "function" && check(...args) === true) {
                     dispose();
                     rs([...args]);
-                    return; 
+                    return;
                 }
             };
             const dispose = () => {
                 this.removeListener(event, listener);
             };
-    
+
             if (timeout) t = setTimeout(() => {
                 dispose();
                 rj("timeout");
             }, timeout);
             this.on(event, listener);
         });
+    }
+
+    getInvite(inviteID, withCounts) {
+        const parsed = resolveInvite(inviteID);
+        return super.getInvite(parsed, withCounts);
     }
 }
 module.exports = LibWUtil;

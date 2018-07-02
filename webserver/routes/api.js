@@ -56,7 +56,7 @@ app.post("/config/:guild", checkAuth, async (rq, rs) => {
             "memberRole",
             "logChannel",
             "logEvents",
-        "modlogChannel"]; // filter out the nonsense
+            "modlogChannel"]; // filter out the nonsense
         const filteredBody = {};
         Object.keys(rq.body).filter(k => props.includes(k)).forEach(k => {
             filteredBody[k] = rq.body[k] || undefined;

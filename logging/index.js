@@ -16,7 +16,7 @@ const logging = {
                 if (!cfg.logChannel || !cfg.logEvents) return {
                     logChannel: null,
                     logEvents: []
-                }
+                };
                 if (cfg.logEvents.split(";").includes("all")) return {
                     logChannel: cfg.logChannel, logEvents: logging.availableTypes
                 };

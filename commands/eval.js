@@ -3,7 +3,7 @@ module.exports = {
     exec: async function (msg, args) {
 
         let evaLUAted;
-        try { evaLUAted = await eval(`(async () => {${args}})()`); }
+        try { evaLUAted = await eval(`(async () => {\n${args}\n})()`); }
         catch (err) { evaLUAted = err.message; console.error(err.stack); }
         let overall;
         if (typeof evaLUAted !== "string") {
