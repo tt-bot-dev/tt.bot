@@ -52,6 +52,7 @@ class ReactionMenu {
         if (emoji.name === ReactionMenu.STOP) {
             if (this.options.stopCallback && !this.stopped) {
                 this.stopped = true;
+                this.unbind();
                 return this.options.stopCallback(ReactionMenu.MANUAL_EXIT);
             }
             else throw new Error("The stop callback is missing.");
