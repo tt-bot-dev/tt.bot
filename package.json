@@ -22,9 +22,11 @@
     "rethinkdbdash": "^2.3.31",
     "snekfetch": "^4.0.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^5.0.1"
+  },
   "scripts": {
-    "test": "echo nope"
+    "test": "eslint ."
   },
   "repository": {
     "type": "git",
