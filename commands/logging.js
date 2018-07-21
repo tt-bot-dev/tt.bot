@@ -33,5 +33,6 @@ module.exports = {
     display: true,
     category: 4,
     description: "Sets up the logging feature.",
-    args: "<events, separated by a semicolon (;)>"
+    args: "<events, separated by a semicolon (;)>",
+    aliases: ["logs"]
 };

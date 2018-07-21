@@ -47,6 +47,5 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 4,
-    description: "Sets up the agreement feature.",
-    aliases: ["logs"]
+    description: "Sets up the agreement feature."
 };
