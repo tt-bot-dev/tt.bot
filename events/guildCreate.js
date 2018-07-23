@@ -11,7 +11,7 @@ const translateToOwnersLang = async owner => {
     const msg = {
         t: (term, ...args) => 
             i18n.getTranslation(term, lang, ...args)
-    }
+    };
 
     return {
         embed: {
@@ -29,14 +29,14 @@ const translateToOwnersLang = async owner => {
             }],
             color: 0x008800
         }
-    }
-}
+    };
+};
 
 
 module.exports = async (guild) => {
     if (guild.defaultChannel) {
         try {
-            dm(guild.members.get(guild.ownerID), await translateToOwnersLang(guild.ownerID))
+            dm(guild.members.get(guild.ownerID), await translateToOwnersLang(guild.ownerID));
         } catch(_) {
             // Do nothing. For now, give the people a little bit of lack of knowledge.
         }

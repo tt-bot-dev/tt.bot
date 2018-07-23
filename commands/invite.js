@@ -1,6 +1,5 @@
 module.exports = {
-    exec: function (msg, args) {
-        let things = args.split(" ");
+    exec: function (msg) {
         bot.createMessage(msg.channel.id, msg.t("BOT_INVITE"));
     },
     name: "invite",

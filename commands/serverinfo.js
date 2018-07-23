@@ -7,13 +7,13 @@ module.exports = {
                 return msg.t("GUILD_VERIFICATION_NONE");
                 
             case 1:
-                return msg.t("GUILD_VERIFICATION_LOW")
+                return msg.t("GUILD_VERIFICATION_LOW");
                 
             case 2:
-                return msg.t("GUILD_VERIFICATION_MEDIUM")
+                return msg.t("GUILD_VERIFICATION_MEDIUM");
                 
             case 3:
-                return "(╯°□°）╯︵ ┻━┻" + msg.t("GUILD_VERIFICATION_TABLEFLIP")
+                return "(╯°□°）╯︵ ┻━┻" + msg.t("GUILD_VERIFICATION_TABLEFLIP");
                 
             case 4:
                 return "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻" + msg.t("GUILD_VERIFICATION_ULTRATABLEFLIP");

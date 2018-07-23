@@ -24,7 +24,7 @@ module.exports = {
                 case "online":
                     return msg.t("ONLINE");
                 case "idle":
-                    return msg.t("IDLE")
+                    return msg.t("IDLE");
                 case "dnd":
                     return msg.t("DND");
                 case "offline":
@@ -83,7 +83,7 @@ module.exports = {
                 embed: {
                     author: {
                         icon_url: u.avatarURL,
-                        name: msg.t("USER_INFO",`${unick} ${unick == bot.getTag(m) ? "" : `(${bot.getTag(m)})`} (${m.id}) ${m.bot ? "(BOT)" : ""}`, true)
+                        name: msg.t("USER_INFO",`${bot.getTag(u)} (${u.id}) ${u.bot ? "(BOT)" : ""}`, true)
                     },
                     thumbnail: {
                         url: u.avatarURL

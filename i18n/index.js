@@ -23,7 +23,7 @@ class I18N {
 
     reloadLang(lang) {
         if (!this.languages[lang]) throw new Error("Unknown language");
-        delete require.cache[require.resolve(`${__dirname}/../languages/${lang}.js`)]
+        delete require.cache[require.resolve(`${__dirname}/../languages/${lang}.js`)];
         this.languages[lang] = require(`${__dirname}/../languages/${lang}.js`);
     }
 }

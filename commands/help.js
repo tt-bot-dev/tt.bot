@@ -105,13 +105,13 @@ class HelpMenu extends ReactionMenu {
 
     getCb(e) {
         switch (e) {
-            case HelpMenu.ADMIN:
-            case HelpMenu.PUBLIC:
-            case HelpMenu.MOD:
-            case HelpMenu.OWNER:
-                return this.listCommands.bind(this);
-            case HelpMenu.HOME:
-                return () => this.pgMsg.edit(HelpMenu.DEFAULT_OBJ(this.permissions, HelpMenu.MESSAGES));
+        case HelpMenu.ADMIN:
+        case HelpMenu.PUBLIC:
+        case HelpMenu.MOD:
+        case HelpMenu.OWNER:
+            return this.listCommands.bind(this);
+        case HelpMenu.HOME:
+            return () => this.pgMsg.edit(HelpMenu.DEFAULT_OBJ(this.permissions, HelpMenu.MESSAGES));
         }
     }
 
@@ -135,9 +135,9 @@ HelpMenu.OWNER = "\u{1F6AB}";
 HelpMenu.PUBLIC = "\u{1F465}";
 HelpMenu.HOME = "🏠";
 HelpMenu.MESSAGES = msg => [`${HelpMenu.PUBLIC} ${msg.t("HELP_PUBLIC")}`,
-`${HelpMenu.OWNER} ${msg.t("HELP_OWNER")}`,
-`${HelpMenu.MOD} ${msg.t("HELP_MOD")}`,
-`${HelpMenu.ADMIN} ${msg.t("HELP_ADMIN")}`];
+    `${HelpMenu.OWNER} ${msg.t("HELP_OWNER")}`,
+    `${HelpMenu.MOD} ${msg.t("HELP_MOD")}`,
+    `${HelpMenu.ADMIN} ${msg.t("HELP_ADMIN")}`];
 module.exports = {
     exec: async function (msg, args) {
         if (args == "") {

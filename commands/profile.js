@@ -1,4 +1,4 @@
-// TODO: Rewrite this because this code makes me puke ngl
+const UserProfile = require("../Structures/UserProfile");
 module.exports = {
     exec: async function (msg, args) {
         let [action, ...rest] = args.split(" ");
@@ -59,7 +59,7 @@ module.exports = {
         }
 
         async function color() {
-            if (!msg.userProfile) return msg.channel.createMessage(msg.t("PROFILE_NONEXISTENT"))
+            if (!msg.userProfile) return msg.channel.createMessage(msg.t("PROFILE_NONEXISTENT"));
             let color = a;
             if (color.startsWith("#")) color = color.slice(1);
             if (!color) return msg.channel.createMessage(msg.t("ARGS_MISSING"));
@@ -67,12 +67,12 @@ module.exports = {
 
             if (color) n = new Number(`0x${color.substring(0, 6)}`);
             if (n && isNaN(n)) return msg.channel.createMessage(msg.t("INVALID_COLOR"));
-            msg.userProfile.color = n.toString()
+            msg.userProfile.color = n.toString();
             await db.table("profile").get(msg.author.id).update(msg.userProfile.toEncryptedObject());
             msg.channel.createMessage({
                 content: ":ok_hand:",
                 embed: {
-                    color: data.color,
+                    color: msg.userProfile.color,
                     author: {
                         name: `${bot.getTag(msg.author)}`,
                         icon_url: msg.author.staticAvatarURL
@@ -94,31 +94,31 @@ module.exports = {
             let fieldname = fieldsargs[0];
             let fielddata = fieldsargs.slice(1).join("|");
             switch (act) {
-                default: {
-                    msg.channel.createMessage(":question: fields <add|del> <<name><|data, not required for del>>");
-                    break;
-                }
-                case "del": {
-                    if (p.profileFields.length == 0) return;
-                    let f = p.profileFields.find(f => f.name == fieldname);
-                    if (f) p.profileFields.splice(newdat1.profileFields.indexOf(f), 1);
-                    else return msg.channel.createMessage(msg.t("FIELD_NONEXISTENT"));
-                    await db.table("profile").get(msg.author.id).update(p.toEncryptedObject());
-                    msg.channel.createMessage(msg.t("FIELD_DELETED", fieldname));
-                    break;
-                }
-                case "add": {
-                    if (p.profileFields && p.profileFields.length > 10) return;
-                    if (p.profileFields && p.profileFields.find(f => f.name.toLowerCase() == fieldname.toLowerCase())) return;
-                    p.profileFields.push({
-                        name: fieldname,
-                        value: fielddata,
-                        inline: true
-                    });
-                    await db.table("profile").get(msg.author.id).update(p.toEncryptedObject());
-                    msg.channel.createMessage(msg.t("FIELD_CREATED", fieldname));
-                    break;
-                }
+            default: {
+                msg.channel.createMessage(":question: fields <add|del> <<name><|data, not required for del>>");
+                break;
+            }
+            case "del": {
+                if (p.profileFields.length == 0) return;
+                let f = p.profileFields.find(f => f.name == fieldname);
+                if (f) p.profileFields.splice(p.profileFields.indexOf(f), 1);
+                else return msg.channel.createMessage(msg.t("FIELD_NONEXISTENT"));
+                await db.table("profile").get(msg.author.id).update(p.toEncryptedObject());
+                msg.channel.createMessage(msg.t("FIELD_DELETED", fieldname));
+                break;
+            }
+            case "add": {
+                if (p.profileFields && p.profileFields.length > 10) return;
+                if (p.profileFields && p.profileFields.find(f => f.name.toLowerCase() == fieldname.toLowerCase())) return;
+                p.profileFields.push({
+                    name: fieldname,
+                    value: fielddata,
+                    inline: true
+                });
+                await db.table("profile").get(msg.author.id).update(p.toEncryptedObject());
+                msg.channel.createMessage(msg.t("FIELD_CREATED", fieldname));
+                break;
+            }
             }
         }
 
@@ -129,7 +129,7 @@ module.exports = {
             if (!momentTz.tz.zone(tzValue)) return msg.channel.createMessage(msg.t("INVALID_TIMEZONE"));
             msg.userProfile.timezone = tzValue;
             await db.table("profile").get(msg.author.id).update(msg.userProfile.toEncryptedObject());
-            msg.channel.createMessage(":ok_hand:")
+            msg.channel.createMessage(":ok_hand:");
         }
 
         async function locale() {
@@ -138,38 +138,38 @@ module.exports = {
             if(!bot.i18n.languages[lang]) return msg.channel.createMessage(msg.t("INVALID_LOCALE", lang));
             msg.userProfile.locale = lang;
             await db.table("profile").get(msg.author.id).update(msg.userProfile.toEncryptedObject());
-            msg.channel.createMessage(msg.t("LOCALE_SET", `${lang} (${msg.t("NATIVE_LOCALE_NAME")}/${msg.t("ENGLISH_LOCALE_NAME")})`))
+            msg.channel.createMessage(msg.t("LOCALE_SET", `${lang} (${msg.t("NATIVE_LOCALE_NAME")}/${msg.t("ENGLISH_LOCALE_NAME")})`));
 
         }
         switch (action) {
-            case "remove": {
-                await remove();
-                break;
-            }
-            case "setup": {
-                await setup();
-                break;
-            }
-            case "show": {
-                await show();
-                break;
-            }
-            case "color": {
-                await color();
-                break;
-            }
-            case "fields": {
-                await fields();
-                break;
-            }
-            case "timezone": {
-                await timezone();
-                break;
-            }
-            case "locale": {
-                await locale();
-                break;
-            }
+        case "remove": {
+            await remove();
+            break;
+        }
+        case "setup": {
+            await setup();
+            break;
+        }
+        case "show": {
+            await show();
+            break;
+        }
+        case "color": {
+            await color();
+            break;
+        }
+        case "fields": {
+            await fields();
+            break;
+        }
+        case "timezone": {
+            await timezone();
+            break;
+        }
+        case "locale": {
+            await locale();
+            break;
+        }
         }
     },
     isCmd: true,
