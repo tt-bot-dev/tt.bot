@@ -77,7 +77,7 @@ module.exports = {
 
     //farewell.js
     FAREWELL_UPDATED:                               (message, channelID) => `:ok_hand: Rozlúčenie nastavené na \`${message}\`. Rozlúčenie bude poslané do <#${channelID}>.`, 
-    FAREWELL_RESET:                                 "Rozloúčenie bolo resetované.",
+    FAREWELL_RESET:                                 "Rozlúčenie bolo resetované.",
 
     //getavatar.js
     AVATAR_NOT_LOADING:                             avatar => `[Obrázok sa nenačítava?](${avatar})`,
@@ -148,7 +148,7 @@ module.exports = {
 
     //profile.js
     PROFILE_NONEXISTENT:                            "Ešte nemáš profil.",
-    PROFILE_DELETED:                                "Tvoj profil je zmazný.",
+    PROFILE_DELETED:                                "Tvoj profil je zmazaný.",
     PROFILE_CREATED:                                "OK. Tvoj profil je vytvorený.",
     INVALID_COLOR:                                  "Táto farba neni správna! Tento príkaz bere farbu v hex formáte (#1234AB)",
     BOT_PROFILE:                                    "Boti nemajú profily.",
@@ -197,7 +197,7 @@ module.exports = {
 
     //strikes.js
     TOO_MUCH_STRIKES:                               "Používateľ má príliš veľa varovaní na to, aby som ich mohol ukázať v embede. Namiesto toho, tu máš textový súbor:",
-    STRIKE_OVERVIEW:                                user => `Tady jsou varování uživatele ${user}`,
+    STRIKE_OVERVIEW:                                user => `Tu sú varovania používateľa ${user}`,
 
     //tags.js
     TAG_CREATED:                                    tag => `Vytvorený tag s názvom \`${tag}\`.`,
@@ -214,7 +214,7 @@ module.exports = {
 
     //timefor.js
     NO_TZ:                                          "Tento používateľ si zatiaľ nenastavil časové pásmo.",
-    TIME_FOR:                                       (time, user) => `Je ${time} pro používateľa ${user}.`,
+    TIME_FOR:                                       (time, user) => `Je ${time} pre používateľa ${user}.`,
 
     //uinfo.js
     PLAYING:                                        "Hrá",
