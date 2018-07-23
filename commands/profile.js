@@ -1,156 +1,175 @@
-const UserProfile = require("../Structures/UserProfile");
+// TODO: Rewrite this because this code makes me puke ngl
 module.exports = {
     exec: async function (msg, args) {
-        let action = args.split(" ")[0];
-        if (!action) return msg.channel.createMessage("WHAT THE HECK DO I DO?1??1?1??!!!!!1!1!1");
-        switch (action) {
-        case "remove": {
-            async function remove() {
-                let d = await db.table("profile").get(msg.author.id);
-                if (!d) return msg.channel.createMessage("You haven't created a profile.");
-                else {
-                    await db.table("profile").get(msg.author.id).delete();
-                    msg.channel.createMessage("Deleted your profile.");
-                }
+        let [action, ...rest] = args.split(" ");
+        let a = rest.join(" ");
+        if (!action) return cmds["help"].exec(msg, "profile");
+        async function remove() {
+            if (!msg.userProfile) return msg.channel.createMessage(msg.t("PROFILE_NONEXISTENT"));
+            else {
+                await db.table("profile").get(msg.author.id).delete();
+                msg.channel.createMessage(msg.t("PROFILE_DELETED"));
             }
-            await remove();
-            break;
         }
-        case "setup": {
-            async function setup() {
-                let pdata = await db.table("profile").get(msg.author.id);
-                if (pdata) return msg.channel.createMessage("You have a profile already :^)");
-                let da = {
-                    id: msg.author.id,
-                    profileFields: [],
-                    color: null,
-                    timezone: "CET"
-                };
-                let optar = args.slice((action.length + 1));
-                let num;
-                if (optar) num = new Number(`0x${optar.substring(0, 6)}`);
-                if (num && isNaN(num)) return msg.channel.createMessage("That's not a valid hex color.");
-                da.color = num ? num.toString() : "";
-                await db.table("profile").insert(UserProfile.create(da));
-                await msg.channel.createMessage("Created a profile.");
-            }
-            await setup();
-            break;
-        }
-        case "show": {
-            async function show() {
-                let optargs = args.slice((action.length + 1));
-                let user;
-                try {
-                    user = await userQuery(optargs || msg.author.id, msg, true);
-                } catch (e) {
-                    return msg.channel.createMessage("I guess, we end here.");
-                }
-                if (user.bot) return msg.channel.createMessage("Bots can't have a profile :thinking:");
-                let profileData = await db.table("profile").get(user.id);
-                if (!profileData) return msg.channel.createMessage(`Can't get profile data for ${user.user.username}#${user.user.discriminator}.`);
-                let profile = new UserProfile(profileData);
-                return msg.channel.createMessage({
-                    embed: {
-                        author: {
-                            name: `${user.user.username}#${user.user.discriminator}'s profile`,
-                            icon_url: user.user.staticAvatarURL
-                        },
-                        fields: (profile.profileFields && profile.profileFields.length > 0) ? profile.profileFields : [{
-                            name: "<:xmark:314349398824058880>",
-                            value: "No profile fields",
-                            inline: true
-                        }],
-                        color: parseInt(profile.color)
-                    }
-                });
-            }
-            await show();
-            break;
-        }
-        case "color": {
-            async function color() {
-                let dat = await db.table("profile").get(msg.author.id);
-                if (!dat) return msg.channel.createMessage("You don't have a profile yet!");
-                let opta = args.slice((action.length + 1));
-                if (!opta) return msg.channel.createMessage("No arguments provided.");
-                let n;
-                if (opta) n = new Number(`0x${opta.substring(0, 6)}`);
-                if (n && isNaN(n)) return msg.channel.createMessage("That's not a valid hex color.");
-                let newdat = new UserProfile(dat);
-                newdat.modifyData("color", n.toString());
-                await db.table("profile").get(msg.author.id).update(newdat.toEncryptedObject());
-                msg.channel.createMessage({
-                    content: "Updated your profile color.\nColor simulation:",
-                    embed: {
-                        color: newdat.color,
-                        author: {
-                            name: `${msg.author.username}#${msg.author.discriminator}`,
-                            icon_url: msg.author.staticAvatarURL
-                        },
-                        description: "Lorum ispum etc....."
-                    }
-                });
 
-            }
-            await color();
-            break;
+        async function setup() {
+            if (msg.userProfile) return;
+            let data = {
+                id: msg.author.id,
+                profileFields: [],
+                color: null,
+                timezone: "UTC",
+                locale: "en"
+            };
+            let color = a;
+            let num;
+            if (color.startsWith("#")) color = color.slice(1);
+            if (color) num = new Number(`0x${color.substring(0, 6)}`);
+            if (num && isNaN(num)) return msg.channel.createMessage(msg.t("INVALID_COLOR"));
+            data.color = num ? num.toString() : "";
+            await db.table("profile").insert(UserProfile.create(data));
+            await msg.channel.createMessage(msg.t("PROFILE_CREATED"));
         }
-        case "fields": {
-            async function fields() {
-                let dat1 = await db.table("profile").get(msg.author.id);
-                if (!dat1) return msg.channel.createMessage("You don't have a profile yet!");
-                let newdat1 = new UserProfile(dat1);
-                let optar = args.slice((action.length + 1));
-                if (!optar) return msg.channel.createMessage("No arguments provided.");
-                let act = optar.split(" ")[0];
-                let fieldsargs = optar.slice((act.length + 1)).split("|");
-                let fieldname = fieldsargs[0];
-                let fielddata = fieldsargs.slice(1).join("|");
-                switch (act) {
+        async function show() {
+            let query = a;
+            let user;
+            try {
+                user = await userQuery(query || msg.author.id, msg, true);
+            } catch (e) {
+                return;
+            }
+            if (user.bot) return msg.channel.createMessage(msg.t("BOT_PROFILE"));
+            let profileData = await db.table("profile").get(user.id);
+            if (!profileData) return msg.channel.createMessage(msg.t("PROFILE_SPECIFIC_NONEXISTENT", bot.getTag(user)));
+            let profile = new UserProfile(profileData);
+            return msg.channel.createMessage({
+                embed: {
+                    author: {
+                        name: `${user.user.username}#${user.user.discriminator}'s profile`,
+                        icon_url: user.user.staticAvatarURL
+                    },
+                    fields: (profile.profileFields && profile.profileFields.length > 0) ? profile.profileFields : [{
+                        name: "<:xmark:314349398824058880>",
+                        value: msg.t("NO_PROFILE_FIELDS"),
+                        inline: true
+                    }],
+                    color: parseInt(profile.color)
+                }
+            });
+        }
+
+        async function color() {
+            if (!msg.userProfile) return msg.channel.createMessage(msg.t("PROFILE_NONEXISTENT"))
+            let color = a;
+            if (color.startsWith("#")) color = color.slice(1);
+            if (!color) return msg.channel.createMessage(msg.t("ARGS_MISSING"));
+            let n;
+
+            if (color) n = new Number(`0x${color.substring(0, 6)}`);
+            if (n && isNaN(n)) return msg.channel.createMessage(msg.t("INVALID_COLOR"));
+            msg.userProfile.color = n.toString()
+            await db.table("profile").get(msg.author.id).update(msg.userProfile.toEncryptedObject());
+            msg.channel.createMessage({
+                content: ":ok_hand:",
+                embed: {
+                    color: data.color,
+                    author: {
+                        name: `${bot.getTag(msg.author)}`,
+                        icon_url: msg.author.staticAvatarURL
+                    },
+                    description: "Lorum ispum dolor sit amet..."
+                }
+            });
+
+        }
+
+
+        async function fields() {
+            if (!msg.userProfile) return msg.channel.createMessage(msg.t("PROFILE_NONEXISTENT"));
+            const p = msg.userProfile;
+            let arg = a;
+            if (!arg) return msg.channel.createMessage(msg.t("ARGS_MISSING"));
+            let [act, ...stuff] = arg.split(" ");
+            let fieldsargs = stuff.join(" ").split("|");
+            let fieldname = fieldsargs[0];
+            let fielddata = fieldsargs.slice(1).join("|");
+            switch (act) {
                 default: {
-                    msg.channel.createMessage("Usage: fields <add|del> <<name><|data, not required for del>>");
+                    msg.channel.createMessage(":question: fields <add|del> <<name><|data, not required for del>>");
                     break;
                 }
                 case "del": {
-                    if (newdat1.profileFields.length == 0) return msg.channel.createMessage("You haven't got any field!");
-                    let f = newdat1.profileFields.find(f => f.name == fieldname);
-                    if (f) newdat1.profileFields.splice(newdat1.profileFields.indexOf(f), 1);
-                    else return msg.channel.createMessage("No such field :/");
-                    await db.table("profile").get(msg.author.id).update(newdat1.toEncryptedObject());
-                    msg.channel.createMessage("Deleted the field " + fieldname);
+                    if (p.profileFields.length == 0) return;
+                    let f = p.profileFields.find(f => f.name == fieldname);
+                    if (f) p.profileFields.splice(newdat1.profileFields.indexOf(f), 1);
+                    else return msg.channel.createMessage(msg.t("FIELD_NONEXISTENT"));
+                    await db.table("profile").get(msg.author.id).update(p.toEncryptedObject());
+                    msg.channel.createMessage(msg.t("FIELD_DELETED", fieldname));
                     break;
                 }
                 case "add": {
-                    if (newdat1.profileFields && newdat1.profileFields.length > 10) return msg.channel.createMessage("There's a limit of 10 fields. Please remove the unneeded ones.");
-                    if (newdat1.profileFields && newdat1.profileFields.find(f => f.name.toLowerCase() == fieldname.toLowerCase())) return msg.channel.createMessage("That field already exists.");
-                    newdat1.profileFields.push({
+                    if (p.profileFields && p.profileFields.length > 10) return;
+                    if (p.profileFields && p.profileFields.find(f => f.name.toLowerCase() == fieldname.toLowerCase())) return;
+                    p.profileFields.push({
                         name: fieldname,
                         value: fielddata,
                         inline: true
                     });
-                    await db.table("profile").get(msg.author.id).update(newdat1.toEncryptedObject());
-                    msg.channel.createMessage(`Made a field \`${fieldname}\` with this data \`\`\`\n${fielddata}\`\`\``);
+                    await db.table("profile").get(msg.author.id).update(p.toEncryptedObject());
+                    msg.channel.createMessage(msg.t("FIELD_CREATED", fieldname));
                     break;
                 }
-                }
             }
-            await fields();
-            break;
         }
-        case "timezone": {
-            async function timezone() {
-                let dat1 = await db.table("profile").get(msg.author.id);
-                if (!dat1) return msg.channel.createMessage("You don't have a profile yet!");
-                let newdat1 = new UserProfile(dat1);
-                let tzValue = args.split(" ").slice(1).join(" ");
-                if (!momentTz.tz.zone(tzValue)) return msg.channel.createMessage("Sorry, but your time zone is not in the list provided by moment-timezone.\nThat list can be found at <https://cdn.rawgit.com/TTtie/TTtie-Bot/master/tz.txt>.");
-                dat1.timezone = tzValue;
-                await db.table("profile").get(msg.author.id).update(newdat1.toEncryptedObject());
+
+        
+        async function timezone() {
+            if (!msg.userProfile) return msg.channel.createMessage(msg.t("PROFILE_NONEXISTENT"));
+            let tzValue = a;
+            if (!momentTz.tz.zone(tzValue)) return msg.channel.createMessage(msg.t("INVALID_TIMEZONE"));
+            msg.userProfile.timezone = tzValue;
+            await db.table("profile").get(msg.author.id).update(msg.userProfile.toEncryptedObject());
+            msg.channel.createMessage(":ok_hand:")
+        }
+
+        async function locale() {
+            if (!msg.userProfile) return msg.channel.createMessage(msg.t("PROFILE_NONEXISTENT"));
+            let lang = a;
+            if(!bot.i18n.languages[lang]) return msg.channel.createMessage(msg.t("INVALID_LOCALE", lang));
+            msg.userProfile.locale = lang;
+            await db.table("profile").get(msg.author.id).update(msg.userProfile.toEncryptedObject());
+            msg.channel.createMessage(msg.t("LOCALE_SET", `${lang} (${msg.t("NATIVE_LOCALE_NAME")}/${msg.t("ENGLISH_LOCALE_NAME")})`))
+
+        }
+        switch (action) {
+            case "remove": {
+                await remove();
+                break;
             }
-            await timezone();
-            break;
-        }
+            case "setup": {
+                await setup();
+                break;
+            }
+            case "show": {
+                await show();
+                break;
+            }
+            case "color": {
+                await color();
+                break;
+            }
+            case "fields": {
+                await fields();
+                break;
+            }
+            case "timezone": {
+                await timezone();
+                break;
+            }
+            case "locale": {
+                await locale();
+                break;
+            }
         }
     },
     isCmd: true,

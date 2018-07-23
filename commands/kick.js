@@ -19,24 +19,24 @@ module.exports = {
             try {
                 
                 if (!options.user) {
-                    msg.channel.createMessage("You need to specify an user!");
+                    msg.channel.createMessage(msg.t("ARGS_MISSING"));
                     return;
                 }
                 let user = await userQuery(options.user, msg, true);
                 if (bot.passesRoleHierarchy(msg.member, user)) {
                     await user.kick(`${bot.getTag(msg.author)}: ${options.reason || "no reason"}`);
                     bot.modLog.addKick(user.id, msg, options.reason);
-                    await msg.channel.createMessage(`:ok_hand: Kicked ${bot.getTag(user)}.`);
+                    await msg.channel.createMessage(msg.t("KICK_DONE", user));
                 } else {
-                    msg.channel.createMessage("You can't kick that user!");
+                    msg.channel.createMessage(msg.t("ROLE_HIERARCHY_ERROR"));
                 }
             } catch (err) {
-                bot.createMessage(msg.channel.id, "```xl\nError:\n" + err + "\n```").then(null, console.error);
+                bot.createMessage(msg.channel.id, msg.t("ERROR", err)).then(null, console.error);
                 console.error(err);
             }
 
         } else {
-            return await bot.createMessage(msg.channel.id, `**${msg.author.username}**, you miss required arguments. (Who should I kick?)`);
+            return await bot.createMessage(msg.channel.id, msg.t("ARGS_MISSING"));
         }
     },
     isCmd: true,

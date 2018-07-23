@@ -19,7 +19,7 @@ module.exports = {
                 delete msg.guildConfig.greetingChannelId;
                 delete msg.guildConfig.greetingMessage;
                 await db.table("configs").get(msg.guild.id).replace(msg.guildConfig).run();
-                await msg.channel.createMessage("Reset the greetings.");
+                await msg.channel.createMessage(msg.t("GREETING_RESET"));
                 return;
             }
             let splitargs = args.split(" | ");
@@ -47,13 +47,13 @@ module.exports = {
                 msg.guildConfig.greetingChannelId = options.channel.id;
                 msg.guildConfig.greetingMessage = options.message || "{u.mention} has joined **{g.name}**.";
                 await db.table("configs").get(msg.guild.id).update(msg.guildConfig).run();
-                return await msg.channel.createMessage(`:ok_hand: Updated the welcome message to \`${msg.guildConfig.greetingMessage}\`. It will be sent into <#${options.channel.id}>.`);
-            } else return await msg.channel.createMessage(`**${msg.author.username}**, I think you haven't filled out the channel where I should post welcome messages.`);
+                return await msg.channel.createMessage(msg.t("GREETING_UPDATED", msg.guildConfig.greetingMessage, options.channel.id));
+            } else return await msg.channel.createMessage(msg.t("ARGS_MISSING"));
         }
     },
     isCmd: true,
     display: true,
     category: 4,
     description: "Greeting messages.",
-    args: "<disable|<message:[ttMsg compatible message](https://github.com/TTtie/TTtie-Bot/wiki/ttMsg) without newlines> | channel:<channel query>>"
+    args: "<disable|<message:[ttMsg compatible message](https://github.com/TTtie/TTtie-Bot/wiki/ttMsg)> | channel:<channel query>>"
 };

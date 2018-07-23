@@ -16,28 +16,17 @@ module.exports = {
             }
         });
         
-        if (!options.punishmentID) return msg.channel.createMessage("You're missing a case ID.");
+        if (!options.punishmentID) return msg.channel.createMessage(msg.t("ARGS_MISSING"));
         try {
             await bot.modLog.removeStrike(options.punishmentID, msg, options.reason);
-            /*const dm = await user.user.getDMChannel()
-            dm.createMessage({
-                embed: {
-                    title: "Your strike was removed!",
-                    description: `The strike removal was issued by ${bot.getTag(msg.author)} for reason \`${options.reason || "No reason"}\`.`,
-                    footer: {
-                        text: "Beware on what you're doing!"
-                    },
-                    timestamp: new Date()
-                }
-            })*/
         } catch(err) {
-            msg.channel.createMessage(`Cannot remove the strike for this reason: ${err.toString()}`);
+            msg.channel.createMessage(msg.t("CANNOT_UNSTRIKE", err));
         }
     },
     isCmd: true,
     display: true,
     category: 3,
-    description: "Strike someone\nThe command uses `\u200b | \u200b` as separators (note the spaces). Use ` \\| ` to escape the separation in your queries.\nThe order of the switches doesn't need to be followed.",
+    description: "Remove a punishment\nThe command uses `\u200b | \u200b` as separators (note the spaces). Use ` \\| ` to escape the separation in your queries.\nThe order of the switches doesn't need to be followed.",
     args: "<punishment-id:<case id>>[ | <reason:<reason>>]",
     aliases: ["rmpunish", "deletepunishment", "removepunishment", "rmstrike", "delstrike", "removestrike", "removepunishment"]
 };

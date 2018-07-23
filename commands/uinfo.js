@@ -9,33 +9,33 @@ module.exports = {
             let unick = m.nick || bot.getTag(m);
             let s = m.status;
             function getStatusType() {
-                if (!m.game) return "Playing";
+                if (!m.game) return msg.t("PLAYING");
                 switch (m.game.type) {
                 case 0:
-                    return "Playing";
+                    return msg.t("PLAYING");
                 case 1:
-                    return "Streaming";
+                    return msg.t("STREAMING");
                 case 2:
-                    return "Listening to";
+                    return msg.t("LISTENING_TO");
                 }
             }
             function getstatus() {
                 switch (s) {
                 case "online":
-                    return "Online";
+                    return msg.t("ONLINE");
                 case "idle":
-                    return "Idle";
+                    return msg.t("IDLE")
                 case "dnd":
-                    return "Do not disturb";
+                    return msg.t("DND");
                 case "offline":
-                    return "Invisible/offline";
+                    return msg.t("OFFLINE");
                 }
             }
             bot.createMessage(msg.channel.id, {
                 embed: {
                     author: {
                         icon_url: m.staticAvatarURL,
-                        name: `Info for ${unick} ${unick == bot.getTag(m) ? "" : `(${bot.getTag(m)})`} (${m.id}) ${m.bot ? "(BOT)" : ""}`
+                        name: msg.t("USER_INFO",`${unick} ${unick == bot.getTag(m) ? "" : `(${bot.getTag(m)})`} (${m.id}) ${m.bot ? "(BOT)" : ""}`)
                     },
                     thumbnail: {
                         url: m.user.avatarURL
@@ -43,61 +43,58 @@ module.exports = {
                     fields: [{
                         name: getStatusType(),
                         value: (() => {
-                            if (!m.game) return "Nothing";
+                            if (!m.game) return msg.t("PLAYING_NONE");
                             let str = "";
                             str += m.game.name + "\n";
                             if (m.game.details) str += m.game.details + "\n";
                             if (m.game.state) str += m.game.state;
-                            return str.trim() || "with an universe of spaces.\nGood luck, you found an easter egg :eyes:";
+                            return str.trim() || msg.t("SPACE_UNIVERSE");
                         })(),
                         inline: true
                     }, {
-                        name: "Status",
+                        name: msg.t("STATUS"),
                         value: getstatus(),
                         inline: true
                     }, {
-                        name: "Roles",
-                        value: rarr.join(", ").length > 2048 ? "Too long to show ;-;" : rarr.join(", "),
+                        name: msg.t("ROLES"),
+                        value: rarr.join(", ").length > 1024 ? msg.t("TOOLONG") : rarr.join(", "),
                         inline: true
                     }, {
-                        name: "Created on",
+                        name: msg.t("CREATED_ON"),
                         value: (msg.userProfile && msg.userProfile.timezone) ? 
                             moment(new Date(m.createdAt)).tz(msg.userProfile.timezone).format(config.tzDateFormat) :
                             moment(new Date(m.createdAt)).format(config.normalDateFormat),
                         inline: true
                     }, {
-                        name: "Is in a voice channel?",
-                        value: m.voiceState.channelID ? "yes" : "no",
+                        name: msg.t("CURRENT_VOICE"),
+                        value: m.voiceState.channelID ? msg.guild.channels.get(m.voiceState.channelID).name : msg.t("NONE"),
                         inline: true
                     }],
                     timestamp: new Date(m.joinedAt),
                     footer: {
-                        text: "Joined on"
+                        text: msg.t("JOINED_ON")
                     }
                 }
             });
         }
         else {
-            const u = await bot.getUserWithoutRESTMode(args);
+            const u = bot.users.get(args) || await bot.getUserWithoutRESTMode(args);
             msg.channel.createMessage({
                 embed: {
                     author: {
                         icon_url: u.avatarURL,
-                        name: `Limited info for ${bot.getTag(u)} (${u.id}) ${u.bot ? "(BOT)" : ""}`
+                        name: msg.t("USER_INFO",`${unick} ${unick == bot.getTag(m) ? "" : `(${bot.getTag(m)})`} (${m.id}) ${m.bot ? "(BOT)" : ""}`, true)
                     },
                     thumbnail: {
                         url: u.avatarURL
                     },
                     fields: [{
-                        name: "Created on",
+                        name: msg.t("JOINED_ON"),
                         value: (msg.userProfile && msg.userProfile.timezone) ? 
                             moment(new Date(u.createdAt)).tz(msg.userProfile.timezone).format(config.tzDateFormat) : 
                             moment(new Date(u.createdAt)).format(config.normalDateFormat),
                         inline: true
-                    }],
-                    footer: {
-                        text: "This is all I can provide. Sorry for that."
-                    }
+                    }]
                 }
             });
         }

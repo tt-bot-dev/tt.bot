@@ -10,7 +10,7 @@ module.exports = class Query {
     async start(msg) {
         let binds = {};
         if (this._items.length == 0) {
-            await msg.channel.createMessage(`We cannot find ${this._query}. Are you sure it exists? ${this._notFound(this._query)}`);
+            await msg.channel.createMessage(msg.t("ITEM_NOT_FOUND", this._query, this._notFound(this._query)));
             throw "Item not found";
         } else if (this._items.length == 1) {
             return this._items[0];
@@ -31,21 +31,21 @@ module.exports = class Query {
             try {
                 const m = await bot.createMessage(msg.channel.id, {
                     embed: {
-                        title: "Multiple items found!",
-                        description: `I've found ${this._items.length} items, displaying maximally 5 of them.\n${listUsers()}\nChoose one from the users by reacting with the number next to the username.\nElse, react with ❌ to cancel.\nQuery will automatically expire in 5 minutes.`
+                        title: msg.t("MULTIPLE_ITEMS_FOUND"),
+                        description: msg.t("MULTIPLE_ITEMS_DESCRIPTION", this._items.length, listUsers())
                     }
                 });
                 return new Promise(async (rs, rj) => {
                     let tout = setTimeout(() => {
                         bot.removeListener("messageReactionAdd", r);
                         m.delete();
-                        bot.createMessage(msg.channel.id, "Query canceled automatically after inactivity.");
+                        bot.createMessage(msg.channel.id, msg.t("OP_CANCELLED"));
                         rj("Canceled automatically.");
                     }, 300000);
                     try {
                         await Promise.all(Object.keys(binds).map(r => m.addReaction(r)));
                     } catch (err) {
-                        bot.createMessage(msg.channel.id, "Cannot add reactions; query cancelled.");
+                        bot.createMessage(msg.channel.id, msg.t("OP_CANCELLED"));
                         rj("Cannot add reactions");
                     }
                     m.addReaction("❌");
@@ -54,7 +54,7 @@ module.exports = class Query {
                         if (me.id != m.id) return;
                         if (e.name == "❌") {
                             bot.removeListener("messageReactionAdd", r);
-                            m.delete(); bot.createMessage(msg.channel.id, "Query canceled.");
+                            m.delete(); bot.createMessage(msg.channel.id, msg.t("OP_CANCELLED"));
                             rj("Cancelled by user");
                             clearTimeout(tout);
                         }

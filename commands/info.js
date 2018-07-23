@@ -15,20 +15,20 @@ module.exports = {
                     icon_url: bot.user.staticAvatarURL, //returns static avatar no matter if you have a gif avatar
                 },
                 fields: [{
-                    name: "Stats",
-                    value: `Guilds: ${bot.guilds.size}\nCached users: ${bot.users.size}\nChannels: ${Object.keys(bot.channelGuildMap).length}`,
+                    name: msg.t("INFO_STATS"),
+                    value: msg.t("INFO_STATS_TEXT"),
                     inline: true
                 }, {
-                    name: "Author and help",
-                    value: `${ownerStrings.join("\n")}\n[Support server](https://discord.gg/pGN5dMq)\n[Eris website](https://abal.moe/Eris)\n[GitHub repository](https://github.com/tttie/tttie-bot)`,
+                    name: msg.t("INFO_AUTHORS"),
+                    value: msg.t("INFO_OWNERS", ownerStrings),
                     inline: true
                 }, {
-                    name: "Versions:",
+                    name: msg.t("INFO_VERSIONS"),
                     value: `tt.bot: ${require("../package.json").version}\nEris: ${require("eris/package.json").version}\nNode.js: ${process.versions.node}\nV8 engine: ${process.versions.v8}`,
                     inline: true
                 },
                 {
-                    name: "Uptime:",
+                    name: msg.t("INFO_UPTIME"),
                     value: getUptime(moment(), moment(Date.now() - bot.uptime)),
                     inline: true
                 }],

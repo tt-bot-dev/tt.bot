@@ -52,6 +52,7 @@
         "momentTz": true,
         "encryptData": true,
         "decryptData": true,
-        "sentry": true
+        "sentry": true,
+        "i18n": true
     }
 }

@@ -4,11 +4,14 @@ const ErisEndpoints = require("eris/lib/rest/Endpoints");
 const ModLog = require("./modlog/index");
 const WorkerManager = require("./util/worker");
 const resolveInvite = require("./util/resolveInvite");
+const i18n = require("./i18n")
 class LibWUtil extends eris {
     constructor(token, options) {
         super(token, options);
         this.modLog = new ModLog();
         this.workers = new WorkerManager();
+        this.i18n = new i18n(this);
+        global.i18n = this.i18n;
     }
 
     async canUseCommand(user, command) {

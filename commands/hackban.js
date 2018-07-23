@@ -12,12 +12,12 @@ module.exports = {
                 }
                 if (msg.guild.members.get(userToBan.id)) member = msg.guild.members.get(userToBan.id);
                 try {
-                    if (member && !bot.passesRoleHierarchy(msg.member, member)) { msg.channel.createMessage("You can't hackban that user!"); return false; }
+                    if (member && !bot.passesRoleHierarchy(msg.member, member)) { msg.channel.createMessage(msg.t("ROLE_HIERARCHY_ERROR")); return false; }
                     await msg.guild.banMember(userToBan.id, 0, `${isMass == false ? "Hackbanned" : "Masshackbanned"} by ${bot.getTag(msg.author)}`);
                     if (doMessage) await msg.channel.createMessage(":ok_hand:");
                     return true;
                 } catch (err) {
-                    if (doMessage) await msg.channel.createMessage("Can't ban the user, do I lack the permission to?");
+                    if (doMessage) await msg.channel.createMessage(msg.t("MISSING_PERMISSIONS"));
                     return false;
                 }
             }
@@ -27,7 +27,7 @@ module.exports = {
                     let ban = await dohackBan(u, false, true);
                     bans.push(ban);
                 });
-                msg.channel.createMessage(`:ok_hand: Banned ${bans.filter(b => b == true).length} users.`);
+                msg.channel.createMessage(msg.t("HACKBANNED_USERS", bans.filter(b => !!b)));
             } else {
                 await dohackBan(args, true, false);
             }
