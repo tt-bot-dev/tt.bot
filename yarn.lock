@@ -865,8 +865,8 @@ isexe@^2.0.0:
 
 "jimp@github:oliver-moran/jimp":
   version "0.2.28"
-  uid "94523945365fec7cdda8f718e293034b0fe17c90"
-  resolved "https://codeload.github.com/oliver-moran/jimp/tar.gz/94523945365fec7cdda8f718e293034b0fe17c90"
+  uid e3806cc1303c393d487f14ba2631ae29fe380a97
+  resolved "https://codeload.github.com/oliver-moran/jimp/tar.gz/e3806cc1303c393d487f14ba2631ae29fe380a97"
   dependencies:
     bignumber.js "^7.2.1"
     bmp-js "0.1.0"
@@ -882,7 +882,6 @@ isexe@^2.0.0:
     phin "^2.9.0"
     pixelmatch "^4.0.0"
     pngjs "^3.0.0"
-    raw-body "^2.3.2"
     tinycolor2 "^1.1.2"
     utif "^2.0.0"
 
@@ -1262,7 +1261,7 @@ raw-body@2.3.2:
     iconv-lite "0.4.19"
     unpipe "1.0.0"
 
-raw-body@2.3.3, raw-body@^2.3.2:
+raw-body@2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.3.3.tgz#1b324ece6b5706e153855bc1148c65bb7f6ea0c3"
   dependencies:
