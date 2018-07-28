@@ -1,4 +1,5 @@
-const eris = require("eris").Client;
+const { Base, Client } = require("eris");
+const eris = Client;
 const s = require("snekfetch");
 const ErisEndpoints = require("eris/lib/rest/Endpoints");
 const ModLog = require("./modlog/index");
@@ -107,7 +108,7 @@ class LibWUtil extends eris {
         return this.requestHandler.request("GET", ErisEndpoints.USER(userID), true).then((user) => new ErisO.User(user, this));
     }
     getBaseObject(id) {
-        return new (require("eris/lib/structures/Base"))(id);
+        return new Base(id);
     }
     getTag(user) {
         return `${user.username}#${user.discriminator}`;

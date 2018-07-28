@@ -16,6 +16,6 @@ module.exports = function () {
     bot.connect();
     global.cmds = {};
     global.cmdAliases = {};
-    require("./msgdotguild");
+    require("./overrideprops");
     require("./evt");
 };
