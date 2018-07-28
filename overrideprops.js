@@ -7,7 +7,7 @@ const [major] = process.versions.node.split(".");
  */
 Object.defineProperty(ErisO.Base.prototype, "createdAt", {
     get: function() {
-        if (major > 10) {
+        if (major >= 10) {
             return Number((BigInt(this.id) >> BigInt(22)) + BigInt(1420070400000));
         } else {
             /* no brackets here, according to maths, division takes precedence over addition;
