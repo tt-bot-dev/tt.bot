@@ -175,6 +175,6 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 1,
-    description: "Shows the profile of the user (NOT USER DATA).",
-    args: "<show [user]|setup [color]fields <del|add> <<name><|data, not required for del>>|remove|color <color>>"
+    description: "Shows the profile of the user (NOT USER DATA).\nLocale list [here](https://github.com/tt-bot-dev/languages)",
+    args: "<show [user]|setup [color]|fields <del|add> <<name><|data, not required for del>>|remove|color <color>|locale <locale>>"
 };
