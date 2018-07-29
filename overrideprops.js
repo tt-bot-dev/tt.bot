@@ -1,4 +1,5 @@
 const [major] = process.versions.node.split(".");
+function set() {}
 
 /**
  * Overrides createdAt to provide more accurate timestamps when used with node v10+
@@ -16,7 +17,7 @@ Object.defineProperty(ErisO.Base.prototype, "createdAt", {
             return this.id / 4194304 + 1420070400000;
         }
     },
-    set: function() {}
+    set
 })
 
 /**
@@ -36,5 +37,5 @@ Object.defineProperty(ErisO.Guild.prototype, "defaultChannel", {
         if (!defaultChannel) return null;
         return this.channels.get(defaultChannel.id);
     },
-    set: function() {}
+    set
 });
