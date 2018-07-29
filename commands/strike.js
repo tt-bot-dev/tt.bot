@@ -33,7 +33,7 @@ module.exports = {
             await bot.modLog.addStrike(user.id, msg, options.reason);
             const dm = await user.user.getDMChannel();
             const p = await db.table("profile").get(user.id);
-            const prof = new UserProfile(p);
+            const prof = p ? new UserProfile(p) : {};
             dm.createMessage({
                 embed: {
                     title: i18n.getTranslation("YOU_GOT_STRIKED", prof.locale || "en"),
