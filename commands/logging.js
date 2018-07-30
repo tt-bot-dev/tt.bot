@@ -2,7 +2,7 @@ module.exports = {
     exec: async function (msg, args) {
         const { logChannel, logEvents } = msg.guildConfig;
         if (logChannel && logEvents) {
-            msg.channel.createMessage("The logging feature was already set up on this server. Do you want to disable it?\nType y or yes for disabling it. n or no otherwise. To respond, you have 10 seconds.");
+            msg.channel.createMessage(msg.t("LOGGING_ALREADY_SETUP"));
             try {
                 let [resp] = await bot.waitForEvent("messageCreate", 10000, (m) => {
                     if (m.author.id != msg.author.id) return false;
@@ -14,19 +14,19 @@ module.exports = {
                     delete msg.guildConfig.logChannel;
                     delete msg.guildConfig.logEvents;
                     await db.table("configs").get(msg.guild.id).replace(msg.guildConfig);
-                    msg.channel.createMessage("Done! The logging feature is now disabled.");
+                    msg.channel.createMessage(msg.t("LOGGING_DISABLED"));
                 } else {
-                    msg.channel.createMessage("Operation cancelled.");
+                    msg.channel.createMessage(msg.t("OP_CANCELLED"));
                 }
             } catch (err) {
-                if (err == "timeout") return msg.channel.createMessage("Operation cancelled.");
+                if (err == "timeout") return msg.channel.createMessage(msg.t("OP_CANCELLED"));
             }
         } else {
-            if (!args) return msg.channel.createMessage("Please supply the events that I should log, separated by a semicolon (;)");
+            if (!args) return msg.channel.createMessage(msg.t("ARGS_MISSING"));
             msg.guildConfig.logChannel = msg.channel.id;
             msg.guildConfig.logEvents = args;
             await db.table("configs").get(msg.guild.id).update(msg.guildConfig);
-            msg.channel.createMessage("The setup is done! Now, when one of the specified events trigger, I'll send them here.");
+            msg.channel.createMessage(msg.t("LOGGING_SETUP"));
         }
     },
     isCmd: true,

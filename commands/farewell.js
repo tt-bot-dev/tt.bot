@@ -47,13 +47,13 @@ module.exports = {
                 msg.guildConfig.farewellChannelId = options.channel.id;
                 msg.guildConfig.farewellMessage = options.message || "{u.mention} has left **{g.name}**.";
                 await db.table("configs").get(msg.guild.id).update(msg.guildConfig).run();
-                return await msg.channel.createMessage(`:ok_hand: Updated the leave message to \`${msg.guildConfig.farewellMessage}\`. It will be sent into <#${options.channel.id}>.`);
-            } else return await msg.channel.createMessage(`**${msg.author.username}**, I think you haven't filled out the channel where I should post welcome messages.`);
+                return await msg.channel.createMessage(msg.t("FAREWELL_UPDATED", msg.guildConfig.farewellMessage, options.channel.id));
+            } else return await msg.channel.createMessage(msg.t("ARGS_MISSING"));
         }
     },
     isCmd: true,
     display: true,
     category: 4,
     description: "Farewell messages.",
-    args: "<disable|<message:[ttMsg compatible message](https://github.com/TTtie/TTtie-Bot/wiki/ttMsg) without newlines> | channel:<channel query>>"
+    args: "<disable|<message:[ttMsg compatible message](https://github.com/TTtie/TTtie-Bot/wiki/ttMsg)> | channel:<channel>>"
 };

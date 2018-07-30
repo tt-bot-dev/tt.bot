@@ -1,0 +1,1 @@
+There are no real guidelines for contributing. Feel free to do whatever you do.

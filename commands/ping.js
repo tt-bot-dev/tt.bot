@@ -1,7 +1,17 @@
 module.exports = {
     exec: function(msg) {
-        return bot.createMessage(msg.channel.id, "Pinging.......").then(m =>{
-            m.edit(`It took ${m.timestamp - (msg.editedTimestamp || msg.timestamp)}ms to ping.\n\nDiscord latency: ${msg.guild.shard.latency}ms`);
+        return bot.createMessage(msg.channel.id, ":ping_pong:").then(m =>{
+            m.edit({
+                content: "",
+                embed: {
+                    title: msg.t("PONG"),
+                    description: msg.t("PING_LATENCY", m.timestamp - msg.timestamp),
+                    footer: {
+                        text: msg.t("PING_DISCORD_LATENCY", msg.guild.shard.latency)
+                    },
+                    color: 0x008800
+                }
+            });
         });
     },
     isCmd: true,

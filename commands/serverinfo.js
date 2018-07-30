@@ -4,88 +4,88 @@ module.exports = {
         function getGuildVerification() {
             switch (msg.guild.verificationLevel) {
             case 0:
-                return "None";
+                return msg.t("GUILD_VERIFICATION_NONE");
                 
             case 1:
-                return "Low (Requires verified email)";
+                return msg.t("GUILD_VERIFICATION_LOW");
                 
             case 2:
-                return "Medium (Requires verified email and being registered on Discord for more than 5 minutes)";
+                return msg.t("GUILD_VERIFICATION_MEDIUM");
                 
             case 3:
-                return "(╯°□°）╯︵ ┻━┻ (Requires verified email, being registered on Discord for more than 5 minutes and being on the server for more than 10 minutes)";
+                return "(╯°□°）╯︵ ┻━┻" + msg.t("GUILD_VERIFICATION_TABLEFLIP");
                 
             case 4:
-                return "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻ (Requires verified phone)";
+                return "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻" + msg.t("GUILD_VERIFICATION_ULTRATABLEFLIP");
             }
         }
         function getExplicitContent() {
             switch (msg.guild.explicitContentFilter) {
             case 0:
-                return "Off";
+                return msg.t("EXPLICIT_FILTERING_OFF");
                 
             case 1:
-                return "On for people without any role";
+                return msg.t("EXPLICIT_FILTERING_NOROLE");
                 
             case 2:
-                return "On for all";
+                return msg.t("EXPLICIT_FILTERING_ALL");
                 
             }
         }
         let embed = {
             author: {
-                name: `Server info for ${msg.guild.name}`
+                name: `${msg.guild.name}`
             },
             thumbnail: {
                 url: msg.guild.iconURL
             },
             fields: [
                 {
-                    name: "Members",
-                    value: `${msg.guild.memberCount} members`,
+                    name: msg.t("MEMBERS"),
+                    value: msg.t("MEMBER_COUNT", msg.guild.memberCount),
                     inline: true
                 },
                 {
-                    name: "Owner",
+                    name: msg.t("OWNER"),
                     value: bot.getTag(msg.guild.members.get(msg.guild.ownerID)),
                     inline: true
                 }, {
-                    name: "Guild verification",
+                    name: msg.t("GUILD_VERIFICATION_LEVEL"),
                     value: getGuildVerification(),
                     inline: true
                 }, {
-                    name: "Requires admin 2FA",
-                    value: msg.guild.mfaLevel == 1 ? "Yes" : "No",
+                    name: msg.t("REQUIRES_ADMIN_MFA"),
+                    value: msg.guild.mfaLevel == 1 ? msg.t("YES") : msg.t("NO"),
                     inline: true
                 }, {
-                    name: "Roles",
-                    value: `${msg.guild.roles.size} roles`,
+                    name: msg.t("ROLES"),
+                    value: msg.t("ROLE_COUNT", msg.guild.roles.size),
                     inline: true
                 }, {
-                    name: "Explicit content filtering",
+                    name: msg.t("EXPLICIT_FILTERING"),
                     value: getExplicitContent(),
                     inline: true
                 }, {
-                    name: "Default notification setting",
-                    value: msg.guild.defaultNotifications == 1 ? "Only @mentions" : "All messages",
+                    name: msg.t("DEFAULT_NOTIFICATIONS"),
+                    value: msg.guild.defaultNotifications == 1 ? msg.t("ONLY_MENTIONS") : msg.t("ALL_MESSAGES"),
                     inline: true
                 }
             ],
             description: `
 **ID**: ${msg.guild.id}
-**Voice region**: ${msg.guild.region}
-**AFK timeout**: ${msg.guild.afkTimeout / 60} minutes`,
+**${msg.t("VOICE_REGION")}**: ${msg.guild.region}
+**${msg.t("AFK_TIMEOUT")}**: ${msg.t("AFK_MINUTES", msg.guild.afkTimeout)}`,
             image: {
                 url: `https://cdn.discordapp.com/splashes/${msg.guild.id}/${msg.guild.splash}`
             },
             footer: {
-                text: "Created at"
+                text: msg.t("CREATED_ON")
             },
             timestamp: new Date(msg.guild.createdAt),
             color: 0x008800
         };
         if (msg.guild.afkChannelID) embed.fields.push({
-            name: "AFK channel name",
+            name: msg.t("AFK_CHANNEL"),
             value: msg.guild.channels.get(msg.guild.afkChannelID).name,
             inline:true
         });

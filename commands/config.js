@@ -17,9 +17,9 @@ module.exports = {
             if (setting && value && server[setting]) {
                 server[setting] = value;
                 await db.table("configs").get(msg.guild.id).update(server).run();
-                return await msg.channel.createMessage(`Updated ${setting} to ${value}`);
+                return await msg.channel.createMessage(msg.t("SETTING_UPDATED", setting, value));
             } else {
-                return await msg.channel.createMessage(`Unknown setting ${setting}`);
+                return await msg.channel.createMessage(msg.t("SETTING_UNKNOWN", setting));
             }
         }
         else {
@@ -29,7 +29,7 @@ module.exports = {
             Object.keys(server).forEach(item => {
                 if (item != "id") items.push(`${item} - ${server[item]}`);
             });
-            return await bot.createMessage(msg.channel.id, `\`\`\`\nServer configuration for ${msg.guild.name}\n${items.join("\n")}\`\`\`\nEven though the config names are selfexplanatory, it is possible that your settings might bork the configuration.\nIf you want to use the web version instead, go to ${config.webserverDisplay("/")}`);
+            return await bot.createMessage(msg.channel.id, msg.t(msg.guild.name, items));
         }
     },
     isCmd: true,

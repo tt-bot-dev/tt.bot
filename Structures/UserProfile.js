@@ -10,6 +10,7 @@ module.exports = class UserProfile {
             };
         }) : [];
         this.timezone = data.timezone ? decryptData(data.timezone) : null;
+        this.locale = data.locale ? decryptData(data.locale) : null;
     }
     toEncryptedObject() {
         return UserProfile.create(this);
@@ -25,7 +26,8 @@ module.exports = class UserProfile {
                     value: encryptData(profileField.value)
                 };
             }) || [],
-            timezone: encryptData(data.timezone)
+            timezone: encryptData(data.timezone),
+            locale: encryptData(data.locale)
         };
     }
 };

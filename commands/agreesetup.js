@@ -2,7 +2,7 @@ module.exports = {
     exec: async function (msg) {
         const { agreeChannel, memberRole } = msg.guildConfig;
         if (agreeChannel && memberRole) {
-            msg.channel.createMessage("The agreement feature was already set up on this server. Do you want to disable it?\nType y or yes for disabling it. n or no otherwise. To respond, you have 10 seconds.");
+            msg.channel.createMessage(msg.t("AGREE_SETUP_ALREADY"));
             try {
                 let [resp] = await bot.waitForEvent("messageCreate", 10000, (m) => {
                     if (m.author.id != msg.author.id) return false;
@@ -14,15 +14,15 @@ module.exports = {
                     delete msg.guildConfig.agreeChannel;
                     delete msg.guildConfig.memberRole;
                     await db.table("configs").get(msg.guild.id).replace(msg.guildConfig);
-                    msg.channel.createMessage("Done! The agree feature is now disabled.");
+                    msg.channel.createMessage(msg.t("AGREE_DISABLED"));
                 } else {
-                    msg.channel.createMessage("Operation cancelled.");
+                    msg.channel.createMessage(msg.t("OP_CANCELLED"));
                 }
             } catch (err) {
-                if (err == "timeout") return msg.channel.createMessage("Operation cancelled.");
+                if (err == "timeout") return msg.channel.createMessage(msg.t("OP_CANCELLED"));
             }
         } else {
-            msg.channel.createMessage("So, here we go! Please type your search query to choose the role you want to set up the agreement feature.");
+            msg.channel.createMessage(msg.t("AGREE_ROLE_QUERY"));
             try {
                 let [resp] = await bot.waitForEvent("messageCreate", 30000, (m) => {
                     if (m.author.id != msg.author.id) return false;
@@ -33,14 +33,14 @@ module.exports = {
                 try {
                     role = await queries.role(msg, resp.content, true);
                 } catch(err) {
-                    return msg.channel.createMessage("Sorry, but I didn't get this right. Please rerun the command.");
+                    return msg.channel.createMessage(msg.t("COMMAND_ERROR"));
                 }
                 msg.guildConfig.agreeChannel = msg.channel.id;
                 msg.guildConfig.memberRole = role.id;
                 await db.table("configs").get(msg.guild.id).update(msg.guildConfig);
-                msg.channel.createMessage(`The setup is done! Now, when somebody types ${config.prefix}agree here, I'll give them the role.`);
+                msg.channel.createMessage(msg.t("AGREE_SETUP", config.prefix));
             } catch (err) {
-                if (err == "timeout") return msg.channel.createMessage("Operation cancelled.");
+                if (err == "timeout") return msg.channel.createMessage(msg.t("OP_CANCELLED"));
             }
         }
     },

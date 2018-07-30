@@ -2,8 +2,8 @@ const s = require("snekfetch");
 module.exports = {
     exec: async function (msg, args) {
         let errMessages = {
-            queryTooLong: "Your query is too long.",
-            cantTell: "I can't respond on that :thinking:"
+            queryTooLong: msg.t("QUERY_TOO_LONG"),
+            cantTell: msg.t("CANT_TELL")
         };
         if (args > 255) return msg.channel.createMessage(errMessages.queryTooLong);
         try {
