@@ -9,6 +9,7 @@ function set() {}
 Object.defineProperty(ErisO.Base.prototype, "createdAt", {
     get: function() {
         if (major >= 10) {
+            // eslint-disable-next-line no-undef
             return Number((BigInt(this.id) >> BigInt(22)) + BigInt(1420070400000));
         } else {
             /* no brackets here, according to maths, division takes precedence over addition;
@@ -18,7 +19,7 @@ Object.defineProperty(ErisO.Base.prototype, "createdAt", {
         }
     },
     set
-})
+});
 
 /**
  * msg.guild polyfill
