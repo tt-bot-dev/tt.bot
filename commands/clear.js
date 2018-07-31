@@ -1,3 +1,19 @@
+const [major] = process.versions.node.split(".");
+const D_EPOCH = 1421280000000;
+
+/**
+ * Allows getting more accurate snowflakes when using node v10
+ * Returns either a BigInt or a number depending on node version
+ */
+function getOldestSnowflake() {
+    if (major >= 10) {
+        // eslint-disable-next-line no-undef
+        return (BigInt(Date.now()) - BigInt(D_EPOCH)) << BigInt(22)
+    } else {
+        return (Date.now() - 1421280000000) * 4194304;
+    }
+}
+
 module.exports = {
     exec: async function (msg, args) {
         let splitargs = args.split(" | ");
@@ -41,7 +57,7 @@ module.exports = {
             await msg.delete();
             if (options.from && options.from != "bots") options.from = await userQuery(options.from, msg, true);
             if (options.mentions) options.mentions = await userQuery(options.mentions, msg, true);
-            let oldestSnowflakeAllowed = (Date.now() - 1421280000000) * 4194304;
+            let oldestSnowflakeAllowed = getOldestSnowflake();
             let msgCount = () => { if (options.messages) { if (isNaN(options.messages)) return 100; else return options.messages; } else return 100; };
             let mss = await msg.channel.getMessages(msgCount());
             function matchesCriteriaContaining(m) {
