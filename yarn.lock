@@ -54,6 +54,10 @@ ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
+any-base@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/any-base/-/any-base-1.1.0.tgz#ae101a62bc08a597b4c9ab5b7089d456630549fe"
+
 argparse@^1.0.7:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"
@@ -104,10 +108,6 @@ balanced-match@^1.0.0:
 base64-js@^1.0.2:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.3.0.tgz#cab1e6118f051095e58b5281aea8c1cd22bfc0e3"
-
-bignumber.js@^7.2.1:
-  version "7.2.1"
-  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-7.2.1.tgz#80c048759d826800807c4bfd521e50edbba57a5f"
 
 bindings@^1.2.1:
   version "1.3.0"
@@ -860,17 +860,16 @@ isexe@^2.0.0:
 
 "jimp@github:oliver-moran/jimp":
   version "0.3.0"
-  uid da3ae0ee57d763577aa42035e649fa9e7f55099f
-  resolved "https://codeload.github.com/oliver-moran/jimp/tar.gz/da3ae0ee57d763577aa42035e649fa9e7f55099f"
+  uid f321190fcaf2d82c209dbd93c0b4aaa55650d5bf
+  resolved "https://codeload.github.com/oliver-moran/jimp/tar.gz/f321190fcaf2d82c209dbd93c0b4aaa55650d5bf"
   dependencies:
-    bignumber.js "^7.2.1"
+    any-base "^1.1.0"
     bmp-js "0.1.0"
     buffer "^5.2.0"
     exif-parser "^0.1.12"
     file-type "^8.1.0"
     jpeg-js "^0.3.4"
     load-bmfont "^1.3.0"
-    mime "^2.3.1"
     mkdirp "0.5.1"
     omggif "^1.0.9"
     phin "^2.9.0"
@@ -987,10 +986,6 @@ mime@1.4.1:
 mime@^1.3.4:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
-
-mime@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/mime/-/mime-2.3.1.tgz#b1621c54d63b97c47d3cfe7f7215f7d64517c369"
 
 mimic-fn@^1.0.0:
   version "1.2.0"
