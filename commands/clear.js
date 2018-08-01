@@ -8,7 +8,7 @@ const D_EPOCH = 1421280000000;
 function getOldestSnowflake() {
     if (major >= 10) {
         // eslint-disable-next-line no-undef
-        return (BigInt(Date.now()) - BigInt(D_EPOCH)) << BigInt(22)
+        return (BigInt(Date.now()) - BigInt(D_EPOCH)) << BigInt(22);
     } else {
         return (Date.now() - 1421280000000) * 4194304;
     }
