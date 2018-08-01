@@ -1,6 +1,6 @@
 # tt.bot 
 [![Discord](https://discordapp.com/api/guilds/195865382039453697/widget.png?style=shield](https://discord.gg/pGN5dMq) [![Add me!](https://img.shields.io/badge/tt.bot-add%20to%20your%20server-brightgreen.svg?style=flat-square)](https://discordapp.com/oauth2/authorize?scope=bot&client_id=195506253806436353&permissions=-1&redirect_uri=https://tttie.ga/close.php&response_type=code)
-
+[![Build Status](https://travis-ci.org/tt-bot-dev/tt.bot.svg?branch=master)](https://travis-ci.org/tt-bot-dev/tt.bot)
 
 tt.bot is a bot with aim for moderation and fun, made in JavaScript using [Node.js](https://nodejs.org) and [Eris](https://github.com/abalabahaha/eris) library.<br>
 This bot uses (and probably used) some pieces of code from [blargbot](https://github.com/ratismal/blargbot).
