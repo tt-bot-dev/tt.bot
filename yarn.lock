@@ -860,8 +860,8 @@ isexe@^2.0.0:
 
 "jimp@github:oliver-moran/jimp":
   version "0.3.0"
-  uid f321190fcaf2d82c209dbd93c0b4aaa55650d5bf
-  resolved "https://codeload.github.com/oliver-moran/jimp/tar.gz/f321190fcaf2d82c209dbd93c0b4aaa55650d5bf"
+  uid ba15d12ba6bf4f395a238ba387ef6e61a80db22c
+  resolved "https://codeload.github.com/oliver-moran/jimp/tar.gz/ba15d12ba6bf4f395a238ba387ef6e61a80db22c"
   dependencies:
     any-base "^1.1.0"
     bmp-js "0.1.0"
