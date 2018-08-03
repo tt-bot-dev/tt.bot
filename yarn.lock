@@ -860,9 +860,9 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
 
 "jimp@github:oliver-moran/jimp":
-  version "0.3.0"
-  uid ba15d12ba6bf4f395a238ba387ef6e61a80db22c
-  resolved "https://codeload.github.com/oliver-moran/jimp/tar.gz/ba15d12ba6bf4f395a238ba387ef6e61a80db22c"
+  version "0.3.1"
+  uid d64200c660602f10d034b31b739024153c7cbea9
+  resolved "https://github.com/oliver-moran/jimp#d64200c660602f10d034b31b739024153c7cbea9"
   dependencies:
     any-base "^1.1.0"
     bmp-js "0.1.0"
