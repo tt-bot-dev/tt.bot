@@ -22,7 +22,7 @@ module.exports = {
                     } else if (fe.match(/(guildID:([0-9]{17,18}))/)) {
                         options.guild = {id: fe.replace(/guildID:/, "")};
                     } else {
-                        console.log(fe + " doesn't match any regexes.");
+                        msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``))
                     }
                 });
                 if (action == "blacklist") {

@@ -12,7 +12,7 @@ module.exports = {
                     options.reason = fe.replace(/reason:/, "").replace(/ \\\| /g, " | ");
                 }
             } else {
-                console.log(fe + " doesn't match any regexes.");
+                msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``))
             }
         });
         

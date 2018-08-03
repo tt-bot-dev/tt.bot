@@ -34,7 +34,7 @@ module.exports = {
                         options.channel = fe.replace(/channel:/, "").replace(/ \\\| /g, " | ");
                     }
                 } else {
-                    console.log(fe + " doesn't match any regexes.");
+                    msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``))
                 }
             });
 
