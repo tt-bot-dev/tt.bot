@@ -3,7 +3,7 @@ fi.forEach(e => {
     if (/.+\.js$/.test(e)) {
         let cmFL = require("./events/" + e);
         if (cmFL.isEvent) {
-            console.log(`${__filename}      | Loading ${e.replace(/\.js/, "")} event, file ${e}`);
+            console.log(`${__filename}      | Loading ${e.replace(/\.js$/, "")} event, file ${e}`);
             bot.on(e.replace(/\.js$/, ""), cmFL);
         }
         else console.log(__filename + "    | Skipping non-event " + e);
