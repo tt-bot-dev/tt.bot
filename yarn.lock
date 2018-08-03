@@ -368,9 +368,10 @@ encodeurl@~1.0.2:
 
 "eris@github:abalabahaha/eris#dev":
   version "0.8.6"
-  resolved "https://codeload.github.com/abalabahaha/eris/tar.gz/94019f1f5ff74446fb50cfd76e0f34af727eb30d"
+  uid ed3997020d15ac42baaf5cf01c4eb869e5a5bd9a
+  resolved "https://github.com/abalabahaha/eris#ed3997020d15ac42baaf5cf01c4eb869e5a5bd9a"
   dependencies:
-    ws "^5.2.0"
+    ws "^6.0.0"
   optionalDependencies:
     opusscript "^0.0.4"
     tweetnacl "^1.0.0"
@@ -1582,9 +1583,9 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
-ws@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-5.2.0.tgz#9fd95e3ac7c76f6ae8bcc868a0e3f11f1290c33e"
+ws@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-6.0.0.tgz#eaa494aded00ac4289d455bac8d84c7c651cef35"
   dependencies:
     async-limiter "~1.0.0"
 
