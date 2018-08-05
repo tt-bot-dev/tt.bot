@@ -368,7 +368,6 @@ encodeurl@~1.0.2:
 
 "eris@github:abalabahaha/eris#dev":
   version "0.8.6"
-  uid ed3997020d15ac42baaf5cf01c4eb869e5a5bd9a
   resolved "https://github.com/abalabahaha/eris#ed3997020d15ac42baaf5cf01c4eb869e5a5bd9a"
   dependencies:
     ws "^6.0.0"
@@ -859,10 +858,9 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
 
-"jimp@github:oliver-moran/jimp":
-  version "0.3.1"
-  uid d64200c660602f10d034b31b739024153c7cbea9
-  resolved "https://github.com/oliver-moran/jimp#d64200c660602f10d034b31b739024153c7cbea9"
+jimp@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/jimp/-/jimp-0.3.2.tgz#2d1aec14be8bf5249e01f2b670400a174fb82175"
   dependencies:
     any-base "^1.1.0"
     bmp-js "0.1.0"
@@ -885,7 +883,6 @@ jpeg-js@^0.3.4:
 
 "jpgjs@github:makr28/jpgjs":
   version "1.0.0"
-  uid c83f107ad725b476a3441d20680a02590d8752cc
   resolved "https://codeload.github.com/makr28/jpgjs/tar.gz/c83f107ad725b476a3441d20680a02590d8752cc"
 
 js-tokens@^3.0.2:
