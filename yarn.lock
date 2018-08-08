@@ -367,9 +367,9 @@ encodeurl@~1.0.2:
   resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
 
 "eris@github:abalabahaha/eris#dev":
-  version "0.8.6"
-  uid cb93c03951d41c58e92fae37dea4a2ff5fab3a12
-  resolved "https://github.com/abalabahaha/eris#cb93c03951d41c58e92fae37dea4a2ff5fab3a12"
+  version "0.9.0"
+  uid "89ed28c2e7ec214b7609588c46cd35a8687896b5"
+  resolved "https://github.com/abalabahaha/eris#89ed28c2e7ec214b7609588c46cd35a8687896b5"
   dependencies:
     ws "^6.0.0"
   optionalDependencies:
