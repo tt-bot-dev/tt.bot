@@ -1,1 +1,1 @@
-There are no real guidelines for contributing. Feel free to do whatever you do.
+There are no real guidelines for contributing. Feel free to do whatever you do as long as it is linted properly.
