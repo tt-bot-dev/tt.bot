@@ -29,7 +29,7 @@ module.exports = {
             Object.keys(server).forEach(item => {
                 if (item != "id") items.push(`${item} - ${server[item]}`);
             });
-            return await bot.createMessage(msg.channel.id, msg.t(msg.guild.name, items));
+            return await bot.createMessage(msg.channel.id, msg.t("GUILD_CONFIG", msg.guild.name, items));
         }
     },
     isCmd: true,
