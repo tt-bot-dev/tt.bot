@@ -28,7 +28,7 @@ module.exports = {
                 return msg.t("EXPLICIT_FILTERING_NOROLE");
                 
             case 2:
-                return msg.t("EXPLICIT_FILTERING_ALL");
+                return msg.t("EXPLICIT_FILTERING_ON");
                 
             }
         }
