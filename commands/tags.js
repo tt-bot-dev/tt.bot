@@ -36,7 +36,7 @@ module.exports = {
                 content: content,
                 owner: msg.author.id
             }));
-            await msg.channel.createMessage(msg.t("TAG_CREATED"));
+            await msg.channel.createMessage(msg.t("TAG_CREATED", tagName));
         }
         async function edit(tagName, content) {
             if (!tagName) return await msg.channel.createMessage(msg.t("ARGS_MISSING"));
