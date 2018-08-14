@@ -89,7 +89,7 @@ module.exports = {
                         url: u.avatarURL
                     },
                     fields: [{
-                        name: msg.t("JOINED_ON"),
+                        name: msg.t("CREATED_ON"),
                         value: (msg.userProfile && msg.userProfile.timezone) ? 
                             moment(new Date(u.createdAt)).tz(msg.userProfile.timezone).format(config.tzDateFormat) : 
                             moment(new Date(u.createdAt)).format(config.normalDateFormat),
