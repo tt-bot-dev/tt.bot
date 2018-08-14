@@ -27,7 +27,8 @@ class WorkerManager {
             const p = fork(`${__dirname}/${f}`, [], {
                 env: {
                     WORKER_ID: this.nextWorkerId
-                }
+                },
+                windowsHide: true
             });
             const ipc = new pp(p);
             const workerId = this.nextWorkerId;
