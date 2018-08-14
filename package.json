@@ -1,11 +1,12 @@
 {
   "name": "tt.bot",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A bot with aim for fun and moderation made in JS using Eris.",
   "main": "run.js",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
+    "csurf": "github:tt-bot-dev/csurf",
     "ejs": "^2.6.1",
     "eris": "github:abalabahaha/eris#dev",
     "erlpack": "github:discordapp/erlpack",

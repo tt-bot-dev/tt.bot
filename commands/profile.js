@@ -45,7 +45,7 @@ module.exports = {
             return msg.channel.createMessage({
                 embed: {
                     author: {
-                        name: `${user.user.username}#${user.user.discriminator}'s profile`,
+                        name: msg.t("USER_PROFILE", bot.getTag(user)),
                         icon_url: user.user.staticAvatarURL
                     },
                     fields: (profile.profileFields && profile.profileFields.length > 0) ? profile.profileFields : [{

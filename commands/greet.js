@@ -34,7 +34,7 @@ module.exports = {
                         options.channel = fe.replace(/channel:/, "").replace(/ \\\| "/g, " | ");
                     }
                 } else {
-                    msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``))
+                    msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``));
                 }
             });
 

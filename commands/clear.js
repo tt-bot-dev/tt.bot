@@ -49,7 +49,7 @@ module.exports = {
                 let invertion = fe.replace(/invert:/, "");
                 if (invertion == "true") options.invert = true; else options.invert = false;
             } else {
-                msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``))
+                msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``));
             }
         });
 

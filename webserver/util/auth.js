@@ -1,5 +1,6 @@
 const sa = require("snekfetch");
 const APIBase = "https://discordapp.com/api/v6/oauth2";
+
 const auth = {
     async checkAuth(rq, rs, nx) {
         if (!rq.session.tokenData) return nx();
@@ -16,7 +17,7 @@ const auth = {
             try {
                 d = await auth.getUserInfo(rq.session.tokenData.accessToken);
             } catch (err) {
-                return nx();
+                console.error(err);
             }
             rq.user = d;
             rq.signedIn = true;
@@ -44,7 +45,7 @@ const auth = {
             refreshToken: body.refreshToken,
             expiry: body.expires_in,
             date: dateAfterReq,
-            redirURI: `${req.protocol}://${req.headers.host}/callback`
+            redirURI: `${req.protocol}://${req.headers.host}/callback`,
         };
         req.user = d;
         return true;
@@ -72,7 +73,7 @@ const auth = {
             refreshToken: body.refresh_token,
             expiry: body.expires_in,
             date: dateAfterReq,
-            redirURI: `${req.protocol}://${req.headers.host}/callback`
+            redirURI: `${req.protocol}://${req.headers.host}/callback`,
         };
         req.user = d;
         return;
@@ -80,11 +81,11 @@ const auth = {
 
     async getUserInfo(token) {
         try {
-            const { body } = await sa.get("https://discordapp.com/api/v6/users/@me")
-                .set("Authorization", `Bearer ${token}`);
-
-            const { body: guilds } = await sa.get("https://discordapp.com/api/v6/users/@me/guilds").
-                set("Authorization", `Bearer ${token}`);
+            const e = new ErisO.Client(`Bearer ${token}`, {
+                restMode: true
+            })
+            const body = await e.requestHandler.request("GET", "/users/@me", true)
+            const guilds = await e.requestHandler.request("GET", "/users/@me/guilds", true);
             return {
                 id: body.id,
                 username: body.username,
@@ -111,6 +112,8 @@ const auth = {
                     token: req.session.tokenData.refreshToken,
                     token_type_hint: "refresh_token"
                 });
+            // free the memery
+            delete cache._items[req.session.tokenData.accessToken];
             req.session.destroy();
         } catch (err) {
             throw err;

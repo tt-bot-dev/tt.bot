@@ -12,7 +12,7 @@ module.exports = {
                     options.reason = fe.replace(/reason:/, "").replace(/ \\\| /g, " | ");
                 }
             } else {
-                msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``))
+                msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``));
             }
         });
         

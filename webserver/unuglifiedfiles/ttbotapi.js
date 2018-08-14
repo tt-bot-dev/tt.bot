@@ -1,6 +1,7 @@
 (function(w) {
     var ttbot = {};
     ttbot.guildId = null;
+    ttbot.csrfToken = null;
     ttbot.guildConfig = null;
     ttbot.savingDashboardChanges = false;
     ttbot.saveDashboardChanges = function (data) {
@@ -9,7 +10,8 @@
             body: JSON.stringify(data),
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "CSRF-Token": ttbot.csrfToken
             }
         }).then(function(r) {
             return r.json();

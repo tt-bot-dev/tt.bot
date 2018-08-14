@@ -25,8 +25,6 @@ module.exports = app => {
     app.engine("ejs", ejs.renderFile);
     app.set("views", `${__dirname}/../views`);
     app.set("view engine", "ejs");
-    
-    
     app.use(cookieparser(config.clientSecret));
     app.use((rq, rs, nx) => {
         rq.makeTemplatingData = function (...objects) {
