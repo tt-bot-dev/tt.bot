@@ -21,7 +21,8 @@
     "process-as-promised": "^1.0.1",
     "raven": "^2.6.3",
     "rethinkdbdash": "^2.3.31",
-    "snekfetch": "^4.0.4"
+    "snekfetch": "^4.0.4",
+    "zlib-sync": "^0.1.4"
   },
   "devDependencies": {
     "eslint": "^5.3.0"

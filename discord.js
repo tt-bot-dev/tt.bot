@@ -6,7 +6,8 @@ module.exports = function () {
         getAllUsers:true,
         disableEveryone: false,
         defaultImageSize: 1024,
-        defaultImageFormat: "webp"
+        defaultImageFormat: "webp",
+        compress: true
     });
     global.isO = function(msg) {
         if (!Array.isArray(config.oid)) return msg.author.id == config.oid;
