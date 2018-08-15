@@ -10,7 +10,7 @@ module.exports = {
                 return next();
             }
             res.redirect("/login");
-        }
+        };
     },
 
     checkAuthNeg(api = false) {
@@ -25,7 +25,7 @@ module.exports = {
             }
             res.redirect("/");
             next();
-        }
+        };
     },
     loadMiddleware: require("./loadMiddleware"),
     getGuilds(req, res) {

@@ -40,7 +40,7 @@ module.exports = csrf => {
     });
 
     app.post("/config/:guild", authNeeded, csrf(), async (rq, rs) => {
-        console.log(`POST /config/:guild\n:guild = ${rq.params.guild}\nbody = ${require("util").inspect(rq.body)}`)
+        console.log(`POST /config/:guild\n:guild = ${rq.params.guild}\nbody = ${require("util").inspect(rq.body)}`);
         const guilds = getGuilds(rq, rs);
         if (!guilds.find(g => g.isOnServer && g.id == rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
         else {

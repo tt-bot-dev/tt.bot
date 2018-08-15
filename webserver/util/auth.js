@@ -83,8 +83,8 @@ const auth = {
         try {
             const e = new ErisO.Client(`Bearer ${token}`, {
                 restMode: true
-            })
-            const body = await e.requestHandler.request("GET", "/users/@me", true)
+            });
+            const body = await e.requestHandler.request("GET", "/users/@me", true);
             const guilds = await e.requestHandler.request("GET", "/users/@me/guilds", true);
             return {
                 id: body.id,
@@ -112,8 +112,6 @@ const auth = {
                     token: req.session.tokenData.refreshToken,
                     token_type_hint: "refresh_token"
                 });
-            // free the memery
-            delete cache._items[req.session.tokenData.accessToken];
             req.session.destroy();
         } catch (err) {
             throw err;

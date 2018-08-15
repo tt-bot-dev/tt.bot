@@ -110,7 +110,7 @@ app.use((err, req, res, next) => {
             res.status(403).render("500", req.makeTemplatingData({
                 error: "Missing CSRF token! Please redo the action again in order to protect yourself.",
                 pageTitle: "Cross Site Request Forgery"
-            }))
+            }));
             return;
         }
         console.error(err);
