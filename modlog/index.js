@@ -35,7 +35,7 @@ class ModLog {
     }
     async addStrike(userID, msg, reason) {
         if (!msg.guild.channels.get(msg.guildConfig.modlogChannel)) return;
-        if ((await bot.isModerator(msg.guild.members.get(userID), false))) throw "Are you stupid? You cannot strike a moderator.";
+        if ((await bot.isModerator(msg.guild.members.get(userID), false))) throw msg.t("MODS_UNSTRIKABLE");
         const guildID = msg.guild.id;
         let guildStrikes = await db.table("modlog").get(guildID);
         if (!guildStrikes) guildStrikes = await this.insertNew(guildID);
