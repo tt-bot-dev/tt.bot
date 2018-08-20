@@ -14,6 +14,8 @@ function getOldestSnowflake() {
     }
 }
 
+const yN = require("../util/askYesNo");
+
 module.exports = {
     exec: async function (msg, args) {
         let splitargs = args.split(" | ");
@@ -54,7 +56,6 @@ module.exports = {
         });
 
         try {
-            await msg.delete();
             if (options.from && options.from != "bots") options.from = await userQuery(options.from, msg, true);
             if (options.mentions) options.mentions = await userQuery(options.mentions, msg, true);
             let oldestSnowflakeAllowed = getOldestSnowflake();
@@ -83,6 +84,17 @@ module.exports = {
                 if (fn < oldestSnowflakeAllowed) return false;
                 else return true;
             });
+            const m = await msg.channel.createMessage(msg.t("CLEAR_CONFIRM"));
+            const r = await yN(msg, true);
+            await m.delete();
+            await msg.delete();
+            await r.msg.delete();
+            if (!r.response) {
+                const mok = await msg.channel.createMessage(msg.t("OP_CANCELLED"));
+                setTimeout(async () => await mok.delete(), 2000);
+                return;
+            }
+
             await msg.channel.deleteMessages(filteredMsgIDs);
             let msgOK = await msg.channel.createMessage(msg.t("CLEAR_DONE", filteredMsgIDs.length));
             setTimeout(async () => await msgOK.delete(), 2000);

@@ -24,17 +24,19 @@ class HelpMenu extends ReactionMenu {
         for (const e of toAdd) await this.pgMsg.addReaction(e);
     }
 
-    stopCallback(reason) {
-        if (reason === ReactionMenu.MANUAL_EXIT) {
-            this.pgMsg.delete();
-            this.ogMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_MANUAL")).then(m => setTimeout(() => m.delete(), 5000));
-        }
-        /*case ReactionMenu.TIMEOUT:
-            this.ogMsg.channel.createMessage(`The menu has expired.`)*/
-        else if (reason === ReactionMenu.MESSAGE_DELETE)
-            this.ogMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_MESSAGE_DELETE")).then(m => setTimeout(() => m.delete(), 5000));
-        else if (reason === ReactionMenu.CHANNEL_DELETE)
-            bot.users.get(this.authorID).getDMChannel().then(dm => dm.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_CHANNEL_DELETE")));
+    async stopCallback(reason) {
+        try {
+            if (reason === ReactionMenu.MANUAL_EXIT) {
+                await this.pgMsg.delete();
+                await this.ogMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_MANUAL")).then(m => setTimeout(() => m.delete(), 5000));
+            }
+            /*case ReactionMenu.TIMEOUT:
+                this.ogMsg.channel.createMessage(`The menu has expired.`)*/
+            else if (reason === ReactionMenu.MESSAGE_DELETE)
+                await this.ogMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_MESSAGE_DELETE")).then(m => setTimeout(() => m.delete(), 5000));
+            else if (reason === ReactionMenu.CHANNEL_DELETE)
+                await bot.users.get(this.authorID).getDMChannel().then(dm => dm.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_CHANNEL_DELETE")));
+        } catch (_) {} //eslint-disable-line no-empty
     }
 
     hasPermission(emoji) {
@@ -122,7 +124,7 @@ class HelpMenu extends ReactionMenu {
     static DEFAULT_OBJ(msg, permissions) {
         return {
             embed: {
-                description: msg.t("HELP_HOME", HelpMenu, permissions, {t: msg.t}),
+                description: msg.t("HELP_HOME", HelpMenu, permissions, { t: msg.t }),
                 color: 0x008800
             }
         };

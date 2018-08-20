@@ -6,20 +6,10 @@ tt.bot is a bot with aim for moderation and fun, made in JavaScript using [Node.
 This bot uses (and probably used) some pieces of code from [blargbot](https://github.com/ratismal/blargbot).
 
 # Features
-- Cross-server telephony
-- Getting user info and their avatar
-- Basic moderation
-- Welcome and farewell messages
-- Rerouting your command input into direct messages
-- Emoji to picture 
-- Many more commands that I am lazy to list
-- Logging deleted messages
+Check a special page for [tt.bot](https://tttie.github.io/ttbot)
 
 # How to selfhost
 Go [here](https://github.com/TTtie/TTtie-Bot/wiki/Selfhosting)
-
-# Creating events/commands
-Refer to [EVENTS.md](./EVENTS.md) or [COMMANDS.md](./COMMANDS.md).
 
 ## sentry.io integration
 tt.bot supports the sentry.io integration. Just fill out the config.js(on) `sentry` property with this object:

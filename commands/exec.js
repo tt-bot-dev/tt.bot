@@ -8,9 +8,9 @@ function exec(command) {
         const [cmd, ...args] = command.split(" ");
         let b = [];
         const endHandler = (c, s) => {
-            b.push(Buffer.from(`======= Program ${s ? `killed with the ${s} signal` : `exited with code ${c}`} =======`))
+            b.push(Buffer.from(`======= Program ${s ? `killed with the ${s} signal` : `exited with code ${c}`} =======`));
             rs(Buffer.concat(b).toString());
-        }
+        };
         const s = spawn(cmd, args, {
             windowsHide: true, // Do not create a window if run inside PM2
             stdio: ["ignore", "pipe", "pipe"], // Do not pipe stdin
@@ -18,11 +18,11 @@ function exec(command) {
 
         });
         s.on("error", e => rj(e))
-        .on("exit", endHandler)
-        .on("close", endHandler);
-        s.stdout.on("data", d => b.push(d))
+            .on("exit", endHandler)
+            .on("close", endHandler);
+        s.stdout.on("data", d => b.push(d));
         s.stderr.on("data", d => b.push(d));
-    })
+    });
 }
 module.exports = {
     exec: async function (msg, args) {

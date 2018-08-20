@@ -89,7 +89,7 @@ class LibWUtil extends eris {
 
     isAdmin(member, botOwnerIsAdmin = true) {
         if (botOwnerIsAdmin && isO({ author: member.user })) return true;
-        if (member.permission.json["administrator"]) return true;
+        if (member.permission.has("manageGuild")) return true;
         if (member.guild.ownerID == member.id) return true;
     }
     listBotColls() {

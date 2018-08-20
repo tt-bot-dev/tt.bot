@@ -7,7 +7,7 @@ module.exports = {
                 try {
                     userToBan = await bot.getUserWithoutRESTMode(args);
                 } catch (err) {
-                    if (doMessage) await msg.channel.createMessage("That user doesn't exist!");
+                    if (doMessage) await msg.channel.createMessage(msg.t("ARGS_MISSING"));
                     return false;
                 }
                 if (msg.guild.members.get(userToBan.id)) member = msg.guild.members.get(userToBan.id);
@@ -22,17 +22,13 @@ module.exports = {
                 }
             }
             if (args.split(" ").length > 1) {
-                let bans = [];
-                await args.split(" ").forEach(async u => {
-                    let ban = await dohackBan(u, false, true);
-                    bans.push(ban);
-                });
+                const bans = await Promise.all(args.split(" ").map(async u => await dohackBan(u, false, true)));
                 msg.channel.createMessage(msg.t("HACKBANNED_USERS", bans.filter(b => !!b)));
             } else {
                 await dohackBan(args, true, false);
             }
         } else {
-            return await bot.createMessage(msg.channel.id, `**${msg.author.username}**, you miss required arguments (Who should I hackban?).`);
+            return await bot.createMessage(msg.channel.id, msg.t("ARGS_MISSING"));
         }
     },
     isCmd: true,

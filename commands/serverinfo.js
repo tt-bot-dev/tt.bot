@@ -16,7 +16,7 @@ module.exports = {
                 return "(╯°□°）╯︵ ┻━┻" + msg.t("GUILD_VERIFICATION_TABLEFLIP");
                 
             case 4:
-                return "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻" + msg.t("GUILD_VERIFICATION_ULTRATABLEFLIP");
+                return "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻ " + msg.t("GUILD_VERIFICATION_ULTRATABLEFLIP");
             }
         }
         function getExplicitContent() {

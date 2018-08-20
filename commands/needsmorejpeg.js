@@ -28,12 +28,7 @@ module.exports = {
             image.quality((Math.random() * 5) + 1);
             let file;
             try {
-                file = await (new Promise((rs, rj) => {
-                    image.getBuffer(MIME_JPEG, (e, b) => {
-                        if (e) rj(e);
-                        else rs(b);
-                    });
-                }));
+                file = await image.getBufferAsync(MIME_JPEG);
             } catch (err) {
                 return;
             }

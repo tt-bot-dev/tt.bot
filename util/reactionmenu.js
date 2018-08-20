@@ -13,7 +13,7 @@ class ReactionMenu {
         bot.on("channelDelete", this.handleChannelDelete.bind(this));
     }
 
-    async unbind() {
+    unbind() {
         bot.removeListener("messageReactionAdd", this.handleReactionAdd.bind(this));
         bot.removeListener("messageDelete", this.handleDeleteMessage.bind(this));
         bot.removeListener("messageDeleteBulk", this.handleDeleteMessage.bind(this));

@@ -122,7 +122,7 @@ module.exports = {
             }
         }
 
-        
+
         async function timezone() {
             if (!msg.userProfile) return msg.channel.createMessage(msg.t("PROFILE_NONEXISTENT"));
             let tzValue = a;
@@ -134,12 +134,30 @@ module.exports = {
 
         async function locale() {
             if (!msg.userProfile) return msg.channel.createMessage(msg.t("PROFILE_NONEXISTENT"));
+            if (!a) {
+                const status = await calculateLocaleStatus();
+                return msg.channel.createMessage(msg.t("PROFILE_LOCALE_LIST", msg.userProfile.locale, Object.keys(status).map(l => `${l} - ${status[l]}%`).join("\n")));
+            }
             let lang = a;
-            if(!bot.i18n.languages[lang]) return msg.channel.createMessage(msg.t("INVALID_LOCALE", lang));
+            if (!bot.i18n.languages[lang]) return msg.channel.createMessage(msg.t("INVALID_LOCALE", lang));
             msg.userProfile.locale = lang;
             await db.table("profile").get(msg.author.id).update(msg.userProfile.toEncryptedObject());
             msg.channel.createMessage(msg.t("LOCALE_SET", `${lang} (${msg.t("NATIVE_LOCALE_NAME")}/${msg.t("ENGLISH_LOCALE_NAME")})`));
+        }
 
+        async function calculateLocaleStatus() {
+            let s = {};
+            for (const [l, k] of Object.entries(bot.i18n.languages)) {
+                if (!bot.i18n.languages.hasOwnProperty(l)) continue;
+                if (l === "en") {
+                    s["en"] = (100).toFixed(2);
+                    continue;
+                }
+                const terms = Object.keys(bot.i18n.languages.en);
+                const termsInForeignLang = terms.filter(l => k.hasOwnProperty(l)).length; // Removes stuff that don't exist
+                s[l] = ((termsInForeignLang / terms.length) * 100).toFixed(2);
+            }
+            return s;
         }
         switch (action) {
         case "remove": {
@@ -176,5 +194,5 @@ module.exports = {
     display: true,
     category: 1,
     description: "Shows the profile of the user (NOT USER DATA).\nLocale list [here](https://github.com/tt-bot-dev/languages)",
-    args: "<show [user]|setup [color]|fields <del|add> <<name><|data, not required for del>>|remove|color <color>|locale <locale>>"
+    args: "<show [user]|setup [color]|fields <del|add> <<name><|data, not required for del>>|remove|color <color>|locale [locale]>"
 };
