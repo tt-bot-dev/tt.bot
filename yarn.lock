@@ -1053,9 +1053,9 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
 
-jimp@^0.3.10:
-  version "0.3.10"
-  resolved "https://registry.yarnpkg.com/jimp/-/jimp-0.3.10.tgz#10367fbcb9cdde25c19dcaae30770c1977ec2e0e"
+jimp@^0.3.11:
+  version "0.3.11"
+  resolved "https://registry.yarnpkg.com/jimp/-/jimp-0.3.11.tgz#187ca4633198a43705113d82a559ae850f17247a"
   dependencies:
     "@babel/polyfill" "^7.0.0"
     "@jimp/custom" "^0.3.9"
