@@ -1,0 +1,1 @@
+module.exports = r => `(done using an extension) ${r || "reason not specified"}`

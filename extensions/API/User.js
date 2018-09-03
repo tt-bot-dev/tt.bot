@@ -1,8 +1,6 @@
-let origUser = null;
 const Message = require("./Message");
 class User {
     constructor(user) {
-        origUser = user;
         this.avatar = user.avatar;
         this.avatarURL = user.avatarURL;
         this.bot = user.bot;
@@ -14,19 +12,27 @@ class User {
         this.mention = user.mention;
         this.staticAvatarURL = user.staticAvatarURL;
         this.username = user.username;
+
+        // We do not need to share a global variable anymore!
+        Object.defineProperty(this, "dynamicAvatarURL", {
+            value: function (format, size) {
+                return user.dynamicAvatarURL(format, size);
+            },
+            configurable: true
+        })
+
+        Object.defineProperty(this, "createMessage", {
+            value: function (content, file) {
+                // Save us a request
+                if (this.bot) return Promise.reject(false);
+                return user.getDMChannel().then(dm => dm.createMessage(content, file)).then(m => new Message(m)).catch(() => false);
+            },
+            configurable: true
+        })
     }
 
-    // noinspection JSMethodCanBeStatic
-    dynamicAvatarURL(format, size) {
-        return origUser.dynamicAvatarURL(format, size);
-    }
-
-    createMessage(content, file) {
-        if (this.bot) return Promise.reject({
-            code: 50017,
-            message: "Cannot send messages to this user"
-        });
-        return origUser.getDMChannel().then(dm => dm.createMessage(content, file)).then(m => new Message(m)).catch(() => false);
+    toString() {
+        return this.mention;
     }
 }
 module.exports = User;

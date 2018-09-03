@@ -3,7 +3,7 @@ process.on("unhandledRejection", (r) => {
 });
 process.on("uncaughtException", (err) => {
     console.log(`${__filename}      | Unhandled exception`, err.message);
-    console.error(err.stack);
+    console.log(err.stack);
 });
 global.p = function () { return; };
 global.cmds = {};

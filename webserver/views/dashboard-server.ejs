@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
-<body onload="window.ttbot.guildId = '<%=guild.id%>'; window.ttbot.csrfToken = '<%=csrfToken%>'">
+<body>
 <div class="tttie-container">
 <%- include("./partials/header") %>
 <div class="tttie-body">
@@ -87,6 +87,7 @@ Also, you can set the case insensitive name of your moderator role (You. Yeah, y
 </div>
 </div>
 </div>
+<script src="/dashboard/<%=guild.id%>/load.js"></script>
 <script src="/static/js/ttbotapi.js"></script>
 <script src="/static/js/dashboard.js"></script>
 </body>
