@@ -19,7 +19,7 @@
     "moment-timezone": "^0.5.21",
     "pmx": "^1.6.7",
     "process-as-promised": "^1.0.1",
-    "raven": "^2.6.3",
+    "raven": "^2.6.4",
     "rethinkdbdash": "^2.3.31",
     "snekfetch": "^4.0.4",
     "zlib-sync": "^0.1.4"
