@@ -10,7 +10,11 @@ const r = require("../Utils/InterceptReason");
 class TextChannel extends Channel {
     constructor(channel) {
         super(channel);
-        this.lastMessage = new Message(channel.messages.get(channel.lastMessageID));
+        Object.defineProperty(this, "lastMessage", {
+            get: function() {
+                return new Message(channel.messages.get(channel.lastMessageID));
+            }
+        });
         this.lastPinTimestamp = channel.lastPinTimestamp;
 
         Object.defineProperty(this, "messages", {
@@ -122,6 +126,7 @@ class TextChannel extends Channel {
 
         Object.defineProperty(this, "purge", {
             value: function (limit, filter, before, after) {
+                if(!filter) filter = () => true;
                 return channel.purge(limit, m => filter(new Message(m)), before, after).then(n => n).catch(() => false);
             },
             configurable: true

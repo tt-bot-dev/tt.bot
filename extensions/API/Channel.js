@@ -4,6 +4,7 @@ let CategoryChannel, TextChannel, VoiceChannel, Guild;
 const r = require("../Utils/InterceptReason");
 const resolveRoleOrUser = require("../Utils/ResolveRoleOrUserID");
 const resolveUser = require("../Utils/ResolveUserID");
+const Consts = require("./Constants");
 // HACK: circular dependency
 process.nextTick(() => {
     CategoryChannel = require("./CategoryChannel");
@@ -28,6 +29,7 @@ class Channel {
 
         Object.defineProperty(this, "parent", {
             get: function () {
+                if (!channel.parentID || channel.type === Consts.ChannelTypes.category) return null;
                 return new CategoryChannel(channel.guild.channels.get(channel.parentID));
             }
         });

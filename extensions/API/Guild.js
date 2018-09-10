@@ -181,14 +181,15 @@ class Guild {
 
         Object.defineProperty(this, "editNickname", {
             value: function (nickname) {
-                return guild.editNickname(nickname)
+                return guild.editNickname(nickname).then(() => true).catch(() => false);
             },
             configurable: true
         })
 
         Object.defineProperty(this, "editRole", {
-            value: function (options, reason) {
-                return guild.editRole(options, r(reason)).then(r => new Role(r)).catch(() => false);
+            value: function (role, options, reason) {
+                role = ResolveRoleID(role);
+                return guild.editRole(role, options, r(reason)).then(r => new Role(r)).catch(() => false);
             },
             configurable: true
         })
@@ -282,7 +283,5 @@ class Guild {
     delete() {
         return Promise.reject(false);
     }
-
-    // TODO: Guild.channels
 }
 module.exports = Guild;
