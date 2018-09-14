@@ -1,4 +1,5 @@
 const {Collection} = require("eris");
+const Channel = require("./Channel");
 const Invite = require("./Invite");
 const Member = require("./Member");
 const r = require("../Utils/InterceptReason");

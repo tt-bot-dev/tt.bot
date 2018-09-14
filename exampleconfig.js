@@ -134,5 +134,11 @@ module.exports = {
      */
     dblVoteHookGuild: "",
     dblVoteHookRole: "",
-    dblVoteHookSecret: ""
+    dblVoteHookSecret: "",
+
+    /**
+     * Allows debug logging
+     * @type {boolean}
+     */
+    debugLogging: false
 };

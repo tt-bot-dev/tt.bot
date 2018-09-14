@@ -1,6 +1,6 @@
 let EventEmitter = require("events").EventEmitter;
 module.exports = class Emitter extends EventEmitter {
-    constructor(channel1, channel2) {
+    constructor(channel1, channel2, callData1, callData2) {
         super();
         this._phoneEmoji = "\u260e";
         this._chan1 = channel1;
@@ -10,9 +10,9 @@ module.exports = class Emitter extends EventEmitter {
         const getSpeakerPhoneMessage = (author, text) => {
             return `${this._phoneEmoji} ${bot.getTag(author)}: ${text}`;
         };
-        channel1.createMessage(this.getMessage(channel2));
-        channel2.createMessage(this.getMessage(channel1));
-        const bindingFunction = function (msg) {
+        channel1.createMessage(this.getMessage(channel2, callData2));
+        channel2.createMessage(this.getMessage(channel1, callData1));
+        const bindingFunction = msg => {
             if (msg.guild.id == channel1.guild.id || msg.guild.id == channel2.guild.id) {
                 if (msg.channel.id == chan1id || msg.channel.id == chan2id) {
                     if (!msg.author) return;
@@ -22,6 +22,10 @@ module.exports = class Emitter extends EventEmitter {
                             if (msg.attachments.length > 0) {
                                 return `\n${msg.attachments.map(a => a.url).join("\n")}`;
                             } else return "";
+                        }
+                        if (msg.content.startsWith(`${config.prefix}hangup`)) {
+                            this.emit("EndSpeakerphone", msg.channel);
+                            return;
                         }
                         if (!msg.content.startsWith("^")) return;
                         let mToSend = msg.content.slice(1);
@@ -37,18 +41,18 @@ module.exports = class Emitter extends EventEmitter {
         bot.on("messageCreate", bindingFunction);
         this.once("EndSpeakerphone", (endChannel) => {
             bot.removeListener("messageCreate", bindingFunction);
-            if (endChannel == channel1) {
-                channel2.createMessage(this._phoneEmoji + " The other side has ended the communication."); 
-                endChannel.createMessage(this._phoneEmoji + " You ended the communication."); 
+            if (endChannel.id == chan1id) {
+                channel2.createMessage("The other side has hung up."); 
+                endChannel.createMessage("You have hung up."); 
             }
-            else if (endChannel == channel2) { 
-                channel1.createMessage(this._phoneEmoji + " The other side has ended the communication.");
-                endChannel.createMessage(this._phoneEmoji + " You ended the communication."); 
+            else if (endChannel.id == chan2id) { 
+                channel1.createMessage("The other side has hung up."); 
+                endChannel.createMessage("You have hung up."); 
             }
         });
     }
-    getMessage(channel) {
-        return `${this._phoneEmoji} Connected to #${channel.name} at ${channel.guild.name}\n\nPrefix your messages with \`^\` to send them over.`;
+    getMessage(channel, side) {
+        return `${this._phoneEmoji} Connected to ${side.id} ${!(side.private) ? `(#${channel.name} at ${channel.guild.name})` : ""}\n\nPrefix your messages with \`^\` to send them over.\nType \`${config.prefix}hangup\` to hang up`;
     }
 
 };
