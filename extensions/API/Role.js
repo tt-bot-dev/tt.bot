@@ -1,22 +1,22 @@
 let Guild;
 process.nextTick(() => {
     Guild = require("./Guild");
-}) 
+})
+const Base = require("./Base");
 const r = require("../Utils/InterceptReason");
-class Role {
-    constructor(role) {
+class Role extends Base {
+    constructor(extension, role) {
+        super(extension, role);
         this.color = role.color;
-        this.createdAt = role.createdAt;
 
         Object.defineProperty(this, "guild", {
             get: function () {
                 const Guild = require("./Guild");
-                return new Guild(role.guild);
+                return new Guild(extension, role.guild);
             },
             configurable: true
         })
         this.hoist = role.hoist;
-        this.id = role.id;
         this.managed = role.managed;
         this.mention = role.mention;
         this.mentionable = role.mentionable;
@@ -26,14 +26,14 @@ class Role {
 
         Object.defineProperty(this, "delete", {
             value: function (reason) {
-                return role.delete(r(reason)).then(() => true).catch(() => false);
+                return role.delete(r(extension, reason)).then(() => true).catch(() => false);
             },
             configurable: true
         });
 
         Object.defineProperty(this, "edit", {
             value: function (options, reason) {
-                return role.edit(options, r(reason)).then(r => new Role(r)).catch(() => false);
+                return role.edit(options, r(extension, reason)).then(r => new Role(r)).catch(() => false);
             },
             configurable: true
         })

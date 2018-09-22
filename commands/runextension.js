@@ -3,7 +3,11 @@ const ExtensionRunner = require("../extensions/Runner");
 module.exports = {
     exec: async function (msg, args) {
 
-        let { error:err } = ExtensionRunner(msg, bot, args);
+        let { error: err } = ExtensionRunner(msg, bot, args, {
+            id: "eval",
+            name: "Evaluated extension",
+            data: {}
+        });
         let overall;
         if (err && typeof err !== "string") {
             overall = require("util").inspect(err);

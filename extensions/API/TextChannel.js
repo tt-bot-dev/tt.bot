@@ -8,11 +8,11 @@ const resolveUser = require("../Utils/ResolveUserID");
 const r = require("../Utils/InterceptReason");
 
 class TextChannel extends Channel {
-    constructor(channel) {
-        super(channel);
+    constructor(extension, channel) {
+        super(extension, channel);
         Object.defineProperty(this, "lastMessage", {
             get: function() {
-                return new Message(channel.messages.get(channel.lastMessageID));
+                return new Message(extension, channel.messages.get(channel.lastMessageID));
             }
         });
         this.lastPinTimestamp = channel.lastPinTimestamp;
@@ -20,7 +20,7 @@ class TextChannel extends Channel {
         Object.defineProperty(this, "messages", {
             get: function () {
                 const coll = new Collection(Message);
-                channel.messages.forEach(m => coll.add(m));
+                channel.messages.forEach(m => coll.add(new Message(extension, m)));
                 return coll;
             },
             configurable: true
@@ -38,7 +38,7 @@ class TextChannel extends Channel {
 
         Object.defineProperty(this, "createInvite", {
             value: function (options, reason) {
-                return channel.createInvite(options, r(reason)).then(i => new Invite(i)).catch(() => false);
+                return channel.createInvite(options, r(extension, reason)).then(i => new Invite(i)).catch(() => false);
             },
             configurable: true
         })
@@ -52,7 +52,7 @@ class TextChannel extends Channel {
 
         Object.defineProperty(this, "createWebhook", {
             value: function (options, reason) {
-                return channel.createWebhook(options, r(reason)).then(o => o).catch(() => false);
+                return channel.createWebhook(options, r(extension, reason)).then(o => o).catch(() => false);
             },
             configurable: true
         })
@@ -60,7 +60,7 @@ class TextChannel extends Channel {
         Object.defineProperty(this, "deleteMessage", {
             value: function (message, reason) {
                 message = resolveMsg(message);
-                return channel.deleteMessage(message, r(reason)).then(() => true).catch(() => false);
+                return channel.deleteMessage(message, r(extension, reason)).then(() => true).catch(() => false);
             },
             configurable: true
         })
@@ -76,21 +76,21 @@ class TextChannel extends Channel {
         Object.defineProperty(this, "editMessage", {
             value: function (message, content) {
                 message = resolveMsg(message);
-                return channel.editMessage(message, content).then(m => new Message(m)).catch(() => false);
+                return channel.editMessage(message, content).then(m => new Message(extension, m)).catch(() => false);
             },
             configurable: true
         })
 
         Object.defineProperty(this, "getInvites", {
             value: function () {
-                return channel.getInvites().then(i => i.map(inv => new Invite(inv))).catch(() => false);
+                return channel.getInvites().then(i => i.map(inv => new Invite(extension, inv))).catch(() => false);
             },
             configurable: true
         })
 
         Object.defineProperty(this, "getMessage", {
             value: function (id) {
-                return channel.getMessage(id).then(m => new Message(m)).catch(() => false);
+                return channel.getMessage(id).then(m => new Message(extension, m)).catch(() => false);
             },
             configurable: true
         })
@@ -98,21 +98,21 @@ class TextChannel extends Channel {
         Object.defineProperty(this, "getMessageReaction", {
             value: function (id, reaction, limit, before, after) {
                 id = resolveMsg(id);
-                return channel.getMessageReaction(id, reaction, limit, before, after).then(u => u.map(u => new User(u))).catch(() => false);
+                return channel.getMessageReaction(id, reaction, limit, before, after).then(u => u.map(u => new User(extension, u))).catch(() => false);
             },
             configurable: true
         })
 
         Object.defineProperty(this, "getMessages", {
             value: function (limit, before, after, around) {
-                return channel.getMessages(limit, before, after, around).then(m => m.map(m => new Message(m))).catch(() => false);
+                return channel.getMessages(limit, before, after, around).then(m => m.map(m => new Message(extension, m))).catch(() => false);
             },
             configurable: true
         })
 
         Object.defineProperty(this, "getPins", {
             value: function () {
-                return channel.getPins().then(m => m.map(m => new Message(m))).catch(() => false);
+                return channel.getPins().then(m => m.map(m => new Message(extension, m))).catch(() => false);
             },
             configurable: true
         })
@@ -127,7 +127,7 @@ class TextChannel extends Channel {
         Object.defineProperty(this, "purge", {
             value: function (limit, filter, before, after) {
                 if(!filter) filter = () => true;
-                return channel.purge(limit, m => filter(new Message(m)), before, after).then(n => n).catch(() => false);
+                return channel.purge(limit, m => filter(new Message(extension, m)), before, after).then(n => n).catch(() => false);
             },
             configurable: true
         })

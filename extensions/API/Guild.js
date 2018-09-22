@@ -7,6 +7,7 @@ const { ChannelTypes } = require("./Constants");
 const User = require("./User");
 const Invite = require("./Invite");
 const Member = require("./Member");
+const Base = require("./Base")
 let TextChannel, VoiceChannel, CategoryChannel, Role, GuildAuditLogEntry, Channel;
 process.nextTick(() => {
     CategoryChannel = class {}
@@ -16,11 +17,11 @@ process.nextTick(() => {
     GuildAuditLogEntry = require("./GuildAuditLogEntry");
     Channel = require("./Channel")
 })
-class Guild {
-    constructor(guild) {
+class Guild extends Base {
+    constructor(extension, guild) {
+        super(extension, guild);
         this.afkChannelID = guild.afkChannelID;
         this.afkTimeout = guild.afkTimeout;
-        this.createdAt = guild.createdAt;
         Object.defineProperty(this, "channels", {
             get: function () {
                 const coll = new Collection(Channel);
@@ -29,7 +30,7 @@ class Guild {
                     if (ch instanceof tc) ch = TextChannel;
                     else if (ch instanceof vc) ch = VoiceChannel;
                     else if (ch instanceof cc) ch = CategoryChannel;
-                    coll.add(new ch(c));
+                    coll.add(new ch(extension, c));
                 });
                 return coll;
             }
@@ -40,7 +41,6 @@ class Guild {
         this.features = guild.features;
         this.icon = guild.icon;
         this.iconURL = guild.iconURL;
-        this.id = guild.id;
         this.joinedAt = guild.joinedAt;
         this.large = guild.large;
         this.memberCount = guild.memberCount;
@@ -48,7 +48,7 @@ class Guild {
             get: function () {
                 const coll = new Collection(Member);
                 guild.members.forEach(m => {
-                    coll.add(new Member(m));
+                    coll.add(new Member(extension, m));
                 })
                 return coll;
             },
@@ -56,7 +56,7 @@ class Guild {
         })
         Object.defineProperty(this, "me", {
             get: function () {
-                return new Member(guild.members.get(guild.shard.client.user.id));
+                return new Member(extension, guild.members.get(guild.shard.client.user.id));
             },
             configurable: true
         })
@@ -65,7 +65,7 @@ class Guild {
         this.ownerID = guild.ownerID;
         Object.defineProperty(this, "owner", {
             get: function () {
-                return new Member(guild.members.get(guild.ownerID));
+                return new Member(extension, guild.members.get(guild.ownerID));
             },
             configurable: true
         })
@@ -73,15 +73,14 @@ class Guild {
             get: function () {
                 const coll = new Collection(Role);
                 guild.roles.forEach(m => {
-                    coll.add(new Role(m));
+                    coll.add(new Role(extension, m));
                 })
                 return coll;
             },
             configurable: true
         });
         this.splash = guild.splash;
-        this.systemChannelID = guild.systemChannelID;
-        this.joinMessageChannelID = this.systemChannelID;
+        this.systemChannelID = this.joinMessageChannelID = guild.systemChannelID;
         this.unavailable = guild.unavailable;
         this.verificationLevel = guild.verificationLevel;
 
@@ -89,7 +88,7 @@ class Guild {
             value: function (member, role, reason) {
                 member = ResolveUserID(member);
                 role = ResolveRoleID(role);
-                return guild.addMemberRole(member, role, r(reason)).then(() => true).catch(() => false);
+                return guild.addMemberRole(member, role, r(extension, reason)).then(() => true).catch(() => false);
             },
             configurable: true
         })
@@ -97,7 +96,7 @@ class Guild {
         Object.defineProperty(this, "banMember", {
             value: function (user, deleteMessageDays, reason) {
                 user = ResolveUserID(user);
-                return guild.banMember(user, deleteMessageDays, r(reason)).then(() => true).catch(() => false);
+                return guild.banMember(user, deleteMessageDays, r(extension, reason)).then(() => true).catch(() => false);
             },
             configurable: true
         })
@@ -107,10 +106,10 @@ class Guild {
                 // We don't need to send a request for an invalid type, right?
                 if (type !== ChannelTypes.text && type !== ChannelTypes.voice && type !== ChannelTypes.category) return Promise.reject(false);
                 parent = ResolveChannelID(parent);
-                return guild.createChannel(name, type, r(reason), parent).then(c => {
-                    if (c instanceof tc) return new TextChannel(c);
-                    if (c instanceof vc) return new VoiceChannel(c);
-                    if (c instanceof cc) return new CategoryChannel(c);
+                return guild.createChannel(name, type, r(extension, reason), parent).then(c => {
+                    if (c instanceof tc) return new TextChannel(extension, c);
+                    if (c instanceof vc) return new VoiceChannel(extension, c);
+                    if (c instanceof cc) return new CategoryChannel(extension, c);
                     // Whatever, we do not speak that
                     return false;
                 }).catch(() => false);
@@ -121,21 +120,21 @@ class Guild {
             value: function (options, reason) {
                 const o = Object.assign({}, options); // Let their options be
                 if (o.roles) o.roles = o.roles.map(r => ResolveRoleID(r));
-                return guild.createEmoji(o, r(reason)).then(e => e).catch(() => false);
+                return guild.createEmoji(o, r(extension, reason)).then(e => e).catch(() => false);
             },
             configurable: true
         })
 
         Object.defineProperty(this, "createRole", {
             value: function (options, reason) {
-                return guild.createRole(options, r(reason)).then(r => new Role(r)).catch(() => false);
+                return guild.createRole(options, r(extension, reason)).then(r => new Role(extension, r)).catch(() => false);
             },
             configurable: true
         })
 
         Object.defineProperty(this, "deleteEmoji", {
             value: function (emojiID, reason) {
-                return guild.deleteEmoji(emojiID, r(reason)).then(() => true).catch(() => false);
+                return guild.deleteEmoji(emojiID, r(extension, reason)).then(() => true).catch(() => false);
             },
             configurable: true
         })
@@ -143,7 +142,7 @@ class Guild {
         Object.defineProperty(this, "deleteRole", {
             value: function (role, reason) {
                 role = ResolveRoleID(role);
-                return guild.deleteRole(role, r(reason)).then(() => true).catch(() => false);
+                return guild.deleteRole(role, r(extension, reason)).then(() => true).catch(() => false);
             },
             configurable: true
         })
@@ -157,14 +156,14 @@ class Guild {
 
         Object.defineProperty(this, "edit", {
             value: function (options, reason) {
-                return guild.edit(options, r(reason)).then(g => new Guild(g)).catch(() => false);
+                return guild.edit(options, r(extension, reason)).then(g => new Guild(extension, g)).catch(() => false);
             },
             configurable: true
         });
 
         Object.defineProperty(this, "editEmoji", {
             value: function (emojiID, options, reason) {
-                return guild.editEmoji(emojiID, options, r(reason)).then(o => o).catch(() => false);
+                return guild.editEmoji(emojiID, options, r(extension, reason)).then(o => o).catch(() => false);
             },
             configurable: true
         })
@@ -174,7 +173,7 @@ class Guild {
                 member = ResolveUserID(member);
                 const o = Object.assign({}, options); // Let their options be
                 if (o.roles) o.roles = o.roles.map(r => ResolveRoleID(r));
-                return guild.editMember(member, o, r(reason)).then(() => true).catch(() => false);
+                return guild.editMember(member, o, r(extension, reason)).then(() => true).catch(() => false);
             },
             configurable: true
         })
@@ -189,7 +188,7 @@ class Guild {
         Object.defineProperty(this, "editRole", {
             value: function (role, options, reason) {
                 role = ResolveRoleID(role);
-                return guild.editRole(role, options, r(reason)).then(r => new Role(r)).catch(() => false);
+                return guild.editRole(role, options, r(extension, reason)).then(r => new Role(extension, r)).catch(() => false);
             },
             configurable: true
         })
@@ -197,8 +196,8 @@ class Guild {
         Object.defineProperty(this, "getAuditLogs", {
             value: function (limit, before, actionType) {
                 return guild.getAuditLogs(limit, before, actionType).then(({ users, entries }) => ({
-                    users: users.map(u => new User(u)),
-                    entries: entries.map(e => new GuildAuditLogEntry(e))
+                    users: users.map(u => new User(extension, u)),
+                    entries: entries.map(e => new GuildAuditLogEntry(extension, e))
                 })).catch(() => false);
             },
             configurable: true
@@ -209,7 +208,7 @@ class Guild {
                 user = ResolveUserID(user);
                 return guild.getBan(user).then(({ reason, user }) => ({
                     reason,
-                    user: new User(user)
+                    user: new User(extension, user)
                 })).catch(() => false);
             },
             configurable: true
@@ -219,7 +218,7 @@ class Guild {
             value: function () {
                 return guild.getBans().then(u => u.map(({ reason, user }) => ({
                     reason,
-                    user: new User(user)
+                    user: new User(extension, user)
                 }))).catch(() => false);
             },
             configurable: true
@@ -227,7 +226,7 @@ class Guild {
 
         Object.defineProperty(this, "getInvites", {
             value: function () {
-                return guild.getInvites().then(i => i.map(inv => new Invite(inv))).catch(() => false);
+                return guild.getInvites().then(i => i.map(inv => new Invite(extension, inv))).catch(() => false);
             },
             configurable: true
         })
@@ -249,14 +248,14 @@ class Guild {
         Object.defineProperty(this, "kickMember", {
             value: function (user, reason) {
                 user = ResolveUserID(user);
-                return guild.kickMember(user, r(reason)).then(() => true).catch(() => false);
+                return guild.kickMember(user, r(extension, reason)).then(() => true).catch(() => false);
             },
             configurable: true
         })
 
         Object.defineProperty(this, "pruneMembers", {
             value: function (days, reason) {
-                return guild.pruneMembers(days, r(reason)).then(n => n).catch(() => false);
+                return guild.pruneMembers(days, r(extension, reason)).then(n => n).catch(() => false);
             },
             configurable: true
         })
@@ -265,7 +264,7 @@ class Guild {
             value: function (member, role, reason) {
                 member = ResolveUserID(member);
                 role = ResolveRoleID(role);
-                return guild.removeMemberRole(member, role, r(reason)).then(() => true).catch(() => false);
+                return guild.removeMemberRole(member, role, r(extension, reason)).then(() => true).catch(() => false);
             },
             configurable: true
         })
@@ -273,7 +272,7 @@ class Guild {
         Object.defineProperty(this, "unbanMember", {
             value: function (user, reason) {
                 user = ResolveUserID(user);
-                return guild.unbanMember(user, r(reason)).then(() => true).catch(() => false);
+                return guild.unbanMember(user, r(extension, reason)).then(() => true).catch(() => false);
             },
             configurable: true
         })

@@ -1,14 +1,14 @@
 const Message = require("./Message");
-class User {
-    constructor(user) {
+const Base = require("./Base");
+class User extends Base {
+    constructor(extension, user) {
+        super(extension, user);
         this.avatar = user.avatar;
         this.avatarURL = user.avatarURL;
         this.bot = user.bot;
-        this.createdAt = user.createdAt;
         this.defaultAvatar = user.defaultAvatar;
         this.defaultAvatarURL = user.defaultAvatarURL;
         this.discriminator = user.discriminator;
-        this.id = user.id;
         this.mention = user.mention;
         this.staticAvatarURL = user.staticAvatarURL;
         this.username = user.username;
@@ -25,7 +25,7 @@ class User {
             value: function (content, file) {
                 // Save us a request
                 if (this.bot) return Promise.reject(false);
-                return user.getDMChannel().then(dm => dm.createMessage(content, file)).then(m => new Message(m)).catch(() => false);
+                return user.getDMChannel().then(dm => dm.createMessage(content, file)).then(m => new Message(extension, m)).catch(() => false);
             },
             configurable: true
         })

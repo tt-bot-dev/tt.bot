@@ -1,19 +1,21 @@
 const Guild = require("./Guild");
 const resolveId = require("../Utils/ResolveUserID");
 const InterceptReason = require("../Utils/InterceptReason");
+const Base = require("./Base");
 let TextChannel, Member, User;
 process.nextTick(() => {
     TextChannel= require("./TextChannel");
     Member = require("./Member");
     User = require("./User")
 })
-class Message {
-    constructor(msg) {
+class Message extends Base {
+    constructor(extension, msg) {
+        super(extension, msg);
         this.attachments = msg.attachments;
         this.author = new User(msg.author);
         Object.defineProperty(this, "channel", {
             get: function () {
-                return new TextChannel(msg.channel);
+                return new TextChannel(extension, msg.channel);
             },
             configurable: true
         })
@@ -22,11 +24,10 @@ class Message {
         this.content = msg.content;
         this.editedTimestamp = msg.editedTimestamp;
         this.embeds = msg.embeds;
-        this.guild = new Guild(msg.guild);
-        this.id = msg.id;
-        this.member = new Member(msg.member);
+        this.guild = new Guild(extension, msg.guild);
+        this.member = new Member(extension, msg.member);
         this.mentionEveryone = msg.mentionEveryone;
-        this.mentions = msg.mentions.map(u => new User(u));
+        this.mentions = msg.mentions.map(u => new User(extension, u));
         this.mentionsMembers = msg.mentions.map(u => this.guild.members.get(u))
         this.pinned = msg.pinned;
         this.reactions = msg.reactions;
@@ -37,7 +38,7 @@ class Message {
 
         Object.defineProperty(this, "delete", {
             value: function (reason) {
-                return msg.delete(InterceptReason(reason)).then(() => true).catch(() => false);
+                return msg.delete(InterceptReason(extension, reason)).then(() => true).catch(() => false);
             },
             configurable: true
         })
@@ -59,7 +60,7 @@ class Message {
         Object.defineProperty(this, "getReaction", {
             value: function (reaction, limit, before, after) {
                 if (before && after) return Promise.reject(false);
-                return msg.getReaction(reaction, limit, before, after).then(u => u.map(user => new User(user))).catch(() => false);
+                return msg.getReaction(reaction, limit, before, after).then(u => u.map(user => new User(extension, user))).catch(() => false);
             },
             configurable: true
         })
@@ -88,14 +89,14 @@ class Message {
 
         Object.defineProperty(this, "edit", {
             value: function (content) {
-                return msg.edit(content).then(m => new Message(m)).catch(() => false);
+                return msg.edit(content).then(m => new Message(extension, m)).catch(() => false);
             },
             configurable: true
         })
 
         Object.defineProperty(this, "reply", {
             value: function (...args) {
-                return msg.channel.createMessage(...args).then(m => new Message(m)).catch(() => false);
+                return msg.channel.createMessage(...args).then(m => new Message(extension, m)).catch(() => false);
             },
             configurable: true
         })

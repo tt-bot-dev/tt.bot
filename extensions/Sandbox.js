@@ -10,12 +10,13 @@ const Member = require("./API/Member");
 const Role = require("./API/Role");
 const TextChannel = require("./API/TextChannel")
 const Constants = require("./API/Constants");
+const Extension = require("./API/Extension");
 
-module.exports = (msg, bot) => {
-
+module.exports = (msg, bot, {id, name, data}) => {
+    const extStruct = new Extension(id, name, data);
     class Bot {
         constructor() {
-            this.user = new User(bot.user);
+            this.user = new User(extStruct, bot.user);
         }
 
         get guilds() {
@@ -29,11 +30,12 @@ module.exports = (msg, bot) => {
 
     const instance = {
         bot: new Bot(),
-        message: new Message(msg),
-        guild: new Guild(msg.guild),
-        channel: new TextChannel(msg.channel),
-        member: new Member(msg.member),
-        author: new User(msg.author),
+        message: new Message(extStruct, msg),
+        guild: new Guild(extStruct, msg.guild),
+        channel: new TextChannel(extStruct, msg.channel),
+        member: new Member(extStruct, msg.member),
+        author: new User(extStruct, msg.author),
+        extension: extStruct,
         Constants,
         Types: {
             User, Message, Guild, GuildAuditLogEntry, Channel, Invite, Member, Role, TextChannel

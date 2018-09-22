@@ -1,35 +1,37 @@
+const Base = require("./Base");
 const User = require("./User");
 const Guild = require("./Guild")
 const Invite = require("./Invite");
 const { TextChannel: tc, VoiceChannel: vc, CategoryChannel: cc, Member: m, Role: r, Invite: i } = require("eris");
 const { AuditLogActions } = require("./Constants");
-class GuildAuditLogEntry {
-    constructor(entry) {
+class GuildAuditLogEntry extends Base {
+    constructor(extension, entry) {
+        super(extension, entry);
         this.id = entry.id;
-        this.guild = new Guild(entry.guild);
+        this.guild = new Guild(extension, entry.guild);
 
         this.actionType = entry.actionType;
         this.reason = entry.reason;
-        this.user = new User(entry.user);
+        this.user = new User(extension, entry.user);
         this.before = entry.before;
         this.after = entry.after;
         this.targetID = entry.targetID;
         this.count = entry.count;
         if (entry.channel) {
-            if (entry.channel instanceof tc) this.channel = new TextChannel(entry.channel);
-            else if (entry.channel instanceof vc) this.channel = new VoiceChannel(entry.channel);
-            else if (entry.channel instanceof cc) this.channel = new CategoryChannel(entry.channel);
+            if (entry.channel instanceof tc) this.channel = new TextChannel(extension, entry.channel);
+            else if (entry.channel instanceof vc) this.channel = new VoiceChannel(extension, entry.channel);
+            else if (entry.channel instanceof cc) this.channel = new CategoryChannel(extension, entry.channel);
             else this.channel = null; // We do not speak that
         }
         this.deleteMemberDays = entry.deleteMemberDays;
         if (entry.member) {
             if (!(entry.member instanceof m)) this.member = entry.member;
-            else this.member = new Member(entry.member);
+            else this.member = new Member(extension, entry.member);
         }
 
         if (entry.role) {
             if (!(entry.role instanceof r)) this.role = entry.role;
-            else this.role = new Role(entry.role);
+            else this.role = new Role(extension, entry.role);
         }
 
         /*
@@ -45,7 +47,7 @@ class GuildAuditLogEntry {
                 else if (this.actionType < 50) {
                     const changes = this.actionType == AuditLogActions.INVITE_DELETE ? this.before : this.after;
                     // Poor man's solution
-                    return new Invite(new i({
+                    return new Invite(extension, new i({
                         code: changes.code,
                         channel: changes.channel,
                         guild: this.guild,
@@ -53,10 +55,10 @@ class GuildAuditLogEntry {
                         max_uses: changes.max_uses,
                         max_age: changes.max_age,
                         temporary: changes.temporary
-                    }, entry.guild && entry.guild.shard.client))
+                    }))
                 } else if (this.actionType < 60) return null;
                 else if (this.actionType < 70) return this.guild && this.guild.emojis.find(p => p.id === this.targetID)
-                else if (this.actionType < 80) return this.guild && new User(entry.guild.shard.client.users.get(this.targetID));
+                else if (this.actionType < 80) return this.guild && new User(extension, entry.guild.shard.client.users.get(this.targetID));
                 else throw new Error(`Unrecognized action type: ${this.actionType}`);
             },
             configurable: true

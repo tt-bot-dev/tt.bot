@@ -1,1 +1,1 @@
-module.exports = r => `(done using an extension) ${r || "reason not specified"}`
+module.exports = (extension, r) => `Extension ID ${extension.id}: ${r || "reason not specified"}`

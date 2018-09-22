@@ -5,8 +5,8 @@ const Member = require("./Member");
 const r = require("../Utils/InterceptReason");
 
 class VoiceChannel extends Channel {
-    constructor(channel) {
-        super(channel);
+    constructor(extension, channel) {
+        super(extension, channel);
         this.bitrate = channel.bitrate;
         this.userLimit = channel.userLimit;
 
