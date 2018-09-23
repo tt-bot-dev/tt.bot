@@ -21,13 +21,13 @@ class VoiceChannel extends Channel {
 
         Object.defineProperty(this, "createInvite", {
             value: function (options, reason) {
-                return channel.createInvite(options, r(reason)).then(i => new Invite(i)).catch(() => false);
+                return channel.createInvite(options, r(extension, reason)).then(i => new Invite(extension, i)).catch(() => false);
             },
             configurable: true
         })
         Object.defineProperty(this, "getInvites", {
             value: function () {
-                return channel.getInvites().then(i => i.map(inv => new Invite(inv))).catch(() => false);
+                return channel.getInvites().then(i => i.map(inv => new Invite(extension, inv))).catch(() => false);
             },
             configurable: true
         })

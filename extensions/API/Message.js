@@ -12,7 +12,7 @@ class Message extends Base {
     constructor(extension, msg) {
         super(extension, msg);
         this.attachments = msg.attachments;
-        this.author = new User(msg.author);
+        this.author = new User(extension, msg.author);
         Object.defineProperty(this, "channel", {
             get: function () {
                 return new TextChannel(extension, msg.channel);
@@ -28,7 +28,7 @@ class Message extends Base {
         this.member = new Member(extension, msg.member);
         this.mentionEveryone = msg.mentionEveryone;
         this.mentions = msg.mentions.map(u => new User(extension, u));
-        this.mentionsMembers = msg.mentions.map(u => this.guild.members.get(u))
+        this.mentionsMembers = msg.mentions.map(u => this.guild.members.get(u));
         this.pinned = msg.pinned;
         this.reactions = msg.reactions;
         this.roleMentions = msg.roleMentions.map(r => this.guild.roles.get(r));

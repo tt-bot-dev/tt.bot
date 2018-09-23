@@ -18,7 +18,7 @@ class Channel extends Base {
     constructor(extension, channel) {
         super(extension, channel);
         Object.defineProperty(this, "guild", {
-            get:function () {
+            get: function () {
                 return new Guild(extension, channel.guild);
             },
             configurable: true

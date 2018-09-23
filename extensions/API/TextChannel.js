@@ -45,7 +45,7 @@ class TextChannel extends Channel {
 
         Object.defineProperty(this, "createMessage", {
             value: function (content, file) {
-                return channel.createMessage(content, file).then(m => new Message(m)).catch(() => false);
+                return channel.createMessage(content, file).then(m => new Message(extension, m)).catch(() => false);
             },
             configurable: true
         })

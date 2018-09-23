@@ -11,7 +11,6 @@ class Role extends Base {
 
         Object.defineProperty(this, "guild", {
             get: function () {
-                const Guild = require("./Guild");
                 return new Guild(extension, role.guild);
             },
             configurable: true

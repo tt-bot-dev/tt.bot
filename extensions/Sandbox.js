@@ -3,11 +3,7 @@
 const User = require("./API/User");
 const Message = require("./API/Message");
 const Guild = require("./API/Guild");
-const GuildAuditLogEntry = require("./API/GuildAuditLogEntry");
-const Channel = require("./API/Channel");
-const Invite = require("./API/Invite");
 const Member = require("./API/Member");
-const Role = require("./API/Role");
 const TextChannel = require("./API/TextChannel")
 const Constants = require("./API/Constants");
 const Extension = require("./API/Extension");
@@ -37,9 +33,6 @@ module.exports = (msg, bot, {id, name, data}) => {
         author: new User(extStruct, msg.author),
         extension: extStruct,
         Constants,
-        Types: {
-            User, Message, Guild, GuildAuditLogEntry, Channel, Invite, Member, Role, TextChannel
-        }
     }
 
     return {
