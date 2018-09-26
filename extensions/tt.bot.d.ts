@@ -57,6 +57,8 @@ declare module "tt.bot" {
         user: User;
         get guilds(): number;
         get users(): number;
+        passesRoleHierarchy(member1: Member, member2: Member): boolean;
+        waitForMessage(channel: GuildChannel, author: UserResolvable, check: (msg: Message) => boolean, timeout: number): Promise<Message|Error|string>
     }
 
     class Message {

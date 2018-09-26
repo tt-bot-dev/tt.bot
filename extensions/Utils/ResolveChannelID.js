@@ -1,15 +1,17 @@
-const User = require("../API/User");
-const Member = require("../API/Member");
+const Channel = require("../API/Channel");
+const CategoryChannel = require("../API/CategoryChannel");
+const TextChannel = require("../API/TextChannel");
+const VoiceChannel = require("../API/VoiceChannel");
 const {getPrototypeOf} = Object;
 /** Resolves an ID from a provided object
- * @param {Message|User|Member} object User, Member, or Message object
+ * @param {Channel} object A channel
  * @returns {String} The ID or passed argument if the object is not one of above objects.
  */
 function resolveUserId(object) {
-    const Message = require("../API/Message")
-    if (getPrototypeOf(object) === Message.prototype) return object.author.id;
-    if (getPrototypeOf(object) === User.prototype) return object.id;
-    if (getPrototypeOf(object) === Member.prototype) return object.id;
+    if (getPrototypeOf(object) === Channel.prototype) return object.id;
+    if (getPrototypeOf(object) === CategoryChannel.prototype) return object.id;
+    if (getPrototypeOf(object) === TextChannel.prototype) return object.id;
+    if (getPrototypeOf(object) === VoiceChannel.prototype) return object.id;
     return object;
 }
 module.exports = resolveUserId;
