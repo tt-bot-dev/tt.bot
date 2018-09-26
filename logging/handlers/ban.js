@@ -4,7 +4,6 @@ module.exports = async function (config, guild, user, unban) {
         a = await guild.getAuditLogs(50, null, unban ? 23 : 22);
     }
     catch (err) {
-        console.error(err);
         a = null;
     }
     const fields = [];
@@ -32,7 +31,6 @@ module.exports = async function (config, guild, user, unban) {
             }
         });
     } catch(_) {
-        console.error(_);
         return;
     }
 };

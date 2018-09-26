@@ -110,6 +110,7 @@ class ModLog {
 
         if (!dataobj) throw "Item not found";
         dataobj.reason = newReason;
+        if (!dataobj.userID) dataobj.userID = msg.author.id;
         await this.updateMessage(dataobj.messageID, dataobj, msg);
         await db.table("modlog").get(guildID).update({items});
     }
