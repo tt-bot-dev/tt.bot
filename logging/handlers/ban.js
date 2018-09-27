@@ -18,8 +18,9 @@ module.exports = async function (config, guild, user, unban) {
             value: entry.reason || "None"
         });
     }
+    if (!guild.channels.has(config.logChannel)) return;
     try {
-        await bot.createMessage(config.logChannel, {
+        await guild.channels.get(config.logChannel).createMessage({
             embed: {
                 author: {
                     name: `${bot.getTag(user)} (${user.id})`,

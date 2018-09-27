@@ -1,6 +1,7 @@
 module.exports = async function (config, msg) {
+    if (!msg.channel.guild.channels.has(config.logChannel)) return;
     try {
-        await bot.createMessage(config.logChannel, {
+        await msg.channel.guild.channels.get(config.logChannel).createMessage({
             embed: {
                 title: "Unknown message deleted",
                 fields: [{

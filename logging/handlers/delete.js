@@ -1,6 +1,7 @@
 module.exports = async function (config, msg) {
+    if (!msg.guild.channels.has(config.logChannel)) return;
     try {
-        await bot.createMessage(config.logChannel, {
+        await msg.guild.channels.get(config.logChannel).createMessage({
             embed: {
                 author: {
                     name: `${bot.getTag(msg.author)} (${msg.author.id})`,
