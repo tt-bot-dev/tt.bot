@@ -58,9 +58,18 @@ module.exports = {
         try {
             if (options.from && options.from != "bots") options.from = await userQuery(options.from, msg, true);
             if (options.mentions) options.mentions = await userQuery(options.mentions, msg, true);
-            let oldestSnowflakeAllowed = getOldestSnowflake();
-            let msgCount = () => { if (options.messages) { if (isNaN(options.messages)) return 100; else return options.messages; } else return 100; };
-            let mss = await msg.channel.getMessages(msgCount());
+            const m = await msg.channel.createMessage(msg.t("CLEAR_CONFIRM"));
+            const r = await yN(msg, true);
+            await Promise.all([m.delete(), msg.delete(), r.msg.delete()]);
+            if (!r.response) {
+                const mok = await msg.channel.createMessage(msg.t("OP_CANCELLED"));
+                setTimeout(async () => await mok.delete(), 2000);
+                return;
+            }
+
+            const oldestSnowflakeAllowed = getOldestSnowflake();
+            const msgCount = () => { if (options.messages) { if (isNaN(options.messages)) return 100; else return options.messages; } else return 100; };
+            const mss = await msg.channel.getMessages(msgCount());
             function matchesCriteriaContaining(m) {
                 if (!options.contains) return true;
                 if (options.contains && m.content.toLowerCase().includes(options.contains.toLowerCase())) return true;
@@ -77,26 +86,15 @@ module.exports = {
                 if (options.from && m.author.id == options.from.id) return true;
                 else return false;
             }
-            let callAll = m => options.invert ? !(matchesCriteriaContaining(m) && matchesCriteriaFrom(m) && matchesCriteriaMentions(m)) : (matchesCriteriaContaining(m) && matchesCriteriaFrom(m) && matchesCriteriaMentions(m));
-            let msgs = mss.filter(callAll);
-            let msgIDs = msgs.map(m => m.id);
-            let filteredMsgIDs = msgIDs.filter(fn => {
+            const callAll = m => options.invert ? !(matchesCriteriaContaining(m) && matchesCriteriaFrom(m) && matchesCriteriaMentions(m)) : (matchesCriteriaContaining(m) && matchesCriteriaFrom(m) && matchesCriteriaMentions(m));
+            const msgs = mss.filter(callAll);
+            const msgIDs = msgs.map(m => m.id);
+            const filteredMsgIDs = msgIDs.filter(fn => {
                 if (fn < oldestSnowflakeAllowed) return false;
                 else return true;
             });
-            const m = await msg.channel.createMessage(msg.t("CLEAR_CONFIRM"));
-            const r = await yN(msg, true);
-            await m.delete();
-            await msg.delete();
-            await r.msg.delete();
-            if (!r.response) {
-                const mok = await msg.channel.createMessage(msg.t("OP_CANCELLED"));
-                setTimeout(async () => await mok.delete(), 2000);
-                return;
-            }
-
             await msg.channel.deleteMessages(filteredMsgIDs);
-            let msgOK = await msg.channel.createMessage(msg.t("CLEAR_DONE", filteredMsgIDs.length));
+            const msgOK = await msg.channel.createMessage(msg.t("CLEAR_DONE", filteredMsgIDs.length));
             setTimeout(async () => await msgOK.delete(), 2000);
         } catch (err) {
             await msg.channel.createMessage(msg.t("MISSING_PERMISSIONS"));
