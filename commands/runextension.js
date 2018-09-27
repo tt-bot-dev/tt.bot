@@ -12,7 +12,7 @@ module.exports = {
         if (err && typeof err !== "string") {
             overall = require("util").inspect(err);
         } else if (err) overall = err;
-        else overall = "Ran successfully!"
+        else overall = "Ran successfully!";
         const censor = new CensorBuilder();
         let data = `\`\`\`js\n${overall.replace(censor.build(), "jako rilý?")}\n\`\`\``;
         if (data.length > 2048) {

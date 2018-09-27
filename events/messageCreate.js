@@ -40,7 +40,7 @@ module.exports = async function (msg) {
 
     if ((server && msg.content.toLowerCase().startsWith(server.prefix.toLowerCase())) || msg.content.toLowerCase().startsWith(config.prefix.toLowerCase())) { // if the content starts with the prefix
         let [cmdName, ...argumentArr] = ((server && msg.content.startsWith(server.prefix)) ? msg.content.slice(server.prefix.length) : msg.content.slice(config.prefix.length)).split(" "); // we slice it so we can get the command
-        let args = argumentArr.join(" ") // we determine arguments
+        let args = argumentArr.join(" "); // we determine arguments
         let cmdAlias = cmdAliases[cmdName.toLowerCase()];
         try {
             let cmd = cmds[cmdName.toLowerCase()]; // we load it from object
@@ -69,17 +69,20 @@ ${args ? `    Arguments   ${args}` : ""}
                     id: extension.id,
                     name: extension.name,
                     data: store ? Object.assign({}, JSON.parse(store.store), {id: store.id, guildID: msg.guild.id}) : null
-                })
+                }, {
+                    prefix: server.prefix || config.prefix,
+                    trigger: cmdName.toLowerCase(), args
+                });
                 if (error) msg.channel.createMessage({
-                        embed: {
-                            color: 0xFF0000,
-                            title: msg.t("OOPS"),
-                            description: msg.t("ERROR", error),
-                            footer: {
-                                text: `Extension ${extension.name} (ID ${extension.id})`
-                            }
+                    embed: {
+                        color: 0xFF0000,
+                        title: msg.t("OOPS"),
+                        description: msg.t("ERROR", error),
+                        footer: {
+                            text: `Extension ${extension.name} (ID ${extension.id})`
                         }
-                    })
+                    }
+                });
             }
         } catch (err) {
             console.error(err); // if an error is thrown, we log it.

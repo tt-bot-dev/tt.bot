@@ -268,7 +268,7 @@ ConfigMenu.emojiPropMap = {
 ConfigMenu.HOME = "🏠";
 ConfigMenu.DISABLE = "❌";
 module.exports = {
-    exec: async function (msg, args) {
+    exec: async function (msg) {
         async function makeCfg() {
             await db.table("configs").insert({
                 id: msg.guild.id,

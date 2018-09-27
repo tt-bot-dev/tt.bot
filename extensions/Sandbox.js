@@ -10,7 +10,7 @@ const Extension = require("./API/Extension");
 const ResolveUserID = require("./Utils/ResolveUserID");
 const ResolveChannelID = require("./Utils/ResolveChannelID")
 
-module.exports = (msg, bot, { id, name, data }) => {
+module.exports = (msg, bot, { id, name, data }, { prefix, trigger, args }) => {
     const extStruct = new Extension(id, name, data);
     class Bot {
         constructor() {
@@ -62,6 +62,9 @@ module.exports = (msg, bot, { id, name, data }) => {
         author: new User(extStruct, msg.author),
         extension: extStruct,
         Constants,
+        command: {
+            prefix, trigger, args
+        }
     }
 
     return {

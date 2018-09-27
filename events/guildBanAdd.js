@@ -8,9 +8,9 @@ module.exports = async function (guild, user) {
     if (guildData) {
         let m;
         try {
-            m = await guild.getAuditLogs(50, null, 22)
+            m = await guild.getAuditLogs(50, null, 22);
         } catch(_) {
-
+            // Eslint pls
         }
         let entry;
         if (m) entry = m.entries.find(a => a.targetID == user.id);
@@ -21,7 +21,7 @@ module.exports = async function (guild, user) {
                 username: "Unknown User",
                 discriminator: "0000",
                 avatarURL: "https://cdn.discordapp.com/embed/avatars/0.png",
-                id: `Unknown`
+                id: "Unknown"
             },
             guild
         }, entry ? entry.reason : null);
