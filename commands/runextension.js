@@ -6,7 +6,7 @@ module.exports = {
         let { error: err } = ExtensionRunner(msg, bot, args, {
             id: "eval",
             name: "Evaluated extension",
-            data: {}
+            data: {id: "evaluation"}
         });
         let overall;
         if (err && typeof err !== "string") {

@@ -17,6 +17,7 @@ class Extension {
      * @returns {Promise<object>}
      */
     async updateData(data) {
+        if (!this.store) throw new Error("You haven't set up a storage")
         if ((typeof data === "string" ? data : JSON.stringify(data)).length > 25 * (1024 ** 2)) { // 25 MiB
             throw new Error("The extension exceeded the storage limit of 25 MiB");
         }
@@ -29,7 +30,7 @@ class Extension {
             throw new Error("The data must be JSON");
         }
 
-        await db.table("extensions").get(this.id).update({ data: JSON.stringify(toSet) });
+        await db.table("extension_store").get([this.store.guildID, this.store.id]).update({ store: JSON.stringify(toSet) });
         return this.store = toSet;
     }
 
@@ -38,7 +39,8 @@ class Extension {
      * @returns {Promise<object>}
      */
     async wipeData() {
-        await db.table("extensions").get(this.id).update({ data: JSON.stringify({}) })
+        if (!this.store) throw new Error("You haven't set up a storage")
+        await db.table("extension_store").get([this.store.guildID, this.store.id]).update({ store: JSON.stringify({}) })
         return this.store = {};
     }
 }

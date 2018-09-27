@@ -64,10 +64,11 @@ ${args ? `    Arguments   ${args}` : ""}
                 if (!extension) return;
                 if (extension.allowedChannels.length !== 0 && !extension.allowedChannels.includes(msg.channel.id)) return;
                 if (extension.allowedRoles.length !== 0 && !extension.allowedRoles.find(r => msg.member.roles.includes(r))) return;
+                const store = await db.table("extension_store").get([msg.guild.id, extension.store]);
                 const {error} = await ExtensionRunner(msg, bot, extension.code, {
                     id: extension.id,
                     name: extension.name,
-                    data: JSON.parse(extension.data)
+                    data: store ? Object.assign({}, JSON.parse(store.store), {id: store.id, guildID: msg.guild.id}) : null
                 })
                 if (error) msg.channel.createMessage({
                         embed: {
