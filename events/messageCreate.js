@@ -68,9 +68,9 @@ ${args ? `    Arguments   ${args}` : ""}
                 const {error} = await ExtensionRunner(msg, bot, extension.code, {
                     id: extension.id,
                     name: extension.name,
-                    data: store ? Object.assign({}, JSON.parse(store.store), {id: store.id, guildID: msg.guild.id}) : null
+                    data: store ? Object.assign({}, JSON.parse(store.store), {id: store.id, guildID: msg.guild.id}) : {guildID: msg.guild.id, id: null}
                 }, {
-                    prefix: server.prefix || config.prefix,
+                    prefix: server && server.prefix || config.prefix,
                     trigger: cmdName.toLowerCase(), args
                 });
                 if (error) msg.channel.createMessage({
