@@ -1,5 +1,6 @@
 const [major] = process.versions.node.split(".");
 const D_EPOCH = 1421280000000;
+const sleep = ms => new Promise(rs => setTimeout(() => rs(), ms))
 
 /**
  * Allows getting more accurate snowflakes when using node v10
@@ -10,10 +11,33 @@ function getOldestSnowflake() {
         // eslint-disable-next-line no-undef
         return (BigInt(Date.now()) - BigInt(D_EPOCH)) << BigInt(22);
     } else {
-        return (Date.now() - 1421280000000) * 4194304;
+        return (Date.now() - D_EPOCH) * 4194304;
     }
 }
 
+async function deleteStrategy(msg, messages) {
+    if (messages.length === 1) {
+        return await msg.channel.deleteMessage(messages[0]);
+    } else if (messages.length > 1 && messages.length <= 100) {
+        return await msg.channel.deleteMessages(messages)
+    } else {
+        // More than 100 messages, huh?
+        const messageCopy = [...messages];
+        const delet = async () => {
+            if (messageCopy.length >= 100) {
+                const toDelet = messageCopy.splice(0, 100);
+                await msg.channel.deleteMessages(toDelet);
+                await sleep(1000);
+                return delet();
+            } else {
+                await msg.channel.deleteMessages(messageCopy);
+                return true;
+            }
+        }
+
+        return delet();
+    }
+}
 const yN = require("../util/askYesNo");
 
 module.exports = {
@@ -93,7 +117,7 @@ module.exports = {
                 if (fn < oldestSnowflakeAllowed) return false;
                 else return true;
             });
-            await msg.channel.deleteMessages(filteredMsgIDs);
+            await deleteStrategy(msg, filteredMsgIDs);
             const msgOK = await msg.channel.createMessage(msg.t("CLEAR_DONE", filteredMsgIDs.length));
             setTimeout(async () => await msgOK.delete(), 2000);
         } catch (err) {
