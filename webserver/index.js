@@ -103,6 +103,21 @@ app.get("/callback", csrfProtection({
     }
 });
 
+app.get("/dashboard/:id/extensions", checkAuth(), async (rq, rs) => {
+    const guilds = getGuilds(rq, rs);
+    if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
+    else {
+        const g = bot.guilds.get(rq.params.id);
+        rs.render("extensions", rq.makeTemplatingData({
+            erisGuild: g,
+            extensions: await db.table("extensions").filter({
+                guildID: g.id
+            }),
+            pageTitle: `Extensions for ${g.name}`
+        }));
+    }
+})
+
 app.get("/logout", checkAuth(), function (req, res) {
     logout(req, res);
     res.redirect("/");

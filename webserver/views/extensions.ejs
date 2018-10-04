@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<%- include("./partials/head") %>
+<body>
+<div class="tttie-container">
+<%- include("./partials/header") %>
+<div class="tttie-body">
+<div class="tttie-center">
+<div>
+<div class="tttie-center text">
+<div>
+<img class="tttie-server-dash-icon" src="<%=erisGuild.dynamicIconURL('png', 256) || '/static/unknown.png'%>"><br>
+<h1>Extensions for <%=erisGuild.name%></h1>
+
+<p>Here's a list of extensions. You can create one, or edit them, even delete them from there.</p>
+</div>
+</div>
+<div>
+<div class="tttie-changes-buttons">
+<a class="tttie-linkbutton" id="create"><div class="tttie-button">Create an extension</div></a>
+</div>
+</div>
+</body>
+</html>
