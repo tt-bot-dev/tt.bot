@@ -15,6 +15,14 @@ function getOldestSnowflake() {
     }
 }
 
+function compare(num1, num2) {
+	if (major >= 10) {
+		return BigInt(num1) < BigInt(num2);
+	} else {
+		return num1 < num2;
+	}
+}
+
 async function deleteStrategy(msg, messages) {
     if (messages.length === 1) {
         return await msg.channel.deleteMessage(messages[0]);
@@ -114,7 +122,7 @@ module.exports = {
             const msgs = mss.filter(callAll);
             const msgIDs = msgs.map(m => m.id);
             const filteredMsgIDs = msgIDs.filter(fn => {
-                if (fn < oldestSnowflakeAllowed) return false;
+                if (compare(fn, oldestSnowflakeAllowed)) return false;
                 else return true;
             });
             await deleteStrategy(msg, filteredMsgIDs);
