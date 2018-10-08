@@ -6,13 +6,15 @@ try {
 }
 (async function () {
     if (!db) return;
-    const dbs = await db.tableList();
-    if (!dbs.includes("blacklist")) await db.tableCreate("blacklist");
-    if (!dbs.includes("session")) await db.tableCreate("session");
-    if (!dbs.includes("configs")) await db.tableCreate("configs");
-    if (!dbs.includes("feedback")) await db.tableCreate("feedback");
-    if (!dbs.includes("tags")) await db.tableCreate("tags");
-    if (!dbs.includes("profile")) await db.tableCreate("profile");
-    if (!dbs.includes("modlog")) await db.tableCreate("modlog");
+    const tables = await db.tableList();
+    if (!tables.includes("blacklist")) await db.tableCreate("blacklist");
+    if (!tables.includes("session")) await db.tableCreate("session");
+    if (!tables.includes("configs")) await db.tableCreate("configs");
+    if (!tables.includes("feedback")) await db.tableCreate("feedback");
+    if (!tables.includes("tags")) await db.tableCreate("tags");
+    if (!tables.includes("profile")) await db.tableCreate("profile");
+    if (!tables.includes("modlog")) await db.tableCreate("modlog");
+    if (!tables.includes("extensions")) await db.tableCreate("extensions");
+    if (!tables.includes("extension_store")) await db.tableCreate("extension_store");
     return console.log("All set up!");
 })();
