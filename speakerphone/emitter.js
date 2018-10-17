@@ -7,9 +7,10 @@ module.exports = class Emitter extends EventEmitter {
         this._chan2 = channel2;
         let chan1id = channel1.id;
         let chan2id = channel2.id;
-        const getSpeakerPhoneMessage = (author, text) => {
-            return `${this._phoneEmoji} ${bot.getTag(author)}: ${text}`;
-        };
+        const getSpeakerPhoneMessage = (author, text) => ({
+            content: `${this._phoneEmoji} ${bot.getTag(author)}: ${text}`,
+            disableEveryone: true
+        });
         channel1.createMessage(this.getMessage(channel2, callData2));
         channel2.createMessage(this.getMessage(channel1, callData1));
         const bindingFunction = msg => {
