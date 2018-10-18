@@ -9,7 +9,7 @@ module.exports = class Emitter extends EventEmitter {
         let chan2id = channel2.id;
         const getSpeakerPhoneMessage = (author, text) => {
             let mod_text = text.replace(/@(everyone|here)/, '(why u ping everyone tho?)')
-            return `${this._phoneEmoji} ${bot.getTag(author)}: ${text}`;
+            return `${this._phoneEmoji} ${bot.getTag(author)}: ${mod_text}`;
         };
         channel1.createMessage(this.getMessage(channel2));
         channel2.createMessage(this.getMessage(channel1));
