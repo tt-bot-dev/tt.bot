@@ -13,12 +13,12 @@ module.exports = {
                         options.reason = fe.replace(/reason:/, "").replace(/ \\\| /g, " | ");
                     }
                 } else {
-                    console.log(fe + " doesn't match any regexes.");
+                    msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``));
                 }
             });
             try {
                 if (!options.user) {
-                    msg.channel.createMessage("You need to specify an user!");
+                    msg.channel.createMessage(msg.t("ARGS_MISSING"));
                     return;
                 }
                 let user = await userQuery(options.user, msg, true);
@@ -26,17 +26,17 @@ module.exports = {
                     await user.ban(1, `${bot.getTag(msg.author)}: ${options.reason || "no reason"}`);
                     await user.unban();
                     bot.modLog.addBan(user.id, msg, options.reason, true);
-                    await msg.channel.createMessage(`:ok_hand: Softbanned ${bot.getTag(user)}`);
+                    await msg.channel.createMessage(msg.t("SOFTBAN_DONE", user));
                 } else {
-                    msg.channel.createMessage("You can't softban that user!");
+                    msg.channel.createMessage(msg.t("ROLE_HIERARCHY_ERROR"));
                     return;
                 }
             } catch (err) {
-                bot.createMessage(msg.channel.id, "```xl\nError:\n" + err + "\n```").then(null, console.error);
+                bot.createMessage(msg.channel.id, msg.t("ERROR", err)).then(null, console.error);
                 console.error(err);
             }
         } else {
-            return await bot.createMessage(msg.channel.id, `**${msg.author.username}**, you miss required arguments. (Who should I softban?)`);
+            return await bot.createMessage(msg.channel.id, msg.t("ARGS_MISSING"));
         }
     },
     isCmd: true,

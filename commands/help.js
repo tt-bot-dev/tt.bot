@@ -24,17 +24,19 @@ class HelpMenu extends ReactionMenu {
         for (const e of toAdd) await this.pgMsg.addReaction(e);
     }
 
-    stopCallback(reason) {
-        if (reason === ReactionMenu.MANUAL_EXIT) {
-            this.pgMsg.delete();
-            this.ogMsg.channel.createMessage("You have exited the menu.").then(m => setTimeout(() => m.delete(), 5000));
-        }
-        /*case ReactionMenu.TIMEOUT:
-            this.ogMsg.channel.createMessage(`The menu has expired.`)*/
-        else if (reason === ReactionMenu.MESSAGE_DELETE)
-            this.ogMsg.channel.createMessage("Exited the menu because the message was deleted.").then(m => setTimeout(() => m.delete(), 5000));
-        else if (reason === ReactionMenu.CHANNEL_DELETE)
-            bot.users.get(this.authorID).getDMChannel().then(dm => dm.createMessage("Exited the menu because the channel was deleted."));
+    async stopCallback(reason) {
+        try {
+            if (reason === ReactionMenu.MANUAL_EXIT) {
+                await this.pgMsg.delete();
+                await this.ogMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_MANUAL")).then(m => setTimeout(() => m.delete(), 5000));
+            }
+            /*case ReactionMenu.TIMEOUT:
+                this.ogMsg.channel.createMessage(`The menu has expired.`)*/
+            else if (reason === ReactionMenu.MESSAGE_DELETE)
+                await this.ogMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_MESSAGE_DELETE")).then(m => setTimeout(() => m.delete(), 5000));
+            else if (reason === ReactionMenu.CHANNEL_DELETE)
+                await bot.users.get(this.authorID).getDMChannel().then(dm => dm.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_CHANNEL_DELETE")));
+        } catch (_) {} //eslint-disable-line no-empty
     }
 
     hasPermission(emoji) {
@@ -59,7 +61,7 @@ class HelpMenu extends ReactionMenu {
         } catch (_) {
             if (!this.reactionErrored) {
                 this.reactionErrored = true;
-                this.pgMsg.channel.createMessage("Error: Cannot remove your reaction because I'm very likely lacking the Manage Messages permission.\nIf you give to me, I'll remove your reaction for your convenience.");
+                this.pgMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_NO_AUTOREMOVE"));
             }
         }
         this.getCb(emoji.name)(emoji, id);
@@ -68,8 +70,8 @@ class HelpMenu extends ReactionMenu {
 
     listCommands(emoji) {
         const fields = this.getCommands(emoji.name).map(({ name, obj }) => ({
-            name: `${name}`,
-            value: obj.description || "No description",
+            name,
+            value: obj.description || this.ogMsg.t("HELP_NO_DESCRIPTION"),
             inline: true
         }));
         this.pgMsg.edit({
@@ -80,7 +82,7 @@ class HelpMenu extends ReactionMenu {
                 },
                 fields,
                 footer: {
-                    text: `Use ${config.prefix}help <command> to see more information about it.`
+                    text: this.ogMsg.t("HELP_REMINDER")
                 }
             }
         });
@@ -95,10 +97,10 @@ class HelpMenu extends ReactionMenu {
     }
 
     getCategoryName(e) {
-        if (e === HelpMenu.ADMIN) return "Admin commands";
-        else if (e === HelpMenu.PUBLIC) return "Public commands";
-        else if (e === HelpMenu.MOD) return "Moderator commands";
-        else if (e === HelpMenu.OWNER) return "Owner commands";
+        if (e === HelpMenu.ADMIN) return this.ogMsg.t("HELP_ADMIN");
+        else if (e === HelpMenu.PUBLIC) return this.ogMsg.t("HELP_PUBLIC");
+        else if (e === HelpMenu.MOD) return this.ogMsg.t("HELP_MOD");
+        else if (e === HelpMenu.OWNER) return this.ogMsg.t("HELP_OWNER");
         else if (e === HelpMenu.HOME) return 0;
         else return 1;
     }
@@ -119,10 +121,10 @@ class HelpMenu extends ReactionMenu {
         return [true, isO(msg), await bot.isModerator(msg.member), bot.isAdmin(msg.member)];
     }
 
-    static DEFAULT_OBJ(permissions) {
+    static DEFAULT_OBJ(msg, permissions) {
         return {
             embed: {
-                description: `Welcome to tt.bot's help! Please use reactions to access the help for the command categories.\n:stop_button: Stop\n:house: Home (this page)\n${HelpMenu.MESSAGES.filter((_, idx) => permissions[idx]).join("\n")}`,
+                description: msg.t("HELP_HOME", HelpMenu, permissions, { t: msg.t }),
                 color: 0x008800
             }
         };
@@ -134,10 +136,10 @@ HelpMenu.MOD = "\u{1F528}";
 HelpMenu.OWNER = "\u{1F6AB}";
 HelpMenu.PUBLIC = "\u{1F465}";
 HelpMenu.HOME = "🏠";
-HelpMenu.MESSAGES = [`${HelpMenu.PUBLIC} Public commands`,
-    `${HelpMenu.OWNER} Owner commands`,
-    `${HelpMenu.MOD} Moderator commands`,
-    `${HelpMenu.ADMIN} Administrator commands`];
+HelpMenu.MESSAGES = msg => [`${HelpMenu.PUBLIC} ${msg.t("HELP_PUBLIC")}`,
+    `${HelpMenu.OWNER} ${msg.t("HELP_OWNER")}`,
+    `${HelpMenu.MOD} ${msg.t("HELP_MOD")}`,
+    `${HelpMenu.ADMIN} ${msg.t("HELP_ADMIN")}`];
 module.exports = {
     exec: async function (msg, args) {
         if (args == "") {
@@ -170,7 +172,7 @@ module.exports = {
 
             Object.keys(cmds).forEach(doShit);
             const permissions = await HelpMenu.getPermissions(msg);
-            const m = await msg.channel.createMessage(HelpMenu.DEFAULT_OBJ(permissions));
+            const m = await msg.channel.createMessage(HelpMenu.DEFAULT_OBJ(msg, permissions));
             const helpMenu = new HelpMenu(msg, m, {
                 public: gencmds,
                 owner: ocmds,
@@ -183,28 +185,23 @@ module.exports = {
             let cname;
             if (cmdAliases[args]) { c = cmds[cmdAliases[args]]; cname = cmdAliases[args]; }
             else { c = cmds[args]; cname = args; }
-            bot.getDMChannel(msg.author.id).then(dm => {
-                if (c) {
-                    msg.channel.createMessage(`${msg.author.mention} Sent you a PM with help for ${cname} command`);
-                    bot.createMessage(dm.id, {
-                        embed: {
-                            author: { name: `Help for ${cname}` },
-                            fields: [{
-                                name: "Arguments",
-                                value: c.args || "None",
-                                inline: true
-                            }, {
-                                name: "Aliases",
-                                value: c.aliases ? c.aliases.join(", ") : "None",
-                                inline: true
-                            }, {
-                                name: "Description",
-                                value: c.description || "None",
-                                inline: false
-                            }],
-                            color: 0x008800
-                        }
-                    });
+            msg.channel.createMessage({
+                embed: {
+                    author: { name: msg.t("HELP_FOR_COMMAND", cname) },
+                    fields: [{
+                        name: msg.t("HELP_ARGUMENTS"),
+                        value: c.args || msg.t("NONE"),
+                        inline: true
+                    }, {
+                        name: msg.t("HELP_ALIASES"),
+                        value: c.aliases ? c.aliases.join(", ") : msg.t("NONE"),
+                        inline: true
+                    }, {
+                        name: msg.t("HELP_DESCRIPTION"),
+                        value: c.description || msg.t("NONE"),
+                        inline: false
+                    }],
+                    color: 0x008800
                 }
             });
         }

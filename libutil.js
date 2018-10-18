@@ -1,14 +1,18 @@
-const eris = require("eris").Client;
+const { Base, Client } = require("eris");
+const eris = Client;
 const s = require("snekfetch");
 const ErisEndpoints = require("eris/lib/rest/Endpoints");
 const ModLog = require("./modlog/index");
 const WorkerManager = require("./util/worker");
 const resolveInvite = require("./util/resolveInvite");
+const i18n = require("./i18n");
 class LibWUtil extends eris {
     constructor(token, options) {
         super(token, options);
         this.modLog = new ModLog();
         this.workers = new WorkerManager();
+        this.i18n = new i18n(this);
+        global.i18n = this.i18n;
     }
 
     async canUseCommand(user, command) {
@@ -85,7 +89,7 @@ class LibWUtil extends eris {
 
     isAdmin(member, botOwnerIsAdmin = true) {
         if (botOwnerIsAdmin && isO({ author: member.user })) return true;
-        if (member.permission.json["administrator"]) return true;
+        if (member.permission.has("manageGuild")) return true;
         if (member.guild.ownerID == member.id) return true;
     }
     listBotColls() {
@@ -104,7 +108,7 @@ class LibWUtil extends eris {
         return this.requestHandler.request("GET", ErisEndpoints.USER(userID), true).then((user) => new ErisO.User(user, this));
     }
     getBaseObject(id) {
-        return new (require("eris/lib/structures/Base"))(id);
+        return new Base(id);
     }
     getTag(user) {
         return `${user.username}#${user.discriminator}`;

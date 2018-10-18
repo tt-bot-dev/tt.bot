@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
-<body onload="window.ttbot.guildId = '<%=guild.id%>'">
+<body onload="window.ttbot.guildId = '<%=guild.id%>'; window.ttbot.csrfToken = '<%=csrfToken%>'">
 <div class="tttie-container">
 <%- include("./partials/header") %>
 <div class="tttie-body">

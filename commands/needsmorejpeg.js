@@ -1,7 +1,7 @@
 module.exports = {
     exec: async function (msg, args) {
         if (!args && msg.attachments.filter(i => i.height && i.width).length == 0) {
-            msg.channel.createMessage("Please give us an image.");
+            msg.channel.createMessage(msg.t("ARGS_MISSING"));
             return;
         }
         const URLRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/;
@@ -15,7 +15,7 @@ module.exports = {
                 return;
             }
         })();
-        if (!url) return "Seems to be an invalid URL :eyes:";
+        if (!url) return;
         else {
             await msg.channel.sendTyping();
             const { read, MIME_JPEG } = require("jimp");
@@ -23,19 +23,14 @@ module.exports = {
             try {
                 image = await read(url);
             } catch (err) {
-                return "There was an error reading the image.";
+                return;
             }
             image.quality((Math.random() * 5) + 1);
             let file;
             try {
-                file = await (new Promise((rs, rj) => {
-                    image.getBuffer(MIME_JPEG, (e, b) => {
-                        if (e) rj(e);
-                        else rs(b);
-                    });
-                }));
+                file = await image.getBufferAsync(MIME_JPEG);
             } catch (err) {
-                return "There was an error generating the image.";
+                return;
             }
             msg.channel.createMessage("", {file, name: "needsmorejpeg.jpg"});
 

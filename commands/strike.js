@@ -1,3 +1,5 @@
+const UserProfile = require("../Structures/UserProfile");
+
 module.exports = {
     exec: async function (msg, args) {
         let splitargs = args.split(" | ");
@@ -12,11 +14,11 @@ module.exports = {
                     options.reason = fe.replace(/reason:/, "").replace(/ \\\| /g, " | ");
                 }
             } else {
-                console.log(fe + " doesn't match any regexes.");
+                msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``));
             }
         });
         
-        if (!options.user) return msg.channel.createMessage("You're missing a user to strike.");
+        if (!options.user) return msg.channel.createMessage(msg.t("ARGS_MISSING"));
         let user;
         try {
             user = await userQuery(options.user, msg, true);
@@ -25,23 +27,25 @@ module.exports = {
         }
         try {
             if (user.bot) {
-                msg.channel.createMessage("Bots are not the best subjects to strike. Trust me. :thinking:");
+                msg.channel.createMessage(msg.t("BOTS_NOT_STRIKABLE"));
                 return;
             }
             await bot.modLog.addStrike(user.id, msg, options.reason);
             const dm = await user.user.getDMChannel();
+            const p = await db.table("profile").get(user.id);
+            const prof = p ? new UserProfile(p) : {};
             dm.createMessage({
                 embed: {
-                    title: "It seems like you got striked.",
-                    description: `The strike was issued by ${bot.getTag(msg.author)} for reason \`${options.reason || "No reason"}\`.`,
+                    title: i18n.getTranslation("YOU_GOT_STRIKED", prof.locale || "en"),
+                    description: i18n.getTranslation("STRIKE_DETAILS", prof.locale || "en", bot.getTag(msg.author), options.reason),
                     footer: {
-                        text: "Beware on what you're doing!"
+                        text: i18n.getTranslation("PAY_ATTENTION", prof.locale || "en")
                     },
                     timestamp: new Date()
                 }
             });
         } catch(err) {
-            msg.channel.createMessage(`Cannot strike the user for this reason: ${err.toString()}`);
+            msg.channel.createMessage(msg.t("ERROR", err));
         }
     },
     isCmd: true,

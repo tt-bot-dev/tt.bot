@@ -2,7 +2,7 @@ let db;
 try {
     db = require("rethinkdbdash")(require("./config").connectionOpts);
 } catch (err) {
-    console.error("You haven't installed rethinkdbdash npm module or you don't have configured the bot yet! Please do so.");
+    console.error("You haven't installed rethinkdbdash npm module or you didn't have configured the bot yet! Please do so.");
 }
 (async function () {
     if (!db) return;

@@ -4,8 +4,20 @@ const e = require("express"),
     { checkAuth, checkAuthNeg, loadMiddleware, getGuilds, getHost } = util,
     scope = ["identify", "guilds"],
     { createServer: httpsServer } = require("https"),
-    { getAccessToken, logout } = require("./util/auth");
-    
+    { getAccessToken, logout } = require("./util/auth"),
+    csrf = require("csurf");
+
+const csrfProtection = csrf({
+    value: req =>
+        (req.body && req.body._csrf) ||
+        (req.query && req.query._csrf) ||
+        (req.query && req.query.state) ||
+        (req.headers["csrf-token"]) ||
+        (req.headers["xsrf-token"]) ||
+        (req.headers["x-csrf-token"]) ||
+        (req.headers["x-xsrf-token"])
+});
+
 loadMiddleware(app);
 app.get("/", (rq, rs) => {
     rs.render("landing", rq.makeTemplatingData());
@@ -23,7 +35,7 @@ app.get("/acceptcookie", (rq, rs) => {
     rs.redirect(p.startsWith("/") ? p : "/"); // prevent redirecting somewhere we are not supposed to
 });
 
-app.get("/dashboard", checkAuth, (rq, rs) => {
+app.get("/dashboard", checkAuth(), (rq, rs) => {
     const guilds = getGuilds(rq, rs);
     rs.render("dashboard", rq.makeTemplatingData({
         guilds,
@@ -31,8 +43,8 @@ app.get("/dashboard", checkAuth, (rq, rs) => {
     }));
 });
 
-app.get("/dashboard/:id", checkAuth, async (rq, rs) => {
-    
+app.get("/dashboard/:id", checkAuth(), csrfProtection(), async (rq, rs) => {
+
     async function makeCfg() {
         await db.table("configs").insert({
             id: rq.params.id,
@@ -49,14 +61,17 @@ app.get("/dashboard/:id", checkAuth, async (rq, rs) => {
         return rs.render("dashboard-server", rq.makeTemplatingData({
             guild: data,
             erisGuild: g,
-            pageTitle: `${g.name} Dashboard`
+            pageTitle: `${g.name} Dashboard`,
+            csrfToken: rq.csrfToken()
         }));
     }
 });
-app.get("/login", checkAuthNeg, function (req, res) {
-    return res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${config.clientID}&scope=${encodeURIComponent(scope.join(" "))}&response_type=code&redirect_uri=${encodeURIComponent(`${req.protocol}://${req.headers.host}/callback`)}`);
+app.get("/login", checkAuthNeg(), csrfProtection(), function (req, res) {
+    return res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${config.clientID}&scope=${encodeURIComponent(scope.join(" "))}&response_type=code&redirect_uri=${encodeURIComponent(`${req.protocol}://${req.headers.host}/callback`)}&state=${req.csrfToken()}`);
 });
-app.get("/callback", async function (req, res) {
+app.get("/callback", csrfProtection({
+    ignoreMethods: ["HEAD", "OPTIONS"]
+}), async function (req, res) {
     if (!req.query.code) return res.redirect("/login");
     else {
         try {
@@ -66,21 +81,21 @@ app.get("/callback", async function (req, res) {
             return res.redirect("/login");
         }
 
-        try{
-            await (new Promise((rs, rj) => req.session.save(e => e?rj(e):rs())));
-        } catch(err) {
+        try {
+            await (new Promise((rs, rj) => req.session.save(e => e ? rj(e) : rs())));
+        } catch (err) {
             throw err;
         }
         return res.redirect("/");
     }
 });
 
-app.get("/logout", checkAuth, function (req, res) {
+app.get("/logout", checkAuth(), function (req, res) {
     logout(req, res);
     res.redirect("/");
 });
 
-app.use("/api", require("./routes/api"));
+app.use("/api", require("./routes/api")(csrfProtection));
 
 //eslint-disable-next-line no-unused-vars
 app.use((rq, rs, nx) => {
@@ -91,6 +106,13 @@ app.use((rq, rs, nx) => {
 //eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
     if (err) {
+        if (err.code && err.code === "ebadcsrftoken".toUpperCase()) {
+            res.status(403).render("500", req.makeTemplatingData({
+                error: "Missing CSRF token! Please redo the action again in order to protect yourself.",
+                pageTitle: "Cross Site Request Forgery"
+            }));
+            return;
+        }
         console.error(err);
         res.status(500).render("500", req.makeTemplatingData({
             error: (req.user && isO({ author: req.user })) ? err.stack : err.message,

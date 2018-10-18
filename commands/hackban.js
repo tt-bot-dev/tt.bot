@@ -7,32 +7,28 @@ module.exports = {
                 try {
                     userToBan = await bot.getUserWithoutRESTMode(args);
                 } catch (err) {
-                    if (doMessage) await msg.channel.createMessage("That user doesn't exist!");
+                    if (doMessage) await msg.channel.createMessage(msg.t("ARGS_MISSING"));
                     return false;
                 }
                 if (msg.guild.members.get(userToBan.id)) member = msg.guild.members.get(userToBan.id);
                 try {
-                    if (member && !bot.passesRoleHierarchy(msg.member, member)) { msg.channel.createMessage("You can't hackban that user!"); return false; }
+                    if (member && !bot.passesRoleHierarchy(msg.member, member)) { msg.channel.createMessage(msg.t("ROLE_HIERARCHY_ERROR")); return false; }
                     await msg.guild.banMember(userToBan.id, 0, `${isMass == false ? "Hackbanned" : "Masshackbanned"} by ${bot.getTag(msg.author)}`);
                     if (doMessage) await msg.channel.createMessage(":ok_hand:");
                     return true;
                 } catch (err) {
-                    if (doMessage) await msg.channel.createMessage("Can't ban the user, do I lack the permission to?");
+                    if (doMessage) await msg.channel.createMessage(msg.t("MISSING_PERMISSIONS"));
                     return false;
                 }
             }
             if (args.split(" ").length > 1) {
-                let bans = [];
-                await args.split(" ").forEach(async u => {
-                    let ban = await dohackBan(u, false, true);
-                    bans.push(ban);
-                });
-                msg.channel.createMessage(`:ok_hand: Banned ${bans.filter(b => b == true).length} users.`);
+                const bans = await Promise.all(args.split(" ").map(async u => await dohackBan(u, false, true)));
+                msg.channel.createMessage(msg.t("HACKBANNED_USERS", bans.filter(b => !!b)));
             } else {
                 await dohackBan(args, true, false);
             }
         } else {
-            return await bot.createMessage(msg.channel.id, `**${msg.author.username}**, you miss required arguments (Who should I hackban?).`);
+            return await bot.createMessage(msg.channel.id, msg.t("ARGS_MISSING"));
         }
     },
     isCmd: true,

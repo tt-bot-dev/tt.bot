@@ -11,16 +11,16 @@ module.exports = {
             return false;
         }
         async function show(tagName) {
-            if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!");
+            if (!tagName) return await msg.channel.createMessage(msg.t("ARGS_MISSING"));
             let tagData = await db.table("tags").get(encryptData(tagName));
-            if (!tagData) return await msg.channel.createMessage("No such tag.");
+            if (!tagData) return await msg.channel.createMessage(msg.t("TAG_DOESNTEXIST"));
             let data = new TagObject(tagData);
             let profileData = await db.table("profile").get(data.owner);
             let profile = profileData? new UserProfile(profileData) : undefined;
             msg.channel.createMessage({
                 embed: {
                     author: {
-                        name: `Tag ${tagName}`
+                        name: msg.t("TAG_DISPLAY", tagName)
                     },
                     description: bot.parseMsg(data.content.replace(/\[/g, "\\[").replace(/\]/g, "\\]").replace(/\(/g, "\\(").replace(/\)/g, "\\)"), msg.member, msg.guild),
                     color: profile ? profile.color : null
@@ -28,42 +28,41 @@ module.exports = {
             });
         }
         async function create(tagName, content) {
-            if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!");
-            if (!content) return await msg.channel.createMessage("I'm missing out the tag content!");
+            if (!tagName || !content) return await msg.channel.createMessage(msg.t("ARGS_MISSING"));
             let data = await db.table("tags").get(encryptData(tagName));
-            if (data) return await msg.channel.createMessage("That tag already exists!");
+            if (data) return await msg.channel.createMessage(msg.t("TAG_EXISTS"));
             await db.table("tags").insert(TagObject.create({
                 id: tagName,
                 content: content,
                 owner: msg.author.id
             }));
-            await msg.channel.createMessage(`Created the tag ${tagName} successfully.`);
+            await msg.channel.createMessage(msg.t("TAG_CREATED", tagName));
         }
         async function edit(tagName, content) {
-            if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!");
+            if (!tagName) return await msg.channel.createMessage(msg.t("ARGS_MISSING"));
             let tdata = await db.table("tags").get(encryptData(tagName));
-            if (!tdata) return await msg.channel.createMessage("No such tag.");
+            if (!tdata) return await msg.channel.createMessage(msg.t("TAG_DOESNTEXIST"));
             let data = new TagObject(tdata);
             if (isTagOwner(msg.author.id, data)) {
-                if (!content) return msg.channel.createMessage("I don't have anything to update!");
+                if (!content) return msg.channel.createMessage(msg.t("ARGS_MISSING"));
                 else {
                     data.content = content;
                     await db.table("tags").get(encryptData(tagName)).update(data.toEncryptedObject());
-                    msg.channel.createMessage(`Updated the tag ${tagName}.`);
+                    msg.channel.createMessage(msg.t("TAG_UPDATED", tagName));
                 }
             } else {
-                return await msg.channel.createMessage("You're not an owner of this tag.");
+                return await msg.channel.createMessage(msg.t("TAG_NOTOWNER"));
             }
         }
         async function del(tagName) {
-            if (!tagName) return await msg.channel.createMessage("I'm missing out the tag name!");
+            if (!tagName) return await msg.channel.createMessage(msg.t("ARGS_MISSING"));
             let data = await db.table("tags").get(encryptData(tagName));
-            if (!data) return await msg.channel.createMessage("No such tag.");
+            if (!data) return await msg.channel.createMessage(msg.t("TAG_DOESNTEXIST"));
             if (isTagOwner(msg.author.id, data)) {
                 await db.table("tags").get(encryptData(tagName)).delete();
-                msg.channel.createMessage(`Deleted the tag ${tagName}.`);
+                msg.channel.createMessage(msg.t("TAG_DELETED", tagName));
             } else {
-                return await msg.channel.createMessage("You're not an owner of this tag.");
+                return await msg.channel.createMessage(msg.t("TAG_NOTOWNER"));
             }
         }
         switch (action) {

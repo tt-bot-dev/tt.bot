@@ -35,6 +35,8 @@ module.exports = async function (msg) {
     let user = userData ? new UserProfileStructure(userData) : null;
     msg.guildConfig = server;
     msg.userProfile = user;
+    msg.t = (term, ...args) => bot.i18n.getTranslation(term, user ? user.locale || "en" : "en", ...args);
+
     if ((server && msg.content.toLowerCase().startsWith(server.prefix.toLowerCase())) || msg.content.toLowerCase().startsWith(config.prefix.toLowerCase())) { // if the content starts with the prefix
         let nameslice = (server && msg.content.startsWith(server.prefix)) ? msg.content.slice(server.prefix.length) : msg.content.slice(config.prefix.length); // we slice it so we can get the command
         let cmdName = nameslice.split(" ")[0]; //  we split the slice output by spaces and choosing the command from the first element

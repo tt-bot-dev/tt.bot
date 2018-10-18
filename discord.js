@@ -2,11 +2,12 @@ module.exports = function () {
     global.fs = require("fs");
     global.ErisO = require("eris");
     global.Eris = require("./libutil");
-    const bot = new Eris(config.token,{
+    global.bot = new Eris(config.token,{
         getAllUsers:true,
         disableEveryone: false,
         defaultImageSize: 1024,
-        defaultImageFormat: "webp"
+        defaultImageFormat: "webp",
+        compress: true
     });
     global.isO = function(msg) {
         if (!Array.isArray(config.oid)) return msg.author.id == config.oid;
@@ -14,9 +15,8 @@ module.exports = function () {
     };
     global.connected = false;
     bot.connect();
-    global.bot = bot;
     global.cmds = {};
     global.cmdAliases = {};
-    require("./msgdotguild");
+    require("./overrideprops");
     require("./evt");
 };

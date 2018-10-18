@@ -17,5 +17,8 @@ module.exports = {
         });
         if (start) return q.start(msg);
         return q;
+    },
+    roleCompat(quer, msg, start) {
+        return this.role(msg, quer, start);
     }
 };

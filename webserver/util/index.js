@@ -1,12 +1,31 @@
 module.exports = {
-    checkAuth(req, res, next) {
-        if (req.signedIn) return next();
-        res.redirect("/login");
+    checkAuth(api = false) {
+        return (req, res, next) => {
+            if (req.signedIn) return next();
+            if (api) {
+                res.status(401).send({
+                    error: "Unauthorized",
+                    description: "You aren't authorized."
+                });
+                return next();
+            }
+            res.redirect("/login");
+        };
     },
 
-    checkAuthNeg(req, res, next) {
-        if (!req.signedIn) return next();
-        res.send("you're logged in already :)");
+    checkAuthNeg(api = false) {
+        return (req, res, next) => {
+            if (!req.signedIn) return next();
+            if (api) {
+                res.status(403).send({
+                    error: "Forbidden",
+                    description: "You are authorized already."
+                });
+                return next();
+            }
+            res.redirect("/");
+            next();
+        };
     },
     loadMiddleware: require("./loadMiddleware"),
     getGuilds(req, res) {

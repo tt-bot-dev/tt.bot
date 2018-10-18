@@ -33,7 +33,7 @@
         var loc;
         for (var opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-loc option")) if (opt.selected == true) loc = opt.value
         var ml;
-        for (var opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-ml option")) if (opt.value === cfg.modlogChannel) ml = opt.value;
+        for (var opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-ml option")) if (opt.selected == true) ml = opt.value;
         cb({
             prefix: p,
             modRole: m,

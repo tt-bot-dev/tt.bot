@@ -1,43 +1,17 @@
 module.exports = {
     exec: async function (msg, args) {
-        let splitargs = args.split(" | ");
-        let options = {};
-        splitargs.forEach(async fe => {
-            if (fe.match(/(punishment-id:([^]{0,34}))/i)) {
-                if (!options.punishmentID) {
-                    options.punishmentID = fe.replace(/punishment-id:/, "").replace(/ \\\| /g, " | ");
-                }
-            } else if (fe.match(/(reason:([^]{0,400}))/i)) {
-                if (!options.reason) {
-                    options.reason = fe.replace(/reason:/, "").replace(/ \\\| /g, " | ");
-                }
-            } else {
-                console.log(fe + " doesn't match any regexes.");
-            }
-        });
-        
-        if (!options.punishmentID) return msg.channel.createMessage("You're missing a case ID.");
+        const [caseID, ...reason] = args.split(" ");
+        if (!caseID) return msg.channel.createMessage(msg.t("ARGS_MISSING"));
         try {
-            await bot.modLog.removeStrike(options.punishmentID, msg, options.reason);
-            /*const dm = await user.user.getDMChannel()
-            dm.createMessage({
-                embed: {
-                    title: "Your strike was removed!",
-                    description: `The strike removal was issued by ${bot.getTag(msg.author)} for reason \`${options.reason || "No reason"}\`.`,
-                    footer: {
-                        text: "Beware on what you're doing!"
-                    },
-                    timestamp: new Date()
-                }
-            })*/
+            await bot.modLog.removeStrike(caseID, msg, reason.join(" "));
         } catch(err) {
-            msg.channel.createMessage(`Cannot remove the strike for this reason: ${err.toString()}`);
+            msg.channel.createMessage(msg.t("CANNOT_UNSTRIKE", err));
         }
     },
     isCmd: true,
     display: true,
     category: 3,
-    description: "Strike someone\nThe command uses `\u200b | \u200b` as separators (note the spaces). Use ` \\| ` to escape the separation in your queries.\nThe order of the switches doesn't need to be followed.",
-    args: "<punishment-id:<case id>>[ | <reason:<reason>>]",
+    description: "Remove a punishment",
+    args: "<case id> [reason]",
     aliases: ["rmpunish", "deletepunishment", "removepunishment", "rmstrike", "delstrike", "removestrike", "removepunishment"]
 };
