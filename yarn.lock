@@ -611,7 +611,8 @@ encodeurl@~1.0.2:
 
 "eris@github:abalabahaha/eris#dev":
   version "0.9.0"
-  resolved "https://codeload.github.com/abalabahaha/eris/tar.gz/e6208fa8ab49d526df5276620ac21eb351da3954"
+  uid e2dc920a157a283ecf43c062f0e3836f571fd1a7
+  resolved "https://codeload.github.com/abalabahaha/eris/tar.gz/e2dc920a157a283ecf43c062f0e3836f571fd1a7"
   dependencies:
     ws "^6.0.0"
   optionalDependencies:
