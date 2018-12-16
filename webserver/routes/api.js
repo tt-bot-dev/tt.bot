@@ -125,7 +125,6 @@ module.exports = csrf => {
 
             filteredBody.id = id;
             filteredBody.guildID = guild;
-            console.log(filteredBody)
             if (id === "new") {
                 delete filteredBody.id;
                 const tryInsert = async () => {

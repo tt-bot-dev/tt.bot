@@ -29,13 +29,22 @@
             savingExtensionData = true;
             var oldData = el.innerHTML;
             el.innerText = "Saving...";
+            var oldExtData = w.ttbot.extensionData;
             dg(function (d) {
                 var f = function () {
                     el.innerHTML = oldData;
                     savingExtensionData = false;
                     cb(w.ttbot.extensionData)
                 }
-                if (d) w.ttbot.updateExtension(d).then(f)
+                if (d) w.ttbot.updateExtension(d).then(function(d) {
+                    return f(d, false, true)
+                }).then(function () {
+                    if (w.ttbot.extension === "new") w.location = "/dashboard/" + w.ttbot.guildId + "/extensions/" + w.ttbot.extensionData.id + (w.ttbot.editor ? "/monaco" : "")
+                    else {
+                        if (oldExtData.name !== w.ttbot.extensionData.name) w.location.reload();
+                        else return;
+                    }
+                })
                 else f();
             })
         })
@@ -87,9 +96,9 @@
             store: store.value || null
         })
     }
-    function setValues(cfg, reset) {
+    function setValues(cfg, reset, update) {
 
-        if (!reset) {
+        if (!reset || !update) {
             if (cfg.id === "new") document.title += " - New extension"
             else document.title += " - Extension: " + cfg.name
         }
