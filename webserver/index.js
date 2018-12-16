@@ -5,7 +5,8 @@ const e = require("express"),
     scope = ["identify", "guilds"],
     { createServer: httpsServer } = require("https"),
     { getAccessToken, logout } = require("./util/auth"),
-    csrf = require("csurf");
+    csrf = require("csurf"),
+    fs = require("fs");
 
 const csrfProtection = csrf({
     value: req =>
@@ -79,6 +80,19 @@ app.get("/dashboard/:id/load.js", checkAuth(), csrfProtection(), async (rq, rs) 
         });
     }
 });
+app.get("/dashboard/:id/extensions/:extension/load.js", checkAuth(), csrfProtection(), async (rq, rs) => {
+    const { id, extension } = rq.params;
+    const guilds = getGuilds(rq, rs);
+    if (!guilds.find(g => g.isOnServer && g.id == id)) return rs.sendStatus(403);
+    else {
+        const g = bot.guilds.get(id);
+        // No, this isn't incorrect. Read RFC 4329 + we do support just modern browsers.
+        rs.set("Content-Type", "application/javascript");
+        return rs.render("cspextensions", {
+            extension
+        });
+    }
+});
 app.get("/login", checkAuthNeg(), csrfProtection(), function (req, res) {
     return res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${config.clientID}&scope=${encodeURIComponent(scope.join(" "))}&response_type=code&redirect_uri=${encodeURIComponent(`${req.protocol}://${req.headers.host}/callback`)}&state=${req.csrfToken()}`);
 });
@@ -108,12 +122,90 @@ app.get("/dashboard/:id/extensions", checkAuth(), async (rq, rs) => {
     if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
     else {
         const g = bot.guilds.get(rq.params.id);
+        const extensions = await db.table("extensions").filter({
+            guildID: g.id
+        })
         rs.render("extensions", rq.makeTemplatingData({
             erisGuild: g,
             extensions: await db.table("extensions").filter({
                 guildID: g.id
             }),
-            pageTitle: `Extensions for ${g.name}`
+            pageTitle: `Extensions for ${g.name}`,
+            extensions
+        }));
+    }
+})
+
+app.get("/dashboard/:id/extensions/:extension", checkAuth(), async (rq, rs) => {
+    const guilds = getGuilds(rq, rs);
+    if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
+    else {
+        const g = bot.guilds.get(rq.params.id);
+        if (rq.params.extension === "new") {
+
+            rs.render("extensions-update", rq.makeTemplatingData({
+                erisGuild: g,
+                extension: {
+                    id: "new"
+                },
+                isMonaco: false
+            }));
+
+            return;
+        }
+        const extension = await db.table("extensions").get(rq.params.extension);
+        if (!extension || (extension && extension.guildID !== g.id)) {
+            rs.status(404);
+            return rs.render("404", rq.makeTemplatingData({
+                pageTitle: "404"
+            }))
+        }
+
+        rs.render("extensions-update", rq.makeTemplatingData({
+            erisGuild: g,
+            extension: {
+                id: extension.id
+            },
+            isMonaco: false
+        }));
+    }
+})
+
+app.get("/dashboard/:id/extensions/:extension/monaco", checkAuth(), async (rq, rs) => {
+    const guilds = getGuilds(rq, rs);
+    if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
+    else {
+        const g = bot.guilds.get(rq.params.id);
+        if (rq.params.extension === "new") {
+
+            rs.render("extensions-update", rq.makeTemplatingData({
+                erisGuild: g,
+                pageTitle: `New extension`,
+                extension: {
+                    name: `New extension`,
+                    id: "new"
+                },
+                isMonaco: true
+            }));
+
+            return;
+        }
+        const extension = await db.table("extensions").get(rq.params.extension);
+        if (!extension || (extension && extension.guildID !== g.id)) {
+            rs.status(404);
+            return rs.render("404", rq.makeTemplatingData({
+                pageTitle: "404"
+            }))
+        }
+
+        rs.render("extensions-update", rq.makeTemplatingData({
+            erisGuild: g,
+            pageTitle: `Extension: ${extension.name}`,
+            extension: {
+                name: extension.name,
+                id: extension.id
+            },
+            isMonaco: true
         }));
     }
 })
@@ -124,25 +216,34 @@ app.get("/logout", checkAuth(), function (req, res) {
 });
 
 app.use("/api", require("./routes/api")(csrfProtection));
+app.use("/monaco", e.static(`${__dirname}/../node_modules/monaco-editor/min`))
+app.get("/tt.bot.d.ts", (rq, rs) => {
+    const s = fs.createReadStream(`${__dirname}/../extensions/tt.bot.d.ts`);
+    s.pipe(rs);
+});
 
 //eslint-disable-next-line no-unused-vars
-app.use((rq, rs, nx) => {
-    rs.status(404).render("404", rq.makeTemplatingData({
+app.use((rq, rs) => {
+    rs.status(404);
+    rs.render("404", rq.makeTemplatingData({
         pageTitle: "404"
     }));
+    return;
 });
 //eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
     if (err) {
         if (err.code && err.code === "ebadcsrftoken".toUpperCase()) {
-            res.status(403).render("500", req.makeTemplatingData({
+            res.status(403)
+            res.render("500", req.makeTemplatingData({
                 error: "Missing CSRF token! Please redo the action again in order to protect yourself.",
                 pageTitle: "Cross Site Request Forgery"
             }));
             return;
         }
         console.error(err);
-        res.status(500).render("500", req.makeTemplatingData({
+        res.status(500)
+        res.render("500", req.makeTemplatingData({
             error: (req.user && isO({ author: req.user })) ? err.stack : err.message,
             pageTitle: "Error"
         }));

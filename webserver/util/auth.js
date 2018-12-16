@@ -1,24 +1,83 @@
 const sa = require("snekfetch");
 const APIBase = "https://discordapp.com/api/v6/oauth2";
 
+class Cache {
+    constructor(time, getter) {
+        this.time = time;
+        this._cache = {};
+        this._getter = getter;
+    }
+
+    get(item) {
+        if (this._cache[item]) {
+            if (this._cache[item].error) {
+                this._fetch(item);
+                return Promise.resolve(this._cache[item].data);
+            }
+            if (Date.now() - this._cache[item].time < this.time) {
+                return Promise.resolve(this._cache[item].data);
+            }
+            this._fetch(item);
+            return Promise.resolve(this._cache[item].data);
+        }
+        return this._fetch(item);
+    }
+
+    _fetch(item) {
+        return this._getter(item).then(data => {
+            if (data.error) console.error(data.error);
+            this._cache[item] = { time: Date.now(), data };
+            return data;
+        });
+    }
+
+    clear() {
+        this._cache = {};
+    }
+}
+
+const getUserInfo = async token => {
+    try {
+        const e = new ErisO.Client(`Bearer ${token}`, {
+            restMode: true
+        });
+        const body = await e.requestHandler.request("GET", "/users/@me", true);
+        const guilds = await e.requestHandler.request("GET", "/users/@me/guilds", true);
+        return {
+            id: body.id,
+            username: body.username,
+            discriminator: body.discriminator,
+            avatar: body.avatar,
+            guilds
+        };
+    } catch (err) {
+        throw err;
+    }
+}
+
+const c = new Cache(6e4, async token => {
+    try {
+        return await getUserInfo(token);
+    } catch (e) {
+        return { error: e };
+    }
+})
+
 const auth = {
     async checkAuth(rq, rs, nx) {
         if (!rq.session.tokenData) return nx();
         else {
             if (Date.now() - rq.session.tokenData.date >= rq.session.tokenData.expiry) {
                 try {
+                    console.log("Refreshing a token.")
                     await auth.refreshToken(rq.session.refreshToken, rq);
                 } catch (err) {
                     return nx();
                 }
             }
 
-            let d;
-            try {
-                d = await auth.getUserInfo(rq.session.tokenData.accessToken);
-            } catch (err) {
-                console.error(err);
-            }
+            const d = await c.get(rq.session.tokenData.accessToken);
+            if (d.error) nx();
             rq.user = d;
             rq.signedIn = true;
             nx();
@@ -39,7 +98,7 @@ const auth = {
         }
         const { body } = dat;
         const dateAfterReq = Date.now();
-        const d = await auth.getUserInfo(body.access_token);
+        const d = await c.get(body.access_token);
         req.session.tokenData = {
             accessToken: body.access_token,
             refreshToken: body.refreshToken,
@@ -79,24 +138,7 @@ const auth = {
         return;
     },
 
-    async getUserInfo(token) {
-        try {
-            const e = new ErisO.Client(`Bearer ${token}`, {
-                restMode: true
-            });
-            const body = await e.requestHandler.request("GET", "/users/@me", true);
-            const guilds = await e.requestHandler.request("GET", "/users/@me/guilds", true);
-            return {
-                id: body.id,
-                username: body.username,
-                discriminator: body.discriminator,
-                avatar: body.avatar,
-                guilds
-            };
-        } catch (err) {
-            throw err;
-        }
-    },
+    getUserInfo,
 
     async logout(req) {
         try {

@@ -7,6 +7,10 @@ module.exports = {
             id: "eval",
             name: "Evaluated extension",
             data: {id: "evaluation"}
+        }, {
+            prefix: config.prefix,
+            trigger: "extension",
+            args: ""
         });
         let overall;
         if (err && typeof err !== "string") {

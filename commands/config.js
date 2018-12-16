@@ -107,6 +107,7 @@ class ConfigMenu extends ReactionMenu {
                         if (m.channel.id !== this.ogMsg.channel.id) return;
                         return true;
                     });
+                    m.t = this.ogMsg.t;
                     let c;
                     try {
                         let qType;

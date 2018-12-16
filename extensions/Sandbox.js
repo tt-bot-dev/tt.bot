@@ -1,19 +1,19 @@
 // A huge wall of code describing much secure sandbox
 
-const User = require("./API/User");
-const Message = require("./API/Message");
+const Extension = require("./API/Extension");
 const Guild = require("./API/Guild");
 const Member = require("./API/Member");
-const TextChannel = require("./API/TextChannel")
+const Message = require("./API/Message");
+const TextChannel = require("./API/TextChannel");
+const User = require("./API/User");
 const Constants = require("./API/Constants");
-const Extension = require("./API/Extension");
 const ResolveUserID = require("./Utils/ResolveUserID");
 const ResolveChannelID = require("./Utils/ResolveChannelID")
 
 module.exports = (msg, bot, { id, name, data }, { prefix, trigger, args }) => {
     const extStruct = new Extension(id, name, data);
     class Bot {
-        constructor() {
+        constructor(extStruct) {
             this.user = new User(extStruct, bot.user);
         }
 
@@ -54,9 +54,9 @@ module.exports = (msg, bot, { id, name, data }, { prefix, trigger, args }) => {
     }
 
     const instance = {
-        bot: new Bot(),
-        message: new Message(extStruct, msg),
+        bot: new Bot(extStruct),
         guild: new Guild(extStruct, msg.guild),
+        message: new Message(extStruct, msg),
         channel: new TextChannel(extStruct, msg.channel),
         member: new Member(extStruct, msg.member),
         author: new User(extStruct, msg.author),
@@ -64,7 +64,7 @@ module.exports = (msg, bot, { id, name, data }, { prefix, trigger, args }) => {
         Constants,
         command: {
             prefix, trigger, args
-        }
+        },
     }
 
     return {

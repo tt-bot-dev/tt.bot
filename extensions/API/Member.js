@@ -87,6 +87,14 @@ class Member extends Base {
             configurable: true
         })
 
+        Object.defineProperty(this, "strike", {
+            value: function (reason) {
+                if (!reason) return Promise.reject(false);
+                return member.guild.shard.client.modLog.addStrikeExtension(member.id, member.guild, r(extension, reason)).then(() => true).catch(() => false);
+            },
+            configurable: true
+        })
+
         Object.defineProperty(this, "createMessage", {
             value: function (content, file) {
                 // Save us a request

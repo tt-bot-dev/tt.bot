@@ -1,37 +1,135 @@
 declare module "tt.bot" {
-    import {
-        Attachment,
-        Embed,
-        MessageContent,
-        MessageFile,
-        GamePresence,
-        Permission,
-        PermissionOverwrite,
-        VoiceState,
-        MemberOptions,
-        Collection,
-        Emoji,
-        EmojiOptions,
-        RoleOptions,
-        GuildOptions,
-        Webhook,
-        CreateInviteOptions,
-
-    } from "eris";
+    export const bot: Bot;
+    export const message: Message;
+    export const guild: Guild;
+    export const channel: TextChannel;
+    export const member: Member;
+    export const author: User;
+    export const extension: Extension;
+    export const Constants: Constants;
+    export const command: {
+        prefix: string;
+        trigger: string;
+        args: string;
+    }
 
     type UserResolvable = User | Member | Message | string;
     type RoleResolvable = Role | string;
     type MessageResolvable = Message | string;
     type GuildChannel = TextChannel | VoiceChannel | CategoryChannel;
-
     type OverwriteResolvable = UserResolvable | RoleResolvable;
 
+    // ===================== ERIS TYPINGS =====================
+
+    type MessageContent = string | { content?: string, tts?: boolean, disableEveryone?: boolean, embed?: EmbedOptions };
+    interface Attachment { url: string; proxy_url: string; size: number; id: string; filename: string; }
+    interface EmbedBase {
+        title?: string;
+        description?: string;
+        url?: string;
+        timestamp?: string;
+        color?: number;
+        footer?: { text: string, icon_url?: string, proxy_icon_url?: string };
+        image?: { url?: string, proxy_url?: string, height?: number, width?: number };
+        thumbnail?: { url?: string, proxy_url?: string, height?: number, width?: number };
+        video?: { url: string, height?: number, width?: number };
+        provider?: { name: string, url?: string };
+        fields?: Array<{ name?: string, value?: string, inline?: boolean }>;
+        author?: { name: string, url?: string, icon_url?: string, proxy_icon_url?: string };
+    }
+    type Embed = {
+        type: string,
+    } & EmbedBase;
+    type EmbedOptions = {
+        type: string;
+    } & EmbedBase;
+    interface MessageFile { file: Buffer | string; name: string; }
+    interface EmojiBase {
+        name: string;
+        icon?: string;
+    }
+    type EmojiOptions = {
+        roles?: string[],
+    } & EmojiBase;
+    type Emoji = {
+        roles: string[],
+    } & EmojiBase;
+    interface GamePresence { name: string; type?: number; url?: string; }
+    interface Permission {
+        public allow: number;
+        public deny: number;
+        public json: { [s: string]: boolean };
+        public has(permission: string): boolean;
+    }
+    interface PermissionOverwrite extends Permission {
+        public id: string;
+        public createdAt: number;
+        public type: string;
+    }
+    interface VoiceState {
+        public id: string;
+        public createdAt: number;
+        public sessionID?: string;
+        public channelID?: string;
+        public mute: boolean;
+        public deaf: boolean;
+        public suppress: boolean;
+        public selfMute: boolean;
+        public selfDeaf: boolean;
+    }
+
+    interface GuildOptions {
+        name?: string;
+        region?: string;
+        icon?: string;
+        verificationLevel?: number;
+        defaultNotifications?: number;
+        afkChannelID?: string;
+        afkTimeout?: number;
+        ownerID?: string;
+        splash?: string;
+      }
+      interface MemberOptions { roles?: string[]; nick?: string; mute?: boolean; deaf?: boolean; channelID?: string; }
+    interface RoleOptions { name?: string; permissions?: number; color?: number; hoist?: boolean; mentionable?: boolean; }
+
+    interface Webhook {
+        name: string;
+        channel_id: string;
+        token: string;
+        avatar?: string;
+        guild_id: string;
+        id: string;
+        user: {
+          username: string,
+          discriminator: string,
+          id: string,
+          avatar?: string,
+        };
+    }
+    interface CreateInviteOptions {
+        maxAge?: number;
+        maxUses?: number;
+        temporary?: boolean;
+    }
+    interface Collection<T extends { id: string | number }> extends Map<string | number, T> {
+        public baseObject: new (...args: any[]) => T;
+        public limit?: number;
+        public constructor(baseObject: new (...args: any[]) => T, limit?: number);
+        public add(obj: T, extra?: any, replace?: boolean): T;
+        public find(func: (i: T) => boolean): T;
+        public random(): T;
+        public filter(func: (i: T) => boolean): T[];
+        public map<R>(func: (i: T) => R): R[];
+        public update(obj: T, extra?: any, replace?: boolean): T;
+        public remove(obj: T | { id: string }): T;
+    }
+    // ===================== ERIS TYPINGS END =====================
     interface GuildBan {
         reason?: string;
         user: User;
     }
 
-    export interface Constants {
+    interface Constants {
         ChannelTypes: {
             text: 0,
             dm: 1,
@@ -58,7 +156,7 @@ declare module "tt.bot" {
         get guilds(): number;
         get users(): number;
         passesRoleHierarchy(member1: Member, member2: Member): boolean;
-        waitForMessage(channel: GuildChannel, author: UserResolvable, check: (msg: Message) => boolean, timeout: number): Promise<Message|Error|string>
+        waitForMessage(channel: GuildChannel, author: UserResolvable, check: (msg: Message) => boolean, timeout: number): Promise<Message | Error | string>
     }
 
     class Message {
@@ -126,7 +224,8 @@ declare module "tt.bot" {
         edit(options: MemberOptions, reason?: string): Promise<boolean>;
         kick(reason?: string): Promise<boolean>;
         removeRole(role: RoleResolvable, reason?: string): Promise<boolean>;
-        unban(reason?: string): Promise<boolean>
+        strike(reason: string): Promise<boolean>;
+        unban(reason?: string): Promise<boolean>;
     }
 
     class Guild {
@@ -288,7 +387,6 @@ declare module "tt.bot" {
 
     class Invite {
         code: string;
-
         channel: { id: string, name: string };
         guild: {
             id: string,
@@ -308,5 +406,13 @@ declare module "tt.bot" {
         memberCount: number?;
         delete(): Promise<boolean>;
         get createdAt(): number;
+    }
+
+    class Extension {
+        id: string;
+        name: string;
+        store: object;
+        updateData(data: string | object): Promise<object|Error>
+        wipeData(): Promise<object|Error>
     }
 }

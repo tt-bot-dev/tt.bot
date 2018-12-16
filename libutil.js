@@ -59,7 +59,9 @@ class LibWUtil extends eris {
     async postStats() {
         if (!config.dbotskey || config.dbotskey == "") return;
         try {
-            return await this._doPost(config.dbotskey, `https://bots.discord.pw/api/bots/${this.user.id}/stats`);
+            return await this._doPost(config.dbotskey, `https://discord.bots.gg/api/v1/bots/${this.user.id}/stats`, {
+                guildCount: this.guilds.size
+            });
         } catch (err) {
             throw err;
         }

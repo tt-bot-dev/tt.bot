@@ -1,0 +1,1 @@
+!function(o){require.config({paths:{vs:"/monaco/vs"}}),require(["vs/editor/editor.main"],function(){o.ttbot.monacoLoaded=!0})}(window);

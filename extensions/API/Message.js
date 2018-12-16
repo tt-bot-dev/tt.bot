@@ -1,12 +1,13 @@
-const Guild = require("./Guild");
+
 const resolveId = require("../Utils/ResolveUserID");
 const InterceptReason = require("../Utils/InterceptReason");
 const Base = require("./Base");
-let TextChannel, Member, User;
+let TextChannel, Member, User, Guild;
 process.nextTick(() => {
     TextChannel= require("./TextChannel");
     Member = require("./Member");
-    User = require("./User")
+    User = require("./User");
+    Guild = require("./Guild");
 })
 class Message extends Base {
     constructor(extension, msg) {

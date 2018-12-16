@@ -8,7 +8,7 @@ module.exports = csrf => {
         if (!guilds.find(g => g.isOnServer && g.id == rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
         else {
             const guild = bot.guilds.get(rq.params.guild);
-            return rs.send(guild.channels.filter(c => c.type === 0).map(c => ({
+            return rs.send(guild.channels.filter(c => c.type === 0).sort((a, b) => a.position - b.position).map(c => ({
                 name: c.name,
                 id: c.id
             })));
@@ -32,10 +32,10 @@ module.exports = csrf => {
             const highestRole = guild.members.get(bot.user.id).roles
                 .map(r => guild.roles.get(r))
                 .sort((a, b) => b.position - a.position)[0];
-            return rs.send(guild.roles.filter(r => r.position < highestRole.position).map(r => ({
+            return rs.send(guild.roles.filter(r => r.position < highestRole.position).sort((a, b) => b.position - a.position).map(r => ({
                 name: r.name,
                 id: r.id
-            })).sort((a, b) => b.position - a.position));
+            })));
         }
     });
 
@@ -66,6 +66,37 @@ module.exports = csrf => {
             return rs.send(await db.table("configs").get(rq.params.guild));
         }
     });
+
+    app.get("/extensions/:guild/:id", async (rq, rs) => {
+        const d = {
+            allowedChannels: [],
+            allowedRoles: [],
+            commandTrigger: "",
+            store: null,
+            code: `const { message } = require("tt.bot");\n\nmessage.reply("hi!")`,
+            name: `New extension`,
+            id: "new"
+        }
+        const { guild, id } = rq.params;
+        const guilds = getGuilds(rq, rs);
+        if (!guilds.find(g => g.isOnServer && g.id == guild)) return rs.status(403).send({ error: "Forbidden" });
+        else {
+            if (id === "new") return rs.send(d);
+            const filteredBody = {};
+            const extension = await db.table("extensions").get(id);
+            if (!extension || (extension && extension.guildID !== guild)) {
+                rs.status(404);
+                rs.send({ error: "Forbidden" });
+                return;
+            }
+            Object.keys(extension).filter(k => Object.keys(d).includes(k)).forEach(k => {
+                filteredBody[k] = extension[k] || undefined;
+            });
+
+            filteredBody.id = id;
+            rs.send(filteredBody)
+        }
+    })
 
     if (config.dblVoteHook) {
         app.post("/dblvotes", async (rq, rs) => {

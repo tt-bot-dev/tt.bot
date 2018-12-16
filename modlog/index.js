@@ -33,6 +33,23 @@ class ModLog {
             messageID: null
         };
     }
+
+    async addStrikeExtension(userID, guild, reason) {
+        const guildID = guild.id;
+        const config = await db.table("configs").get(guild.id);
+        if (!config) return;
+        if (!guild.channels.get(config.modlogChannel)) return;
+        if ((await bot.isModerator(guild.members.get(userID), false))) throw new Error();
+        let guildStrikes = await db.table("modlog").get(guildID);
+        if (!guildStrikes) guildStrikes = await this.insertNew(guildID);
+        let {items} = guildStrikes;
+        const dataobj = await this.generateObj(userID, reason, PunishTypes.STRIKE);
+        const m = await this.makeLogMessage(userID, dataobj.id, PunishTypes.STRIKE, {guild, guildConfig: config, author: bot.user}, reason);
+        if (!m) throw "Cannot make modlog message";
+        dataobj.messageID = m.id;
+        items.push(dataobj);
+        await db.table("modlog").get(guildID).update({items});
+    }
     async addStrike(userID, msg, reason) {
         if (!msg.guild.channels.get(msg.guildConfig.modlogChannel)) return;
         if ((await bot.isModerator(msg.guild.members.get(userID), false))) throw msg.t("MODS_UNSTRIKABLE");
