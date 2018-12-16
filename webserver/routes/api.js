@@ -32,7 +32,9 @@ module.exports = csrf => {
             const highestRole = guild.members.get(bot.user.id).roles
                 .map(r => guild.roles.get(r))
                 .sort((a, b) => b.position - a.position)[0];
-            return rs.send(guild.roles.filter(r => r.position < highestRole.position).sort((a, b) => b.position - a.position).map(r => ({
+            let roles = guild.roles.filter(r => r.position < highestRole.position);
+            if (rq.query.ignoreHierarchy === "true") roles = [...guild.roles.values()];
+            return rs.send(roles.sort((a, b) => b.position - a.position).map(r => ({
                 name: r.name,
                 id: r.id
             })));
@@ -40,7 +42,6 @@ module.exports = csrf => {
     });
 
     app.post("/config/:guild", authNeeded, csrf(), async (rq, rs) => {
-        console.log(`POST /config/:guild\n:guild = ${rq.params.guild}\nbody = ${require("util").inspect(rq.body)}`);
         const guilds = getGuilds(rq, rs);
         if (!guilds.find(g => g.isOnServer && g.id == rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
         else {
@@ -95,6 +96,62 @@ module.exports = csrf => {
 
             filteredBody.id = id;
             rs.send(filteredBody)
+        }
+    })
+
+    app.post("/extensions/:guild/:id", async (rq, rs) => {
+        const { guild, id } = rq.params;
+        const guilds = getGuilds(rq, rs);
+        if (!guilds.find(g => g.isOnServer && g.id == guild)) return rs.status(403).send({ error: "Forbidden" });
+        else {
+            const props = [
+                "code",
+                "allowedChannels",
+                "allowedRoles",
+                "commandTrigger",
+                "name",
+                "store"
+            ]
+            const filteredBody = {};
+            const extension = id === "new" ? {guildID: guild} : await db.table("extensions").get(id);
+            if (!extension || (extension && extension.guildID !== guild)) {
+                rs.status(404);
+                rs.send({ error: "Forbidden" });
+                return;
+            }
+            Object.keys(rq.body).filter(k => props.includes(k)).forEach(k => {
+                filteredBody[k] = rq.body[k] || undefined;
+            });
+
+            filteredBody.id = id;
+            filteredBody.guildID = guild;
+            console.log(filteredBody)
+            if (id === "new") {
+                delete filteredBody.id;
+                const tryInsert = async () => {
+                    const id = await r.uuid();
+                    try {
+                        await db.table("extension_store").insert({
+                            id: [msg.guild.id, id],
+                            store: "{}"
+                        }, {
+                                conflict: "error"
+                            });
+                    } catch (_) {
+                        // Try to insert with a different id
+                        return tryInsert();
+                    } finally {
+                        return id;
+                    }
+                }
+
+                if (!filteredBody.store) filteredBody.store = await tryInsert();
+                const { generated_keys: [newID] } = await db.table("extensions").insert(filteredBody)
+                return rs.send(await db.table("extensions").get(newID));
+            } else {
+                await db.table("extensions").get(id).replace(filteredBody);
+                return rs.send(await db.table("extensions").get(id));
+            }
         }
     })
 

@@ -46,8 +46,8 @@
             return r.json();
         })
     }
-    ttbot.getAvailableRoles = function () {
-        return fetch("/api/roles/" + ttbot.guildId, {
+    ttbot.getAvailableRoles = function (ignoreHierarchy) {
+        return fetch("/api/roles/" + ttbot.guildId + (ignoreHierarchy ? "?ignoreHierarchy=true" : ""), {
             credentials: "include"
         }).then(function (r) {
             return r.json();

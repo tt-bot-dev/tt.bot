@@ -33,16 +33,16 @@
                 var f = function () {
                     el.innerHTML = oldData;
                     savingExtensionData = false;
-                    cb(ttbot.extensionData)
+                    cb(w.ttbot.extensionData)
                 }
-                if (d) ttbot.saveDashboardChanges(d).then(f)
+                if (d) w.ttbot.updateExtension(d).then(f)
                 else f();
             })
         })
     }
 
     var bindToResetButton = function (el, cb) {
-        el.addEventListener("click", function () { cb(ttbot.extensionData) });
+        el.addEventListener("click", function () { cb(w.ttbot.extensionData, true) });
     }
 
     function dg(cb) {
@@ -76,18 +76,23 @@
             code = ta.value;
         }
 
+        var name = document.querySelector("input#tttie-extension-name");
+
         cb({
             allowedChannels: allowedChannels,
             allowedRoles: allowedRoles,
-            commandTrigger: commandTrigger,
+            commandTrigger: commandTrigger.value,
             code: code,
+            name: name.value,
+            store: store.value || null
         })
     }
     function setValues(cfg, reset) {
 
-        
-        if (cfg.id === "new") document.title += " - New extension"
-        else document.title += " - Extension: " + cfg.name
+        if (!reset) {
+            if (cfg.id === "new") document.title += " - New extension"
+            else document.title += " - Extension: " + cfg.name
+        }
 
         var title = document.querySelector("h1#tttie-title");
         if (cfg.id === "new") title.innerText = "Create a new extension";
@@ -130,11 +135,9 @@
     window.addEventListener("load", function () {
         var pickers = document.querySelectorAll("div.tttie-extension-channel-list");
         var rPickers = document.querySelectorAll("div.tttie-extension-role-list");
-        //w.ttbot.bindToSaveButton(document.querySelector("a.tttie-linkbutton#save"), setValues, dg);
-        //w.ttbot.bindToResetButton(document.querySelector("a.tttie-linkbutton#reset"), setValues);
         w.ttbot.getAvailableChannels().then(function (c) {
             pickers.forEach(loadPickers(true, c));
-            return w.ttbot.getAvailableRoles()
+            return w.ttbot.getAvailableRoles(true)
         }).then(function (r) {
             rPickers.forEach(loadPickers(false, r.filter(function (r) {
                 return r.id !== w.ttbot.guildId;
@@ -173,7 +176,7 @@
                 ta.value = d.code;
             }
             setValues(d);
-            //bindToSaveButton(document.querySelector("a.tttie-linkbutton#save"), setValues, dg);
+            bindToSaveButton(document.querySelector("a.tttie-linkbutton#save"), setValues, dg);
             bindToResetButton(document.querySelector("a.tttie-linkbutton#reset"), function (cfg) {
                 setValues(cfg, true)
             });

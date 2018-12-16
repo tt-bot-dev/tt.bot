@@ -180,9 +180,7 @@ app.get("/dashboard/:id/extensions/:extension/monaco", checkAuth(), async (rq, r
 
             rs.render("extensions-update", rq.makeTemplatingData({
                 erisGuild: g,
-                pageTitle: `New extension`,
                 extension: {
-                    name: `New extension`,
                     id: "new"
                 },
                 isMonaco: true
@@ -200,9 +198,7 @@ app.get("/dashboard/:id/extensions/:extension/monaco", checkAuth(), async (rq, r
 
         rs.render("extensions-update", rq.makeTemplatingData({
             erisGuild: g,
-            pageTitle: `Extension: ${extension.name}`,
             extension: {
-                name: extension.name,
                 id: extension.id
             },
             isMonaco: true
