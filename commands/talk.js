@@ -26,7 +26,7 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 1,
-    description: "Chat with the cleverbot!",
+    description: "Chat with the cleverbot.",
     args: "<query>",
     aliases: [
         "cb"

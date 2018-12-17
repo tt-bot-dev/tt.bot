@@ -100,10 +100,9 @@ module.exports = {
         }
     },
     isCmd: true,
-    name: "uinfo",
     display: true,
     category: 1,
-    description: "User information.",
+    description: "Allows getting information about someone",
     aliases: ["userinfo"]
 
 };

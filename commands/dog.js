@@ -1,10 +1,11 @@
+const { get } = require("snekfetch");
 module.exports = {
     exec: async function (msg) {
-        let data = await require("snekfetch").get("https://random.dog/woof");
-        msg.channel.createMessage({embed:{image:{url: "https://random.dog/"+data.text}, color: 0x008800}});
+        const { body } = await get("https://random.dog/woof.json");
+        msg.channel.createMessage({embed:{image:{url: body.url}, color: 0x008800}});
     },
     isCmd: true,
     display: true,
     category: 1,
-    description: "Gets a random cat picture.",
+    description: "Gets a random dog picture.",
 };

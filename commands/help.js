@@ -223,11 +223,10 @@ module.exports = {
             });
         }
     },
-    name: "help",
     isCmd: true,
     category: 1,
     display: false,
-    description: "Help?",
+    description: "New to tt.bot? This command is for you!",
     args: "[command]",
     aliases: [
         "cmds",

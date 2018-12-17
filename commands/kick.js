@@ -42,6 +42,6 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 3,
-    description: "Kicks a user.\nThe command uses `\u200b | \u200b` as separators (note the spaces). Use ` \\| ` to escape the separation in your queries.\nThe order of the switches doesn't need to be followed.",
+    description: "Kicks an user.\nThe command uses `\u200b | \u200b` as separators (note the spaces). Use ` \\| ` to escape the separation in your queries.\nThe order of the switches doesn't matter.",
     args: "<user:<user>>[ | <reason:<reason>>]"
 };

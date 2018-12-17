@@ -1,12 +1,11 @@
-// This is an example command, it shouldn't be treat as a command
+// This is an example command, it shouldn't be treated as a command
 module.exports = {
-    exec: function(msg,args) {
-        args;
-        return bot.createMessage(msg.channel.id, "Hello!");
+    exec: function(msg, args) {
+        console.log(args);
+        bot.createMessage(msg.channel.id, "Hello!");
     },
     isCmd: false,
-    name: "examplecommand",
     display: true,
     category: 1,
-    description: "Testing command."
+    description: "This is an example command."
 };

@@ -86,7 +86,7 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 1,
-    description: "Store the messages",
+    description: "Store something for later retrieval (tags are public)",
     args: "<show <name>|create <name>|<content>|edit <name>|<content>|delete <name>>",
     aliases: [
         "tag", "t"

@@ -35,6 +35,6 @@ module.exports = {
     name: "hackban",
     display: true,
     category: 3,
-    description: "Bans a user by ID.",
+    description: "Bans an user by ID.",
     args: "<user id> [<user id> <user id>...]"
 };

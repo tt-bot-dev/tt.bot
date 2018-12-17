@@ -287,5 +287,5 @@ module.exports = {
     name: "config",
     display: true,
     category: 4,
-    description: "This lets you configure your server.",
+    description: "Lets you configure your server.",
 };

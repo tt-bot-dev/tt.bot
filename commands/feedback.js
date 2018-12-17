@@ -3,12 +3,12 @@ module.exports = {
     exec: async function (msg, args) {
         if (!args) return msg.channel.createMessage("I can't send any feedback without your input.");
         else {
-            if (args.length > 1000 && !args.startsWith("respond ")) return msg.channel.createMessage("This command is actually limited to 1000 characters in the input. If you want to submit a longer report, join our support server in the info command.");
+            if (args.length > 1000 && !args.startsWith("respond ")) return msg.channel.createMessage("The input is limited to 1000 characters. If you want to submit a longer report, join our support server in the info command.");
             if (isO(msg) && args.startsWith("respond ")) {
                 let newArgs = args.slice("respond ".length);
                 let caseID = newArgs.split(" ")[0];
                 let respondString = newArgs.split(" ").slice(1).join(" ");
-                if (respondString.length > 1000) return msg.channel.createMessage("This command is actually limited to 1000 characters in the input.");
+                if (respondString.length > 1000) return msg.channel.createMessage("The input is limited to 1000 characters.");
                 let feedbackData = await db.table("feedback").get(caseID).run();
                 let obj = new FeedbackObject(feedbackData);
                 if (obj) {
@@ -62,7 +62,7 @@ module.exports = {
                     id: sentMessage.id
                 };
                 await db.table("feedback").get(insertObject.generated_keys[0]).update(obj).run();
-                msg.channel.createMessage(`${msg.author.mention}, Sent your feedback into our support server.\nYour case ID is ${insertObject.generated_keys[0]}. Please note that and wait for the response.`);
+                msg.channel.createMessage(`${msg.author.mention}, I have sent your feedback into our support server.\nYour case ID is ${insertObject.generated_keys[0]}. Please note that and wait for the response.`);
             }
 
         }
@@ -70,5 +70,5 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 1,
-    description: "You wanna send any feedback? Use this command. You can as always come to our support server(in info command) and tell it there.\nBy using this command, you allow us to send the feedback to our support server, with these data:\nServer name, server ID, server owner ID, author(your) username, discriminator(That 4-digit number after your username) (These will be PMed to the server owner if I can't get you), ID, channel ID(to actually respond).\nThese data will be deleted right after the response.",
+    description: "Tell us something. You can as always come to our support server (in the info command) and tell it there.\nBy using this command, you allow us to send the feedback to our support server, with these data:\nServer name, server ID, server owner ID, author(your) username, discriminator(4-digit number after your username) (These will be sent as a DM to the server owner if I can't get you), ID, channel ID(to respond).\nThese data will be deleted right after the response.",
 };

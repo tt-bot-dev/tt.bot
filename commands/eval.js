@@ -1,7 +1,6 @@
 const CensorBuilder = require("../CensorBuilder");
 module.exports = {
     exec: async function (msg, args) {
-
         let evaLUAted;
         try { evaLUAted = await eval(`(async () => {\n${args}\n})()`); }
         catch (err) { evaLUAted = err.message; console.error(err.stack); }
@@ -57,7 +56,7 @@ module.exports = {
     },
     category: 2,
     isCmd: true,
-    description: "evaluates js. if ur not an owner go away",
+    description: "Evaluates JS code.",
     display: true,
     name: "eval",
     args: "<code>"

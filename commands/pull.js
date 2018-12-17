@@ -5,6 +5,6 @@ module.exports = {
     },
     category: 2,
     isCmd: true,
-    description: "pulls latest stuff. if ur not an owner go away",
+    description: "A simple shortcut that pulls newest data.",
     display: true,
 };
