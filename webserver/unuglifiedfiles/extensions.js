@@ -108,8 +108,7 @@
         else title.innerText = "Extension: " + cfg.name
 
         var extName = document.querySelector("input#tttie-extension-name");
-        if (cfg.id === "new") extName.value = "My cool extension";
-        else extName.value = cfg.name
+        extName.value = cfg.name
 
         for (var picker of document.querySelectorAll("div.tttie-extension-channel-list")) {
             picker.querySelectorAll("input[name=\"tttie-channels\"]").forEach(function (c) {

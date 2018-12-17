@@ -102,7 +102,7 @@ const auth = {
         req.session.tokenData = {
             accessToken: body.access_token,
             refreshToken: body.refreshToken,
-            expiry: body.expires_in,
+            expiry: (body.expires_in * 1000), // Expiry is in seconds, convert to ms
             date: dateAfterReq,
             redirURI: `${req.protocol}://${req.headers.host}/callback`,
         };

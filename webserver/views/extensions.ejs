@@ -28,6 +28,7 @@
         <th>Name</th>
         <th>ID</th>
         <th>Store ID</th>
+        <th>Actions</th>
     </tr>
 </thead>
 <tbody>
@@ -37,6 +38,10 @@
 <td><%=e.name%></td>
 <td><%=e.id%></td>
 <td><%=e.store%></td>
+<td>
+<a class="tttie-linkbutton" href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>"><div class="tttie-button">Edit</div></a>
+<a class="tttie-linkbutton nomargin" href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>/monaco"><div class="tttie-button">Edit (Monaco)</div></a>
+<a class="tttie-linkbutton nomargin" href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>/delete"><div class="tttie-button red">Delete</div></a></td>
 </tr>
 <%})%>
 </tbody>

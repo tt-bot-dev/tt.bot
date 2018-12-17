@@ -206,6 +206,31 @@ app.get("/dashboard/:id/extensions/:extension/monaco", checkAuth(), async (rq, r
     }
 })
 
+app.get("/dashboard/:id/extensions/:extension/delete", checkAuth(), async (rq, rs) => {
+    const guilds = getGuilds(rq, rs);
+    if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
+    else {
+        const g = bot.guilds.get(rq.params.id);
+        const extension = await db.table("extensions").get(rq.params.extension);
+        if (!extension || (extension && extension.guildID !== g.id)) {
+            rs.status(404);
+            return rs.render("404", rq.makeTemplatingData({
+                pageTitle: "404"
+            }))
+        }
+
+        rs.render("extensions-delete", rq.makeTemplatingData({
+            erisGuild: g,
+            extension: {
+                name: extension.name,
+                id: extension.id,
+                store: extension.store
+            },
+            isMonaco: false
+        }));
+    }
+})
+
 app.get("/logout", checkAuth(), function (req, res) {
     logout(req, res);
     res.redirect("/");

@@ -68,14 +68,14 @@ module.exports = csrf => {
         }
     });
 
-    app.get("/extensions/:guild/:id", async (rq, rs) => {
+    app.get("/extensions/:guild/:id", authNeeded, async (rq, rs) => {
         const d = {
             allowedChannels: [],
             allowedRoles: [],
             commandTrigger: "",
             store: null,
             code: `const { message } = require("tt.bot");\n\nmessage.reply("hi!")`,
-            name: `New extension`,
+            name: `My cool extension`,
             id: "new"
         }
         const { guild, id } = rq.params;
@@ -87,7 +87,7 @@ module.exports = csrf => {
             const extension = await db.table("extensions").get(id);
             if (!extension || (extension && extension.guildID !== guild)) {
                 rs.status(404);
-                rs.send({ error: "Forbidden" });
+                rs.send({ error: "Not Found" });
                 return;
             }
             Object.keys(extension).filter(k => Object.keys(d).includes(k)).forEach(k => {
@@ -99,7 +99,7 @@ module.exports = csrf => {
         }
     })
 
-    app.post("/extensions/:guild/:id", async (rq, rs) => {
+    app.post("/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
         const { guild, id } = rq.params;
         const guilds = getGuilds(rq, rs);
         if (!guilds.find(g => g.isOnServer && g.id == guild)) return rs.status(403).send({ error: "Forbidden" });
@@ -116,7 +116,7 @@ module.exports = csrf => {
             const extension = id === "new" ? {guildID: guild} : await db.table("extensions").get(id);
             if (!extension || (extension && extension.guildID !== guild)) {
                 rs.status(404);
-                rs.send({ error: "Forbidden" });
+                rs.send({ error: "Not Found" });
                 return;
             }
             Object.keys(rq.body).filter(k => props.includes(k)).forEach(k => {
@@ -131,7 +131,7 @@ module.exports = csrf => {
                     const id = await r.uuid();
                     try {
                         await db.table("extension_store").insert({
-                            id: [msg.guild.id, id],
+                            id: [guild, id],
                             store: "{}"
                         }, {
                                 conflict: "error"
@@ -151,6 +151,27 @@ module.exports = csrf => {
                 await db.table("extensions").get(id).replace(filteredBody);
                 return rs.send(await db.table("extensions").get(id));
             }
+        }
+    })
+
+    app.delete("/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
+        const { guild, id } = rq.params;
+        const guilds = getGuilds(rq, rs);
+        if (!guilds.find(g => g.isOnServer && g.id == guild)) return rs.status(403).send({ error: "Forbidden" });
+        else {
+            const extension = await db.table("extensions").get(id);
+            if (!extension || (extension && extension.guildID !== guild)) {
+                rs.status(404);
+                rs.send({ error: "Not Found" });
+                return;
+            }
+        
+            const { deleteStore } = rq.body;
+            await db.table("extensions").get(id).delete();
+            if (deleteStore) {
+                await db.table("extension_store").get([guild, extension.store]).delete();
+            }
+            return rs.status(204).end();
         }
     })
 

@@ -88,5 +88,18 @@
             return ttbot.extensionData = j;
         })
     }
+    ttbot.deleteExtension = function (deleteStore) {
+        return fetch("/api/extensions/" + ttbot.guildId + "/" + ttbot.extension, {
+            credentials: "include",
+            body: JSON.stringify({
+                deleteStore: !!deleteStore  
+            }),
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "CSRF-Token": ttbot.csrfToken
+            }
+        }).then(function(){return});
+    }
     w.ttbot = ttbot;
 })(window);
