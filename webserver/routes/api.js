@@ -74,10 +74,10 @@ module.exports = csrf => {
             allowedRoles: [],
             commandTrigger: "",
             store: null,
-            code: `const { message } = require("tt.bot");\n\nmessage.reply("hi!")`,
-            name: `My cool extension`,
+            code: "const { message } = require(\"tt.bot\");\n\nmessage.reply(\"hi!\")",
+            name: "My cool extension",
             id: "new"
-        }
+        };
         const { guild, id } = rq.params;
         const guilds = getGuilds(rq, rs);
         if (!guilds.find(g => g.isOnServer && g.id == guild)) return rs.status(403).send({ error: "Forbidden" });
@@ -95,9 +95,9 @@ module.exports = csrf => {
             });
 
             filteredBody.id = id;
-            rs.send(filteredBody)
+            rs.send(filteredBody);
         }
-    })
+    });
 
     app.post("/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
         const { guild, id } = rq.params;
@@ -111,7 +111,7 @@ module.exports = csrf => {
                 "commandTrigger",
                 "name",
                 "store"
-            ]
+            ];
             const filteredBody = {};
             const extension = id === "new" ? {guildID: guild} : await db.table("extensions").get(id);
             if (!extension || (extension && extension.guildID !== guild)) {
@@ -128,31 +128,30 @@ module.exports = csrf => {
             if (id === "new") {
                 delete filteredBody.id;
                 const tryInsert = async () => {
-                    const id = await r.uuid();
+                    const id = await db.uuid();
                     try {
                         await db.table("extension_store").insert({
                             id: [guild, id],
                             store: "{}"
                         }, {
-                                conflict: "error"
-                            });
+                            conflict: "error"
+                        });
+                        return id;
                     } catch (_) {
                         // Try to insert with a different id
                         return tryInsert();
-                    } finally {
-                        return id;
                     }
-                }
+                };
 
                 if (!filteredBody.store) filteredBody.store = await tryInsert();
-                const { generated_keys: [newID] } = await db.table("extensions").insert(filteredBody)
+                const { generated_keys: [newID] } = await db.table("extensions").insert(filteredBody);
                 return rs.send(await db.table("extensions").get(newID));
             } else {
                 await db.table("extensions").get(id).replace(filteredBody);
                 return rs.send(await db.table("extensions").get(id));
             }
         }
-    })
+    });
 
     app.delete("/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
         const { guild, id } = rq.params;
@@ -173,7 +172,7 @@ module.exports = csrf => {
             }
             return rs.status(204).end();
         }
-    })
+    });
 
     if (config.dblVoteHook) {
         app.post("/dblvotes", async (rq, rs) => {

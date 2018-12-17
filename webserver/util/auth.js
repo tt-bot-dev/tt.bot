@@ -53,7 +53,7 @@ const getUserInfo = async token => {
     } catch (err) {
         throw err;
     }
-}
+};
 
 const c = new Cache(6e4, async token => {
     try {
@@ -61,7 +61,7 @@ const c = new Cache(6e4, async token => {
     } catch (e) {
         return { error: e };
     }
-})
+});
 
 const auth = {
     async checkAuth(rq, rs, nx) {
@@ -69,7 +69,7 @@ const auth = {
         else {
             if (Date.now() - rq.session.tokenData.date >= rq.session.tokenData.expiry) {
                 try {
-                    console.log("Refreshing a token.")
+                    console.log("Refreshing a token.");
                     await auth.refreshToken(rq.session.refreshToken, rq);
                 } catch (err) {
                     return nx();

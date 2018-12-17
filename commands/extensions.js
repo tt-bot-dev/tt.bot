@@ -8,12 +8,12 @@ module.exports = {
             const extensions = await db.table("extensions").filter({
                 guildID: msg.guild.id
             });
-            if (extensions.length === 0) return msg.channel.createMessage("You don't have any extensions yet!")
+            if (extensions.length === 0) return msg.channel.createMessage("You don't have any extensions yet!");
             let page = 0;
-            if (id > 1) page = Number(id - 1)
+            if (id > 1) page = Number(id - 1);
             if (isNaN(page)) page = 0;
             let ext = extensions.slice(page * 25 - 1, (page + 1) * 25 - 1);
-            if (ext.length === 0) return msg.channel.createMessage("There aren't any more extensions than that.")
+            if (ext.length === 0) return msg.channel.createMessage("There aren't any more extensions than that.");
             msg.channel.createMessage({
                 embed: {
                     title: `Here are the extensions for ${msg.guild.name}`,
@@ -27,7 +27,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                     })),
                     color: 0x008800
                 }
-            })
+            });
         } else if (action === "create") {
             const m = await msg.channel.createMessage("Please upload your code as a Discord attachment. You have 60 seconds to upload the code.\nKeep in mind, that the code must be a in a .js file.");
             let code;
@@ -38,13 +38,13 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                     if (m.attachments.length === 0) return false;
                     if (!m.attachments.find(a => /.+\.js$/.test(a.filename))) return false;
                     return true;
-                })
+                });
                 code = m;
             } catch (_) {
                 msg.channel.createMessage(msg.t("OP_CANCELLED"));
                 return;
             }
-            const { body } = await get(code.attachments.find(a => /.+\.js$/.test(a.filename)).url)
+            const { body } = await get(code.attachments.find(a => /.+\.js$/.test(a.filename)).url);
             const jsCode = body.toString();
             await m.delete();
             try {
@@ -60,7 +60,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                     if (m.author.id !== msg.author.id) return false;
                     if (m.content.length > 100) return false;
                     return true;
-                })
+                });
                 name = m;
             } catch (_) {
                 msg.channel.createMessage(msg.t("OP_CANCELLED"));
@@ -83,7 +83,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                     if (m.content.split(" ").length > 1) return false;
                     if (m.content.length > 20) return false;
                     return true;
-                })
+                });
                 trigger = m;
             } catch (_) {
                 msg.channel.createMessage(msg.t("OP_CANCELLED"));
@@ -110,28 +110,31 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
             if (response) {
                 const embedStructure = () => ({
                     embed: {
-                        title: `Allowed channels`,
+                        title: "Allowed channels",
                         description: `Please type in the letter next to the action to do the listed action\nCurrently allowed channels: ${allowedChannels.map(c => `<#${c}>`).join(", ") || "All"}`,
                         fields: [{
-                            name: `a: Add`,
-                            value: `Adds a channel to the list of allowed channels`,
+                            name: "a: Add",
+                            value: "Adds a channel to the list of allowed channels",
                             inline: true
                         }, {
-                            name: `r: Remove`,
-                            value: `Removes a channel off the list of allowed channels`,
+                            name: "r: Remove",
+                            value: "Removes a channel off the list of allowed channels",
                             inline: true
                         }, {
-                            name: `d: Done`,
-                            value: `Finishes editing`,
+                            name: "d: Done",
+                            value: "Finishes editing",
                             inline: true
                         }]
                     }
-                })
+                });
                 const m = await msg.channel.createMessage(embedStructure());
                 let firstCycle = false;
+
+                // eslint I hope you realize that I break out of the loop eventually
+                // eslint-disable-next-line no-constant-condition
                 while (!0) {
                     if (firstCycle) {
-                        await m.edit(embedStructure())
+                        await m.edit(embedStructure());
                     } else {
                         firstCycle = true;
                     }
@@ -141,7 +144,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                             if (m.author.id !== msg.author.id) return false;
                             if (m.content.toLowerCase() !== "a" && m.content.toLowerCase() !== "r" && m.content.toLowerCase() !== "d") return false;
                             return true;
-                        })
+                        });
                         try {
                             await resp.delete();
                         } catch (_) {
@@ -156,8 +159,8 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                                     if (m.channel.id !== msg.channel.id) return false;
                                     if (m.author.id !== msg.author.id) return false;
                                     return true;
-                                })
-                                c = await queries.channel(m.content, m, true)
+                                });
+                                c = await queries.channel(m.content, m, true);
                                 try {
                                     await m.delete();
                                 } catch (_) {
@@ -178,8 +181,8 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                                     if (m.channel.id !== msg.channel.id) return false;
                                     if (m.author.id !== msg.author.id) return false;
                                     return true;
-                                })
-                                c = await queries.channel(m.content, m, true)
+                                });
+                                c = await queries.channel(m.content, m, true);
                                 try {
                                     await m.delete();
                                 } catch (_) {
@@ -190,7 +193,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                                 continue;
                             }
                             if (!allowedChannels.find(ch => ch === c.id)) {
-                                msg.channel.createMessage("This channel is not allowed already.")
+                                msg.channel.createMessage("This channel is not allowed already.");
                                 continue;
                             }
                             allowedChannels.splice(allowedChannels.indexOf(c.id), 1);
@@ -222,28 +225,31 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
             if (response2) {
                 const embedStructure = () => ({
                     embed: {
-                        title: `Allowed roles`,
+                        title: "Allowed roles",
                         description: `Please type in the letter next to the action to do the listed action\nCurrently allowed roles: ${allowedRoles.map(c => `<@&${c}>`).join(", ") || "All"}`,
                         fields: [{
-                            name: `a: Add`,
-                            value: `Adds a role to the list of allowed roles`,
+                            name: "a: Add",
+                            value: "Adds a role to the list of allowed roles",
                             inline: true
                         }, {
-                            name: `r: Remove`,
-                            value: `Removes a role off the list of allowed roles`,
+                            name: "r: Remove",
+                            value: "Removes a role off the list of allowed roles",
                             inline: true
                         }, {
-                            name: `d: Done`,
-                            value: `Finishes editing`,
+                            name: "d: Done",
+                            value: "Finishes editing",
                             inline: true
                         }]
                     }
-                })
+                });
                 const m = await msg.channel.createMessage(embedStructure());
                 let firstCycle = false;
+                
+                // eslint I hope you realize that I break out of the loop eventually
+                // eslint-disable-next-line no-constant-condition
                 while (!0) {
                     if (firstCycle) {
-                        await m.edit(embedStructure())
+                        await m.edit(embedStructure());
                     } else {
                         firstCycle = true;
                     }
@@ -253,7 +259,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                             if (m.author.id !== msg.author.id) return false;
                             if (m.content.toLowerCase() !== "a" && m.content.toLowerCase() !== "r" && m.content.toLowerCase() !== "d") return false;
                             return true;
-                        })
+                        });
                         try {
                             await resp.delete();
                         } catch (_) {
@@ -268,8 +274,8 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                                     if (m.channel.id !== msg.channel.id) return false;
                                     if (m.author.id !== msg.author.id) return false;
                                     return true;
-                                })
-                                r = await queries.role(m, m.content, true)
+                                });
+                                r = await queries.role(m, m.content, true);
                                 try {
                                     await m.delete();
                                 } catch (_) {
@@ -284,14 +290,14 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                             continue;
                         } else if (action === "r") {
                             const m2 = await msg.channel.createMessage("Please type in the role you want to remove. You have 30 seconds to respond.");
-                            let r;
+                            let role;
                             try {
                                 const [m] = await bot.waitForEvent("messageCreate", 30000, m => {
                                     if (m.channel.id !== msg.channel.id) return false;
                                     if (m.author.id !== msg.author.id) return false;
                                     return true;
-                                })
-                                r = await queries.role(m, m.content, true)
+                                });
+                                role = await queries.role(m, m.content, true);
                                 try {
                                     await m.delete();
                                 } catch (_) {
@@ -301,11 +307,11 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                                 msg.channel.createMessage("Didn't catch that; please try again.");
                                 continue;
                             }
-                            if (!allowedRoles.find(r => r === r.id)) {
-                                msg.channel.createMessage("This role is not allowed already.")
+                            if (!allowedRoles.find(r => r === role.id)) {
+                                msg.channel.createMessage("This role is not allowed already.");
                                 continue;
                             }
-                            allowedRoles.splice(allowedRoles.indexOf(c.id), 1);
+                            allowedRoles.splice(allowedRoles.indexOf(role.id), 1);
                             await m2.delete();
                             continue;
                         } else if (action === "d") {
@@ -320,7 +326,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                 }
             }
 
-            const m6 = await msg.channel.createMessage("Do you want to use a different extension store than the default one? Type y or yes if you want to use one. n or no otherwise. To respond, you have 10 seconds.")
+            const m6 = await msg.channel.createMessage("Do you want to use a different extension store than the default one? Type y or yes if you want to use one. n or no otherwise. To respond, you have 10 seconds.");
             const { response: r6, msg: s } = await askYesNo(msg, true);
             await m6.delete();
             try {
@@ -339,7 +345,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                         if (m.author.id !== msg.author.id) return false;
                         if (m.content.length > 100) return false;
                         return true;
-                    })
+                    });
                     s = res;
                 } catch (_) {
                     msg.channel.createMessage(msg.t("OP_CANCELLED"));
@@ -359,23 +365,22 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                 store = stor.id;
             } else {
                 const tryInsert = async () => {
-                    const id = await r.uuid();
+                    const id = await db.uuid();
                     try {
                         await db.table("extension_store").insert({
                             id: [msg.guild.id, id],
                             store: "{}"
                         }, {
-                                conflict: "error"
-                            });
+                            conflict: "error"
+                        });
+                        return id;
                     } catch (_) {
                         // Try to insert with a different id
                         return tryInsert();
-                    } finally {
-                        return id;
                     }
-                }
+                };
                 store = await tryInsert();
-                await msg.channel.createMessage(`Created a store with an ID ${store}.`)
+                await msg.channel.createMessage(`Created a store with an ID ${store}.`);
             }
 
             // FINALLY INSERT !!!
@@ -387,9 +392,9 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                 commandTrigger,
                 guildID: msg.guild.id,
                 store
-            })
+            });
 
-            await msg.channel.createMessage(`Finished! Extension ${extensionName} has been successfully created! Its ID is ${info.generated_keys[0]}.`)
+            await msg.channel.createMessage(`Finished! Extension ${extensionName} has been successfully created! Its ID is ${info.generated_keys[0]}.`);
         } else if (action === "delete") {
             const d = await db.table("extensions").get(id);
             if (!d || (d && d.guildID !== msg.guild.id)) {
@@ -409,7 +414,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                         return;
                     }
                     await db.table("extension_store").get([msg.guild.id, d.store]).delete();
-                    await msg.channel.createMessage(`Done, deleted the store with an ID ${d.store}`)
+                    await msg.channel.createMessage(`Done, deleted the store with an ID ${d.store}`);
 
                 }
             } else {

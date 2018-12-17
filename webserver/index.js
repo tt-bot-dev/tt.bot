@@ -85,7 +85,6 @@ app.get("/dashboard/:id/extensions/:extension/load.js", checkAuth(), csrfProtect
     const guilds = getGuilds(rq, rs);
     if (!guilds.find(g => g.isOnServer && g.id == id)) return rs.sendStatus(403);
     else {
-        const g = bot.guilds.get(id);
         // No, this isn't incorrect. Read RFC 4329 + we do support just modern browsers.
         rs.set("Content-Type", "application/javascript");
         return rs.render("cspextensions", {
@@ -124,17 +123,14 @@ app.get("/dashboard/:id/extensions", checkAuth(), async (rq, rs) => {
         const g = bot.guilds.get(rq.params.id);
         const extensions = await db.table("extensions").filter({
             guildID: g.id
-        })
+        });
         rs.render("extensions", rq.makeTemplatingData({
             erisGuild: g,
-            extensions: await db.table("extensions").filter({
-                guildID: g.id
-            }),
-            pageTitle: `Extensions for ${g.name}`,
-            extensions
+            extensions,
+            pageTitle: `Extensions for ${g.name}`
         }));
     }
-})
+});
 
 app.get("/dashboard/:id/extensions/:extension", checkAuth(), async (rq, rs) => {
     const guilds = getGuilds(rq, rs);
@@ -158,7 +154,7 @@ app.get("/dashboard/:id/extensions/:extension", checkAuth(), async (rq, rs) => {
             rs.status(404);
             return rs.render("404", rq.makeTemplatingData({
                 pageTitle: "404"
-            }))
+            }));
         }
 
         rs.render("extensions-update", rq.makeTemplatingData({
@@ -169,7 +165,7 @@ app.get("/dashboard/:id/extensions/:extension", checkAuth(), async (rq, rs) => {
             isMonaco: false
         }));
     }
-})
+});
 
 app.get("/dashboard/:id/extensions/:extension/monaco", checkAuth(), async (rq, rs) => {
     const guilds = getGuilds(rq, rs);
@@ -193,7 +189,7 @@ app.get("/dashboard/:id/extensions/:extension/monaco", checkAuth(), async (rq, r
             rs.status(404);
             return rs.render("404", rq.makeTemplatingData({
                 pageTitle: "404"
-            }))
+            }));
         }
 
         rs.render("extensions-update", rq.makeTemplatingData({
@@ -204,7 +200,7 @@ app.get("/dashboard/:id/extensions/:extension/monaco", checkAuth(), async (rq, r
             isMonaco: true
         }));
     }
-})
+});
 
 app.get("/dashboard/:id/extensions/:extension/delete", checkAuth(), async (rq, rs) => {
     const guilds = getGuilds(rq, rs);
@@ -216,7 +212,7 @@ app.get("/dashboard/:id/extensions/:extension/delete", checkAuth(), async (rq, r
             rs.status(404);
             return rs.render("404", rq.makeTemplatingData({
                 pageTitle: "404"
-            }))
+            }));
         }
 
         rs.render("extensions-delete", rq.makeTemplatingData({
@@ -229,7 +225,7 @@ app.get("/dashboard/:id/extensions/:extension/delete", checkAuth(), async (rq, r
             isMonaco: false
         }));
     }
-})
+});
 
 app.get("/logout", checkAuth(), function (req, res) {
     logout(req, res);
@@ -237,7 +233,7 @@ app.get("/logout", checkAuth(), function (req, res) {
 });
 
 app.use("/api", require("./routes/api")(csrfProtection));
-app.use("/monaco", e.static(`${__dirname}/../node_modules/monaco-editor/min`))
+app.use("/monaco", e.static(`${__dirname}/../node_modules/monaco-editor/min`));
 app.get("/tt.bot.d.ts", (rq, rs) => {
     const s = fs.createReadStream(`${__dirname}/../extensions/tt.bot.d.ts`);
     s.pipe(rs);
@@ -255,7 +251,7 @@ app.use((rq, rs) => {
 app.use((err, req, res, next) => {
     if (err) {
         if (err.code && err.code === "ebadcsrftoken".toUpperCase()) {
-            res.status(403)
+            res.status(403);
             res.render("500", req.makeTemplatingData({
                 error: "Missing CSRF token! Please redo the action again in order to protect yourself.",
                 pageTitle: "Cross Site Request Forgery"
@@ -263,7 +259,7 @@ app.use((err, req, res, next) => {
             return;
         }
         console.error(err);
-        res.status(500)
+        res.status(500);
         res.render("500", req.makeTemplatingData({
             error: (req.user && isO({ author: req.user })) ? err.stack : err.message,
             pageTitle: "Error"

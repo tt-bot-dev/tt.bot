@@ -1,6 +1,6 @@
 const [major] = process.versions.node.split(".");
 const D_EPOCH = 1421280000000;
-const sleep = ms => new Promise(rs => setTimeout(() => rs(), ms))
+const sleep = ms => new Promise(rs => setTimeout(() => rs(), ms));
 
 /**
  * Allows getting more accurate snowflakes when using node v10
@@ -16,18 +16,19 @@ function getOldestSnowflake() {
 }
 
 function compare(num1, num2) {
-	if (major >= 10) {
-		return BigInt(num1) < BigInt(num2);
-	} else {
-		return num1 < num2;
-	}
+    if (major >= 10) {
+        // eslint-disable-next-line no-undef
+        return BigInt(num1) < BigInt(num2);
+    } else {
+        return num1 < num2;
+    }
 }
 
 async function deleteStrategy(msg, messages) {
     if (messages.length === 1) {
         return await msg.channel.deleteMessage(messages[0]);
     } else if (messages.length > 1 && messages.length <= 100) {
-        return await msg.channel.deleteMessages(messages)
+        return await msg.channel.deleteMessages(messages);
     } else {
         // More than 100 messages, huh?
         const messageCopy = [...messages];
@@ -41,7 +42,7 @@ async function deleteStrategy(msg, messages) {
                 await msg.channel.deleteMessages(messageCopy);
                 return true;
             }
-        }
+        };
 
         return delet();
     }
