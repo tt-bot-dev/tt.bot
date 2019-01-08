@@ -35,21 +35,23 @@ module.exports = {
                 guildID: msg.guild.id
             });
             if (phones.length && !isO({author: {id: msg.guild.ownerID}})) { // Any guilds owned by developers are allowed infinite numbers
-                await msg.channel.createMessage("You already have a phone number here, don't you?");
+                await msg.channel.createMessage(msg.t("ALREADY_HAVE_NUMBER"));
                 return;
             }
             const phoneNumber = convertPhoneNumber(additionalArgs.join(" "));
             if (!checkValid(phoneNumber)) {
-                await msg.channel.createMessage("Uh... This is not a valid phone number.\nYour number must start with TTBOT (88268), then 9 numbers of your choice.");
+                await msg.channel.createMessage(msg.t("NUMBER_INVALID", true));
                 return;
             }
             if (phoneNumber.startsWith("882680") && !isO({author: {id: msg.guild.ownerID}})) {
-                await msg.channel.createMessage("Sorry, but phone numbers starting with TTBOT 0 (882680) are reserved for the developers.");
+                await msg.channel.createMessage(msg.t("NUMBER_RESERVED"));
+                return;
             }
             if (await db.table("phone").get(phoneNumber)) {
-                await msg.channel.createMessage("The number already exists, so why register it again?");
+                await msg.channel.createMessage(msg.t("NUMBER_EXISTS"));
+                return;
             }
-            await msg.channel.createMessage("Do you want to make your number to be private? Private numbers show up as registered, however, in the lookup, no information will be available.");
+            await msg.channel.createMessage(msg.t("QUESTION_NUMBER_PRIVATE"));
             const isPrivate = await askYesNo(msg);
             await db.table("phone").insert({
                 id: phoneNumber,
@@ -57,11 +59,11 @@ module.exports = {
                 channelID: msg.channel.id,
                 guildID: msg.guild.id
             });
-            await msg.channel.createMessage("Alright, that's all! Your number is now safe and sound.");
+            await msg.channel.createMessage(msg.t("NUMBER_CREATED"));
         } else if (action === "call") {
             const phoneNumber = convertPhoneNumber(additionalArgs.join(" "));
             if (!checkValid(phoneNumber)) {
-                await msg.channel.createMessage("Uh... This is not a valid phone number.");
+                await msg.channel.createMessage(msg.t("NUMBER_INVALID"));
                 return;
             }
             const d = await db.table("phone").filter({
@@ -69,20 +71,21 @@ module.exports = {
                 channelID: msg.channel.id
             });
             if (!d.length) {
-                await msg.channel.createMessage("We don't do anonymous calls, sorry.");
+                await msg.channel.createMessage(msg.t("CALLER_NO_NUMBER"));
                 return;
             }
             const [currentSideData] = d;
             const otherSideData = await db.table("phone").get(phoneNumber);
             if (!otherSideData) {
-                await msg.channel.createMessage("This number is not registered, sorry.");
+                await msg.channel.createMessage(msg.t("NUMBER_NONEXISTANT"));
+                return;
             }
-            await msg.channel.createMessage("Alrighty, they are being called now!");
+            await msg.channel.createMessage(msg.t("CALLING"));
             try {
                 await bot.createMessage(otherSideData.channelID, `Incoming call by ${currentSideData.id} ${!(currentSideData.private) ? `(#${msg.channel.name} at ${msg.guild.name})` : ""}\nType ${config.prefix}pickup to pick up the call. Else type ${config.prefix}hangup. You have 2 minutes to respond.`);
             } catch (_) {
                 if (!bot.guilds.get(otherSideData.guildID)) {
-                    await msg.channel.createMessage("Call aborted: The bot was removed from the guild you are calling.");
+                    await msg.channel.createMessage(msg.t("CALL_ABORTED_BOT_REMOVED"));
                     const phoneNumbersInDelGuild = await db.table("phone").filter({
                         guildID: otherSideData.guildID
                     });
@@ -90,7 +93,7 @@ module.exports = {
                         console.log(`Deleted the phone numbers from ${otherSideData.guildID}: ${phoneNumbersInDelGuild.map(d => d.id).join(", ")}`);
                     });
                 } else {
-                    await msg.channel.createMessage("Call aborted: The bot doesn't have the permissions to write in the channel you are calling.");
+                    await msg.channel.createMessage(msg.t("CALL_ABORTED_NO_PERMISSIONS"));
                 }
                 return;
             }
@@ -114,22 +117,25 @@ module.exports = {
         } else if (action === "lookup") {
             const phoneNumber = convertPhoneNumber(additionalArgs.join(" "));
             if (!checkValid(phoneNumber)) {
-                await msg.channel.createMessage("Uh... This is not a valid phone number.\nYour number must start with TTBOT (88268), then 9 numbers of your choice.");
+                await msg.channel.createMessage(msg.t("NUMBER_INVALID", true));
                 return;
             }
             const data = await db.table("phone").get(phoneNumber);
             if (!data) {
-                await msg.channel.createMessage("This number is not registered, sorry.");
+                await msg.channel.createMessage(msg.t("NUMBER_NONEXISTANT"));
+                return;
             }
 
 
             const fields = [{
-                name: "Private",
+                name: msg.t("PRIVATE_NUMBER"),
                 value: data.private ? msg.t("YES") : msg.t("NO"),
                 inline: true
             }];
             if (!data.private) {
+                let isOnServer = true;
                 if (!bot.guilds.has(data.guildID)) {
+                    isOnServer = false;
                     const phoneNumbersInDelGuild = await db.table("phone").filter({
                         guildID: data.guildID
                     });
@@ -137,22 +143,47 @@ module.exports = {
                         console.log(`Deleted the phone numbers from ${data.guildID}: ${phoneNumbersInDelGuild.map(d => d.id).join(", ")}`);
                     });
                 }
+                const c = bot.getChannel(data.channelID)
                 fields.push({
-                    name: "Channel information",
-                    value: bot.guilds.get(data.guildID) ? `${bot.getChannel(data.channelID) ? bot.getChannel(data.channelID) : "unknown channel"} at${bot.guilds.get(data.guildID)}` : "The bot was removed from the guild this number owns. This number is free to register now.",
+                    name: msg.t("CHANNEL_INFORMATION"),
+                    value: isOnServer ? msg.t("CHANNEL_INFORMATION_VALUE", c, bot.guilds.get(data.guildID)) : msg.t("NUMBER_AVAILABLE"),
                     inline: true
                 });
             }
             await msg.channel.createMessage({
                 embed: {
                     author: {
-                        name: `Information about the number ${data.id}`
+                        name: msg.t("NUMBER_INFORMATION", data.id)
                     },
                     fields,
                     color: 0x008800
                 }
             });
             
+        } else if (action === "delete") {
+            
+            const phoneNumber = convertPhoneNumber(additionalArgs.join(" "));
+            if (!checkValid(phoneNumber)) {
+                await msg.channel.createMessage(msg.t("NUMBER_INVALID", true));
+                return;
+            }
+            const data = await db.table("phone").get(phoneNumber);
+            if (!data || (!isO(msg) && (data && (data.guildID !== msg.guild.id)))) {
+                await msg.channel.createMessage(msg.t("NUMBER_NONEXISTANT"));
+                return;
+            }
+            const m = await msg.channel.createMessage(msg.t("QUESTION_DELETE_NUM", data.id));
+
+            if (await askYesNo(msg)) {
+                await db.table("phone").get(phoneNumber).delete();
+                await m.delete();
+                await msg.channel.createMessage(msg.t("NUMBER_DELETED"))
+            } else {
+                await m.delete();
+                await msg.channel.createMessage(msg.t("OP_CANCELLED"))
+            }
+        } else {
+            await cmds.help.exec(msg, "phone");
         }
     },
     name: "phone",
@@ -160,4 +191,5 @@ module.exports = {
     category: 1,
     display: true,
     description: "Talk with people across Discord.",
+    args: "<register|call|delete> <number>"
 };

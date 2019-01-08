@@ -8,28 +8,27 @@ module.exports = {
             const extensions = await db.table("extensions").filter({
                 guildID: msg.guild.id
             });
-            if (extensions.length === 0) return msg.channel.createMessage("You don't have any extensions yet!");
+            if (extensions.length === 0) return msg.channel.createMessage(msg.t("NO_EXTENSIONS"));
             let page = 0;
             if (id > 1) page = Number(id - 1);
             if (isNaN(page)) page = 0;
-            let ext = extensions.slice(page * 25 - 1, (page + 1) * 25 - 1);
-            if (ext.length === 0) return msg.channel.createMessage("There aren't any more extensions than that.");
+            let pageI = page * 25 - 1;
+            if (page === 0) pageI = 0;
+            let ext = extensions.slice(pageI, (page + 1) * 25 - 1);
+            if (ext.length === 0) return msg.channel.createMessage(msg.t("NO_MORE_EXTENSIONS"));
             msg.channel.createMessage({
                 embed: {
-                    title: `Here are the extensions for ${msg.guild.name}`,
-                    description: `Page ${page + 1}`,
+                    title: msg.t("EXTENSION_LIST", msg.guild),
+                    description: msg.t("PAGE", page + 1),
                     fields: ext.map(e => ({
                         name: e.name,
-                        value: `
-ID: ${e.id}
-Allowed channels: ${e.allowedChannels.map(c => `<#${c}>`).join(", ") || "All"}
-Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
+                        value: msg.t("EXTENSION_LIST_FIELD", e)
                     })),
                     color: 0x008800
                 }
             });
         } else if (action === "create") {
-            const m = await msg.channel.createMessage("Please upload your code as a Discord attachment. You have 60 seconds to upload the code.\nKeep in mind, that the code must be a in a .js file.");
+            const m = await msg.channel.createMessage(msg.t("QUESTION_EXTENSION_CODE"));
             let code;
             try {
                 const [m] = await bot.waitForEvent("messageCreate", 60000, m => {
@@ -52,7 +51,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
             } catch (_) {
                 // ok :/
             }
-            const m2 = await msg.channel.createMessage("Please tell me how would you like to name your extension. The limit for the name is 100 characters. You have 60 seconds to respond.");
+            const m2 = await msg.channel.createMessage(msg.t("QUESTION_EXTENSION_NAME"));
             let name;
             try {
                 const [m] = await bot.waitForEvent("messageCreate", 60000, m => {
@@ -74,13 +73,13 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                 // ok :/
             }
 
-            const m3 = await msg.channel.createMessage("Please tell me what command trigger would you like to use. The limit for the command trigger is 20 characters. Also, you cannot use spaces in the trigger. You have 20 seconds to respond.");
+            const m3 = await msg.channel.createMessage(msg.t("QUESTION_EXTENSION_TRIGGER"));
             let trigger;
             try {
                 const [m] = await bot.waitForEvent("messageCreate", 20000, m => {
                     if (m.channel.id !== msg.channel.id) return false;
                     if (m.author.id !== msg.author.id) return false;
-                    if (m.content.split(" ").length > 1) return false;
+                    if (m.content.includes(" ")) return false;
                     if (m.content.length > 20) return false;
                     return true;
                 });
@@ -97,7 +96,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                 // ok :/
             }
 
-            const m4 = await msg.channel.createMessage("Would you like to restrict running the extension to certain channels? Type y or yes if you want to, n or no otherwise. You have 10 seconds to respond.");
+            const m4 = await msg.channel.createMessage(msg.t("QUESTION_EXTENSION_CHANNEL_RESTRICT"));
             const { response, msg: res } = await askYesNo(msg, true);
             await m4.delete();
             try {
@@ -110,19 +109,19 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
             if (response) {
                 const embedStructure = () => ({
                     embed: {
-                        title: "Allowed channels",
-                        description: `Please type in the letter next to the action to do the listed action\nCurrently allowed channels: ${allowedChannels.map(c => `<#${c}>`).join(", ") || "All"}`,
+                        title: msg.t("ALLOWED_CHANNELS"),
+                        description: msg.t("EXTENSION_MENU_SUBTEXT", `\n${msg.t("MENU_CURRENTLY_SELECTED")} ${allowedChannels.map(c => `<#${c}>`).join(", ") || "All"}`),
                         fields: [{
-                            name: "a: Add",
-                            value: "Adds a channel to the list of allowed channels",
+                            name: msg.t("ALLOWED_CHANNELS_ACTION_ADD"),
+                            value: msg.t("ALLOWED_CHANNELS_ACTION_ADD_DESCRIPTION"),
                             inline: true
                         }, {
-                            name: "r: Remove",
-                            value: "Removes a channel off the list of allowed channels",
+                            name: msg.t("ALLOWED_CHANNELS_ACTION_REMOVE"),
+                            value: msg.t("ALLOWED_CHANNELS_ACTION_REMOVE_DESCRIPTION"),
                             inline: true
                         }, {
-                            name: "d: Done",
-                            value: "Finishes editing",
+                            name: msg.t("ALLOWED_CHANNELS_ACTION_DONE"),
+                            value: msg.t("ALLOWED_CHANNELS_ACTION_DONE_DESCRIPTION"),
                             inline: true
                         }]
                     }
@@ -152,7 +151,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                         }
                         const action = resp.content.toLowerCase();
                         if (action === "a") {
-                            const m2 = await msg.channel.createMessage("Please type in the channel you want to add in. You have 30 seconds to respond.");
+                            const m2 = await msg.channel.createMessage(msg.t("QUESTION_ALLOWED_CHANNELS_ADD"));
                             let c;
                             try {
                                 const [m] = await bot.waitForEvent("messageCreate", 30000, m => {
@@ -167,14 +166,18 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                                     // oki :^)
                                 }
                             } catch (_) {
-                                msg.channel.createMessage("Didn't catch that; please try again.");
+                                msg.channel.createMessage(msg.t("COMMAND_ERROR"));
+                                continue;
+                            }
+                            if (allowedChannels.find(ch => ch === c.id)) {
+                                msg.channel.createMessage(msg.t("CHANNEL_ALLOWED_ALREADY"));
                                 continue;
                             }
                             allowedChannels.push(c.id);
                             await m2.delete();
                             continue;
                         } else if (action === "r") {
-                            const m2 = await msg.channel.createMessage("Please type in the channel you want to remove. You have 30 seconds to respond.");
+                            const m2 = await msg.channel.createMessage(msg.t("QUESTION_ALLOWED_CHANNELS_REMOVE"));
                             let c;
                             try {
                                 const [m] = await bot.waitForEvent("messageCreate", 30000, m => {
@@ -189,11 +192,11 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                                     // oki :^)
                                 }
                             } catch (_) {
-                                msg.channel.createMessage("Didn't catch that; please try again.");
+                                msg.channel.createMessage(msg.t("COMMAND_ERROR"));
                                 continue;
                             }
                             if (!allowedChannels.find(ch => ch === c.id)) {
-                                msg.channel.createMessage("This channel is not allowed already.");
+                                msg.channel.createMessage(msg.t("CHANNEL_DISALLOWED_ALREADY"));
                                 continue;
                             }
                             allowedChannels.splice(allowedChannels.indexOf(c.id), 1);
@@ -204,7 +207,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                             break;
                         }
                     } catch (_) {
-                        msg.channel.createMessage("Menu cancelled due to inactivity; the channels that were selected already will be used.");
+                        msg.channel.createMessage(msg.t("ALLOWED_CHANNELS_MENU_CANCELLED"));
                         await m.delete();
                         break;
                     }
@@ -212,7 +215,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
             }
 
 
-            const m5 = await msg.channel.createMessage("Would you like to restrict running the extension to members with certain roles? Type y or yes if you want to, n or no otherwise. You have 10 seconds to respond.");
+            const m5 = await msg.channel.createMessage(msg.t("QUESTION_EXTENSION_ROLE_RESTRICT"));
             const { response: response2, msg: res2 } = await askYesNo(msg, true);
             await m5.delete();
             try {
@@ -225,19 +228,19 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
             if (response2) {
                 const embedStructure = () => ({
                     embed: {
-                        title: "Allowed roles",
-                        description: `Please type in the letter next to the action to do the listed action\nCurrently allowed roles: ${allowedRoles.map(c => `<@&${c}>`).join(", ") || "All"}`,
+                        title: msg.t("ALLOWED_ROLES"),
+                        description: msg.t("EXTENSION_MENU_SUBTEXT", `\n${msg.t("MENU_CURRENTLY_SELECTED"), true} ${allowedRoles.map(c => `<@&${c}>`).join(", ") || "All"}`),
                         fields: [{
-                            name: "a: Add",
-                            value: "Adds a role to the list of allowed roles",
+                            name: msg.t("ALLOWED_CHANNELS_ACTION_ADD"),
+                            value: msg.t("ALLOWED_CHANNELS_ACTION_ADD_DESCRIPTION", true),
                             inline: true
                         }, {
-                            name: "r: Remove",
-                            value: "Removes a role off the list of allowed roles",
+                            name: msg.t("ALLOWED_CHANNELS_ACTION_REMOVE"),
+                            value: msg.t("ALLOWED_CHANNELS_ACTION_ADD_DESCRIPTION", true),
                             inline: true
                         }, {
-                            name: "d: Done",
-                            value: "Finishes editing",
+                            name: msg.t("ALLOWED_CHANNELS_ACTION_DONE"),
+                            value: msg.t("ALLOWED_CHANNELS_ACTION_DONE_DESCRIPTION"),
                             inline: true
                         }]
                     }
@@ -267,7 +270,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                         }
                         const action = resp.content.toLowerCase();
                         if (action === "a") {
-                            const m2 = await msg.channel.createMessage("Please type in the role you want to add in. You have 30 seconds to respond.");
+                            const m2 = await msg.channel.createMessage(msg.t("QUESTION_ALLOWED_CHANNELS_ADD", true));
                             let r;
                             try {
                                 const [m] = await bot.waitForEvent("messageCreate", 30000, m => {
@@ -282,14 +285,19 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                                     // oki :^)
                                 }
                             } catch (_) {
-                                msg.channel.createMessage("Didn't catch that; please try again.");
+                                msg.channel.createMessage(msg.t("COMMAND_ERROR"));
+                                continue;
+                            }
+                            
+                            if (allowedRoles.find(ch => ch === c.id)) {
+                                msg.channel.createMessage(msg.t("CHANNEL_ALLOWED_ALREADY", true));
                                 continue;
                             }
                             allowedRoles.push(r.id);
                             await m2.delete();
                             continue;
                         } else if (action === "r") {
-                            const m2 = await msg.channel.createMessage("Please type in the role you want to remove. You have 30 seconds to respond.");
+                            const m2 = await msg.channel.createMessage(msg.t("QUESTION_ALLOWED_CHANNELS_REMOVE"));
                             let role;
                             try {
                                 const [m] = await bot.waitForEvent("messageCreate", 30000, m => {
@@ -304,11 +312,11 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                                     // oki :^)
                                 }
                             } catch (_) {
-                                msg.channel.createMessage("Didn't catch that; please try again.");
+                                msg.channel.createMessage(msg.t("COMMAND_ERROR"));
                                 continue;
                             }
                             if (!allowedRoles.find(r => r === role.id)) {
-                                msg.channel.createMessage("This role is not allowed already.");
+                                msg.channel.createMessage(msg.t("CHANNEL_DISALLOWED_ALREADY", tue));
                                 continue;
                             }
                             allowedRoles.splice(allowedRoles.indexOf(role.id), 1);
@@ -319,14 +327,14 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                             break;
                         }
                     } catch (_) {
-                        msg.channel.createMessage("Menu cancelled due to inactivity; the roles that were selected already will be used.");
+                        msg.channel.createMessage(msg.t("ALLOWED_CHANNELS_MENU_CANCELLED", true));
                         await m.delete();
                         break;
                     }
                 }
             }
 
-            const m6 = await msg.channel.createMessage("Do you want to use a different extension store than the default one? Type y or yes if you want to use one. n or no otherwise. To respond, you have 10 seconds.");
+            const m6 = await msg.channel.createMessage(msg.t("QUESTION_EXTENSION_STORE"));
             const { response: r6, msg: s } = await askYesNo(msg, true);
             await m6.delete();
             try {
@@ -337,7 +345,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
 
             let store;
             if (r6) {
-                const m = await msg.channel.createMessage("Type in the store ID now.");
+                const m = await msg.channel.createMessage(msg.t("QUESTION_EXTENSION_STORE_ID"));
                 let s;
                 try {
                     const [res] = await bot.waitForEvent("messageCreate", 20000, m => {
@@ -359,7 +367,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                 }
                 const stor = await db.table("extension_store").get([msg.guild.id, s.content]);
                 if (!stor) {
-                    msg.channel.createMessage("This store doesn't exist.");
+                    msg.channel.createMessage(msg.t("STORE_NONEXISTANT"));
                     return;
                 }
                 store = stor.id;
@@ -380,7 +388,7 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                     }
                 };
                 store = await tryInsert();
-                await msg.channel.createMessage(`Created a store with an ID ${store}.`);
+                await msg.channel.createMessage(msg.t("STORE_CREATED", store));
             }
 
             // FINALLY INSERT !!!
@@ -394,32 +402,34 @@ Allowed roles: ${e.allowedRoles.map(r => `<@&${r}>`).join(", ") || "All"}`
                 store
             });
 
-            await msg.channel.createMessage(`Finished! Extension ${extensionName} has been successfully created! Its ID is ${info.generated_keys[0]}.`);
+            await msg.channel.createMessage(msg.t("EXTENSION_CREATED", extensionName, info.generated_keys[0]));
         } else if (action === "delete") {
             const d = await db.table("extensions").get(id);
             if (!d || (d && d.guildID !== msg.guild.id)) {
-                msg.channel.createMessage("This extension doesn't exist.");
+                msg.channel.createMessage(msg.t("EXTENSION_NONEXISTANT"));
                 return;
             }
-            await msg.channel.createMessage(`Are you sure you want to delete the extension ${d.name} (ID ${d.id})? Type y or yes if you want to. n or no otherwise. To respond, you have 10 seconds.`);
+            await msg.channel.createMessage(msg.t("QUESTION_EXTENSION_DELETE", d));
             const r = await askYesNo(msg);
             if (r) {
                 await db.table("extensions").get(id).delete();
-                await msg.channel.createMessage(`Done! The extension ${d.name} is deleted.\nWould you also like to delete its store (ID ${d.store})? Type y or yes if you want to. n or no otherwise. To respond, you have 10 seconds.`);
+                await msg.channel.createMessage(msg.t("QUESTION_EXTENSION_DELETE_STORE", d));
                 const r = await askYesNo(msg);
                 if (r) {
                     const d = await db.table("extension_store").get([msg.guild.id, d.store]);
                     if (!d) {
-                        await msg.channel.createMessage("Alright, the store doesn't exist.");
+                        await msg.channel.createMessage(msg.t("STORE_DELETE_NONEXISTANT"));
                         return;
                     }
                     await db.table("extension_store").get([msg.guild.id, d.store]).delete();
-                    await msg.channel.createMessage(`Done, deleted the store with an ID ${d.store}`);
+                    await msg.channel.createMessage(msg.t("STORE_DELETED", d));
 
                 }
             } else {
                 await msg.channel.createMessage(msg.t("OP_CANCELLED"));
             }
+        } else {
+            await cmds.help.exec(msg, "extensions");
         }
     },
     isCmd: true,

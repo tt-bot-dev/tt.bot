@@ -31,13 +31,13 @@
             el.innerText = "Saving...";
             var oldExtData = w.ttbot.extensionData;
             dg(function (d) {
-                var f = function () {
+                var f = function (failed, update) {
                     el.innerHTML = oldData;
                     savingExtensionData = false;
-                    cb(w.ttbot.extensionData)
+                    cb(w.ttbot.extensionData, failed, update)
                 }
                 if (d) w.ttbot.updateExtension(d).then(function(d) {
-                    return f(d, false, true)
+                    return f(false, true)
                 }).then(function () {
                     if (w.ttbot.extension === "new") w.location = "/dashboard/" + w.ttbot.guildId + "/extensions/" + w.ttbot.extensionData.id + (w.ttbot.editor ? "/monaco" : "")
                     else {
@@ -45,7 +45,7 @@
                         else return;
                     }
                 })
-                else f();
+                else f(true, false);
             })
         })
     }
@@ -75,7 +75,7 @@
         if (ttbot.extension !== "new" && !store.value) cb(false);
 
         var commandTrigger = document.querySelector("input#tttie-extension-cmd")
-        if (!commandTrigger.value) cb(false);
+        if (!commandTrigger.value || commandTrigger.value.includes(" ") || commandTrigger.value.length > 20) cb(false);
 
         var code;
         var ta = document.querySelector("textarea#tttie-textarea-code");
@@ -86,6 +86,7 @@
         }
 
         var name = document.querySelector("input#tttie-extension-name");
+        if (!name.value || name.value.length > 100) cb(false);
 
         cb({
             allowedChannels: allowedChannels,
