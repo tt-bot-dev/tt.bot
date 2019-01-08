@@ -271,14 +271,14 @@ module.exports = {
                         const action = resp.content.toLowerCase();
                         if (action === "a") {
                             const m2 = await msg.channel.createMessage(msg.t("QUESTION_ALLOWED_CHANNELS_ADD", true));
-                            let r;
+                            let role;
                             try {
                                 const [m] = await bot.waitForEvent("messageCreate", 30000, m => {
                                     if (m.channel.id !== msg.channel.id) return false;
                                     if (m.author.id !== msg.author.id) return false;
                                     return true;
                                 });
-                                r = await queries.role(m, m.content, true);
+                                role = await queries.role(m, m.content, true);
                                 try {
                                     await m.delete();
                                 } catch (_) {
@@ -289,11 +289,11 @@ module.exports = {
                                 continue;
                             }
                             
-                            if (allowedRoles.find(ch => ch === c.id)) {
+                            if (allowedRoles.find(r => r === role.id)) {
                                 msg.channel.createMessage(msg.t("CHANNEL_ALLOWED_ALREADY", true));
                                 continue;
                             }
-                            allowedRoles.push(r.id);
+                            allowedRoles.push(role.id);
                             await m2.delete();
                             continue;
                         } else if (action === "r") {
@@ -316,7 +316,7 @@ module.exports = {
                                 continue;
                             }
                             if (!allowedRoles.find(r => r === role.id)) {
-                                msg.channel.createMessage(msg.t("CHANNEL_DISALLOWED_ALREADY", tue));
+                                msg.channel.createMessage(msg.t("CHANNEL_DISALLOWED_ALREADY", true));
                                 continue;
                             }
                             allowedRoles.splice(allowedRoles.indexOf(role.id), 1);

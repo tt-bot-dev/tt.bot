@@ -143,7 +143,7 @@ module.exports = {
                         console.log(`Deleted the phone numbers from ${data.guildID}: ${phoneNumbersInDelGuild.map(d => d.id).join(", ")}`);
                     });
                 }
-                const c = bot.getChannel(data.channelID)
+                const c = bot.getChannel(data.channelID);
                 fields.push({
                     name: msg.t("CHANNEL_INFORMATION"),
                     value: isOnServer ? msg.t("CHANNEL_INFORMATION_VALUE", c, bot.guilds.get(data.guildID)) : msg.t("NUMBER_AVAILABLE"),
@@ -177,10 +177,10 @@ module.exports = {
             if (await askYesNo(msg)) {
                 await db.table("phone").get(phoneNumber).delete();
                 await m.delete();
-                await msg.channel.createMessage(msg.t("NUMBER_DELETED"))
+                await msg.channel.createMessage(msg.t("NUMBER_DELETED"));
             } else {
                 await m.delete();
-                await msg.channel.createMessage(msg.t("OP_CANCELLED"))
+                await msg.channel.createMessage(msg.t("OP_CANCELLED"));
             }
         } else {
             await cmds.help.exec(msg, "phone");
