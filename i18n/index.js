@@ -16,7 +16,7 @@ class I18N {
     getTranslation(term, lang, ...args) {
         const l = this.languages[lang];
         if (!l) throw new Error("Unknown language");
-        const tr = l[term];
+        const tr = l[term.toUpperCase()];
         if (!tr && l.fallbackLanguage) {
             return this.getTranslation(term, l.fallbackLanguage, ...args);
         } else if (!tr) return "Unknown term";
