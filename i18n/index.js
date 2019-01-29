@@ -14,9 +14,12 @@ class I18N {
     }
 
     getTranslation(term, lang, ...args) {
-        if (!this.languages[lang]) throw new Error("Unknown language");
-        const tr = this.languages[lang][term] || this.languages["en"][term];
-        if (!tr) return "Unknown term";
+        const l = this.languages[lang];
+        if (!l) throw new Error("Unknown language");
+        const tr = l[term];
+        if (!tr && l.fallbackLanguage) {
+            return this.getTranslation(term, l.fallbackLanguage, ...args);
+        } else if (!tr) return "Unknown term";
         if (typeof tr === "string") return tr;
         return tr(...args);
     }

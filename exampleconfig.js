@@ -140,5 +140,11 @@ module.exports = {
      * Allows debug logging
      * @type {boolean}
      */
-    debugLogging: false
+    debugLogging: false,
+
+    /**
+     * Allows using Snekfetch in extensions
+     * @type {boolean}
+     */
+    enableSnekfetchInExtensions: false
 };

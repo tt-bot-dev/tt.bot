@@ -72,7 +72,7 @@ module.exports = (msg, bot, { id, name, data }, { prefix, trigger, args }) => {
             // Our bot
             if (mod === "tt.bot") return instance;
             // Snekfetch
-            //else if (mod === "snekfetch") return require("snekfetch");
+            else if (mod === "snekfetch" && config.enableSnekfetchInExtensions) return require("snekfetch");
         },
         setTimeout,
         clearTimeout
