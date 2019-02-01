@@ -1,4 +1,4 @@
-const logging = require("../logging");
+const logging = require("../lib/logging");
 module.exports = async function (guild, user) {
     const config = await logging.getInfo(guild.id);
     if (config.logEvents.includes("guildBan")) {

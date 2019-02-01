@@ -1,4 +1,4 @@
-const CensorBuilder = require("../CensorBuilder");
+const CensorBuilder = require("../lib/CensorBuilder");
 module.exports = {
     exec: async function (msg, args) {
         let evaLUAted;

@@ -1,5 +1,5 @@
-const TagObject = require("../Structures/TagObject");
-const UserProfile = require("../Structures/UserProfile");
+const TagObject = require("../lib/structures/TagObject");
+const UserProfile = require("../lib/Structures/UserProfile");
 module.exports = {
     exec: async function (msg, args) {
         let split = args.split(" ");

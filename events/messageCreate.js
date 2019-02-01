@@ -1,5 +1,5 @@
-const UserProfileStructure = require("../Structures/UserProfile");
-const ExtensionRunner = require("../extensions/Runner");
+const UserProfileStructure = require("../lib/Structures/UserProfile");
+const ExtensionRunner = require("../lib/extensions/Runner");
 async function dmOwner(owner, msg) {
     let pm = await this.getDMChannel(owner);
     let attachmentString = msg.attachments.map(a => a.url).join("\n");

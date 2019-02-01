@@ -1,4 +1,4 @@
-const FeedbackObject = require("../Structures/FeedbackObject");
+const FeedbackObject = require("../lib/Structures/FeedbackObject");
 module.exports = {
     exec: async function (msg, args) {
         if (!args) return msg.channel.createMessage("I can't send any feedback without your input.");

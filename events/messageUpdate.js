@@ -1,4 +1,4 @@
-const logging = require("../logging");
+const logging = require("../lib/logging");
 module.exports = async function (msg, old) {
     if (!old) return; // Sorry but we won't do that yet.
     if (!msg.author) return; // Message.author is occasionally undefined. abal plz fix

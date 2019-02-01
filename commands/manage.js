@@ -1,43 +1,42 @@
 module.exports = {
-    exec: function (msg, args) {
-        let c = args.split(" ");
-        let action = c[0];
-        let cmdToRld = c[1];
-        if (action && cmdToRld) {
+    exec: async function (msg, args) {
+        const [action, command] = args.split(" ");
+        if (action && command) {
             switch (action) {
             case "unload":
-                return bot.createMessage(msg.channel.id, `Unloading command ${cmdToRld}`).then(m => {
-                    try {
-                        cmdWrap.unload(cmdToRld);
-                        return m.edit(`Unloaded the command ${cmdToRld}`);
-                    } catch (err) {
-                        return m.edit(`Cannot unload the command ${cmdToRld} ${err}`);
-                    }
-                });
+                const m = await bot.createMessage(msg.channel.id, `Unloading command ${command}`)
+                try {
+                    cmdWrap.unload(command);
+                    await m.edit(`Unloaded the command ${command}`);
+                    return;
+                } catch (err) {
+                    await m.edit(`Cannot unload the command ${command} ${err}`);
+                    return;
+                }
             case "load":
-                return bot.createMessage(msg.channel.id, `Loading ${cmdToRld == "all" ? "all commands" : `command ${cmdToRld}`}`).then(m => {
-                    if (cmdToRld == "all") {
-                        cmdWrap.loadAll();
-                        return m.edit("Loaded all commands");
-                    } else {
-                        try {
-                            cmdWrap.load(cmdToRld);
-                            return m.edit(`Loaded the command ${cmdToRld}`);
-                        } catch (err) {
-                            return m.edit(`Cannot load the command ${cmdToRld} ${err}`);
-                        }
-                    }
-
-                });
-            case "reload":
-                return bot.createMessage(msg.channel.id, `Reloading command ${cmdToRld}`).then(m => {
+                const m = await bot.createMessage(msg.channel.id, `Loading ${command == "all" ? "all commands" : `command ${command}`}`);
+                if (command == "all") {
+                    await cmdWrap.loadAll();
+                    await m.edit("Loaded all commands");
+                    return;
+                } else {
                     try {
-                        cmdWrap.reload(cmdToRld);
-                        return m.edit(`Reloaded the command ${cmdToRld}`);
+                        await cmdWrap.load(command);
+                        await m.edit(`Loaded the command ${command}`);
+                        return;
                     } catch (err) {
-                        return m.edit(`Cannot reload the command ${cmdToRld} ${err}`);
+                        await m.edit(`Cannot load the command ${command} ${err}`);
+                        return;
                     }
-                });
+                }
+            case "reload":
+                const m = await bot.createMessage(msg.channel.id, `Reloading command ${command}`);
+                try {
+                    await cmdWrap.reload(command);
+                    return m.edit(`Reloaded the command ${command}`);
+                } catch (err) {
+                    return m.edit(`Cannot reload the command ${command} ${err}`);
+                }
             default:
                 return bot.createMessage(msg.channel.id, "You haven't chosen a valid command management command.");
             }

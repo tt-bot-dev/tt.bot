@@ -1,5 +1,5 @@
 const pp = new (require("process-as-promised"))();
-const e2p = require("../emojitopic");
+const e2p = require("../../lib/e2p");
 const WORKER_ID = Number(process.env.WORKER_ID);
 let workingCount = 0;
 pp.on("generateImage", async ({input}, cb) => {

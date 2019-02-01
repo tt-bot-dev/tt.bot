@@ -1,5 +1,5 @@
-const CensorBuilder = require("../CensorBuilder");
-const ExtensionRunner = require("../extensions/Runner");
+const CensorBuilder = require("../lib/CensorBuilder");
+const ExtensionRunner = require("../lib/extensions/Runner");
 module.exports = {
     exec: async function (msg, args) {
 

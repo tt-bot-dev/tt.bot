@@ -24,7 +24,7 @@ class WorkerManager {
         return new Promise(rs => {
             const f = getFileName(workerType);
             if (!f) throw new Error("Invalid worker");
-            const p = fork(`${__dirname}/${f}`, [], {
+            const p = fork(`${__dirname}/workers/${f}`, [], {
                 env: {
                     WORKER_ID: this.nextWorkerId
                 },

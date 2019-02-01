@@ -2,7 +2,7 @@
     "name": "tt.bot",
     "version": "3.1.0",
     "description": "A bot with aim for fun and moderation made in JS using Eris.",
-    "main": "run.js",
+    "main": "index.js",
     "dependencies": {
         "body-parser": "^1.18.3",
         "cookie-parser": "^1.4.3",

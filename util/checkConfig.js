@@ -1,5 +1,5 @@
 module.exports = function () {
-    global.config = require("./config");
+    global.config = require("../config");
     if (!config.token) {
         console.log(__filename + "     | ERR: Missing token");
         process.exit(1);
@@ -23,6 +23,7 @@ module.exports = function () {
     }
     if (config.encryptionIv.length > 16) {
         console.error("CRITICAL: Initialization vector is too long. It must be smaller than 16 bytes.");
+        process.exit(1);
     }
     return;
 };
