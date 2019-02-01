@@ -108,7 +108,7 @@ module.exports = {
      * ```ts
      * {
      * enabled: boolean,
-     * config: {},
+     * config: object,
      * url: string
      * }
      * ```
