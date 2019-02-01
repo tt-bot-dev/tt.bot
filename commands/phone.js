@@ -1,6 +1,6 @@
 const askYesNo = require("../util/askYesNo");
 // For now use the old call system
-const speakerphoneEmitter = require("../speakerphone/emitter");
+const speakerphoneEmitter = require("../lib/speakerPhone");
 
 function convertPhoneNumber(input) {
     return input
