@@ -1,6 +1,6 @@
 let db;
 try {
-    db = require("rethinkdbdash")(require("./config").connectionOpts);
+    db = require("rethinkdbdash")(require("../config").connectionOpts);
 } catch (err) {
     console.error("You haven't installed rethinkdbdash npm module or you didn't have configured the bot yet! Please do so.");
 }
@@ -16,5 +16,6 @@ try {
     if (!tables.includes("modlog")) await db.tableCreate("modlog");
     if (!tables.includes("extensions")) await db.tableCreate("extensions");
     if (!tables.includes("extension_store")) await db.tableCreate("extension_store");
-    return console.log("All set up!");
+    console.log("All set up!");
+    process.exit(0);
 })();

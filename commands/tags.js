@@ -86,7 +86,7 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 1,
-    description: "Store something for later retrieval (tags are public)",
+    description: "Store something for later retrieval; keep in mind that tags are public. Using [ttMsg](https://github.com) is allowed.",
     args: "<show <name>|create <name>|<content>|edit <name>|<content>|delete <name>>",
     aliases: [
         "tag", "t"
