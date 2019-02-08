@@ -1,4 +1,4 @@
-const CensorBuilder = require("../lib/CensorBuilderCensorBuilder");
+const CensorBuilder = require("../lib/CensorBuilder");
 const { spawn } = require("child_process");
 /**
  * Executes the program, adding data as it is.
