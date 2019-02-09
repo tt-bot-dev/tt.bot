@@ -1,5 +1,5 @@
 const dm = require("../util/sendReplyToDMs");
-const UserProfile = require("../Structures/UserProfile");
+const UserProfile = require("../lib/Structures/UserProfile");
 
 const translateToOwnersLang = async owner => {
     const prof = await db.table("profile").get(owner);
