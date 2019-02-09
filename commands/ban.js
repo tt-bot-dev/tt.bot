@@ -41,6 +41,6 @@ module.exports = {
     name: "ban",
     display: true,
     category: 3,
-    description: "Bans a user.\nThe command uses `\u200b | \u200b` as separators (note the spaces). Use ` \\| ` to escape the separation in your queries.\nThe order of the switches doesn't need to be followed.",
+    description: "Bans an user.\nThe command uses `\u200b | \u200b` as separators (note the spaces). Use ` \\| ` to escape the separation in your queries.The order of the switches doesn't matter.",
     args: "<user:<user>>[ | <reason:<reason>>]"
 };

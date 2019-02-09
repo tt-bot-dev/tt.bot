@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<%- include("./partials/head") %>
+<body>
+<div class="tttie-container">
+<%- include("./partials/header") %>
+<div class="tttie-body">
+<div class="tttie-center">
+<div>
+<div class="tttie-center text">
+<div>
+<h1 id="tttie-title">Extension: Crunching extension data...</h1>
+
+<p>Build your extension here; refer to API documentation for more information.</p>
+</div>
+</div>
+<div class="tttie-changes-buttons">
+<a class="tttie-linkbutton" id="save"><div class="tttie-button">Save changes</div></a>
+<a class="tttie-linkbutton" id="reset"><div class="tttie-button red">Reset</div></a>
+</div>
+
+<h3>Extension name</h3>
+<p>Here's what you'd like your extension to be called.</p>
+<input type="text" id="tttie-extension-name"></textarea>
+
+<h3>Command trigger</h3>
+<p>This is the command name you would like to use. Keep in mind that native tt.bot commands are prioritized over extensions.</p>
+<input type="text" id="tttie-extension-cmd"></textarea>
+
+<h3>Allowed roles</h3>
+<p>You can choose what roles would you like to allow to use this extension. However, checking no roles will let everyone use the roles.</p>
+<div class="tttie-extension-role-list">
+Wait, we are getting the things...
+</div>
+
+
+<h3>Allowed channels</h3>
+<p>You can choose what channels would you like to allow to use this extension. However, checking no channels will let everyone use the roles.</p>
+<div class="tttie-extension-channel-list">
+Wait, we are getting the things...
+</div>
+
+<h3>Extension code</h3>
+<p>This is the heart of your extension. <%= !isMonaco ? "For compatibility across browsers, we display the default textarea element. Using the default textarea element also uses less data. To switch to a proper code editor" : "You are using the Monaco editor, which might not be compatible on mobile browsers. To use the textarea editor"%>, click <a href="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%><%=isMonaco? '' : '/monaco'%>">here</a></p>
+
+<%if (isMonaco) {%>
+    <div class="monaco-container" id="extension-monaco-container"></div>
+<%} else {%>
+<div class="tttie-textarea-wrapper">
+    <textarea class="tttie-textarea" id="tttie-textarea-code" rows="15"><%=extension.code%></textarea>
+    </div>
+<%}%>
+<h3>Store ID</h3>
+<p>This is a powerful feature of tt.bot which allows you to share the storage across extensions. 
+<%if (extension.id === "new") {%>
+Since you are creating a new extension, to create a new store, leave this field blank.
+<%}%>
+</p>
+<input type="text" id="tttie-extension-store-id"></textarea>
+<%if (isMonaco) {%>
+<script src="/monaco/vs/loader.js"></script>
+<script src="/static/js/loadMonaco.js"></script>
+<%}%>
+<script src="/dashboard/<%=erisGuild.id%>/load.js"></script>
+<script src="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%>/load.js"></script>
+<script src="/static/js/ttbotapi.js"></script>
+<script src="/static/js/extensions.js"></script>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

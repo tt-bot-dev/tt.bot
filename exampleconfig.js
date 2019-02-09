@@ -108,7 +108,7 @@ module.exports = {
      * ```ts
      * {
      * enabled: boolean,
-     * config: {},
+     * config: object,
      * url: string
      * }
      * ```
@@ -134,5 +134,17 @@ module.exports = {
      */
     dblVoteHookGuild: "",
     dblVoteHookRole: "",
-    dblVoteHookSecret: ""
+    dblVoteHookSecret: "",
+
+    /**
+     * Allows debug logging
+     * @type {boolean}
+     */
+    debugLogging: false,
+
+    /**
+     * Allows using Snekfetch in extensions
+     * @type {boolean}
+     */
+    enableSnekfetchInExtensions: false
 };

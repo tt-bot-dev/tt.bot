@@ -11,7 +11,7 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 3,
-    description: "Remove a punishment",
+    description: "Remove a strike from an user.",
     args: "<case id> [reason]",
     aliases: ["rmpunish", "deletepunishment", "removepunishment", "rmstrike", "delstrike", "removestrike", "removepunishment"]
 };

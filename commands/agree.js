@@ -26,5 +26,5 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 1,
-    description: "If the server has set agree feature, agrees to the server's rules.",
+    description: "If the server has set up the agreement feature, agrees to the server's rules.",
 };

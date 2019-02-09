@@ -1,4 +1,4 @@
-const logging = require("../logging");
+const logging = require("../lib/logging");
 module.exports = async function (msg) {
     if (!msg[0].channel.guild) return; // All bulkdeleted messages are from a guild
     const channel = msg[0].channel;

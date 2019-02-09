@@ -19,7 +19,7 @@ class HelpMenu extends ReactionMenu {
 
     async prepareEmoji() {
         const arr = [HelpMenu.HOME, ReactionMenu.STOP];
-        const permissiveArr = [HelpMenu.PUBLIC, HelpMenu.OWNER, HelpMenu.MOD, HelpMenu.ADMIN].filter((_, i) => this.permissions[i]);
+        const permissiveArr = [HelpMenu.PUBLIC, HelpMenu.OWNER, HelpMenu.MOD, HelpMenu.ADMIN, HelpMenu.EXTENSION].filter((_, i) => this.permissions[i]);
         const toAdd = [...arr, ...permissiveArr];
         for (const e of toAdd) await this.pgMsg.addReaction(e);
     }
@@ -45,6 +45,7 @@ class HelpMenu extends ReactionMenu {
         if (emoji === HelpMenu.OWNER) return this.permissions[1];
         if (emoji === HelpMenu.MOD) return this.permissions[2];
         if (emoji === HelpMenu.ADMIN) return this.permissions[3];
+        if (emoji === HelpMenu.EXTENSION) return true;
     }
 
     handleReactionAdd(msg, emoji, id) {
@@ -93,6 +94,7 @@ class HelpMenu extends ReactionMenu {
         else if (e === HelpMenu.OWNER) return this.commands.owner;
         else if (e === HelpMenu.MOD) return this.commands.mod;
         else if (e === HelpMenu.ADMIN) return this.commands.admin;
+        else if (e === HelpMenu.EXTENSION) return this.commands.extensions;
         else console.log("I got here for some reason");
     }
 
@@ -101,6 +103,7 @@ class HelpMenu extends ReactionMenu {
         else if (e === HelpMenu.PUBLIC) return this.ogMsg.t("HELP_PUBLIC");
         else if (e === HelpMenu.MOD) return this.ogMsg.t("HELP_MOD");
         else if (e === HelpMenu.OWNER) return this.ogMsg.t("HELP_OWNER");
+        else if (e === HelpMenu.EXTENSION) return "Extensions";
         else if (e === HelpMenu.HOME) return 0;
         else return 1;
     }
@@ -111,6 +114,7 @@ class HelpMenu extends ReactionMenu {
         case HelpMenu.PUBLIC:
         case HelpMenu.MOD:
         case HelpMenu.OWNER:
+        case HelpMenu.EXTENSION:
             return this.listCommands.bind(this);
         case HelpMenu.HOME:
             return () => this.pgMsg.edit(HelpMenu.DEFAULT_OBJ(this.permissions, HelpMenu.MESSAGES));
@@ -118,7 +122,7 @@ class HelpMenu extends ReactionMenu {
     }
 
     static async getPermissions(msg) {
-        return [true, isO(msg), await bot.isModerator(msg.member), bot.isAdmin(msg.member)];
+        return [true, isO(msg), await bot.isModerator(msg.member), bot.isAdmin(msg.member), true];
     }
 
     static DEFAULT_OBJ(msg, permissions) {
@@ -135,11 +139,13 @@ HelpMenu.ADMIN = "\u{1F6E0}";
 HelpMenu.MOD = "\u{1F528}";
 HelpMenu.OWNER = "\u{1F6AB}";
 HelpMenu.PUBLIC = "\u{1F465}";
+HelpMenu.EXTENSION = "🔧";
 HelpMenu.HOME = "🏠";
 HelpMenu.MESSAGES = msg => [`${HelpMenu.PUBLIC} ${msg.t("HELP_PUBLIC")}`,
     `${HelpMenu.OWNER} ${msg.t("HELP_OWNER")}`,
     `${HelpMenu.MOD} ${msg.t("HELP_MOD")}`,
-    `${HelpMenu.ADMIN} ${msg.t("HELP_ADMIN")}`];
+    `${HelpMenu.ADMIN} ${msg.t("HELP_ADMIN")}`,
+    `${HelpMenu.EXTENSION} Extensions`];
 module.exports = {
     exec: async function (msg, args) {
         if (args == "") {
@@ -147,7 +153,7 @@ module.exports = {
             let ocmds = [];
             let modcmds = [];
             let admincmds = [];
-            function doShit(fe) {
+            function doThings(fe) {
                 let cat = cmds[fe].category;
                 if (cat && cmds[fe].display) {
                     if (cat == 1) gencmds.push({
@@ -169,15 +175,26 @@ module.exports = {
                 }
             }
 
+            const extensions = (await db.table("extensions").filter({
+                guildID: msg.guild.id
+            })).filter(e => {
+                if (e.allowedChannels.length !== 0 && !e.allowedChannels.includes(msg.channel.id)) return;
+                if (e.allowedRoles.length !== 0 && !e.allowedRoles.find(r => msg.member.roles.includes(r))) return;
+                return true;
+            }).map(e => ({
+                name: e.commandTrigger,
+                obj: e
+            }));
 
-            Object.keys(cmds).forEach(doShit);
+            Object.keys(cmds).forEach(doThings);
             const permissions = await HelpMenu.getPermissions(msg);
             const m = await msg.channel.createMessage(HelpMenu.DEFAULT_OBJ(msg, permissions));
             const helpMenu = new HelpMenu(msg, m, {
                 public: gencmds,
                 owner: ocmds,
                 mod: modcmds,
-                admin: admincmds
+                admin: admincmds,
+                extensions
             }, permissions);
             helpMenu.start();
         } else {
@@ -206,11 +223,10 @@ module.exports = {
             });
         }
     },
-    name: "help",
     isCmd: true,
     category: 1,
     display: false,
-    description: "Help?",
+    description: "New to tt.bot? This command is for you!",
     args: "[command]",
     aliases: [
         "cmds",

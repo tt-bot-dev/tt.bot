@@ -1,41 +1,23 @@
 # tt.bot 
-[![Discord](https://discordapp.com/api/guilds/195865382039453697/widget.png?style=shield)](https://discord.gg/pGN5dMq) [![Add me!](https://img.shields.io/badge/tt.bot-add%20to%20your%20server-brightgreen.svg?style=flat-square)](https://discordapp.com/oauth2/authorize?scope=bot&client_id=195506253806436353&permissions=-1&redirect_uri=https://tttie.ga/close.php&response_type=code)
-[![Build Status](https://travis-ci.org/tt-bot-dev/tt.bot.svg?branch=master)](https://travis-ci.org/tt-bot-dev/tt.bot)
+[![Discord][discord shield]][discord invite] [![Add me!][tt.bot add shield]][tt.bot invite]
+[![Build Status][travis shield]][travis]
 
-tt.bot is a bot with aim for moderation and fun, made in JavaScript using [Node.js](https://nodejs.org) and [Eris](https://github.com/abalabahaha/eris) library.<br>
-This bot uses (and probably used) some pieces of code from [blargbot](https://github.com/ratismal/blargbot).
+tt.bot is a bot with aim for moderation and fun written in JavaScript using [Node.js] and [Eris] library.  
+This bot uses (and probably used) some pieces of code from [blargbot].
 
 # Features
 Check a special page for [tt.bot](https://tttie.github.io/ttbot)
 
 # How to selfhost
-Go [here](https://github.com/TTtie/TTtie-Bot/wiki/Selfhosting)
+Read the documentation page [here](./docs/Selfhosting)
 
-## sentry.io integration
-tt.bot supports the sentry.io integration. Just fill out the config.js(on) `sentry` property with this object:
-```js
-{
-    "enabled": true,
-    "url": "https://YOURCLIENTID@sentry.io/PROJECTID",
-    "options": {
-        "some": "properties for sentry. Some are overridden by the bot core itself, for easier debugging; they're listed below"
-    }
-}
-```
 
-# Non-overridable properties
-These were made for us to realize where this happened; until we realized we have only 10k errors/month.
-This is the object so you can see. You can always modify these by modifing [this file](util/sentry.js)
-```js
-{
-    name: `ttbot`,
-    release: require("../package.json").version,
-    captureUnhandledRejections: true,
-    stacktrace: true,
-    dataCallback: r => {
-        r.user.id = bot.user ? bot.user.id : "none";
-        return r;
-    },
-    parseUser: ["id"]
-}
-```
+[discord shield]: https://discordapp.com/api/guilds/195865382039453697/widget.png?style=shield
+[discord invite]: https://discord.gg/pGN5dMq
+[tt.bot add shield]: https://img.shields.io/badge/tt.bot-add%20to%20your%20server-brightgreen.svg?style=flat-square
+[tt.bot invite]: https://discordapp.com/oauth2/authorize?scope=bot&client_id=195506253806436353&permissions=-1&response_type=code
+[travis shield]: https://travis-ci.org/tt-bot-dev/tt.bot.svg?branch=master
+[travis]: https://travis-ci.org/tt-bot-dev/tt.bot
+[Node.js]: https://nodejs.org
+[Eris]: https://github.com/abalabahaha/eris
+[blargbot]: https://github.com/ratismal/blargbot

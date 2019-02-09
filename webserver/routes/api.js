@@ -8,7 +8,7 @@ module.exports = csrf => {
         if (!guilds.find(g => g.isOnServer && g.id == rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
         else {
             const guild = bot.guilds.get(rq.params.guild);
-            return rs.send(guild.channels.filter(c => c.type === 0).map(c => ({
+            return rs.send(guild.channels.filter(c => c.type === 0).sort((a, b) => a.position - b.position).map(c => ({
                 name: c.name,
                 id: c.id
             })));
@@ -32,15 +32,16 @@ module.exports = csrf => {
             const highestRole = guild.members.get(bot.user.id).roles
                 .map(r => guild.roles.get(r))
                 .sort((a, b) => b.position - a.position)[0];
-            return rs.send(guild.roles.filter(r => r.position < highestRole.position).map(r => ({
+            let roles = guild.roles.filter(r => r.position < highestRole.position);
+            if (rq.query.ignoreHierarchy === "true") roles = [...guild.roles.values()];
+            return rs.send(roles.sort((a, b) => b.position - a.position).map(r => ({
                 name: r.name,
                 id: r.id
-            })).sort((a, b) => b.position - a.position));
+            })));
         }
     });
 
     app.post("/config/:guild", authNeeded, csrf(), async (rq, rs) => {
-        console.log(`POST /config/:guild\n:guild = ${rq.params.guild}\nbody = ${require("util").inspect(rq.body)}`);
         const guilds = getGuilds(rq, rs);
         if (!guilds.find(g => g.isOnServer && g.id == rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
         else {
@@ -64,6 +65,112 @@ module.exports = csrf => {
 
             await db.table("configs").get(rq.params.guild).replace(filteredBody);
             return rs.send(await db.table("configs").get(rq.params.guild));
+        }
+    });
+
+    app.get("/extensions/:guild/:id", authNeeded, async (rq, rs) => {
+        const d = {
+            allowedChannels: [],
+            allowedRoles: [],
+            commandTrigger: "",
+            store: null,
+            code: "const { message } = require(\"tt.bot\");\n\nmessage.reply(\"hi!\")",
+            name: "My cool extension",
+            id: "new"
+        };
+        const { guild, id } = rq.params;
+        const guilds = getGuilds(rq, rs);
+        if (!guilds.find(g => g.isOnServer && g.id == guild)) return rs.status(403).send({ error: "Forbidden" });
+        else {
+            if (id === "new") return rs.send(d);
+            const filteredBody = {};
+            const extension = await db.table("extensions").get(id);
+            if (!extension || (extension && extension.guildID !== guild)) {
+                rs.status(404);
+                rs.send({ error: "Not Found" });
+                return;
+            }
+            Object.keys(extension).filter(k => Object.keys(d).includes(k)).forEach(k => {
+                filteredBody[k] = extension[k] || undefined;
+            });
+
+            filteredBody.id = id;
+            rs.send(filteredBody);
+        }
+    });
+
+    app.post("/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
+        const { guild, id } = rq.params;
+        const guilds = getGuilds(rq, rs);
+        if (!guilds.find(g => g.isOnServer && g.id == guild)) return rs.status(403).send({ error: "Forbidden" });
+        else {
+            const props = [
+                "code",
+                "allowedChannels",
+                "allowedRoles",
+                "commandTrigger",
+                "name",
+                "store"
+            ];
+            const filteredBody = {};
+            const extension = id === "new" ? {guildID: guild} : await db.table("extensions").get(id);
+            if (!extension || (extension && extension.guildID !== guild)) {
+                rs.status(404);
+                rs.send({ error: "Not Found" });
+                return;
+            }
+            Object.keys(rq.body).filter(k => props.includes(k)).forEach(k => {
+                filteredBody[k] = rq.body[k] || undefined;
+            });
+
+            filteredBody.id = id;
+            filteredBody.guildID = guild;
+            if (id === "new") {
+                delete filteredBody.id;
+                const tryInsert = async () => {
+                    const id = await db.uuid();
+                    try {
+                        await db.table("extension_store").insert({
+                            id: [guild, id],
+                            store: "{}"
+                        }, {
+                            conflict: "error"
+                        });
+                        return id;
+                    } catch (_) {
+                        // Try to insert with a different id
+                        return tryInsert();
+                    }
+                };
+
+                if (!filteredBody.store) filteredBody.store = await tryInsert();
+                const { generated_keys: [newID] } = await db.table("extensions").insert(filteredBody);
+                return rs.send(await db.table("extensions").get(newID));
+            } else {
+                await db.table("extensions").get(id).replace(filteredBody);
+                return rs.send(await db.table("extensions").get(id));
+            }
+        }
+    });
+
+    app.delete("/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
+        const { guild, id } = rq.params;
+        const guilds = getGuilds(rq, rs);
+        if (!guilds.find(g => g.isOnServer && g.id == guild)) return rs.status(403).send({ error: "Forbidden" });
+        else {
+            const extension = await db.table("extensions").get(id);
+            if (!extension || (extension && extension.guildID !== guild)) {
+                rs.status(404);
+                rs.send({ error: "Not Found" });
+                return;
+            }
+        
+            const { deleteStore } = rq.body;
+            await db.table("extensions").get(id).delete();
+            if (deleteStore) {
+                await db.table("extension_store").get([guild, extension.store]).delete();
+            }
+            return rs.status(204).end();
         }
     });
 

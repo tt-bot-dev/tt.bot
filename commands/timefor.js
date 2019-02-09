@@ -1,4 +1,4 @@
-const UserProfile = require("../Structures/UserProfile");
+const UserProfile = require("../lib/Structures/UserProfile");
 module.exports = {
     exec: async function (msg, args) {
         let user;
@@ -19,7 +19,7 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 1,
-    description: "Shows the date and time for the user.",
+    description: "Shows what time is it for a certain user.",
     aliases: ["tf", "time"],
     args: "[user]"
 };

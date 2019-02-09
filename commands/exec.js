@@ -1,4 +1,4 @@
-const CensorBuilder = require("../CensorBuilder");
+const CensorBuilder = require("../lib/CensorBuilder");
 const { spawn } = require("child_process");
 /**
  * Executes the program, adding data as it is.
@@ -82,8 +82,7 @@ module.exports = {
     },
     category: 2,
     isCmd: true,
-    description: "executes stuff in cmd prompt. if ur not an owner go away",
+    description: "Executes shell commands on your machine.",
     display: true,
-    name: "eval",
-    args: "<code>"
+    args: "<commands>"
 };

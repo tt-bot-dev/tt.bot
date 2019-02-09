@@ -1,43 +1,47 @@
 {
-  "name": "tt.bot",
-  "version": "3.1.0",
-  "description": "A bot with aim for fun and moderation made in JS using Eris.",
-  "main": "run.js",
-  "dependencies": {
-    "body-parser": "^1.18.3",
-    "cookie-parser": "^1.4.3",
-    "csurf": "github:tt-bot-dev/csurf",
-    "ejs": "^2.6.1",
-    "eris": "github:abalabahaha/eris#dev",
-    "erlpack": "github:discordapp/erlpack",
-    "express": "^4.16.3",
-    "express-session": "^1.15.6",
-    "express-session-rethinkdb": "^0.4.1",
-    "gifwrap": "^0.7.5",
-    "jimp": "^0.5.3",
-    "moment": "^2.22.2",
-    "moment-timezone": "^0.5.21",
-    "pmx": "^1.6.7",
-    "process-as-promised": "^1.0.1",
-    "raven": "^2.6.4",
-    "rethinkdbdash": "^2.3.31",
-    "snekfetch": "^4.0.4",
-    "zlib-sync": "^0.1.4"
-  },
-  "devDependencies": {
-    "eslint": "^5.6.0"
-  },
-  "scripts": {
-    "test": "eslint ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tt-bot-dev/tt.bot.git"
-  },
-  "author": "TTtie",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/tt-bot-dev/tt.bot/issues"
-  },
-  "homepage": "https://github.com/tt-bot-dev/tt.bot#readme"
+    "name": "tt.bot",
+    "version": "3.1.0",
+    "description": "A bot with aim for fun and moderation made in JS using Eris.",
+    "main": "index.js",
+    "dependencies": {
+        "body-parser": "^1.18.3",
+        "cookie-parser": "^1.4.3",
+        "csurf": "github:tt-bot-dev/csurf",
+        "ejs": "^2.6.1",
+        "eris": "github:abalabahaha/eris#dev",
+        "erlpack": "github:discordapp/erlpack",
+        "express": "^4.16.3",
+        "express-session": "^1.15.6",
+        "express-session-rethinkdb": "^0.4.1",
+        "gifwrap": "^0.7.5",
+        "jimp": "^0.3.10",
+        "moment": "^2.22.2",
+        "moment-timezone": "^0.5.21",
+        "monaco-editor": "^0.14.3",
+        "pmx": "^1.6.7",
+        "process-as-promised": "^1.0.1",
+        "raven": "^2.6.3",
+        "rethinkdbdash": "^2.3.31",
+        "snekfetch": "^4.0.4",
+        "vm2": "^3.6.3",
+        "zlib-sync": "^0.1.4"
+    },
+    "devDependencies": {
+        "eslint": "^5.4.0"
+    },
+    "scripts": {
+        "test": "eslint .",
+        "install": "node scripts/dbsetup",
+        "db-setup": "node scripts/dbsetup"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tt-bot-dev/tt.bot.git"
+    },
+    "author": "TTtie",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/tt-bot-dev/tt.bot/issues"
+    },
+    "homepage": "https://github.com/tt-bot-dev/tt.bot#readme"
 }

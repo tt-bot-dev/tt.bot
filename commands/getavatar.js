@@ -16,8 +16,7 @@ module.exports = {
         }).catch(console.error);
     },
     isCmd: true,
-    name: "getavatar",
     display: true,
     category: 1,
-    description: "Get someone's avatar!"
+    description: "Get someone's avatar."
 };

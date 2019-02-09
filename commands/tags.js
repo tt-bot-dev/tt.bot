@@ -1,5 +1,5 @@
-const TagObject = require("../Structures/TagObject");
-const UserProfile = require("../Structures/UserProfile");
+const TagObject = require("../lib/structures/TagObject");
+const UserProfile = require("../lib/Structures/UserProfile");
 module.exports = {
     exec: async function (msg, args) {
         let split = args.split(" ");
@@ -86,7 +86,7 @@ module.exports = {
     isCmd: true,
     display: true,
     category: 1,
-    description: "Store the messages",
+    description: "Store something for later retrieval; keep in mind that tags are public. Using [ttMsg](https://github.com/tt-bot-dev/tt.bot/blob/master/docs/ttMsg.md) is allowed.",
     args: "<show <name>|create <name>|<content>|edit <name>|<content>|delete <name>>",
     aliases: [
         "tag", "t"

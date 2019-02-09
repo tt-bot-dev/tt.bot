@@ -37,10 +37,9 @@ module.exports = {
         });
     },
     isCmd: true,
-    name: "info",
     display: true,
     category: 1,
-    description: "Need help? Need to contact the owner? There, use this command",
+    description: "Shows the information about the bot and its owners.",
     aliases: [
         "aboutbot",
         "about"

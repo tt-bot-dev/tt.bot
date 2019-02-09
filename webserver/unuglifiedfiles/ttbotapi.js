@@ -46,8 +46,8 @@
             return r.json();
         })
     }
-    ttbot.getAvailableRoles = function () {
-        return fetch("/api/roles/" + ttbot.guildId, {
+    ttbot.getAvailableRoles = function (ignoreHierarchy) {
+        return fetch("/api/roles/" + ttbot.guildId + (ignoreHierarchy ? "?ignoreHierarchy=true" : ""), {
             credentials: "include"
         }).then(function (r) {
             return r.json();
@@ -61,6 +61,45 @@
         }).then(function(j) {
             return ttbot.guildConfig = j;
         })
+    }
+
+    ttbot.getExtension = function () {
+        return fetch("/api/extensions/" + ttbot.guildId + "/" + ttbot.extension, {
+            credentials: "include"
+        }).then(function (r) {
+            return r.json();
+        }).then(function (e) {
+            return ttbot.extensionData = e;
+        })
+    }
+
+    ttbot.updateExtension = function (data) {
+        return fetch("/api/extensions/" + ttbot.guildId + "/" + ttbot.extension, {
+            credentials: "include",
+            body: JSON.stringify(data),
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "CSRF-Token": ttbot.csrfToken
+            }
+        }).then(function(r) {
+            return r.json();
+        }).then(function(j) {
+            return ttbot.extensionData = j;
+        })
+    }
+    ttbot.deleteExtension = function (deleteStore) {
+        return fetch("/api/extensions/" + ttbot.guildId + "/" + ttbot.extension, {
+            credentials: "include",
+            body: JSON.stringify({
+                deleteStore: !!deleteStore  
+            }),
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "CSRF-Token": ttbot.csrfToken
+            }
+        }).then(function(){return});
     }
     w.ttbot = ttbot;
 })(window);

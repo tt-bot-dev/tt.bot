@@ -44,6 +44,6 @@ module.exports = {
     name: "say",
     display: true,
     category: 1,
-    description: "Make emoji render as a picture. Has a limit of 5 emotes.",
+    description: "Render up to 5 emojis as a picture.",
     args: "<emoji> [...emoji]"
 };

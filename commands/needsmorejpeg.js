@@ -40,7 +40,7 @@ module.exports = {
     name: "say",
     display: true,
     category: 1,
-    description: "Does your thing need more JPEG? :eyes: Give it to us and we'll handle it for you!",
+    description: "Do your pictures need more JPEG? :eyes: Give them to us and we'll handle it for you!",
     aliases: [
         "jpeg",
         "jpg",

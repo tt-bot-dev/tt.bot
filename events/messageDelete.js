@@ -1,4 +1,4 @@
-const logging = require("../logging");
+const logging = require("../lib/logging");
 module.exports = async function (msg) {
     if (!msg.channel.guild) return;
     if (!msg.author) {

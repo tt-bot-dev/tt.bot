@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
-<body onload="window.ttbot.guildId = '<%=guild.id%>'; window.ttbot.csrfToken = '<%=csrfToken%>'">
+<body>
 <div class="tttie-container">
 <%- include("./partials/header") %>
 <div class="tttie-body">
@@ -11,6 +11,7 @@
 <div class="tttie-changes-buttons">
 <a class="tttie-linkbutton" id="save"><div class="tttie-button">Save changes</div></a>
 <a class="tttie-linkbutton" id="reset"><div class="tttie-button red">Reset</div></a>
+<a class="tttie-linkbutton" href="/dashboard/<%=erisGuild.id%>/extensions"><div class="tttie-button">Manage extensions</div></a>
 </div>
 <div class="tttie-center text">
 <div>
@@ -87,6 +88,7 @@ Also, you can set the case insensitive name of your moderator role (You. Yeah, y
 </div>
 </div>
 </div>
+<script src="/dashboard/<%=guild.id%>/load.js"></script>
 <script src="/static/js/ttbotapi.js"></script>
 <script src="/static/js/dashboard.js"></script>
 </body>

@@ -107,6 +107,7 @@ class ConfigMenu extends ReactionMenu {
                         if (m.channel.id !== this.ogMsg.channel.id) return;
                         return true;
                     });
+                    m.t = this.ogMsg.t;
                     let c;
                     try {
                         let qType;
@@ -268,7 +269,7 @@ ConfigMenu.emojiPropMap = {
 ConfigMenu.HOME = "🏠";
 ConfigMenu.DISABLE = "❌";
 module.exports = {
-    exec: async function (msg, args) {
+    exec: async function (msg) {
         async function makeCfg() {
             await db.table("configs").insert({
                 id: msg.guild.id,
@@ -277,29 +278,14 @@ module.exports = {
             });
             return msg.guildConfig = await db.table("configs").get(msg.guild.id).run();
         }
-        if (args) {
-            let [setting, ...val] = args.split(" ");
-            let value = val.join(" ");
-            let server = msg.guildConfig || await makeCfg();
-            if (setting && value && server[setting]) {
-                server[setting] = value;
-                await db.table("configs").get(msg.guild.id).update(server).run();
-                return await msg.channel.createMessage(msg.t("SETTING_UPDATED", setting, value));
-            } else {
-                return await msg.channel.createMessage(msg.t("SETTING_UNKNOWN", setting));
-            }
-        }
-        else {
-            msg.guildConfig || await makeCfg();
-            const m = await msg.channel.createMessage(ConfigMenu.DEFAULT_OBJ(msg));
-            const menu = new ConfigMenu(msg, m);
-            menu.start();
-        }
+        msg.guildConfig || await makeCfg();
+        const m = await msg.channel.createMessage(ConfigMenu.DEFAULT_OBJ(msg));
+        const menu = new ConfigMenu(msg, m);
+        menu.start();
     },
     isCmd: true,
     name: "config",
     display: true,
     category: 4,
-    description: "This lets you configure your server.",
-    args: "[<item> <value>] (deprecated)"
+    description: "Lets you configure your server.",
 };

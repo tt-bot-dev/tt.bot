@@ -1,0 +1,1 @@
+!function(t){var e=document.querySelector("a.tttie-linkbutton#delete"),n=document.querySelector("input#tttie-delete-store");e.addEventListener("click",function(e){e.preventDefault(),t.ttbot.deleteExtension(n.checked).then(function(){window.location="/dashboard/"+t.ttbot.guildId+"/extensions"})})}(window);

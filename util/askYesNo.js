@@ -13,7 +13,7 @@ module.exports = async (msg, retMsg = false) => {
         else return retMsg ? {
             response: false,
             msg: resp
-        } : true;
+        } : false;
     } catch (_) {
         return retMsg ? {
             response: false,

@@ -1,8 +1,8 @@
 const {WorkerTypes} = require("../util/worker");
 module.exports = async function () {
-    console.log(`${__filename}      | Connected as ${this.user.username}#${this.user.discriminator}`);
+    console.log(`${__filename}      | Connected as ${this.getTag(this.user)}`);
     global.connected = true;
-    global.cmdWrap = require("../cmdwrapper");
+    global.cmdWrap = require("../lib/commandWrapper");
     if (!this.workers.workersRan) {
         for (let i = 0; i< config.workerCount; i++) {
             await Promise.all(Object.values(WorkerTypes).map(w => this.workers.startWorker(w)));

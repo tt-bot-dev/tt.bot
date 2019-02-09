@@ -15,7 +15,6 @@ module.exports = {
         });
     },
     isCmd: true,
-    name: "ping",
     display: true,
     category: 1,
     description: "Check if the bot is working.",
