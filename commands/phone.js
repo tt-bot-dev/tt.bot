@@ -191,5 +191,5 @@ module.exports = {
     category: 1,
     display: true,
     description: "Talk with people across Discord.",
-    args: "<register|call|delete> <number>"
+    args: "<register|call|delete|lookup> <number>"
 };
