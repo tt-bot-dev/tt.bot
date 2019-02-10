@@ -16,6 +16,7 @@ try {
     if (!tables.includes("modlog")) await db.tableCreate("modlog");
     if (!tables.includes("extensions")) await db.tableCreate("extensions");
     if (!tables.includes("extension_store")) await db.tableCreate("extension_store");
+    if (!tables.includes("phone")) await db.tableCreate("phone");
     console.log("All set up!");
     process.exit(0);
 })();
