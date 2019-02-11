@@ -15,7 +15,7 @@
         "express-session-rethinkdb": "^0.4.1",
         "gifwrap": "^0.7.5",
         "jimp": "^0.6.0",
-        "moment": "^2.22.2",
+        "moment": "^2.24.0",
         "moment-timezone": "^0.5.23",
         "monaco-editor": "^0.15.6",
         "pmx": "^1.6.7",
