@@ -3,7 +3,11 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 # Triggers for all branches on the repo
-# And hopefully triggers for all PRs from forks
+# And for all PRs from forks
+pr:
+  branches:
+    include:
+    - *
 
 pool:
   vmImage: 'Ubuntu-16.04'
