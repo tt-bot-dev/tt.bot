@@ -46,7 +46,8 @@ steps:
   env:
     CURRENT_BRANCH: $(Build.SourceBranchName)
     CURRENT_COMMIT: $(Build.SourceVersion)
-    GIT_ACCESS_TOKEN: $(git.githubAccessToken)
+    #GIT_ACCESS_TOKEN: $(git.githubAccessToken)
+    GIT_ACCESS_TOKEN: $(System.SecurityToken)
 
 - task: Bash@3
   # Disable for pull requests from forks because we don't want malicious things in the mirror
