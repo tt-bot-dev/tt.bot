@@ -32,7 +32,8 @@ steps:
     filePath: './travis/fixlint.sh'
   displayName: 'Fix linting issues and pushing the fix'
   continueOnError: true
-  condition: not(succeeded())
+  # Because we continue on errors
+  condition: eq(variables['Agent.JobStatus'], 'SucceededWithIssues')
   env:
     CURRENT_BRANCH: $(Build.SourceBranchName)
     CURRENT_COMMIT: $(Build.SourceVersion)
@@ -40,7 +41,7 @@ steps:
 
 - task: Bash@3
   # Disable for pull requests from forks because we don't want malicious things in the mirror
-  condition: not(variables['System.PullRequest.IsFork'])
+  condition: eq(variables['System.PullRequest.IsFork'], 'False')
   inputs:
     targetType: filePath
     filePath: './travis/build.sh'
