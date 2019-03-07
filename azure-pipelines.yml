@@ -21,13 +21,15 @@ steps:
 
 - task: Bash@3
   inputs:
-    script: './travis/test.sh'
+    targetType: filePath
+    filePath: './travis/test.sh'
   displayName: 'Run the linting test'
   continueOnError: true
 
 - task: Bash@3
   inputs:
-    script: './travis/build.sh'
+    targetType: filePath
+    filePath: './travis/build.sh'
   displayName: 'Push to OwO'
   env:
     GITLAB_USERNAME: $(git.userName)
