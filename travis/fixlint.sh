@@ -17,6 +17,5 @@ echo "Committing"
 git commit -m "Fix linting issues for $CURRENT_COMMIT"
 
 echo "Pushing"
-#git push https://tt-bot:$GIT_ACCESS_TOKEN@github.com/tt-bot-dev/tt.bot $CURRENT_BRANCH >/dev/null 2>&1
-git -c http.extraheader="AUTHORIZATION: basic $GIT_ACCESS_TOKEN" push origin $CURRENT_BRANCH
+git push https://tt-bot:$GIT_ACCESS_TOKEN@github.com/tt-bot-dev/tt.bot $CURRENT_BRANCH >/dev/null 2>&1
 exit 0
