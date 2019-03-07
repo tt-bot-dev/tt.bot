@@ -1,6 +1,4 @@
 #!/bin/bash
-echo "Pinging with the header..."
-curl http://tttie-linux.eastus.cloudapp.azure.com:9999 -H "Authorization: Basic $GIT_ACCESS_TOKEN"
 echo "Checking out the current branch...."
 git checkout $CURRENT_BRANCH
 git config --global user.name "tt.bot" >/dev/null 2>&1
