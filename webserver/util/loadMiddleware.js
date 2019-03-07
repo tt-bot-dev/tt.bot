@@ -10,10 +10,10 @@ const e = require("express"),
     body = require("body-parser"),
     auth = require("./auth");
 module.exports = app => {
-	app.use((_, rs, nx) =>  {
-		rs.set("Cache-Control", "no-cache");
-		nx();
-	})
+    app.use((_, rs, nx) =>  {
+        rs.set("Cache-Control", "no-cache");
+        nx();
+    });
     app.use("/static", e.static(`${__dirname}/../static`));
     app.enable("trust proxy");
     app.use(body.urlencoded({
