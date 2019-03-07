@@ -4,10 +4,15 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 # Triggers for all branches on the repo
 # And for all PRs from forks
+trigger:
+  branches:
+    include:
+    - '*'
+
 pr:
   branches:
     include:
-    - *
+    - '*'
 
 pool:
   vmImage: 'Ubuntu-16.04'
