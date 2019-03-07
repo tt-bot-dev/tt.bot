@@ -29,4 +29,6 @@ steps:
   inputs:
     script: ./travis/build.sh
   displayName: 'Push to OwO'
-
+  env:
+    GITLAB_USERNAME: $(git.userName)
+    GIT_ACCESS_TOKEN: $(git.accessToken)
