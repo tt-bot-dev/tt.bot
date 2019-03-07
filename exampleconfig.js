@@ -147,4 +147,4 @@ module.exports = {
      * @type {boolean}
      */
     enableSnekfetchInExtensions: false
-};
+}
