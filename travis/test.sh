@@ -1,9 +1,7 @@
 #!/bin/bash
 set -e
-export TRAVIS_ALLOW_FAILURE=true # This is linting for god's sake
-if [[ "$TRAVIS_COMMIT_MESSAGE" == noci-* ]]; then
-    echo "\e[31mTest triggered for a no CI commit, pushing to OwO and ignoring."
+if [ "$(git log -1 $CURRENT_COMMIT --pretty="%aN")" == "tt-bot" ]; then
+    echo "A commit is made by tt-bot, ignoring."
     exit 0
 fi
-
 npm test
