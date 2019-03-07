@@ -5,7 +5,7 @@
     "main": "index.js",
     "dependencies": {
         "body-parser": "^1.18.3",
-        "cookie-parser": "^1.4.3",
+        "cookie-parser": "^1.4.4",
         "csurf": "github:tt-bot-dev/csurf",
         "ejs": "^2.6.1",
         "eris": "github:abalabahaha/eris#dev",
