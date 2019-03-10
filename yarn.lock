@@ -645,7 +645,6 @@ encodeurl@~1.0.2:
 
 "eris@github:abalabahaha/eris#dev":
   version "0.9.0"
-  uid "19257d507b3ccca5d2101e6c45d9d44c3fb2f0f4"
   resolved "https://codeload.github.com/abalabahaha/eris/tar.gz/19257d507b3ccca5d2101e6c45d9d44c3fb2f0f4"
   dependencies:
     ws "^6.0.0"
@@ -1534,7 +1533,7 @@ raven@^2.6.3:
     md5 "^2.2.1"
     stack-trace "0.0.10"
     timed-out "4.0.1"
-    uuid "3.3.2"
+    uuid "3.0.0"
 
 raw-body@2.3.3:
   version "2.3.3"
@@ -1690,6 +1689,12 @@ snekfetch@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/snekfetch/-/snekfetch-4.0.4.tgz#e76a03b8476699a1f0c036d6567e386ce5fbde8e"
   integrity sha512-dyycG9fvwtSJqKPfMVOpXt+60qvMGe7vWLwOJDiSJaiAx+hs2EnFChG2bXCWn7ulz+zGzrHdN9/yeEb0YqEPww==
+
+"sosamba@github:tt-bot-dev/sosamba":
+  version "0.0.3-iter3"
+  resolved "https://codeload.github.com/tt-bot-dev/sosamba/tar.gz/1a3a830a2f848b538b66f2372a7d4614d6fc82e8"
+  dependencies:
+    eris "github:abalabahaha/eris#dev"
 
 sprintf-js@~1.0.2:
   version "1.0.3"
@@ -1868,7 +1873,12 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@3.3.2, uuid@^3.0.1:
+uuid@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.0.tgz#6728fc0459c450d796a99c31837569bdf672d728"
+  integrity sha1-Zyj8BFnEUNeWqZwxg3VpvfZy1yg=
+
+uuid@^3.0.1:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==

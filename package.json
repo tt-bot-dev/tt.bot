@@ -23,6 +23,7 @@
         "raven": "^2.6.3",
         "rethinkdbdash": "^2.3.31",
         "snekfetch": "^4.0.4",
+        "sosamba": "github:tt-bot-dev/sosamba",
         "vm2": "^3.6.10",
         "zlib-sync": "^0.1.4"
     },

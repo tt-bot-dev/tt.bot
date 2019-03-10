@@ -3,7 +3,7 @@
 [![Build Status][azp shield]][azp]
 
 tt.bot is a bot with aim for moderation and fun written in JavaScript using [Node.js] and [Eris] library.  
-This bot uses (and probably used) some pieces of code from [blargbot].
+Also a real life example of [Sosamba] usage.
 
 # Features
 Check a special page for [tt.bot](https://tttie.github.io/ttbot)
@@ -20,4 +20,4 @@ Read the documentation page [here](./docs/Selfhosting)
 [azp]: https://dev.azure.com/tt-bot-dev/tt.bot/_build/latest?definitionId=1&branchName=master
 [Node.js]: https://nodejs.org
 [Eris]: https://github.com/abalabahaha/eris
-[blargbot]: https://github.com/ratismal/blargbot
+[sosamba]: https://github.com/tt-bot-dev/sosamba
