@@ -27,7 +27,7 @@
         "zlib-sync": "^0.1.4"
     },
     "devDependencies": {
-        "eslint": "^5.15.1"
+        "eslint": "^5.15.2"
     },
     "scripts": {
         "test": "eslint .",
