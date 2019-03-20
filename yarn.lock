@@ -1293,10 +1293,10 @@ moment-timezone@^0.5.23:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
-monaco-editor@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.16.0.tgz#83538173c2427f62e0ea3e19a4864742ea457cd9"
-  integrity sha512-a0ZksW1C5gTXOOJR/guKwzYrLJkJtMqzPb/W81YFSFHwbZ/ecVWdNguUkuyUuchzeKJRwqcizgVx++G9wmfofQ==
+monaco-editor@^0.16.2:
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.16.2.tgz#950084ed82eeaef1c8c9d3c1bcab849fe11b2415"
+  integrity sha512-NtGrFzf54jADe7qsWh3lazhS7Kj0XHkJUGBq9fA/Jbwc+sgVcyfsYF6z2AQ7hPqDC+JmdOt/OwFjBnRwqXtx6w==
 
 ms@2.0.0:
   version "2.0.0"
