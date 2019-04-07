@@ -32,14 +32,14 @@ module.exports = {
         if (!req.user) return res.redirect("/login");
         if (!req.user.guilds) return res.redirect("/login");
         return req.user.guilds.filter(g => {
-            if (bot.guilds.has(g.id)) return bot.isAdmin(bot.guilds.get(g.id).members.get(req.user.id));
+            if (req.bot.guilds.has(g.id)) return req.bot.isAdmin(req.bot.guilds.get(g.id).members.get(req.user.id));
             else {
                 const permission = new ErisO.Permission(g.permissions);
                 return permission.has("administrator") || permission.has("manageServer");
             }
 
         }).map(g => Object.assign({}, g, {
-            isOnServer: bot.guilds.has(g.id)
+            isOnServer: req.bot.guilds.has(g.id)
         }));
     },
 

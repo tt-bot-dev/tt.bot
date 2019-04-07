@@ -1,4 +1,4 @@
-const e = require("express"),
+const config = require("../config"), e = require("express"),
     app = e(),
     util = require("./util"),
     { checkAuth, checkAuthNeg, loadMiddleware, getGuilds, getHost } = util,
@@ -6,18 +6,21 @@ const e = require("express"),
     { createServer: httpsServer } = require("https"),
     { getAccessToken, logout } = require("./util/auth"),
     csrf = require("csurf"),
-    fs = require("fs");
+    fs = require("fs"),
+    csrfProtection = csrf({
+        value: req =>
+            (req.body && req.body._csrf) ||
+            (req.query && req.query._csrf) ||
+            (req.query && req.query.state) ||
+            (req.headers["csrf-token"]) ||
+            (req.headers["xsrf-token"]) ||
+            (req.headers["x-csrf-token"]) ||
+            (req.headers["x-xsrf-token"])
+    });
+    
 
-const csrfProtection = csrf({
-    value: req =>
-        (req.body && req.body._csrf) ||
-        (req.query && req.query._csrf) ||
-        (req.query && req.query.state) ||
-        (req.headers["csrf-token"]) ||
-        (req.headers["xsrf-token"]) ||
-        (req.headers["x-csrf-token"]) ||
-        (req.headers["x-xsrf-token"])
-});
+module.exports = function(db, bot, config) {
+    
 
 loadMiddleware(app);
 app.get("/", (rq, rs) => {
@@ -274,3 +277,4 @@ if (config.httpsPort) httpsServer(config.httpsSettings, app)
     .listen(config.httpsPort, config.webserverip || "0.0.0.0", () => {
         console.log("HTTPS webserver is running");
     });
+}

@@ -1,3 +1,4 @@
+const config = require("../../config");
 const sa = require("snekfetch");
 const APIBase = "https://discordapp.com/api/v6/oauth2";
 

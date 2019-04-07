@@ -20,7 +20,6 @@
         "monaco-editor": "^0.16.0",
         "pmx": "^1.6.7",
         "process-as-promised": "^1.0.1",
-        "raven": "^2.6.3",
         "rethinkdbdash": "^2.3.31",
         "snekfetch": "^4.0.4",
         "sosamba": "github:tt-bot-dev/sosamba",

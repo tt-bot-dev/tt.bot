@@ -1,4 +1,4 @@
-const e = require("express"),
+const config = require("../../config"), e = require("express"),
     ejs = require("ejs"),
     cookieparser = require("cookie-parser"),
     session = require("express-session"),
@@ -9,8 +9,9 @@ const e = require("express"),
     cookies = require("./cookies"),
     body = require("body-parser"),
     auth = require("./auth");
-module.exports = app => {
-    app.use((_, rs, nx) =>  {
+module.exports = (app, bot) => {
+    app.use((rq, rs, nx) =>  {
+        rq.bot = bot;
         rs.set("Cache-Control", "no-cache");
         nx();
     });

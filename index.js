@@ -7,4 +7,4 @@ process.on("uncaughtException", (err) => {
     console.log(err.stack);
 });
 console.log(__filename + "     | Running the bot......");
-require("./lib/loadModules");
+require("./lib/load")();

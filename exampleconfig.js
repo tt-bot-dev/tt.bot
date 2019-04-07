@@ -102,19 +102,7 @@ module.exports = {
      * The GitHub (personal) access token with `gist` permission.
      */
     gistKey: "a6ge954rb0zzt29ub897jf9b81t77a67erfv9",
-    /**
-     * The options for sentry.io
-     * This is an object like this:
-     * ```ts
-     * {
-     * enabled: boolean,
-     * config: object,
-     * url: string
-     * }
-     * ```
-     */
-    sentry: {},
-
+    
     /**
      * The initialization vector for encryption. You can either use your own 16 bytes or let the bot generate this.
      * @type {string}
