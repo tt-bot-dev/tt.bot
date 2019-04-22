@@ -16,7 +16,7 @@ class BanCommand extends Command {
                     default: "No reason provided."
                 }
             })
-        })
+        });
     }
     async run(ctx, {user, reason}) {
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {

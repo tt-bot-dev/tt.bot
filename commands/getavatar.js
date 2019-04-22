@@ -13,7 +13,7 @@ class AvatarCommand extends Command {
                     type: User
                 }]
             })
-        })
+        });
     }
 
     async run(ctx, [user]) {

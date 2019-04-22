@@ -17,7 +17,7 @@ class CatCommand extends Command {
                 },
                 color: 0x008800
             }
-        })
+        });
     }
 }
 

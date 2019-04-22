@@ -32,7 +32,7 @@ class EvalCommand extends Command {
                         description: "Unfortunately, we can't provide the data here because they're too long and the request to GitHub's Gist APIs has failed.\nThereby, the output has been logged in the console."
                     }
                 });
-                this.log.log(v)
+                this.log.log(v);
                 return; // we don't replace anything here, because that's console
             }
             return await ctx.send({

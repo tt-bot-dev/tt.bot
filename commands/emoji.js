@@ -13,7 +13,7 @@ class EmojiCommand extends Command {
                     type: String
                 }]
             })
-        })
+        });
     }
     async run(ctx, emojis) {
         if (emojis.length > 5) emojis = emojis.slice(0, 5);

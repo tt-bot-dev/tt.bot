@@ -9,9 +9,9 @@ class ExitCommand extends Command {
         this.sosamba.reactionMenus.forEach(menu => {
             this.sosamba.reactionMenus.remove(menu);
             menu.stopCallback(STOP_REASONS.SHUTDOWN);
-        })
+        });
         this.sosamba.messageListeners.clear();
-        await ctx.send(":wave:")
+        await ctx.send(":wave:");
         process.exit(0);
     }
 }

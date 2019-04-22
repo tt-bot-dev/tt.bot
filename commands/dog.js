@@ -5,7 +5,7 @@ class DogCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "dog",
-        })
+        });
     }
 
     async run(ctx) {
@@ -18,7 +18,7 @@ class DogCommand extends Command {
                 },
                 color: 0x008800
             }
-        })
+        });
     }
 }
 
