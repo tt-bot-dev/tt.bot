@@ -1,7 +1,11 @@
+"use strict";
 const { Command } = require("sosamba");
 const dmReply = require("../util/sendReplyToDMs");
 
 class AgreeCommand extends Command {
+    constructor(...args) {
+        super(...args);
+    }
     async run(ctx) {
         const { memberRole, agreeChannel } = await ctx.guildConfig;
         if (!memberRole || !agreeChannel) return;
