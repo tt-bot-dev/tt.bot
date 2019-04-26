@@ -4,7 +4,7 @@
     "description": "A bot with aim for fun and moderation made in JS using Eris.",
     "main": "index.js",
     "dependencies": {
-        "body-parser": "^1.18.3",
+        "body-parser": "^1.19.0",
         "cookie-parser": "^1.4.4",
         "csurf": "github:tt-bot-dev/csurf",
         "ejs": "^2.6.1",
