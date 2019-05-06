@@ -17,7 +17,7 @@
         "jimp": "^0.6.1",
         "moment": "^2.24.0",
         "moment-timezone": "^0.5.25",
-        "monaco-editor": "^0.16.2",
+        "monaco-editor": "^0.17.0",
         "pmx": "^1.6.7",
         "process-as-promised": "^1.0.1",
         "raven": "^2.6.3",
