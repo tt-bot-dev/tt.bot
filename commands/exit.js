@@ -3,7 +3,7 @@ const { STOP_REASONS } = require("sosamba/lib/Constants");
 
 class ExitCommand extends Command {
     constructor(...args) {
-        super(...args, { name: "exit "});
+        super(...args, { name: "exit"});
     }
     async run(ctx) {
         this.sosamba.reactionMenus.forEach(menu => {
@@ -15,3 +15,5 @@ class ExitCommand extends Command {
         process.exit(0);
     }
 }
+
+module.exports = ExitCommand;

@@ -1,4 +1,4 @@
-const {User, Member} = ErisO;
+const { User, Member } = require("eris");
 module.exports = async (userOrMember, ...args) => {
     let dmChannel;
     if (userOrMember instanceof User) {

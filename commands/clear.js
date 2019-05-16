@@ -7,8 +7,8 @@ const D_EPOCH = 1421280000000n;
 
 class ClearCommand extends Command {
     constructor(sosamba, ...args) {
-        super(sosamba, ...args, "", {
-            name: "ban",
+        super(sosamba, ...args, {
+            name: "clear",
             args: "<messages:Number> [contains:String] [mentions:User]",
             argParser: new SwitchArgumentParser(sosamba, {
                 messages: {

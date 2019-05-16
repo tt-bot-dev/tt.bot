@@ -31,3 +31,5 @@ class AvatarCommand extends Command {
         });
     }
 }
+
+module.exports = AvatarCommand;

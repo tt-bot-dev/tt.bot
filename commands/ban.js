@@ -4,7 +4,7 @@ const { User } = require("eris");
 
 class BanCommand extends Command {
     constructor(sosamba, ...args) {
-        super(sosamba, ...args, "", {
+        super(sosamba, ...args, {
             name: "ban",
             args: "<user:User>",
             argParser: new SwitchArgumentParser(sosamba, {

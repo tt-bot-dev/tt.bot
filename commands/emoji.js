@@ -16,14 +16,15 @@ class EmojiCommand extends Command {
         });
     }
     async run(ctx, emojis) {
-        if (emojis.length > 5) emojis = emojis.slice(0, 5);
+        if (emojis.length > 5) emojis = emojis.slice(0,5);
         await ctx.send(ctx.t("IMAGE_GENERATING"));
         const t = process.hrtime();
         let b;
         try {
-            b = await this.sosamba.workers.sendToRandom(0, "generateImage", {input}).promise;
+            b = await this.sosamba.workers.sendToRandom(0, "generateImage", {input: emojis.join(" ")}).promise;
             if (b && b.err) throw b.err;
         } catch(err) {
+            console.error(err);
             ctx.send(ctx.t("ERROR", err));
             return;
         }
@@ -53,3 +54,5 @@ class EmojiCommand extends Command {
         });
     }
 }
+
+module.exports = EmojiCommand;

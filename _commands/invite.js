@@ -6,5 +6,5 @@ module.exports = {
     category: 1,
     display: true,
     description: "Invite the bot into your server! :)",
-    args: "[permission] [guild id]"
+    args: ""
 };

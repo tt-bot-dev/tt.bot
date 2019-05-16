@@ -1,5 +1,5 @@
 "use strict";
-const { Command } = require("../../");
+const { Command } = require("sosamba");
 const { inspect } = require("util");
 const AsyncFunction = (async () => "").constructor;
 const CensorBuilder = require("../lib/CensorBuilder");

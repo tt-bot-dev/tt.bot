@@ -4,7 +4,9 @@ const dmReply = require("../util/sendReplyToDMs");
 
 class AgreeCommand extends Command {
     constructor(...args) {
-        super(...args);
+        super(...args, {
+            name: "agree"
+        });
     }
     async run(ctx) {
         const { memberRole, agreeChannel } = await ctx.guildConfig;
