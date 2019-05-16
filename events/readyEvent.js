@@ -5,10 +5,10 @@ class ReadyEvent extends Event {
     constructor(...args) {
         super(...args, {
             name: "ready"
-        })
+        });
     }
     async run() {
-        this.log.log("I'm ready....")
+        this.log.log("I'm ready....");
         if (!this.sosamba.workers.workersRan) {
             for (let i = 0; i< config.workerCount; i++) {
                 await Promise.all(Object.values(WorkerTypes).map(w => this.sosamba.workers.startWorker(w)));

@@ -5,7 +5,7 @@ class InviteCommand extends Command {
     constructor(...args) {
         super(...args, { 
             name: "invite"
-        })
+        });
     }
 
     async run(ctx) {
