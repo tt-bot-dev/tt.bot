@@ -15,7 +15,7 @@ class EvalCommand extends Command {
         let d;
         try {
             d = await new AsyncFunction("ctx", "args", args).bind(this)(ctx, args);
-        } catch (e) {
+        } catch (err) {
             d = err.stack;
         }
         const v = typeof d === "string" ? d : inspect(d);
