@@ -18,9 +18,9 @@ class AgreeCommand extends Command {
             await ctx.member.addRole(memberRole, "Agreement to server's rules");
         } catch {
             try {
-                await dmReply(ctx.author, "cannot give you the role :(")
+                await dmReply(ctx.author, "cannot give you the role :(");
             } catch {
-                const m = await ctx.send(`${msg.author.mention} cannot give you the role :(`)
+                const m = await ctx.send(`${ctx.author.mention} cannot give you the role :(`);
                 setTimeout(() => m.delete(), 5000);
             }
         }

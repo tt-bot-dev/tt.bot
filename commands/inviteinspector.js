@@ -5,7 +5,7 @@ class InviteInspectorCommand extends Command {
         super(...args, {
             name: "inviteinspector",
             args: "<invite code>"
-        })
+        });
     }
 
     async run(ctx, args) {

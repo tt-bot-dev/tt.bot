@@ -1,4 +1,4 @@
-const config = require("../config"), e = require("express"),
+const e = require("express"),
     app = e(),
     util = require("./util"),
     { checkAuth, checkAuthNeg, loadMiddleware, getGuilds, getHost } = util,

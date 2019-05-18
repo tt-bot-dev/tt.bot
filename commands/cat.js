@@ -8,7 +8,7 @@ class CatCommand extends Command {
         });
     }
 
-    async run(ctx, args) {
+    async run(ctx) {
         const { body } = await get("https://aws.random.cat/meow");
         await ctx.send({
             embed: {

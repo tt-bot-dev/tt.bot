@@ -1,4 +1,4 @@
-const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
+const { Command, SerializedArgumentParser } = require("sosamba");
 
 class EmojiCommand extends Command {
     constructor(sosamba, ...args) {

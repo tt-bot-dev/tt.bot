@@ -18,9 +18,9 @@ class KickCommand extends Command {
     }
 
     async run(ctx, { user, reason }) {
-        if (this.sosamba.passesRoleHierarchy(msg.member, user)) {
-            if (!this.sosamba.hasBotPermission(msg.channel, "kickMembers")) return ctx.send(ctx.t("ERROR", "I don't have the permissions to kick the user."));
-            await user.kick(`${this.sosamba.getTag(msg.author)}: ${reason}`);
+        if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
+            if (!this.sosamba.hasBotPermission(ctx.channel, "kickMembers")) return ctx.send(ctx.t("ERROR", "I don't have the permissions to kick the user."));
+            await user.kick(`${this.sosamba.getTag(ctx.author)}: ${reason}`);
             this.sosamba.modLog.addKick(user.id, ctx.msg, reason);
             await ctx.send(ctx.t("KICK_DONE", user));
         } else {

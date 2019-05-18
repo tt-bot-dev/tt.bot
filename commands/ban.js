@@ -21,10 +21,10 @@ class BanCommand extends Command {
     async run(ctx, {user, reason}) {
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
             await user.ban(1, `${bot.getTag(ctx.author)}: ${reason}`);
-            bot.modLog.addBan(user.id, msg, reason, false);
-            await ctx.send(msg.t("BAN_DONE", user));
+            bot.modLog.addBan(user.id, ctx.msg, reason, false);
+            await ctx.send(ctx.t("BAN_DONE", user));
         } else {
-            ctx.send(msg.t("ROLE_HIERARCHY_ERROR"));
+            ctx.send(ctx.t("ROLE_HIERARCHY_ERROR"));
         }
     }
 }

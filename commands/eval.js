@@ -3,7 +3,7 @@ const { Command } = require("sosamba");
 const { inspect } = require("util");
 const AsyncFunction = (async () => "").constructor;
 const CensorBuilder = require("../lib/CensorBuilder");
-const gist = require("../lib/gist");
+const makegist = require("../lib/gist");
 class EvalCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
@@ -23,9 +23,9 @@ class EvalCommand extends Command {
         if (description.length > 2048) {
             let gist;
             try {
-                gist = await gist("exec.md", data, "Evaluated code");
+                gist = await makegist("exec.md", description, "Evaluated code");
             } catch (err) {
-                await msg.channel.createMessage({
+                await ctx.send({
                     embed: {
                         title: "Evaluated!",
                         color: 0x008800,
