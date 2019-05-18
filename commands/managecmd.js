@@ -54,14 +54,14 @@ class ManagementCommand extends Command {
                 await what.unmount();
                 await ctx.send({
                     embed: {
-                        title: `:white_check_mark: Unloaded ${what.name} successfully`,
+                        title: `:white_check_mark: Successfully unloaded ${what.name}`,
                         color: 0x008800
                     }
                 });
             } catch (err) {
                 await ctx.send({
                     embed: {
-                        title: `:x: Cannot unload ${what} due to a coding error`,
+                        title: `:x: Cannot unload ${what.name} due to a coding error`,
                         description: `Here's what happened: \`\`\`js\n${err.stack}\n\`\`\``,
                         color: 0xFF0000
                     }
@@ -148,10 +148,10 @@ class ManagementCommand extends Command {
                 const fp = parse(p);
 
                 const cmdClass = new f(this.sosamba, p, fp.dir);
-                cmdClass.mount();
+                await cmdClass.mount();
                 const c = this.sosamba.commands.add(cmdClass);
                 if (cmdClass !== c) {
-                    cmdClass.unmount();
+                    await cmdClass.unmount();
                     await ctx.send({
                         embed: {
                             title: `:x: Cannot load ${what} due to a conflict`,
@@ -169,6 +169,78 @@ class ManagementCommand extends Command {
                     }
                 });
             }
+        } else if (action === ReloadSymbol) {
+            if (!(what instanceof Command)) {
+                await ctx.send({
+                    embed: {
+                        title: `:x: Cannot unload ${what}`,
+                        description: `${what} is not a command.`,
+                        color: 0xFF0000
+                    }
+                });
+                return;
+            }
+            await ctx.send({
+                embed: {
+                    title: `:stopwatch: Reloading ${what.name}`,
+                    description: `This may take a while.`
+                }
+            });
+
+            await what.unmount();
+            const k = require.resolve(`${what.path}/${what.file}`);
+            const c = require.cache[k];
+
+            delete require.cache[k];
+
+            let f;
+
+            try {
+                f = require(k);
+            } catch {
+                require.cache[k] = c;
+                await what.mount();
+                this.sosamba.commands.add(what);
+                await ctx.send({
+                    embed: {
+                        title: `:x: Cannot reload ${what.name} due to a coding error`,
+                        description: `Here's what happened: \`\`\`js\n${err.stack}\n\`\`\``,
+                        footer: {
+                            text: `The old copy of the command was loaded back.`
+                        },
+                        color: 0xFF0000
+                    }
+                });
+                return;
+            }
+            if (!(f.prototype instanceof Command)) {
+                
+                require.cache[k] = c;
+                await what.mount();
+                this.sosamba.commands.add(what);
+                await ctx.send({
+                    embed: {
+                        title: `:x: Cannot reload ${what.name} due to a coding error`,
+                        description: "The command is not an instance of the [Command](https://tt-bot-dev.github.io/sosamba/?api=sosamba#Sosamba.Command) class.",
+                        footer: {
+                            text: `The old copy of the command was loaded back.`
+                        },
+                        color: 0xFF0000
+                    }
+                });
+                return;
+            }
+
+            const cmdClass = new f(this.sosamba, what.file, what.path);
+            await cmdClass.mount();
+            this.sosamba.commands.add(cmdClass);
+            await ctx.send({
+                embed: {
+                    title: `:white_check_mark: Successfully reloaded ${what.name}${cmdClass.name !== what.name ? ` as ${cmdClass.name}` : ""}`,
+                    color: 0x008800
+                }
+            })
+
         }
     }
 }
