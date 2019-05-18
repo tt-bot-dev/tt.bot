@@ -183,7 +183,7 @@ class ManagementCommand extends Command {
             await ctx.send({
                 embed: {
                     title: `:stopwatch: Reloading ${what.name}`,
-                    description: `This may take a while.`
+                    description: "This may take a while."
                 }
             });
 
@@ -197,7 +197,7 @@ class ManagementCommand extends Command {
 
             try {
                 f = require(k);
-            } catch {
+            } catch(err) {
                 require.cache[k] = c;
                 await what.mount();
                 this.sosamba.commands.add(what);
@@ -206,7 +206,7 @@ class ManagementCommand extends Command {
                         title: `:x: Cannot reload ${what.name} due to a coding error`,
                         description: `Here's what happened: \`\`\`js\n${err.stack}\n\`\`\``,
                         footer: {
-                            text: `The old copy of the command was loaded back.`
+                            text: "The old copy of the command was loaded back."
                         },
                         color: 0xFF0000
                     }
@@ -223,7 +223,7 @@ class ManagementCommand extends Command {
                         title: `:x: Cannot reload ${what.name} due to a coding error`,
                         description: "The command is not an instance of the [Command](https://tt-bot-dev.github.io/sosamba/?api=sosamba#Sosamba.Command) class.",
                         footer: {
-                            text: `The old copy of the command was loaded back.`
+                            text: "The old copy of the command was loaded back."
                         },
                         color: 0xFF0000
                     }
@@ -239,7 +239,7 @@ class ManagementCommand extends Command {
                     title: `:white_check_mark: Successfully reloaded ${what.name}${cmdClass.name !== what.name ? ` as ${cmdClass.name}` : ""}`,
                     color: 0x008800
                 }
-            })
+            });
 
         }
     }
