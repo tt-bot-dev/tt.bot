@@ -4,7 +4,7 @@ class ServerCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "serverinfo"
-        })
+        });
     }
 
     async run(ctx) {
@@ -60,40 +60,40 @@ class ServerCommand extends Command {
             },
             timestamp: new Date(ctx.guild.createdAt),
             color: 0x008800
-        }
+        };
 
         await ctx.send({embed});
     }
 
     getGuildVerification(ctx) {
         switch (ctx.guild.verificationLevel) {
-            case 0:
-                return ctx.t("GUILD_VERIFICATION_NONE");
+        case 0:
+            return ctx.t("GUILD_VERIFICATION_NONE");
 
-            case 1:
-                return ctx.t("GUILD_VERIFICATION_LOW");
+        case 1:
+            return ctx.t("GUILD_VERIFICATION_LOW");
 
-            case 2:
-                return ctx.t("GUILD_VERIFICATION_MEDIUM");
+        case 2:
+            return ctx.t("GUILD_VERIFICATION_MEDIUM");
 
-            case 3:
-                return "(╯°□°）╯︵ ┻━┻" + ctx.t("GUILD_VERIFICATION_TABLEFLIP");
+        case 3:
+            return "(╯°□°）╯︵ ┻━┻" + ctx.t("GUILD_VERIFICATION_TABLEFLIP");
 
-            case 4:
-                return "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻ " + ctx.t("GUILD_VERIFICATION_ULTRATABLEFLIP");
+        case 4:
+            return "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻ " + ctx.t("GUILD_VERIFICATION_ULTRATABLEFLIP");
         }
     }
 
     getExplicitContent(ctx) {
         switch (ctx.guild.explicitContentFilter) {
-            case 0:
-                return ctx.t("EXPLICIT_FILTERING_OFF");
+        case 0:
+            return ctx.t("EXPLICIT_FILTERING_OFF");
 
-            case 1:
-                return ctx.t("EXPLICIT_FILTERING_NOROLE");
+        case 1:
+            return ctx.t("EXPLICIT_FILTERING_NOROLE");
 
-            case 2:
-                return ctx.t("EXPLICIT_FILTERING_ON");
+        case 2:
+            return ctx.t("EXPLICIT_FILTERING_ON");
         }
     }
 }

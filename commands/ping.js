@@ -20,8 +20,8 @@ class PingCommand extends Command {
                 },
                 color: 0x008800
             }
-        })
+        });
     }
 }
 
-module.exports = PingCommand
+module.exports = PingCommand;

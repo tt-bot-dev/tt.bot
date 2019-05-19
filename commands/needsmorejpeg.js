@@ -16,13 +16,13 @@ class JPEGCommand extends Command {
                             return str;
                         },
                         default: ctx => {
-                            const images = ctx.msg.attachments.filter(i => i.height && i.width)
+                            const images = ctx.msg.attachments.filter(i => i.height && i.width);
                             return images.length > 0 && images[0].url;
                         }
                     }
                 ]
             })
-        })
+        });
     }
 
     async run(ctx, [url]) {
@@ -39,11 +39,11 @@ class JPEGCommand extends Command {
         } catch (err) {
             await ctx.send({
                 embed: {
-                    title: `:x: Cannot JPEG-ify the image`,
-                    description: `The image cannot be fetched.`,
+                    title: ":x: Cannot JPEG-ify the image",
+                    description: "The image cannot be fetched.",
                     color: 0xFF0000
                 }
-            })
+            });
             return;
         }
         image.quality((Math.random() * 5) + 1);
@@ -53,8 +53,8 @@ class JPEGCommand extends Command {
         } catch (err) {
             await ctx.send({
                 embed: {
-                    title: `:x: Cannot JPEG-ify the image due to an internal error`,
-                    description: `We're sorry for that.`,
+                    title: ":x: Cannot JPEG-ify the image due to an internal error",
+                    description: "We're sorry for that.",
                     color: 0xFF0000
                 }
             });

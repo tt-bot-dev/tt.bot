@@ -5,12 +5,12 @@ class PullCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "pull"
-        })
+        });
         this.exec = ExecCommand.prototype.exec.bind(this);
     }
 
     async run(ctx) {
-        return ExecCommand.prototype.run.call(this, ctx, "git pull")
+        return ExecCommand.prototype.run.call(this, ctx, "git pull");
     }
 }
 
