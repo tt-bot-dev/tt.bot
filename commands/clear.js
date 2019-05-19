@@ -1,7 +1,8 @@
 "use strict";
-const { Command, SwitchArgumentParser } = require("sosamba");
+const { SwitchArgumentParser } = require("sosamba");
 const { user } = require("sosamba/lib/argParsers/switchSerializers/erisObjects");
-const BotSymbol = Symbol("tt.bot::Bots");
+const Command = require("../lib/ModCommand");
+const BotSymbol = Symbol("tt.bot.clear.bots");
 const { User } = require("eris");
 const D_EPOCH = 1421280000000n;
 

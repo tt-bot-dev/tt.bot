@@ -1,4 +1,4 @@
-const { Command } = require("sosamba");
+const Command = require("../lib/OwnerCommand");
 const { STOP_REASONS } = require("sosamba/lib/Constants");
 
 class ExitCommand extends Command {

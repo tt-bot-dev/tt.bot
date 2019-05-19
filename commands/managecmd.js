@@ -1,4 +1,5 @@
-const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
+const { SerializedArgumentParser, ParsingError } = require("sosamba");
+const Command = require("../lib/OwnerCommand");
 const { promises: { stat }} = require("fs");
 const { relative, parse, join } = require("path");
 const UnloadSymbol = Symbol("tt.bot.manage.unload");
@@ -136,6 +137,7 @@ class ManagementCommand extends Command {
                 }
 
                 if (!(f.prototype instanceof Command)) {
+                    delete require.cache[p];
                     await ctx.send({
                         embed: {
                             title: `:x: Cannot load ${what} due to a coding error`,
@@ -151,6 +153,7 @@ class ManagementCommand extends Command {
                 await cmdClass.mount();
                 const c = this.sosamba.commands.add(cmdClass);
                 if (cmdClass !== c) {
+                    delete require.cache[p];
                     await cmdClass.unmount();
                     await ctx.send({
                         embed: {
@@ -159,6 +162,7 @@ class ManagementCommand extends Command {
                             color: 0xFF0000
                         }
                     });
+                    
                     return;
                 }
 

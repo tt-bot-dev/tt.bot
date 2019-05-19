@@ -1,5 +1,5 @@
 "use strict";
-const { Command } = require("sosamba");
+const Command = require("../lib/OwnerCommand");
 const { inspect } = require("util");
 const AsyncFunction = (async () => "").constructor;
 const CensorBuilder = require("../lib/CensorBuilder");
@@ -14,7 +14,10 @@ class EvalCommand extends Command {
     async run(ctx, args) {
         let d;
         try {
-            d = await new AsyncFunction("ctx", "args", args).bind(this)(ctx, args);
+            d = await new AsyncFunction("ctx", "args",
+                // Thanks JS for not scoping things
+                "require", "__dirname", "__filename", "module", args)
+                .bind(this)(ctx, args, require, __dirname, __filename, module);
         } catch (err) {
             d = err.stack;
         }
