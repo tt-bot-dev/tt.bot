@@ -10,7 +10,7 @@ class JPEGCommand extends Command {
                 args: [
                     {
                         name: "url",
-                        type: (str, ctx) => {
+                        type: str => {
                             if (!URLRegex.test(str)) throw new ParsingError("The input is not an URL");
                             if (!ImageExtensionRegex.test(str)) throw new ParsingError("The input is an invalid or unsupported image. The valid formats are PNG, JPEG and BMP.");
                             return str;

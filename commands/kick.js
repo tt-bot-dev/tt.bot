@@ -1,6 +1,6 @@
-const { SwitchArgumentParser } = require("sosamba");
+const { SwitchArgumentParser, 
+    Serializers: { Member } } = require("sosamba");
 const Command = require("../lib/ModCommand");
-const { Member } = require("eris");
 
 class KickCommand extends Command {
     constructor(sosamba, ...args) {

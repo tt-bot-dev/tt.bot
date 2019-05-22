@@ -1,5 +1,5 @@
-const { SerializedArgumentParser, ParsingError } = require("sosamba");
-const Command = require("../lib/OwnerCommand");
+const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
+const OwnerCommand = require("../lib/OwnerCommand");
 const { promises: { stat }} = require("fs");
 const { relative, parse, join } = require("path");
 const UnloadSymbol = Symbol("tt.bot.manage.unload");
@@ -7,7 +7,7 @@ const LoadSymbol = Symbol("tt.bot.manage.load");
 const ReloadSymbol = Symbol("tt.bot.manage.reload");
 
 
-class ManagementCommand extends Command {
+class ManagementCommand extends OwnerCommand {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "managecmd",

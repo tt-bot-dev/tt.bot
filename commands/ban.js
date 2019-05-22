@@ -1,7 +1,6 @@
 "use strict";
-const { SwitchArgumentParser } = require("sosamba");
+const { SwitchArgumentParser, Serializers: { User } } = require("sosamba");
 const Command = require("../lib/ModCommand");
-const { User } = require("eris");
 
 class BanCommand extends Command {
     constructor(sosamba, ...args) {

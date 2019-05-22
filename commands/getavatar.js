@@ -1,5 +1,5 @@
-const { Command, SerializedArgumentParser } = require("sosamba");
-const { User } = require("eris");
+const { Command, SerializedArgumentParser,
+    Serializers: { User } } = require("sosamba");
 
 class AvatarCommand extends Command {
     constructor(sosamba, ...args) {
