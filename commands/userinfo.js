@@ -64,31 +64,31 @@ class UserCommand extends Command {
                     text: ctx.t("JOINED_ON")
                 }
             }
-        })
+        });
     }
 
     getStatusType(user, ctx) {
         if (!user.game) return ctx.t("PLAYING");
         switch (user.game.type) {
-            case 0:
-                return ctx.t("PLAYING");
-            case 1:
-                return ctx.t("STREAMING");
-            case 2:
-                return ctx.t("LISTENING_TO");
+        case 0:
+            return ctx.t("PLAYING");
+        case 1:
+            return ctx.t("STREAMING");
+        case 2:
+            return ctx.t("LISTENING_TO");
         }
     }
 
     getStatus(user, ctx) {
         switch (user.status) {
-            case "online":
-                return ctx.t("ONLINE");
-            case "idle":
-                return ctx.t("IDLE");
-            case "dnd":
-                return ctx.t("DND");
-            case "offline":
-                return ctx.t("OFFLINE");
+        case "online":
+            return ctx.t("ONLINE");
+        case "idle":
+            return ctx.t("IDLE");
+        case "dnd":
+            return ctx.t("DND");
+        case "offline":
+            return ctx.t("OFFLINE");
         }
     }
 }
