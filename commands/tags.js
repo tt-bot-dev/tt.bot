@@ -1,4 +1,4 @@
-const TagObject = require("../lib/structures/TagObject");
+const TagObject = require("../lib/Structures/TagObject");
 const UserProfile = require("../lib/Structures/UserProfile");
 module.exports = {
     exec: async function (msg, args) {
