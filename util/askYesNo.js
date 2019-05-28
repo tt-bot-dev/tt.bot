@@ -1,3 +1,4 @@
+"use strict";
 module.exports = async (msg, retMsg = false) => {
     try {
         const [resp] = await bot.waitForEvent("messageCreate", 10000, (m) => {

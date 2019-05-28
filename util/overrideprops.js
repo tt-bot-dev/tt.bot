@@ -1,3 +1,4 @@
+"use strict";
 const [major] = process.versions.node.split(".");
 function set() {}
 

@@ -4,7 +4,9 @@ const { user } = require("sosamba/lib/argParsers/switchSerializers/erisObjects")
 const Command = require("../lib/ModCommand");
 const BotSymbol = Symbol("tt.bot.clear.bots");
 const { User } = require("eris");
-const D_EPOCH = 1421280000000n;
+// eslint cannot parse bigint literals :(
+const D_EPOCH = BigInt(1421280000000);
+const sleep = ms => new Promise(rs => setTimeout(rs, ms));
 
 class ClearCommand extends Command {
     constructor(sosamba, ...args) {
@@ -36,34 +38,34 @@ class ClearCommand extends Command {
                     default: false
                 }
             })
-        })
+        });
     }
     async clearMessages(ctx, m, r) {
-        await Promise.all([ctx.msg.delete(), m.delete(), r.context.delete()])
+        await Promise.all([ctx.msg.delete(), m.delete(), r.context.delete()]);
         return true;
     }
     async run(ctx, {messages, contains, mentions, from, invert}) {
         if (!ctx.channel.permissionsOf(ctx.sosamba.user.id).has("manageMessages")) return ctx.send(ctx.t("MISSING_PERMISSIONS"));
-        const m = await ctx.send(ctx.t("CLEAR_CONFIRM"))
+        const m = await ctx.send(ctx.t("CLEAR_CONFIRM"));
         const r = await ctx.askYesNo(true);
         if (!r.response) {
-            await ctx.send(ctx.t("OP_CANCELLED"))
+            await ctx.send(ctx.t("OP_CANCELLED"));
             setTimeout(this.clearMessages, 2000, ctx, m, r);
             return;
         }
         await this.clearMessages(ctx, m, r);
-        const oldestPossibleSnowflake = (BigInt(Date.now()) - D_EPOCH) << 22n;
+        const oldestPossibleSnowflake = (BigInt(Date.now()) - D_EPOCH) << BigInt(22);
         const msgs = await ctx.channel.getMessages(messages > 1000 ? 1000 : messages);
         const toDelete = msgs.filter(msg => {
-            const v = this.matchesCriteriaContaining(msg, contains) && this.matchesCriteriaFrom(msg, from) && this.matchesCriteriaMentions(msg, mentions)
+            const v = this.matchesCriteriaContaining(msg, contains) && this.matchesCriteriaFrom(msg, from) && this.matchesCriteriaMentions(msg, mentions);
             return invert ? !v : v;
         }).map(msg => msg.id).filter(msg => {
             return msg < oldestPossibleSnowflake;
-        })
+        });
 
         await this.deleteStrategy(ctx.channel, toDelete);
         
-        const msgOK = await msg.channel.createMessage(ctx.t("CLEAR_DONE", filteredMsgIDs.length));
+        const msgOK = await ctx.send(ctx.t("CLEAR_DONE", toDelete.length));
         setTimeout(async () => await msgOK.delete(), 2000);
     }
 
@@ -84,7 +86,7 @@ class ClearCommand extends Command {
     matchesCriteriaFrom(msg, from) {
         if (!from) return true;
         if (from === BotSymbol && msg.author.bot) return true;
-        if (from && msg.author.id == options.from.id) return true;
+        if (from && msg.author.id == from.id) return true;
         else return false;
     }
 

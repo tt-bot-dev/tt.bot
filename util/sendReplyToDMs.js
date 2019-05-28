@@ -1,3 +1,4 @@
+"use strict";
 const { User, Member } = require("eris");
 module.exports = async (userOrMember, ...args) => {
     let dmChannel;

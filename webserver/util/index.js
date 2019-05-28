@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     checkAuth(api = false) {
         return (req, res, next) => {

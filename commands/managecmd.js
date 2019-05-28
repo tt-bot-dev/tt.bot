@@ -1,3 +1,4 @@
+"use strict";
 const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
 const OwnerCommand = require("../lib/OwnerCommand");
 const { promises: { stat }} = require("fs");
@@ -93,7 +94,7 @@ class ManagementCommand extends OwnerCommand {
                         color: 0xFF0000
                     }
                 });
-                console.error(e);
+                this.log.error(e);
                 return;
             }
 

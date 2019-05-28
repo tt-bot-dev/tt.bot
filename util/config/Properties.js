@@ -1,3 +1,4 @@
+"use strict";
 const Prop = {
     "prefix": {
         type: "string",

@@ -1,3 +1,4 @@
+"use strict";
 const pp = new (require("process-as-promised"))();
 const WORKER_ID = Number(process.env.WORKER_ID);
 const GifWrap = require("gifwrap");

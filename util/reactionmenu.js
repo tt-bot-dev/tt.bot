@@ -1,3 +1,4 @@
+"use strict";
 class ReactionMenu {
     constructor(messageID, channelID, authorID, options) {
         this.messageID = messageID;

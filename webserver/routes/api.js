@@ -1,3 +1,4 @@
+"use strict";
 const { Router } = require("express");
 const app = Router();
 const { checkAuth, getGuilds } = require("../util/index");
@@ -195,6 +196,7 @@ module.exports = csrf => {
             });
 
             if (rq.body.type === "test") {
+                //eslint-disable-next-line no-console
                 console.log("Test passed.");
                 pass();
                 return;

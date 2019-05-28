@@ -1,3 +1,4 @@
+"use strict";
 const { Command, SerializedArgumentParser } = require("sosamba");
 
 class EmojiCommand extends Command {
@@ -24,6 +25,7 @@ class EmojiCommand extends Command {
             b = await this.sosamba.workers.sendToRandom(0, "generateImage", {input: emojis.join(" ")}).promise;
             if (b && b.err) throw b.err;
         } catch(err) {
+            //eslint-disable-next-line no-console
             console.error(err);
             ctx.send(ctx.t("ERROR", err));
             return;

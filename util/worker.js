@@ -1,3 +1,4 @@
+"use strict";
 const pp = require("process-as-promised");
 const { fork } = require("child_process");
 const WorkerTypes = {
@@ -33,6 +34,7 @@ class WorkerManager {
             const ipc = new pp(p);
             const workerId = this.nextWorkerId;
             ipc.once("ready", ({ id }) => {
+                //eslint-disable-next-line no-console
                 console.log(`Worker ${id} is running!`);
                 rs(obj);
             });
@@ -40,6 +42,7 @@ class WorkerManager {
                 const obj = this.workers.get(id);
                 obj.working = working;
             });
+            //eslint-disable-next-line no-console
             ipc.on("debug", (d, c) => { console.log(d); c(); });
             if (workerType === WorkerTypes.E2P) ipc.on("e2pquantize", async ({ frames }, cb) => {
                 const r = [];
@@ -81,7 +84,6 @@ class WorkerManager {
 
     send(id, command, args) {
         if (!this.workers.get(id)) {
-            console.log(`No worker with ID ${id}`);
             return;
         }
         const { ipc } = this.workers.get(id);

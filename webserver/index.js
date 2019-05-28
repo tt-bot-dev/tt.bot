@@ -1,3 +1,4 @@
+"use strict";
 const e = require("express"),
     app = e(),
     util = require("./util"),
@@ -106,6 +107,7 @@ module.exports = function(db, bot, config) {
             try {
                 await getAccessToken(req.query.code, req);
             } catch (err) {
+                //eslint-disable-next-line no-console
                 console.error(err);
                 return res.redirect("/login");
             }
@@ -261,6 +263,7 @@ module.exports = function(db, bot, config) {
                 }));
                 return;
             }
+            //eslint-disable-next-line no-console
             console.error(err);
             res.status(500);
             res.render("500", req.makeTemplatingData({
@@ -270,11 +273,13 @@ module.exports = function(db, bot, config) {
         }
     });
     app.listen(config.httpPort || 8090, config.webserverip || "0.0.0.0", () => {
+        //eslint-disable-next-line no-console
         console.log("HTTP webserver is running.");
     });
 
     if (config.httpsPort) httpsServer(config.httpsSettings, app)
         .listen(config.httpsPort, config.webserverip || "0.0.0.0", () => {
+            //eslint-disable-next-line no-console
             console.log("HTTPS webserver is running");
         });
 };

@@ -1,3 +1,4 @@
+"use strict";
 const ExecCommand = require("./exec");
 const Command = require("../lib/OwnerCommand");
 

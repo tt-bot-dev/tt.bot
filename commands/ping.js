@@ -1,3 +1,4 @@
+"use strict";
 const { Command } = require("sosamba");
 
 class PingCommand extends Command {

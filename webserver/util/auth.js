@@ -1,3 +1,4 @@
+"use strict";
 const config = require("../../config");
 const sa = require("snekfetch");
 const APIBase = "https://discordapp.com/api/v6/oauth2";
@@ -26,6 +27,7 @@ class Cache {
 
     _fetch(item) {
         return this._getter(item).then(data => {
+            //eslint-disable-next-line no-console
             if (data.error) console.error(data.error);
             this._cache[item] = { time: Date.now(), data };
             return data;
@@ -70,7 +72,6 @@ const auth = {
         else {
             if (Date.now() - rq.session.tokenData.date >= rq.session.tokenData.expiry) {
                 try {
-                    console.log("Refreshing a token.");
                     await auth.refreshToken(rq.session.refreshToken, rq);
                 } catch (err) {
                     return nx();

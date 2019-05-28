@@ -3,3 +3,7 @@ webserver/static
 webserver/unuglifiedfiles
 # běžte do píči, indentace je tam z nějakého důvodu
 languages/
+
+# old commands and events
+_commands/
+_events

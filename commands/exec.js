@@ -1,3 +1,4 @@
+"use strict";
 const Command = require("../lib/OwnerCommand");
 const CensorBuilder = require("../lib/CensorBuilder");
 const makegist = require("../lib/gist");
@@ -31,16 +32,12 @@ class ExecCommand extends Command {
     }
 
     async run(ctx, args) {
-        let evaLUAted;
-        try { evaLUAted = await this.exec(args); }
-        catch (err) { evaLUAted = err.message; console.error(err.stack); }
         let overall;
-        if (typeof evaLUAted !== "string") {
-            overall = require("util").inspect(evaLUAted);
-        } else overall = evaLUAted;
+        try { overall = await this.exec(args); }
+        catch (err) { overall = err.message; this.log.error(err.stack); }
         const censor = new CensorBuilder();
-        let data = `\`\`\`\n${overall.replace(censor.build(), "no.")}\n\`\`\``;
-        if (data.length > 2048) {
+        let description = `\`\`\`\n${overall.replace(censor.build(), "no.")}\n\`\`\``;
+        if (description.length > 2048) {
             let gist;
             try {
                 gist = await makegist("exec.md", description, "Evaluated code");
@@ -52,7 +49,7 @@ class ExecCommand extends Command {
                         description: "Unfortunately, we can't provide the data here because they're too long and the request to GitHub's Gist APIs has failed.\nThereby, the output has been logged in the console."
                     }
                 });
-                this.log.log(v);
+                this.log.log(overall);
                 return; // we don't replace anything here, because that's console
             }
             return await ctx.send({
@@ -66,7 +63,7 @@ class ExecCommand extends Command {
         await ctx.send({
             embed: {
                 title: "Executed!",
-                description: data,
+                description,
                 color: 0x008800
             }
         });

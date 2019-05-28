@@ -1,3 +1,4 @@
+"use strict";
 const { Event } = require("sosamba");
 const {WorkerTypes} = require("../util/worker");
 

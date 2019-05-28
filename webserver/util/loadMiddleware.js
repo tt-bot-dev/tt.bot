@@ -1,3 +1,4 @@
+"use strict";
 const config = require("../../config"), e = require("express"),
     ejs = require("ejs"),
     cookieparser = require("cookie-parser"),

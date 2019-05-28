@@ -1,4 +1,5 @@
-
+"use strict";
+/* eslint-disable no-console */
 process.on("unhandledRejection", (r) => {
     console.log(`${__filename}      | Unhandled rejection, reason:\n ${require("util").inspect(r)}`);
 });

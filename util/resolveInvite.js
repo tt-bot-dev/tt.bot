@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Source: https://github.com/discordjs/discord.js/blob/95b2dd3fe63ec9b6c7cec4f63f8276f4d907f228/src/util/DataResolver.js#L29-L34
  * 

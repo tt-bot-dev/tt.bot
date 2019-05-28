@@ -5,7 +5,7 @@
     },
     "extends": "eslint:recommended",
     "parserOptions": {
-        "sourceType": "module",
+        "sourceType": "script",
         "ecmaVersion": 2019
     },
     "rules": {
@@ -22,9 +22,9 @@
             "error",
             "always"
         ],
-        "no-console": "off",
         "no-inner-declarations": "off",
-        "no-useless-escape": "off"
+        "no-useless-escape": "off",
+        "strict": ["error", "global"]
     },
     "globals": {
         "p": false,
@@ -53,6 +53,8 @@
         "encryptData": true,
         "decryptData": true,
         "sentry": true,
-        "i18n": true
+        "i18n": true,
+
+        "BigInt": true
     }
 }

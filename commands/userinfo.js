@@ -1,3 +1,4 @@
+"use strict";
 const { Command, SerializedArgumentParser, 
     Serializers: { Member } } = require("sosamba");
 const moment = require("moment");
@@ -56,7 +57,7 @@ class UserCommand extends Command {
                     inline: true
                 }, {
                     name: ctx.t("CURRENT_VOICE"),
-                    value: user.voiceState.channelID ? msg.guild.channels.get(user.voiceState.channelID).name : ctx.t("NONE"),
+                    value: user.voiceState.channelID ? ctx.guild.channels.get(user.voiceState.channelID).name : ctx.t("NONE"),
                     inline: true
                 }],
                 timestamp: new Date(user.joinedAt),

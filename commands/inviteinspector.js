@@ -1,3 +1,4 @@
+"use strict";
 const { Command } = require("sosamba");
 
 class InviteInspectorCommand extends Command {

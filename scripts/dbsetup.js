@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+"use strict";
 let db;
 try {
     db = require("rethinkdbdash")(require("../config").connectionOpts);

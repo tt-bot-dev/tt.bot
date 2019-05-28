@@ -1,3 +1,4 @@
+"use strict";
 const { SwitchArgumentParser, 
     Serializers: { Member } } = require("sosamba");
 const Command = require("../lib/ModCommand");

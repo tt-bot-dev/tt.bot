@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     /**
      * Your bot token
@@ -131,7 +132,7 @@ module.exports = {
     debugLogging: false,
 
     /**
-     * Allows using Snekfetch in extensions
+     * Allows using Snekfetch (HTTP requests) in extensions
      * @type {boolean}
      */
     enableSnekfetchInExtensions: false
