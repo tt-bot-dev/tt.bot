@@ -3,6 +3,10 @@ const Command = require("../lib/OwnerCommand");
 const CensorBuilder = require("../lib/CensorBuilder");
 const makegist = require("../lib/gist");
 const { spawn } = require("child_process");
+const ANSIRegex = new RegExp(
+    ['[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
+        '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))'].join("|")
+    , "g");
 class ExecCommand extends Command {
     constructor(...args) {
         super(...args, {
@@ -21,7 +25,9 @@ class ExecCommand extends Command {
                 windowsHide: true, // Do not create a window if run inside PM2
                 stdio: ["ignore", "pipe", "pipe"], // Do not pipe stdin
                 shell: true,
-
+                env: Object.assign({}, process.env, {
+                    TERM: "dumb"
+                })
             });
             s.on("error", e => rj(e))
                 .on("exit", endHandler)
@@ -36,7 +42,7 @@ class ExecCommand extends Command {
         try { overall = await this.exec(args); }
         catch (err) { overall = err.message; this.log.error(err.stack); }
         const censor = new CensorBuilder();
-        let description = `\`\`\`\n${overall.replace(censor.build(), "no.")}\n\`\`\``;
+        let description = `\`\`\`\n${overall.replace(censor.build(), "no.").replace(ANSIRegex, "")}\n\`\`\``;
         if (description.length > 2048) {
             let gist;
             try {
