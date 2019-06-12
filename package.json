@@ -11,7 +11,7 @@
         "eris": "github:abalabahaha/eris#dev",
         "erlpack": "github:discordapp/erlpack",
         "express": "^4.17.1",
-        "express-session": "^1.16.1",
+        "express-session": "^1.16.2",
         "express-session-rethinkdb": "^0.4.1",
         "gifwrap": "^0.7.5",
         "jimp": "^0.6.4",
