@@ -6,20 +6,23 @@ class BanCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "ban",
-            args: "<user:User>",
             argParser: new SwitchArgumentParser(sosamba, {
                 user: {
                     type: User,
+                    description: "the user to ban"
                 },
                 reason: {
                     type: String,
-                    default: "No reason provided."
+                    default: "No reason provided.",
+                    description: "the optional reason for the ban"
                 },
                 soft: {
                     type: Boolean,
-                    default: false
+                    default: false,
+                    description: "determines if this ban is a softban."
                 }
-            })
+            }),
+            description: "Bans a user."
         });
     }
     async run(ctx, {user, reason, soft}) {

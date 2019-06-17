@@ -4,7 +4,10 @@ const { STOP_REASONS } = require("sosamba/lib/Constants");
 
 class ExitCommand extends Command {
     constructor(...args) {
-        super(...args, { name: "exit"});
+        super(...args, {
+            name: "exit",
+            description: "Kills the bot, shutting down all reaction menus and message listeners gracefully."
+        });
     }
     async run(ctx) {
         this.sosamba.reactionMenus.forEach(menu => {

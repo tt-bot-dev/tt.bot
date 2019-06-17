@@ -5,7 +5,8 @@ const { get } = require("snekfetch");
 class CatCommand extends Command {
     constructor(...args) {
         super(...args, {
-            name: "cat"
+            name: "cat",
+            description: "Gets a random cat picture."
         });
     }
 

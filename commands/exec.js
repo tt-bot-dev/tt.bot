@@ -10,7 +10,8 @@ const ANSIRegex = new RegExp(
 class ExecCommand extends Command {
     constructor(...args) {
         super(...args, {
-            name: "exec"
+            name: "exec",
+            description: "Executes shell commands."
         });
     }
     exec(command) {

@@ -15,9 +15,11 @@ class TimeForCommand extends Command {
                     default: ctx => ctx.author,
                     name: "user",
                     rest: true,
-                    type: User
+                    type: User,
+                    description: "the user to get the time for"
                 }]
-            })
+            }),
+            description: "Gets the current time of a user."
         });
     }
 
@@ -28,8 +30,6 @@ class TimeForCommand extends Command {
                 this.sosamba.getTag(user)));
         const data = new UserProfile(profile);
         if (!data.timezone) return await ctx.send(ctx.t("NO_TZ"));
-        this.log.debug(moment(new Date()).tz(data.timezone)
-            .format(tzDateFormat), this.sosamba.getTag(user));
         return ctx.send(ctx.t("TIME_FOR",
             moment(new Date()).tz(data.timezone)
                 .format(tzDateFormat), this.sosamba.getTag(user)));

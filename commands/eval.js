@@ -8,6 +8,7 @@ class EvalCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "eval",
+            description: "Evaluates JavaScript code."
         });
     }
 

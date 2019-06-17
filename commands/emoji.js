@@ -11,9 +11,11 @@ class EmojiCommand extends Command {
                 args: [{
                     name: "emojis",
                     rest: true,
-                    type: String
+                    type: String,
+                    description: "the emojis to convert into a picture"
                 }]
-            })
+            }),
+            description: "Render up to 5 emojis as a picture."
         });
     }
     async run(ctx, emojis) {

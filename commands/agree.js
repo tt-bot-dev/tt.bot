@@ -5,11 +5,12 @@ const dmReply = require("../util/sendReplyToDMs");
 class AgreeCommand extends Command {
     constructor(...args) {
         super(...args, {
-            name: "agree"
+            name: "agree",
+            description: "If the server has set up the agreement feature, agrees to the server's rules.",
         });
     }
     async run(ctx) {
-        const { memberRole, agreeChannel } = await ctx.guildConfig;
+        const { memberRole, agreeChannel } = (await ctx.guildConfig || {});
         if (!memberRole || !agreeChannel) return;
         if (ctx.channel.id !== agreeChannel) return;
         if (!ctx.guild.roles.has(memberRole)) return;

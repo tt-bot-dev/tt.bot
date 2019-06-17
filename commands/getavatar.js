@@ -11,9 +11,11 @@ class AvatarCommand extends Command {
                     default: ctx => ctx.author,
                     rest: true,
                     name: "user",
-                    type: User
+                    type: User,
+                    description: "the user to get the avatar from"
                 }]
-            })
+            }),
+            description: "Gets someone's avatar."
         });
     }
 

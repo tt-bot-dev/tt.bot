@@ -18,11 +18,13 @@ class JPEGCommand extends Command {
                         },
                         default: ctx => {
                             const images = ctx.msg.attachments.filter(i => i.height && i.width);
-                            return images.length > 0 && images[0].url;
-                        }
+                            return images.length > 0 && ImageExtensionregex.test(images[0].url) && images[0].url;
+                        },
+                        description: "a link to the image or an attached image"
                     }
                 ]
-            })
+            }),
+            description: "Do your pictures need more JPEG? :eyes: Give them to us and we'll handle it for you!"
         });
     }
 

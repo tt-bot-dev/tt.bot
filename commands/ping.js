@@ -4,7 +4,8 @@ const { Command } = require("sosamba");
 class PingCommand extends Command {
     constructor(...args) {
         super(...args, {
-            name: "ping"
+            name: "ping",
+            description: "Shows my latency to Discord."
         });
     }
 

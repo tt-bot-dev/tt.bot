@@ -9,7 +9,8 @@ class KickCommand extends Command {
             name: "kick",
             argParser: new SwitchArgumentParser(sosamba, {
                 user: {
-                    type: Member
+                    type: Member,
+                    description: "The user to kick"
                 },
                 reason: {
                     type: String,

@@ -4,7 +4,8 @@ const { Command } = require("sosamba");
 class ServerCommand extends Command {
     constructor(...args) {
         super(...args, {
-            name: "serverinfo"
+            name: "serverinfo",
+            description: "Shows the information about the server."
         });
     }
 

@@ -4,7 +4,8 @@ const { Command } = require("sosamba");
 class InviteCommand extends Command {
     constructor(...args) {
         super(...args, { 
-            name: "invite"
+            name: "invite",
+            description: "Sends a link to invite me."
         });
     }
 

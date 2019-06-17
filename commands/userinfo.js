@@ -12,9 +12,11 @@ class UserCommand extends Command {
                     default: ctx => ctx.member,
                     type: Member,
                     rest: true,
-                    name: "user"
+                    name: "user",
+                    description: "the user to get the information for"
                 }]
-            })
+            }),
+            description: "Gets some information about the user."
         });
     }
 

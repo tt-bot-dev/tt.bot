@@ -21,16 +21,19 @@ class ManagementCommand extends OwnerCommand {
                         if (action === "load") return LoadSymbol;
                         if (action === "reload") return ReloadSymbol;
                         throw new ParsingError("Invalid action");
-                    }
+                    },
+                    description: "the action to do with the command"
                 }, {
                     name: "what",
                     type: a => {
                         const cmd = a.toLowerCase();
                         if (this.sosamba.commands.has(cmd)) return this.sosamba.commands.get(cmd);
                         return a;
-                    }
+                    },
+                    description: "the command"
                 }]
-            })
+            }),
+            description: "Manages the commands."
         });
     }
 

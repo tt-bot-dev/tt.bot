@@ -16,28 +16,34 @@ class ClearCommand extends Command {
             argParser: new SwitchArgumentParser(sosamba, {
                 messages: {
                     type: Number,
-                    default: 100
+                    default: 100,
+                    description: "the number of messages to clean"
                 },
                 contains: {
                     type: String,
-                    default: SwitchArgumentParser.None
+                    default: SwitchArgumentParser.None,
+                    description: "an optional argument that filters the messages by content"
                 },
                 mentions: {
                     type: User,
-                    default: SwitchArgumentParser.None
+                    default: SwitchArgumentParser.None,
+                    description: "an optional argument that filters the messages by mentions"
                 },
                 from: {
                     type: async (val, ctx) => {
                         if (val === "bots") return BotSymbol;
                         else return user(val, ctx);
                     },
-                    default: SwitchArgumentParser.None
+                    default: SwitchArgumentParser.None,
+                    description: "an optional argument that filters the messages by their author - use `bots` in order to specify bots as an author."
                 },
                 invert: {
                     type: Boolean,
-                    default: false
+                    default: false,
+                    description: "determines whether all above settings should be inverted."
                 }
-            })
+            }),
+            description: "Clears the desired number of messages."
         });
     }
     async clearMessages(ctx, m, r) {

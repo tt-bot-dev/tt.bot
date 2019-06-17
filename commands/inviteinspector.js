@@ -5,7 +5,8 @@ class InviteInspectorCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "inviteinspector",
-            args: "<invite code>"
+            args: "<invite code>",
+            description: "Gets information about an invite."
         });
     }
 
