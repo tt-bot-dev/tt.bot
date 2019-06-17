@@ -18,7 +18,7 @@ class JPEGCommand extends Command {
                         },
                         default: ctx => {
                             const images = ctx.msg.attachments.filter(i => i.height && i.width);
-                            return images.length > 0 && ImageExtensionregex.test(images[0].url) && images[0].url;
+                            return images.length > 0 && ImageExtensionRegex.test(images[0].url) && images[0].url;
                         },
                         description: "a link to the image or an attached image"
                     }
