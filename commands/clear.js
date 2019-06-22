@@ -46,8 +46,10 @@ class ClearCommand extends Command {
             description: "Clears the desired number of messages."
         });
     }
-    async clearMessages(ctx, m, r) {
-        await Promise.all([ctx.msg.delete(), m.delete(), r.context.delete()]);
+    async clearMessages(ctx, r) {
+        const p = [ctx.msg.delete()];
+        if (r.context) p.push(r.context.msg.delete());
+        await Promise.all(p);
         return true;
     }
     async run(ctx, {messages, contains, mentions, from, invert}) {
@@ -56,19 +58,17 @@ class ClearCommand extends Command {
         const r = await ctx.askYesNo(true);
         if (!r.response) {
             await ctx.send(ctx.t("OP_CANCELLED"));
-            setTimeout(this.clearMessages, 2000, ctx, m, r);
+            setTimeout(this.clearMessages, 2000, ctx, r);
             return;
         }
-        await this.clearMessages(ctx, m, r);
+        await this.clearMessages(ctx, r);
         const oldestPossibleSnowflake = (BigInt(Date.now()) - D_EPOCH) << BigInt(22);
         const msgs = await ctx.channel.getMessages(messages > 1000 ? 1000 : messages);
         const toDelete = msgs.filter(msg => {
             const v = this.matchesCriteriaContaining(msg, contains) && this.matchesCriteriaFrom(msg, from) && this.matchesCriteriaMentions(msg, mentions);
             return invert ? !v : v;
-        }).map(msg => msg.id).filter(msg => {
-            return msg < oldestPossibleSnowflake;
-        });
-
+        }).map(msg => msg.id)
+        .filter(msg => msg > oldestPossibleSnowflake);
         await this.deleteStrategy(ctx.channel, toDelete);
         
         const msgOK = await ctx.send(ctx.t("CLEAR_DONE", toDelete.length));
