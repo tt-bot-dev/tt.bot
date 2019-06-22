@@ -54,7 +54,7 @@ class ClearCommand extends Command {
     }
     async run(ctx, {messages, contains, mentions, from, invert}) {
         if (!ctx.channel.permissionsOf(ctx.sosamba.user.id).has("manageMessages")) return ctx.send(ctx.t("MISSING_PERMISSIONS"));
-        const m = await ctx.send(ctx.t("CLEAR_CONFIRM"));
+        await ctx.send(ctx.t("CLEAR_CONFIRM"));
         const r = await ctx.askYesNo(true);
         if (!r.response) {
             await ctx.send(ctx.t("OP_CANCELLED"));
