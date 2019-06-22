@@ -68,7 +68,7 @@ class ClearCommand extends Command {
             const v = this.matchesCriteriaContaining(msg, contains) && this.matchesCriteriaFrom(msg, from) && this.matchesCriteriaMentions(msg, mentions);
             return invert ? !v : v;
         }).map(msg => msg.id)
-        .filter(msg => msg > oldestPossibleSnowflake);
+            .filter(msg => msg > oldestPossibleSnowflake);
         await this.deleteStrategy(ctx.channel, toDelete);
         
         const msgOK = await ctx.send(ctx.t("CLEAR_DONE", toDelete.length));
