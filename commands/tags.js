@@ -37,7 +37,8 @@ class TagCommand extends Command {
                     description: "a required argument for the create and edit commands, else it isn't required"
                 }],
                 separator: " "
-            })
+            }),
+            description: "Store some data for later retrieval. Keep in mind that the tags are global and accessible by everyone."
         })
     }
 
