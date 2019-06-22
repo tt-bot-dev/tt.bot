@@ -18,7 +18,6 @@ class TagCommand extends Command {
                 args: [{
                     name: "action",
                     type: val => {
-                        console.log(val);
                         if (val === "show") return ShowSymbol;
                         else if (val === "create") return CreateSymbol;
                         else if (val === "edit") return EditSymbol;
