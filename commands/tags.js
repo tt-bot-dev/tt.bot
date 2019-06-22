@@ -39,7 +39,7 @@ class TagCommand extends Command {
                 separator: " "
             }),
             description: "Store some data for later retrieval. Keep in mind that the tags are global and accessible by everyone."
-        })
+        });
     }
 
     async run(ctx, [action, tag, val]) {
@@ -49,7 +49,6 @@ class TagCommand extends Command {
             const data = new TagObject(d);
             const pData = await ctx.db.table("profile").get(data.owner);
             const color = pData && new UserProfile(pData).color;
-            console.log(color);
             await ctx.send({
                 embed: {
                     author: {
@@ -62,7 +61,7 @@ class TagCommand extends Command {
         } else if (action === DeleteSymbol) {
             const d = await ctx.db.table("tags").get(ctx.encryptData(tag));
             if (!d) return ctx.send(ctx.t("TAG_DOESNTEXIST"));
-            if (!oid.includes(ctx.author.id) && ctx.author.id !== data.owner) {
+            if (!oid.includes(ctx.author.id) && ctx.author.id !== d.owner) {
                 return await ctx.send(ctx.t("TAG_NOTOWNER"));
             } else {
                 await ctx.db.table("tags").get(ctx.encryptData(tag)).delete();
@@ -73,13 +72,13 @@ class TagCommand extends Command {
                 await ctx.send({
                     embed: {
                         title: ":x: Argument required",
-                        description: `The argument \`value\` is required.`,
+                        description: "The argument `value` is required.",
                         color: 0xFF0000,
                         footer: {
                             text: `Sosamba v${sosambaVersion}`
                         }
                     }
-                })
+                });
                 return;
             }
 
@@ -100,7 +99,7 @@ class TagCommand extends Command {
                 await ctx.send({
                     embed: {
                         title: ":x: Argument required",
-                        description: `The argument \`value\` is required.`,
+                        description: "The argument `value` is required.",
                         color: 0xFF0000,
                         footer: {
                             text: `Sosamba v${sosambaVersion}`
@@ -118,7 +117,7 @@ class TagCommand extends Command {
                 content: val,
                 owner: ctx.author.id
             }));
-            await ctx.send(ctx.t("TAG_CREATED", tag))
+            await ctx.send(ctx.t("TAG_CREATED", tag));
         }
     }
 }
