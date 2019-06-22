@@ -38,7 +38,7 @@ class TagCommand extends Command {
                 }],
                 separator: " "
             })
-        })
+        });
     }
 
     async run(ctx, [action, tag, val]) {
@@ -72,13 +72,13 @@ class TagCommand extends Command {
                 await ctx.send({
                     embed: {
                         title: ":x: Argument required",
-                        description: `The argument \`value\` is required.`,
+                        description: "The argument `value` is required.",
                         color: 0xFF0000,
                         footer: {
                             text: `Sosamba v${sosambaVersion}`
                         }
                     }
-                })
+                });
                 return;
             }
 
@@ -99,7 +99,7 @@ class TagCommand extends Command {
                 await ctx.send({
                     embed: {
                         title: ":x: Argument required",
-                        description: `The argument \`value\` is required.`,
+                        description: "The argument `value` is required.",
                         color: 0xFF0000,
                         footer: {
                             text: `Sosamba v${sosambaVersion}`
@@ -117,7 +117,7 @@ class TagCommand extends Command {
                 content: val,
                 owner: ctx.author.id
             }));
-            await ctx.send(ctx.t("TAG_CREATED", tag))
+            await ctx.send(ctx.t("TAG_CREATED", tag));
         }
     }
 }
