@@ -1,3 +1,4 @@
+"use strict";
 const { Command, SerializedArgumentParser, Serializers: { User } } = require("sosamba");
 
 class StrikeListCommand extends Command {
