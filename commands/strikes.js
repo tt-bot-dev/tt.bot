@@ -20,26 +20,26 @@ class StrikeListCommand extends Command {
             await ctx.send(ctx.t("BOTS_NOT_STRIKABLE"));
             return;
         }
-            const strikes = await this.sosamba.modLog.getUserStrikes(user.id, ctx);
-            if (strikes > 25) {
-                const strikeStr = strikes.map(s => `${s.id} - ${s.reason}`);
-                await ctx.send(ctx.t("TOO_MUCH_STRIKES"), {
-                    file: Buffer.from(strikeStr.join("\r\n")),
-                    name: "strikes.txt"
-                });
-            } else {
-                await ctx.send({
-                    embed: {
-                        author: {
-                            name: ctx.t("STRIKE_OVERVIEW", this.sosamba.getTag(user)),
-                            fields: strikes.map(s => ({
-                                name: `ID: ${s.id}`,
-                                value: s.reason
-                            }))
-                        }
+        const strikes = await this.sosamba.modLog.getUserStrikes(user.id, ctx);
+        if (strikes > 25) {
+            const strikeStr = strikes.map(s => `${s.id} - ${s.reason}`);
+            await ctx.send(ctx.t("TOO_MUCH_STRIKES"), {
+                file: Buffer.from(strikeStr.join("\r\n")),
+                name: "strikes.txt"
+            });
+        } else {
+            await ctx.send({
+                embed: {
+                    author: {
+                        name: ctx.t("STRIKE_OVERVIEW", this.sosamba.getTag(user)),
+                        fields: strikes.map(s => ({
+                            name: `ID: ${s.id}`,
+                            value: s.reason
+                        }))
                     }
-                })
-            }
+                }
+            });
+        }
     }
 }
 
