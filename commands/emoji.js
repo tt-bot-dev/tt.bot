@@ -37,7 +37,7 @@ class EmojiCommand extends Command {
             return;
         }
         const hrtime = process.hrtime(t);
-        this.log.debug(hrtime[0], hrtime[1] / 1e6)
+        this.log.debug(hrtime[0], hrtime[1] / 1e6);
         ctx.send({
             embed: {
                 description: "Enjoy!",
