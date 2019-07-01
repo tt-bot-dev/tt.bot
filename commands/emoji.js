@@ -18,13 +18,12 @@ class EmojiCommand extends Command {
             description: "Render up to 5 emojis as a picture."
         });
     }
-    async run(ctx, emojis) {
-        if (emojis.length > 5) emojis = emojis.slice(0,5);
+    async run(ctx, [emojis]) {
         await ctx.send(ctx.t("IMAGE_GENERATING"));
         const t = process.hrtime();
         let b;
         try {
-            b = await this.sosamba.workers.sendToRandom(0, "generateImage", {input: emojis.join(" ")}).promise;
+            b = await this.sosamba.workers.sendToRandom(0, "generateImage", {input: emojis}).promise;
             if (b && b.err) throw b.err;
         } catch(err) {
             //eslint-disable-next-line no-console
