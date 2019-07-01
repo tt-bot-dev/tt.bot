@@ -24,7 +24,7 @@ class TimeForCommand extends Command {
     }
 
     async run(ctx, [user]) {
-        const profile = await ctx.db.table("profile").get(user.id);
+        const profile = await ctx.db.getUserProfile(user.id);
         if (!profile) return await ctx.send(
             ctx.t(`PROFILE${user.id === ctx.author.id ? "" : "_SPECIFIC"}_NONEXISTENT`,
                 this.sosamba.getTag(user)));

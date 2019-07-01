@@ -44,10 +44,10 @@ class TagCommand extends Command {
 
     async run(ctx, [action, tag, val]) {
         if (action === ShowSymbol) {
-            const d = await ctx.db.table("tags").get(ctx.encryptData(tag));
+            const d = await ctx.db.getTag(ctx.encryptData(tag));
             if (!d) return ctx.send(ctx.t("TAG_DOESNTEXIST"));
             const data = new TagObject(d);
-            const pData = await ctx.db.table("profile").get(data.owner);
+            const pData = await ctx.db.getUserProfile(data.owner);
             const color = pData && new UserProfile(pData).color;
             await ctx.send({
                 embed: {
@@ -59,12 +59,12 @@ class TagCommand extends Command {
                 }
             });
         } else if (action === DeleteSymbol) {
-            const d = await ctx.db.table("tags").get(ctx.encryptData(tag));
+            const d = await ctx.db.getTag(ctx.encryptData(tag));
             if (!d) return ctx.send(ctx.t("TAG_DOESNTEXIST"));
             if (!oid.includes(ctx.author.id) && ctx.author.id !== d.owner) {
                 return await ctx.send(ctx.t("TAG_NOTOWNER"));
             } else {
-                await ctx.db.table("tags").get(ctx.encryptData(tag)).delete();
+                await ctx.db.deleteTag(ctx.encryptData(tag))
                 await ctx.send(ctx.t("TAG_DELETED", tag));
             }
         } else if (action === EditSymbol) {
@@ -83,15 +83,15 @@ class TagCommand extends Command {
             }
 
             
-            const d = await ctx.db.table("tags").get(ctx.encryptData(tag));
+            const d = await ctx.db.getTag(ctx.encryptData(tag));
             if (!d) return ctx.send(ctx.t("TAG_DOESNTEXIST"));
             const data = new TagObject(d);
             if (!oid.includes(ctx.author.id) && ctx.author.id !== data.owner) {
                 return await ctx.send(ctx.t("TAG_NOTOWNER"));
             } else {
                 data.content = val;
-                await ctx.db.table("tags").get(ctx.encryptData(tag))
-                    .update(data.toEncryptedObject());
+                await ctx.db.updateTag(ctx.encryptData(tag),
+                    data.toEncryptedObject());
                 await ctx.send(ctx.t("TAG_UPDATED", tag));
             }
         } else if (action === CreateSymbol) {
@@ -109,10 +109,10 @@ class TagCommand extends Command {
                 return;
             }
 
-            if (await ctx.db.table("tags").get(ctx.encryptData(tag)))
+            if (await ctx.db.getTag(ctx.encryptData(tag)))
                 return await ctx.send(ctx.t("TAG_EXISTS"));
 
-            await ctx.db.table("tags").insert(TagObject.create({
+            await ctx.db.createTag(TagObject.create({
                 id: tag,
                 content: val,
                 owner: ctx.author.id

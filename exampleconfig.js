@@ -1,4 +1,5 @@
 "use strict";
+const RethinkDBProvider = require("./lib/db-providers/RethinkDBProvider");
 module.exports = {
     /**
      * Your bot token
@@ -78,6 +79,16 @@ module.exports = {
      */
     normalDateFormat: "D[.] M[.] YYYY [at] H:mm",
     tzDateFormat: "D[.] M[.] YYYY [at] H:mm [(]Z[)]",
+    /**
+     * The database options for the bot
+     * @type {object}
+     */
+    database: {
+        provider: RethinkDBProvider,
+        options: {
+            db: "ttalpha"
+        }
+    },
 
     /**
      * Connection options that can be passed to rethinkdbdash.
