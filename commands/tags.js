@@ -64,7 +64,7 @@ class TagCommand extends Command {
             if (!oid.includes(ctx.author.id) && ctx.author.id !== d.owner) {
                 return await ctx.send(ctx.t("TAG_NOTOWNER"));
             } else {
-                await ctx.db.deleteTag(ctx.encryptData(tag))
+                await ctx.db.deleteTag(ctx.encryptData(tag));
                 await ctx.send(ctx.t("TAG_DELETED", tag));
             }
         } else if (action === EditSymbol) {
