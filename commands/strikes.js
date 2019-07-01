@@ -10,9 +10,11 @@ class StrikeListCommand extends Command {
                     name: "user",
                     type: User,
                     default: ctx => ctx.author,
-                    rest: true
+                    rest: true,
+                    description: "The user to get the strikes for"
                 }]
-            })
+            }),
+            description: "Gets user's strikes."
         });
     }
 

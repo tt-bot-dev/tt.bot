@@ -53,7 +53,6 @@ class WorkerManager {
         const val = Array.from(this.workers.values());
         let arr = val.filter(w => w.workerType === type && w.working === 0); // prioritize nonworking workers
         if (arr.length === 0) {
-            console.log("a");
             // assign the work to a random worker and hope nothing goes boom
             arr = val.filter(w => w.workerType === type);
         }
