@@ -37,12 +37,13 @@ class EmojiCommand extends Command {
             return;
         }
         const hrtime = process.hrtime(t);
+        this.log.debug(hrtime[0], hrtime[1] / 1e6)
         ctx.send({
             embed: {
                 description: "Enjoy!",
                 color: 0x008800,
                 image: {
-                    url: `attachment://${b.animated ? "image.gif" : "image.png"}`
+                    url: `attachment://image${b.isGif ? ".gif" :".png"}`
                 },
                 fields: b.generated ? [{
                     name: ctx.t("IMAGE_AUTO_GENERATED"),
@@ -54,7 +55,7 @@ class EmojiCommand extends Command {
             }
         }, {
             file: Buffer.from(b.image, "base64"),
-            name: b.animated ? "image.gif" : "image.png"
+            name: b.isGif ? "image.gif" : "image.png"
         });
     }
 }

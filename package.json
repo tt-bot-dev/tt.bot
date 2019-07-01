@@ -15,6 +15,7 @@
         "express-session-rethinkdb": "^0.4.1",
         "gifwrap": "^0.7.5",
         "jimp": "^0.6.0",
+        "jimp-upng": "github:tt-bot-dev/jimp-upng",
         "moment": "^2.24.0",
         "moment-timezone": "^0.5.23",
         "monaco-editor": "^0.16.0",

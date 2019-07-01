@@ -3,14 +3,11 @@ const pp = require("process-as-promised");
 const { fork } = require("child_process");
 const WorkerTypes = {
     E2P: 0,
-    E2P_QUANTIZE: 1
 };
 function getFileName(workerType) {
     switch (workerType) {
     case WorkerTypes.E2P:
         return "e2pworker.js";
-    case WorkerTypes.E2P_QUANTIZE:
-        return "quantizeWorker.js";
     }
 }
 class WorkerManager {
@@ -38,22 +35,8 @@ class WorkerManager {
                 console.log(`Worker ${id} is running!`);
                 rs(obj);
             });
-            ipc.on("workingCount", ({ id, working }) => {
-                const obj = this.workers.get(id);
-                obj.working = working;
-            });
             //eslint-disable-next-line no-console
             ipc.on("debug", (d, c) => { console.log(d); c(); });
-            if (workerType === WorkerTypes.E2P) ipc.on("e2pquantize", async ({ frames }, cb) => {
-                const r = [];
-                frames.forEach((d, i) => this.sendToRandom(WorkerTypes.E2P_QUANTIZE, "quantizeImage", d).promise.then(res => r[i] = res));
-                const t = setInterval(() => {
-                    if (r.filter(r => !!r).length === frames.length) {
-                        clearInterval(t);
-                        return cb(r);
-                    }
-                }, 10);
-            });
             const obj = {
                 process: p,
                 ipc,
@@ -67,18 +50,21 @@ class WorkerManager {
     }
 
     sendToRandom(type, command, args) {
-        const val = this.workers.values();
-        let arr = [...val].filter(w => w.workerType === type && w.working === 0); // prioritize nonworking workers
+        const val = Array.from(this.workers.values());
+        let arr = val.filter(w => w.workerType === type && w.working === 0); // prioritize nonworking workers
         if (arr.length === 0) {
+            console.log("a");
             // assign the work to a random worker and hope nothing goes boom
-            arr = [...val].filter(w => w.workerType === type);
+            arr = val.filter(w => w.workerType === type);
         }
-        //console.log(arr.length)
         let worker = Math.floor(Math.random() * arr.length); // workers are zero indexed.
         if (worker === arr.length) worker = arr.length - 1;
         return {
             id: arr[worker].id,
-            promise: this.send(arr[worker].id, command, args)
+            promise: this.send(arr[worker].id, command, args).then(o => {
+                arr[worker].working--;
+                return o;
+            })
         };
     }
 
@@ -86,8 +72,9 @@ class WorkerManager {
         if (!this.workers.get(id)) {
             return;
         }
-        const { ipc } = this.workers.get(id);
-        return ipc.send(command, args);
+        const worker = this.workers.get(id);
+        worker.working++;
+        return worker.ipc.send(command, args);
     }
 }
 WorkerManager.WorkerTypes = WorkerTypes;
