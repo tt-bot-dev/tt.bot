@@ -651,9 +651,9 @@ encodeurl@~1.0.2:
   integrity sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=
 
 "eris@github:abalabahaha/eris#dev":
-  version "0.10.0"
-  uid a46f8f5fc56e62ec3e3012b904ea7acd2d90bade
-  resolved "https://codeload.github.com/abalabahaha/eris/tar.gz/a46f8f5fc56e62ec3e3012b904ea7acd2d90bade"
+  version "0.10.1"
+  uid "92ac1048e556d869e4bd400d5282fa2e713e9ca8"
+  resolved "https://codeload.github.com/abalabahaha/eris/tar.gz/92ac1048e556d869e4bd400d5282fa2e713e9ca8"
   dependencies:
     ws "^6.0.0"
   optionalDependencies:
