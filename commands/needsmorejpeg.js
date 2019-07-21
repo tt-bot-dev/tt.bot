@@ -30,7 +30,7 @@ class JPEGCommand extends Command {
 
     async run(ctx, [url]) {
         if (!url) {
-            await ctx.send(ctx.t("ARGS_MISSING"));
+            await ctx.send(await ctx.t("ARGS_MISSING"));
             return;
         }
 

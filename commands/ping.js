@@ -15,10 +15,10 @@ class PingCommand extends Command {
         await ctx.send({
             content: "",
             embed: {
-                title: ctx.t("PONG"),
-                description: ctx.t("PING_LATENCY", m.timestamp - ctx.msg.timestamp),
+                title: await ctx.t("PONG"),
+                description: await ctx.t("PING_LATENCY", m.timestamp - ctx.msg.timestamp),
                 footer: {
-                    text: ctx.t("PING_DISCORD_LATENCY", ctx.guild.shard.latency)
+                    text: await ctx.t("PING_DISCORD_LATENCY", ctx.guild.shard.latency)
                 },
                 color: 0x008800
             }

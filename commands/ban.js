@@ -30,9 +30,9 @@ class BanCommand extends Command {
             await user.ban(1, `${bot.getTag(ctx.author)}: ${reason}`);
             if (soft) await user.unban();
             bot.modLog.addBan(user.id, ctx.msg, reason, soft);
-            await ctx.send(ctx.t(`${soft ? "SOFT": ""}BAN_DONE`, user));
+            await ctx.send(await ctx.t(`${soft ? "SOFT": ""}BAN_DONE`, user));
         } else {
-            ctx.send(ctx.t("ROLE_HIERARCHY_ERROR"));
+            ctx.send(await ctx.t("ROLE_HIERARCHY_ERROR"));
         }
     }
 }

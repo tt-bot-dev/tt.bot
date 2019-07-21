@@ -19,7 +19,7 @@ class EmojiCommand extends Command {
         });
     }
     async run(ctx, [emojis]) {
-        await ctx.send(ctx.t("IMAGE_GENERATING"));
+        await ctx.send(await ctx.t("IMAGE_GENERATING"));
         const t = process.hrtime();
         let b;
         try {
@@ -28,11 +28,11 @@ class EmojiCommand extends Command {
         } catch(err) {
             //eslint-disable-next-line no-console
             console.error(err);
-            ctx.send(ctx.t("ERROR", err));
+            ctx.send(await ctx.t("ERROR", err));
             return;
         }
         if (!b) {
-            ctx.send(ctx.t("IMAGE_NONE"));
+            ctx.send(await ctx.t("IMAGE_NONE"));
             return;
         }
         const hrtime = process.hrtime(t);
@@ -45,11 +45,11 @@ class EmojiCommand extends Command {
                     url: `attachment://image${b.isGif ? ".gif" :".png"}`
                 },
                 fields: b.generated ? [{
-                    name: ctx.t("IMAGE_AUTO_GENERATED"),
-                    value: ctx.t("IMAGE_CAVEATS")
+                    name: await ctx.t("IMAGE_AUTO_GENERATED"),
+                    value: await ctx.t("IMAGE_CAVEATS")
                 }] : [],
                 footer: {
-                    text: ctx.t("IMAGE_GENERATION_TIME", ...hrtime)
+                    text: await ctx.t("IMAGE_GENERATION_TIME", ...hrtime)
                 }
             }
         }, {

@@ -45,14 +45,14 @@ class TagCommand extends Command {
     async run(ctx, [action, tag, val]) {
         if (action === ShowSymbol) {
             const d = await ctx.db.getTag(ctx.encryptData(tag));
-            if (!d) return ctx.send(ctx.t("TAG_DOESNTEXIST"));
+            if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
             const data = new TagObject(d);
             const pData = await ctx.db.getUserProfile(data.owner);
             const color = pData && new UserProfile(pData).color;
             await ctx.send({
                 embed: {
                     author: {
-                        name: ctx.t("TAG_DISPLAY", data.id)
+                        name: await ctx.t("TAG_DISPLAY", data.id)
                     },
                     description: this.sosamba.parseMsg(data.content, ctx.member, ctx.guild),
                     color: color || null
@@ -60,12 +60,12 @@ class TagCommand extends Command {
             });
         } else if (action === DeleteSymbol) {
             const d = await ctx.db.getTag(ctx.encryptData(tag));
-            if (!d) return ctx.send(ctx.t("TAG_DOESNTEXIST"));
+            if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
             if (!oid.includes(ctx.author.id) && ctx.author.id !== d.owner) {
-                return await ctx.send(ctx.t("TAG_NOTOWNER"));
+                return await ctx.send(await ctx.t("TAG_NOTOWNER"));
             } else {
                 await ctx.db.deleteTag(ctx.encryptData(tag));
-                await ctx.send(ctx.t("TAG_DELETED", tag));
+                await ctx.send(await ctx.t("TAG_DELETED", tag));
             }
         } else if (action === EditSymbol) {
             if (!val) {
@@ -84,15 +84,15 @@ class TagCommand extends Command {
 
             
             const d = await ctx.db.getTag(ctx.encryptData(tag));
-            if (!d) return ctx.send(ctx.t("TAG_DOESNTEXIST"));
+            if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
             const data = new TagObject(d);
             if (!oid.includes(ctx.author.id) && ctx.author.id !== data.owner) {
-                return await ctx.send(ctx.t("TAG_NOTOWNER"));
+                return await ctx.send(await ctx.t("TAG_NOTOWNER"));
             } else {
                 data.content = val;
                 await ctx.db.updateTag(ctx.encryptData(tag),
                     data.toEncryptedObject());
-                await ctx.send(ctx.t("TAG_UPDATED", tag));
+                await ctx.send(await ctx.t("TAG_UPDATED", tag));
             }
         } else if (action === CreateSymbol) {
             if (!val) {
@@ -110,14 +110,14 @@ class TagCommand extends Command {
             }
 
             if (await ctx.db.getTag(ctx.encryptData(tag)))
-                return await ctx.send(ctx.t("TAG_EXISTS"));
+                return await ctx.send(await ctx.t("TAG_EXISTS"));
 
             await ctx.db.createTag(TagObject.create({
                 id: tag,
                 content: val,
                 owner: ctx.author.id
             }));
-            await ctx.send(ctx.t("TAG_CREATED", tag));
+            await ctx.send(await ctx.t("TAG_CREATED", tag));
         }
     }
 }

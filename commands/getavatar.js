@@ -29,7 +29,7 @@ class AvatarCommand extends Command {
                 image: {
                     url: user.avatarURL
                 },
-                description: ctx.t("AVATAR_NOT_LOADING", user.user.dynamicAvatarURL("png", 2048))
+                description: await ctx.t("AVATAR_NOT_LOADING", user.user.dynamicAvatarURL("png", 2048))
             }
         });
     }

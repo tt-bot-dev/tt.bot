@@ -10,7 +10,7 @@ class InviteCommand extends Command {
     }
 
     async run(ctx) {
-        ctx.send(ctx.t("BOT_INVITE"));
+        ctx.send(await ctx.t("BOT_INVITE"));
     }
 }
 

@@ -27,71 +27,71 @@ class UserCommand extends Command {
         ctx.send({
             embed: {
                 author: {
-                    name: ctx.t("USER_INFO", `${nick} ${nick === this.sosamba.getTag(user) ? "" : `(${this.sosamba.getTag(user)})`} (${user.id}) ${user.bot ? "(BOT)" : ""}`)
+                    name: await ctx.t("USER_INFO", `${nick} ${nick === this.sosamba.getTag(user) ? "" : `(${this.sosamba.getTag(user)})`} (${user.id}) ${user.bot ? "(BOT)" : ""}`)
                 },
                 thumbnail: {
                     url: user.user.avatarURL
                 },
                 fields: [{
-                    name: this.getStatusType(user, ctx),
-                    value: (() => {
-                        if (!user.game) return ctx.t("PLAYING_NONE");
+                    name: await this.getStatusType(user, ctx),
+                    value: await (async () => {
+                        if (!user.game) return await ctx.t("PLAYING_NONE");
                         let str = "";
                         str += user.game.name + "\n";
                         if (user.game.details) str += user.game.details + "\n";
                         if (user.game.state) str += user.game.state;
-                        return str.trim() || ctx.t("SPACE_UNIVERSE");
+                        return str.trim() || await ctx.t("SPACE_UNIVERSE");
                     })(),
                     inline: true
                 }, {
-                    name: ctx.t("STATUS"),
-                    value: this.getStatus(user, ctx),
+                    name: await ctx.t("STATUS"),
+                    value: await this.getStatus(user, ctx),
                     inline: true
                 }, {
-                    name: ctx.t("ROLES"),
-                    value: roles.join(", ").length > 1024 ? ctx.t("TOOLONG") : roles.join(", "),
+                    name: await ctx.t("ROLES"),
+                    value: roles.join(", ").length > 1024 ? await ctx.t("TOOLONG") : roles.join(", "),
                     inline: true
                 }, {
-                    name: ctx.t("CREATED_ON"),
+                    name: await ctx.t("CREATED_ON"),
                     value: (await ctx.userProfile && (await ctx.userProfile).timezone) ?
                         moment(new Date(user.createdAt)).tz((await ctx.userProfile).timezone).format(config.tzDateFormat) :
                         moment(new Date(user.createdAt)).format(config.normalDateFormat),
                     inline: true
                 }, {
-                    name: ctx.t("CURRENT_VOICE"),
-                    value: user.voiceState.channelID ? ctx.guild.channels.get(user.voiceState.channelID).name : ctx.t("NONE"),
+                    name: await ctx.t("CURRENT_VOICE"),
+                    value: user.voiceState.channelID ? ctx.guild.channels.get(user.voiceState.channelID).name : await ctx.t("NONE"),
                     inline: true
                 }],
                 timestamp: new Date(user.joinedAt),
                 footer: {
-                    text: ctx.t("JOINED_ON")
+                    text: await ctx.t("JOINED_ON")
                 }
             }
         });
     }
 
-    getStatusType(user, ctx) {
-        if (!user.game) return ctx.t("PLAYING");
+    async getStatusType(user, ctx) {
+        if (!user.game) return await ctx.t("PLAYING");
         switch (user.game.type) {
         case 0:
-            return ctx.t("PLAYING");
+            return await ctx.t("PLAYING");
         case 1:
-            return ctx.t("STREAMING");
+            return await ctx.t("STREAMING");
         case 2:
-            return ctx.t("LISTENING_TO");
+            return await ctx.t("LISTENING_TO");
         }
     }
 
-    getStatus(user, ctx) {
+    async getStatus(user, ctx) {
         switch (user.status) {
         case "online":
-            return ctx.t("ONLINE");
+            return await ctx.t("ONLINE");
         case "idle":
-            return ctx.t("IDLE");
+            return await ctx.t("IDLE");
         case "dnd":
-            return ctx.t("DND");
+            return await ctx.t("DND");
         case "offline":
-            return ctx.t("OFFLINE");
+            return await ctx.t("OFFLINE");
         }
     }
 }

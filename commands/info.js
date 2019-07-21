@@ -22,20 +22,20 @@ class InfoCommand extends Command {
                     icon_url: this.sosamba.user.staticAvatarURL
                 }, 
                 fields: [{
-                    name: ctx.t("INFO_STATS"),
-                    value: ctx.t("INFO_STATS_TEXT"),
+                    name: await ctx.t("INFO_STATS"),
+                    value: await ctx.t("INFO_STATS_TEXT"),
                     inline: true
                 }, {
-                    name: ctx.t("INFO_AUTHORS"),
-                    value: ctx.t("INFO_OWNERS", ownerStrings),
+                    name: await ctx.t("INFO_AUTHORS"),
+                    value: await ctx.t("INFO_OWNERS", ownerStrings),
                     inline: true
                 }, {
-                    name: ctx.t("INFO_VERSIONS"),
+                    name: await ctx.t("INFO_VERSIONS"),
                     value: `tt.bot: ${require("../package.json").version}\nSosamba: ${require("sosamba/package.json").version}\nEris: ${require("eris/package.json").version}\nNode.js: ${process.versions.node}\nV8 engine: ${process.versions.v8}`,
                     inline: true
                 },
                 {
-                    name: ctx.t("INFO_UPTIME"),
+                    name: await ctx.t("INFO_UPTIME"),
                     value: this.getUptime(moment(), moment(Date.now() - this.sosamba.uptime)),
                     inline: true
                 }],

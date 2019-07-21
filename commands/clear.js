@@ -53,11 +53,11 @@ class ClearCommand extends Command {
         return true;
     }
     async run(ctx, {messages, contains, mentions, from, invert}) {
-        if (!ctx.channel.permissionsOf(ctx.sosamba.user.id).has("manageMessages")) return ctx.send(ctx.t("MISSING_PERMISSIONS"));
-        await ctx.send(ctx.t("CLEAR_CONFIRM"));
+        if (!ctx.channel.permissionsOf(ctx.sosamba.user.id).has("manageMessages")) return ctx.send(await ctx.t("MISSING_PERMISSIONS"));
+        await ctx.send(await ctx.t("CLEAR_CONFIRM"));
         const r = await ctx.askYesNo(true);
         if (!r.response) {
-            await ctx.send(ctx.t("OP_CANCELLED"));
+            await ctx.send(await ctx.t("OP_CANCELLED"));
             setTimeout(this.clearMessages, 2000, ctx, r);
             return;
         }
@@ -71,7 +71,7 @@ class ClearCommand extends Command {
             .filter(msg => msg > oldestPossibleSnowflake);
         await this.deleteStrategy(ctx.channel, toDelete);
         
-        const msgOK = await ctx.send(ctx.t("CLEAR_DONE", toDelete.length));
+        const msgOK = await ctx.send(await ctx.t("CLEAR_DONE", toDelete.length));
         setTimeout(async () => await msgOK.delete(), 2000);
     }
 

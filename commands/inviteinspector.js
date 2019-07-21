@@ -19,11 +19,11 @@ class InviteInspectorCommand extends Command {
                 embed: {
                     color: 0x880000,
                     author: {
-                        name: ctx.t("OOPS")
+                        name: await ctx.t("OOPS")
                     },
-                    description: ctx.t("CANNOT_GET_INVITE"),
+                    description: await ctx.t("CANNOT_GET_INVITE"),
                     footer: {
-                        text: ctx.t("INVITE_ERR_FOOTER")   
+                        text: await ctx.t("INVITE_ERR_FOOTER")   
                     }
                 }
             });
@@ -36,24 +36,24 @@ class InviteInspectorCommand extends Command {
                     icon_url: inviteData.guild.icon ? `https://cdn.discordapp.com/icons/${inviteData.guild.id}/${inviteData.guild.icon}.png` : null
                 },
                 fields: [{
-                    name: ctx.t("INV_CHANNEL_TYPE"),
-                    value: ctx.t("INV_CHANNEL_TYPE_VAL", inviteData.channel.type, inviteData.channel.name),
+                    name: await ctx.t("INV_CHANNEL_TYPE"),
+                    value: await ctx.t("INV_CHANNEL_TYPE_VAL", inviteData.channel.type, inviteData.channel.name),
                     inline: true
                 }, {
-                    name: ctx.t("INV_GUILD_ID"),
+                    name: await ctx.t("INV_GUILD_ID"),
                     value: inviteData.guild.id,
                     inline: true
                 }, {
-                    name: ctx.t("MEMBERS"),
-                    value: ctx.t("INV_MEMBERS_VAL", inviteData.memberCount, inviteData.presenceCount),
+                    name: await ctx.t("MEMBERS"),
+                    value: await ctx.t("INV_MEMBERS_VAL", inviteData.memberCount, inviteData.presenceCount),
                     inline: true
                 }, {
-                    name: ctx.t("INV_JOIN"),
-                    value: ctx.t("INV_JOIN_LINK",inviteData.code),
+                    name: await ctx.t("INV_JOIN"),
+                    value: await ctx.t("INV_JOIN_LINK",inviteData.code),
                     inline: true
                 }],
                 footer: inviteData.inviter ? {
-                    text: ctx.t("INV_INVITER", bot.getTag(inviteData.inviter)),
+                    text: await ctx.t("INV_INVITER", bot.getTag(inviteData.inviter)),
                     icon_url: inviteData.avatarURL
                 } : null
             }
