@@ -11,7 +11,7 @@ class HackbanCommand extends Command {
                 filterEmptyArguments: true
             }),
             description: "Bans an user by ID."
-        })
+        });
     }
 
     async run(ctx, users) {

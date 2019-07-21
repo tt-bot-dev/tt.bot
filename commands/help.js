@@ -46,7 +46,7 @@ ${command.argParser ? command.argParser.provideUsageString(true) : ""}`.trim() |
                     }],
                     color: 0x008800
                 }
-            })
+            });
         } else {
             const ownerCommands = this.sosamba.commands.filter(c => c instanceof OwnerCommand).filter(e => e.displayInHelp);
             const adminCommands = this.sosamba.commands.filter(c => c instanceof AdminCommand).filter(e => e.displayInHelp);
@@ -55,14 +55,14 @@ ${command.argParser ? command.argParser.provideUsageString(true) : ""}`.trim() |
                 !ownerCommands.includes(c) && !adminCommands.includes(c) && !modCommands.includes(c))
                 .filter(e => e.displayInHelp);
             const extensionCommands = (await ctx.db.getGuildExtensions(ctx.guild.id))
-            .filter(e => {
-                if (e.allowedChannels.length !== 0 && !e.allowedChannels.includes(msg.channel.id)) return;
-                if (e.allowedRoles.length !== 0 && !e.allowedRoles.find(r => msg.member.roles.includes(r))) return;
-                return true;
-            })
-            .map(e => ({
-                id: e.id
-            }));
+                .filter(e => {
+                    if (e.allowedChannels.length !== 0 && !e.allowedChannels.includes(msg.channel.id)) return;
+                    if (e.allowedRoles.length !== 0 && !e.allowedRoles.find(r => msg.member.roles.includes(r))) return;
+                    return true;
+                })
+                .map(e => ({
+                    id: e.id
+                }));
             const permissions = await HelpMenu.getPermissions(ctx);
 
             const m = await ctx.send(await HelpMenu.DEFAULT_OBJ(ctx, permissions));
@@ -91,7 +91,7 @@ class HelpMenu extends ReactionMenu {
         if (this.permissions[2]) this.callbacks[HelpMenu.MOD] = async () => this.listCommands(HelpMenu.MOD);
         if (this.permissions[3]) this.callbacks[HelpMenu.ADMIN] = async () => this.listCommands(HelpMenu.ADMIN);
         
-        this.callbacks[HelpMenu.EXTENSION] = async () => this.listCommands(HelpMenu.EXTENSION)
+        this.callbacks[HelpMenu.EXTENSION] = async () => this.listCommands(HelpMenu.EXTENSION);
     }
 
     async listCommands(e) {
@@ -110,7 +110,7 @@ class HelpMenu extends ReactionMenu {
                     text: await this.ctx.t("HELP_REMINDER")
                 }
             }
-        })
+        });
     }
 
     getCommands(e) {
@@ -143,7 +143,7 @@ class HelpMenu extends ReactionMenu {
         return [true, OwnerCommand.prototype.permissionCheck(ctx),
             ModCommand.prototype.permissionCheck.call({sosamba: ctx.sosamba}, ctx),
             AdminCommand.prototype.permissionCheck.call({sosamba: ctx.sosamba}, ctx),
-        true];
+            true];
     }
 
     static async DEFAULT_OBJ(ctx, permissions) {
@@ -152,7 +152,7 @@ class HelpMenu extends ReactionMenu {
                 description: await ctx.t("HELP_HOME", HelpMenu, permissions, {t: ctx.t.bind(ctx)}),
                 color: 0x008800
             }
-        }
+        };
     }
 }
 HelpMenu.ADMIN = "\u{1F6E0}";
