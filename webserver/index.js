@@ -111,12 +111,7 @@ module.exports = function(db, bot, config) {
                 console.error(err);
                 return res.redirect("/login");
             }
-
-            try {
-                await (new Promise((rs, rj) => req.session.save(e => e ? rj(e) : rs())));
-            } catch (err) {
-                throw err;
-            }
+            await (new Promise((rs, rj) => req.session.save(e => e ? rj(e) : rs())));
             return res.redirect("/");
         }
     });

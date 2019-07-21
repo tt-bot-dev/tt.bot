@@ -24,6 +24,7 @@
         ],
         "no-inner-declarations": "off",
         "no-useless-escape": "off",
+        "require-atomic-updates": "off",
         "strict": ["error", "global"]
     },
     "globals": {

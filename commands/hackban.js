@@ -44,7 +44,7 @@ class HackbanCommand extends Command {
     async doBan(ctx, id, send, mass) {
         let userToBan = bot.users.get(id);
         if (!userToBan) try {
-            userToBan = await bot.getUserWithoutRESTMode(args);
+            userToBan = await bot.getUserWithoutRESTMode(id);
         } catch {
             if (send) await ctx.send({
                 embed: {

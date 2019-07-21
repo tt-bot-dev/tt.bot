@@ -143,8 +143,8 @@ module.exports = csrf => {
                         return tryInsert();
                     }
                 };
-
-                if (!filteredBody.store) filteredBody.store = await tryInsert();
+                //eslint-disable-next-line require-atomic-updates
+                filteredBody.store = filteredBody.store || await tryInsert();
                 const { generated_keys: [newID] } = await db.table("extensions").insert(filteredBody);
                 return rs.send(await db.table("extensions").get(newID));
             } else {
