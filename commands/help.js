@@ -56,8 +56,8 @@ ${command.argParser ? command.argParser.provideUsageString(true) : ""}`.trim() |
                 .filter(e => e.displayInHelp);
             const extensionCommands = (await ctx.db.getGuildExtensions(ctx.guild.id))
                 .filter(e => {
-                    if (e.allowedChannels.length !== 0 && !e.allowedChannels.includes(msg.channel.id)) return;
-                    if (e.allowedRoles.length !== 0 && !e.allowedRoles.find(r => msg.member.roles.includes(r))) return;
+                    if (e.allowedChannels.length !== 0 && !e.allowedChannels.includes(ctx.channel.id)) return;
+                    if (e.allowedRoles.length !== 0 && !e.allowedRoles.find(r => ctx.member.roles.includes(r))) return;
                     return true;
                 })
                 .map(e => ({
