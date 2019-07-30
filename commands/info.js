@@ -13,8 +13,8 @@ class InfoCommand extends Command {
 
     async run(ctx) {
         const ownerStrings = Array.isArray(config.oid) ? 
-            config.oid.map(i => this.getOwnerInfo(this.sosamba.users.get(i))) : 
-            [this.getOwnerInfo(this.sosamba.users.get(config.oid))];
+            config.oid.map(i => this.getOwnerInfo(i, this.sosamba.users.get(i))) : 
+            [this.getOwnerInfo(config.oid, this.sosamba.users.get(config.oid))];
         await ctx.send({
             embed: {
                 author: {
@@ -31,7 +31,7 @@ class InfoCommand extends Command {
                     inline: true
                 }, {
                     name: await ctx.t("INFO_VERSIONS"),
-                    value: `tt.bot: ${require("../package.json").version}\nSosamba: ${require("sosamba/package.json").version}\nEris: ${require("eris/package.json").version}\nNode.js: ${process.versions.node}\nV8 engine: ${process.versions.v8}`,
+                    value: `tt.bot: ${require("../package.json").version}\nSosamba: ${require("sosamba/package.json").version}\nEris: ${require("eris/package.json").version}\nNode.js: ${process.versions.node}\nV8: ${process.versions.v8}`,
                     inline: true
                 },
                 {
@@ -44,8 +44,8 @@ class InfoCommand extends Command {
         });
     }
 
-    getOwnerInfo(owner) {
-        return `<@${owner.id}> (${owner ? owner.username + "#" + owner.discriminator : "Sorry, my owner isn't in my cache ;-;"})`;
+    getOwnerInfo(id, owner) {
+        return `<@${id}> (${owner ? owner.username + "#" + owner.discriminator : "unknown to me :("})`;
     }
 
     getUptime(m1, m2) {
