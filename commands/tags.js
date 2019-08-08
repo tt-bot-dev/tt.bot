@@ -6,7 +6,6 @@ const CreateSymbol = Symbol("tt.bot.tags.create");
 const EditSymbol = Symbol("tt.bot.tags.edit");
 const DeleteSymbol = Symbol("tt.bot.tags.delete");
 const TagObject = require("../lib/structures/TagObject");
-const UserProfile = require("../lib/Structures/UserProfile");
 const {oid} = require("../config");
 
 class TagCommand extends Command {
@@ -47,7 +46,6 @@ class TagCommand extends Command {
             const d = await ctx.db.getTag(ctx.encryptData(tag));
             if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
             const data = new TagObject(d);
-            const pData = await ctx.db.getUserProfile(data.owner);
             await ctx.send({
                 embed: {
                     author: {

@@ -49,7 +49,7 @@ class ProfileCommand extends Command {
 
             if (response) {
                 try { await context.msg.delete(); }
-                catch {}
+                catch {/**/}
                 await ctx.send("What is your timezone? This timezone should be a valid IANA timezone DB (check <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List> for a list of them)\nYou have 30 seconds to answer. Type \"none\" if you don't want to set one yet.");
                 const m = await ctx.waitForMessage(async ctx => {
                     if (ctx.msg.content.toLowerCase() === "none") return true;
@@ -61,12 +61,13 @@ class ProfileCommand extends Command {
                 }, 30000);
                 if (m.msg.content !== "none") profile.timezone = m.msg.content;
                 try { await m.msg.delete(); }
-                catch {}
+                catch {/**/}
 
                 await ctx.send(`Which language do you speak? Here are the available languages: ${Object.keys(this.sosamba.i18n.languages).join(", ")}\nIn case it is not listed or don't want to set a language yet, type "none". You have 30 seconds to choose.\nYou can help us contributing languages on GitHub: <https://github.com/tt-bot-dev/languages>`);
                 const m2 = await ctx.waitForMessage(async ctx => {
                     if (ctx.msg.content.toLowerCase() === "none") return true;
-                    if (!this.sosamba.i18n.languages.hasOwnProperty(ctx.msg.content)) {
+                    if (!Object.prototype.hasOwnProperty
+                        .call(this.sosamba.i18n.languages, ctx.msg.content)) {
                         await ctx.msg.channel.createMessage(await ctx.t("INVALID_LOCALE"));
                         return false;
                     }
@@ -74,7 +75,7 @@ class ProfileCommand extends Command {
                 }, 30000);
                 if (m2.msg.content !== "none") profile.locale = m2.msg.content;
                 try { await m2.msg.delete(); }
-                catch {}
+                catch {/**/}
             }
             const toWrite = UserProfile.create(profile);
             await ctx.db.createUserProfile(toWrite);
@@ -101,7 +102,8 @@ class ProfileCommand extends Command {
                         async k => `${k} (${await this.sosamba.i18n.getTranslation("NATIVE_LOCALE_NAME", k)}/${await this.sosamba.i18n.getTranslation("ENGLISH_LOCALE_NAME", k)}) - ${status[k]}%`
                     ))).join("\n")));
             } else {
-                if (!ctx.sosamba.i18n.languages.hasOwnProperty(arg)) {
+                if (!Object.prototype.hasOwnProperty
+                    .call(ctx.sosamba.i18n.languages, arg)) {
                     await ctx.send(await ctx.t("INVALID_LOCALE", arg));
                     return;
                 }
@@ -120,9 +122,11 @@ class ProfileCommand extends Command {
         };
         const terms = Object.keys(this.sosamba.i18n.languages.en);
         for (const [l, k] of Object.entries(this.sosamba.i18n.languages)) {
-            if (!this.sosamba.i18n.languages.hasOwnProperty(l)) continue;
+            if (!Object.prototype.hasOwnProperty
+                .call(this.sosamba.i18n.languages, l)) continue;
             if (l === "en") continue;
-            const termsInForeign = terms.filter(l => k.hasOwnProperty(l)).length;
+            const termsInForeign = terms.filter(l => Object.prototype.hasOwnProperty
+                .call(k,l)).length;
             s[l] = ((termsInForeign / terms.length) * 100).toFixed(2);
         }
         return s;
