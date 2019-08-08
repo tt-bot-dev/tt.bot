@@ -45,7 +45,7 @@ class ProfileCommand extends Command {
             const { response, context } = await ctx.askYesNo(true);
             const profile = {
                 id: ctx.author.id
-            }
+            };
 
             if (response) {
                 try { await context.msg.delete(); }
@@ -58,7 +58,7 @@ class ProfileCommand extends Command {
                         return false;
                     }
                     return true;
-                }, 30000)
+                }, 30000);
                 if (m.msg.content !== "none") profile.timezone = m.msg.content;
                 try { await m.msg.delete(); }
                 catch {}
@@ -82,7 +82,7 @@ class ProfileCommand extends Command {
             await ctx.send(await ctx.t("PROFILE_CREATED"));
         } else if (action === TimezoneSymbol) {
             if (!arg) {
-                await ctx.send(`Your current timezone is ${(await ctx.userProfile).timezone}.\nIn order to change it, provide a timezone as an argument.`)
+                await ctx.send(`Your current timezone is ${(await ctx.userProfile).timezone}.\nIn order to change it, provide a timezone as an argument.`);
             } else {
                 if (!moment.tz.zone(arg)) {
                     await ctx.send(await ctx.t("INVALID_TIMEZONE"));
@@ -97,9 +97,9 @@ class ProfileCommand extends Command {
             if (!arg) {
                 const status = this.calculateLocaleStatus();
                 await ctx.send(await ctx.t("PROFILE_LOCALE_LIST", await ctx.userLanguage, 
-                (await Promise.all(Object.keys(status).map(
-                    async k => `${k} (${await this.sosamba.i18n.getTranslation("NATIVE_LOCALE_NAME", k)}/${await this.sosamba.i18n.getTranslation("ENGLISH_LOCALE_NAME", k)}) - ${status[k]}%`
-                ))).join("\n")));
+                    (await Promise.all(Object.keys(status).map(
+                        async k => `${k} (${await this.sosamba.i18n.getTranslation("NATIVE_LOCALE_NAME", k)}/${await this.sosamba.i18n.getTranslation("ENGLISH_LOCALE_NAME", k)}) - ${status[k]}%`
+                    ))).join("\n")));
             } else {
                 if (!ctx.sosamba.i18n.languages.hasOwnProperty(arg)) {
                     await ctx.send(await ctx.t("INVALID_LOCALE", arg));
@@ -109,7 +109,7 @@ class ProfileCommand extends Command {
                 p.locale = arg;
                 await (ctx.userProfile = p);
                 await ctx.send(await ctx.t("LOCALE_SET",
-                `${arg} (${await ctx.t("NATIVE_LOCALE_NAME")}/${await ctx.t("ENGLISH_LOCALE_NAME")})`))
+                    `${arg} (${await ctx.t("NATIVE_LOCALE_NAME")}/${await ctx.t("ENGLISH_LOCALE_NAME")})`));
             }
         }
     }
