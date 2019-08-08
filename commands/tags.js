@@ -48,14 +48,12 @@ class TagCommand extends Command {
             if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
             const data = new TagObject(d);
             const pData = await ctx.db.getUserProfile(data.owner);
-            const color = pData && new UserProfile(pData).color;
             await ctx.send({
                 embed: {
                     author: {
                         name: await ctx.t("TAG_DISPLAY", data.id)
                     },
-                    description: this.sosamba.parseMsg(data.content, ctx.member, ctx.guild),
-                    color: color || null
+                    description: this.sosamba.parseMsg(data.content, ctx.member, ctx.guild)
                 }
             });
         } else if (action === DeleteSymbol) {
