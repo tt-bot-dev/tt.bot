@@ -50,7 +50,7 @@ class ProfileCommand extends Command {
             if (response) {
                 try { await context.msg.delete(); }
                 catch {/**/}
-                await ctx.send("What is your timezone? This timezone should be a valid IANA timezone DB (check <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List> for a list of them)\nYou have 30 seconds to answer. Type \"none\" if you don't want to set one yet.");
+                await ctx.send("What is your timezone? This timezone should be a valid entry in the IANA timezone DB (check <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List> for a list of them)\nYou have 30 seconds to answer. Type \"none\" if you don't want to set one yet.");
                 const m = await ctx.waitForMessage(async ctx => {
                     if (ctx.msg.content.toLowerCase() === "none") return true;
                     if (!moment.tz.zone(ctx.msg.content)) {
