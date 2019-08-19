@@ -13,7 +13,7 @@
         "express": "^4.17.1",
         "express-session": "^1.16.1",
         "express-session-rethinkdb": "^0.4.1",
-        "gifwrap": "^0.7.5",
+        "gifwrap": "^0.9.2",
         "jimp": "^0.6.4",
         "moment": "^2.24.0",
         "moment-timezone": "^0.5.25",
