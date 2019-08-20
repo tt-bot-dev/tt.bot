@@ -24,7 +24,7 @@
         "rethinkdbdash": "^2.3.31",
         "snekfetch": "^4.0.4",
         "vm2": "^3.8.1",
-        "zlib-sync": "^0.1.4"
+        "zlib-sync": "^0.1.5"
     },
     "devDependencies": {
         "eslint": "^6.2.0"
