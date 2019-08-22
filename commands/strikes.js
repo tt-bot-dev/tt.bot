@@ -34,12 +34,12 @@ class StrikeListCommand extends Command {
             await ctx.send({
                 embed: {
                     author: {
-                        name: await ctx.t("STRIKE_OVERVIEW", this.sosamba.getTag(user)),
-                        fields: strikes.map(s => ({
-                            name: `ID: ${s.id}`,
-                            value: s.reason
-                        }))
-                    }
+                        name: await ctx.t("STRIKE_OVERVIEW", this.sosamba.getTag(user))
+                    },
+                    fields: strikes.map(s => ({
+                        name: `ID: ${s.id}`,
+                        value: s.reason
+                    }))
                 }
             });
         }
