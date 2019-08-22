@@ -73,7 +73,7 @@ class ServerCommand extends Command {
 **${await ctx.t("VOICE_REGION")}**: ${ctx.guild.region}
 **${await ctx.t("AFK_TIMEOUT")}**: ${await ctx.t("AFK_MINUTES", ctx.guild.afkTimeout)}`,
             image: {
-                url: `https://cdn.discordapp.com/splashes/${ctx.guild.id}/${ctx.guild.splash}`
+                url: `https://cdn.discordapp.com/splashes/${ctx.guild.id}/${ctx.guild.splash}.png?size=2048`
             },
             footer: {
                 text: await ctx.t("CREATED_ON")
