@@ -24,6 +24,7 @@
         "rethinkdbdash": "^2.3.31",
         "snekfetch": "^4.0.4",
         "sosamba": "github:tt-bot-dev/sosamba",
+        "uuid": "^3.3.3",
         "vm2": "^3.8.2",
         "zlib-sync": "^0.1.4"
     },

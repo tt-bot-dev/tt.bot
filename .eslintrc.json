@@ -25,7 +25,10 @@
         "no-inner-declarations": "off",
         "no-useless-escape": "off",
         "require-atomic-updates": "off",
-        "strict": ["error", "global"]
+        "strict": ["error", "global"],
+        "eqeqeq": ["error", "always", {
+            "null": "ignore"
+        }]
     },
     "globals": {
         "p": false,

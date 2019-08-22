@@ -92,7 +92,7 @@ class ClearCommand extends Command {
     matchesCriteriaFrom(msg, from) {
         if (!from) return true;
         if (from === BotSymbol && msg.author.bot) return true;
-        if (from && msg.author.id == from.id) return true;
+        if (from && msg.author.id === from.id) return true;
         else return false;
     }
 

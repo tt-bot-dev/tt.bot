@@ -48,8 +48,26 @@ class ServerCommand extends Command {
                     ? await ctx.t("ONLY_MENTIONS")
                     : await ctx.t("ALL_MESSAGES"),
                 inline: true
-            }
-            ],
+            },
+            {
+                name: "Features",
+                value: await (async () => {
+                    let featureStr = "";
+                    if (ctx.guild.features.includes("INVITE_SPLASH")) featureStr += ":cityscape: This server can have an invite splash\n"
+                    if (ctx.guild.features.includes("VIP_REGIONS")) featureStr += ":loud_sound: This server has access to higher-quality voice servers\n";
+                    if (ctx.guild.features.includes("VANITY_URL")) featureStr += ":link: This server can have a vanity URL\n";
+                    if (ctx.guild.features.includes("VERIFIED")) featureStr += ":white_check_mark: This server is verified\n";
+                    if (ctx.guild.features.includes("PARTNERED")) featureStr += ":star: This server is partnered with Discord\n";
+                    if (ctx.guild.features.includes("COMMERCE")) featureStr += ":moneybag: This server has access to commerce features (store channels, for example)\n";
+                    if (ctx.guild.features.includes("NEWS")) featureStr += ":newspaper: This server can have announcement channels\n";
+                    if (ctx.guild.features.includes("LURKABLE")) featureStr += ":eyes: This server is lurkable\n";
+                    if (ctx.guild.features.includes("DISCOVERABLE")) featureStr += ":mag: This server can be found in the server discovery menu\n";
+                    if (ctx.guild.features.includes("FEATURABLE")) featureStr += ":star2: This server can be featured in the server discovery menu\n";
+                    if (ctx.guild.features.includes("ANIMATED_ICON")) featureStr += ":mountain: This server can have an animated icon\n";
+                    if (ctx.guild.features.includes("BANNER")) featureStr += ":sunrise_over_mountains: This server can have a banner\n";
+                    return featureStr || await ctx.t("NONE")
+                })()
+            }],
             description: `
 **ID**: ${ctx.guild.id}
 **${await ctx.t("VOICE_REGION")}**: ${ctx.guild.region}
