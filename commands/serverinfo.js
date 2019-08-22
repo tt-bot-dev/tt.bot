@@ -53,7 +53,7 @@ class ServerCommand extends Command {
                 name: "Features",
                 value: await (async () => {
                     let featureStr = "";
-                    if (ctx.guild.features.includes("INVITE_SPLASH")) featureStr += ":cityscape: This server can have an invite splash\n"
+                    if (ctx.guild.features.includes("INVITE_SPLASH")) featureStr += ":cityscape: This server can have an invite splash\n";
                     if (ctx.guild.features.includes("VIP_REGIONS")) featureStr += ":loud_sound: This server has access to higher-quality voice servers\n";
                     if (ctx.guild.features.includes("VANITY_URL")) featureStr += ":link: This server can have a vanity URL\n";
                     if (ctx.guild.features.includes("VERIFIED")) featureStr += ":white_check_mark: This server is verified\n";
@@ -65,7 +65,7 @@ class ServerCommand extends Command {
                     if (ctx.guild.features.includes("FEATURABLE")) featureStr += ":star2: This server can be featured in the server discovery menu\n";
                     if (ctx.guild.features.includes("ANIMATED_ICON")) featureStr += ":mountain: This server can have an animated icon\n";
                     if (ctx.guild.features.includes("BANNER")) featureStr += ":sunrise_over_mountains: This server can have a banner\n";
-                    return featureStr || await ctx.t("NONE")
+                    return featureStr || await ctx.t("NONE");
                 })()
             }],
             description: `
