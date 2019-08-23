@@ -32,7 +32,7 @@ class ServerCommand extends Command {
                 inline: true
             }, {
                 name: await ctx.t("REQUIRES_ADMIN_MFA"),
-                value: ctx.guild.mfaLevel == 1 ? await ctx.t("YES") : await ctx.t("NO"),
+                value: ctx.guild.mfaLevel === 1 ? await ctx.t("YES") : await ctx.t("NO"),
                 inline: true
             }, {
                 name: await ctx.t("ROLES"),
@@ -44,7 +44,7 @@ class ServerCommand extends Command {
                 inline: true
             }, {
                 name: await ctx.t("DEFAULT_NOTIFICATIONS"),
-                value: ctx.guild.defaultNotifications == 1
+                value: ctx.guild.defaultNotifications === 1
                     ? await ctx.t("ONLY_MENTIONS")
                     : await ctx.t("ALL_MESSAGES"),
                 inline: true

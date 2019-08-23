@@ -45,7 +45,6 @@ class UpdateReasonCommand extends Command {
         try {
             await this.sosamba.modLog.updateReason(caseID, ctx, reason.join(" "));
         } catch(err) {
-            console.error(err);
             await ctx.send(await ctx.t("ERROR", err));
             return;
         }
