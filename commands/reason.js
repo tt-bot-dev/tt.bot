@@ -12,7 +12,7 @@ class UpdateReasonCommand extends Command {
                 separator: " "
             }),
             description: "Remove a strike from a user."
-        })
+        });
     }
 
     async run(ctx, [caseID, ...reason]) {
@@ -49,7 +49,7 @@ class UpdateReasonCommand extends Command {
             await ctx.send(await ctx.t("ERROR", err));
             return;
         }
-        await ctx.send(":ok_hand:")
+        await ctx.send(":ok_hand:");
     }
 }
 
