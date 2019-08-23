@@ -8,7 +8,7 @@
         "cookie-parser": "^1.4.4",
         "csurf": "github:tt-bot-dev/csurf",
         "ejs": "^2.6.2",
-        "eris": "github:abalabahaha/eris#dev",
+        "eris": "git+https://github.com/abalabahaha/eris.git#dev",
         "erlpack": "github:discordapp/erlpack",
         "express": "^4.17.1",
         "express-session": "^1.16.2",
