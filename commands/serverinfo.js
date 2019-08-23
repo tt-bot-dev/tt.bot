@@ -101,33 +101,33 @@ class ServerCommand extends Command {
 
     async getGuildVerification(ctx) {
         switch (ctx.guild.verificationLevel) {
-            case 0:
-                return await ctx.t("GUILD_VERIFICATION_NONE");
+        case 0:
+            return await ctx.t("GUILD_VERIFICATION_NONE");
 
-            case 1:
-                return await ctx.t("GUILD_VERIFICATION_LOW");
+        case 1:
+            return await ctx.t("GUILD_VERIFICATION_LOW");
 
-            case 2:
-                return await ctx.t("GUILD_VERIFICATION_MEDIUM");
+        case 2:
+            return await ctx.t("GUILD_VERIFICATION_MEDIUM");
 
-            case 3:
-                return "(╯°□°）╯︵ ┻━┻" + await ctx.t("GUILD_VERIFICATION_TABLEFLIP");
+        case 3:
+            return "(╯°□°）╯︵ ┻━┻" + await ctx.t("GUILD_VERIFICATION_TABLEFLIP");
 
-            case 4:
-                return "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻ " + await ctx.t("GUILD_VERIFICATION_ULTRATABLEFLIP");
+        case 4:
+            return "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻ " + await ctx.t("GUILD_VERIFICATION_ULTRATABLEFLIP");
         }
     }
 
     async getExplicitContent(ctx) {
         switch (ctx.guild.explicitContentFilter) {
-            case 0:
-                return await ctx.t("EXPLICIT_FILTERING_OFF");
+        case 0:
+            return await ctx.t("EXPLICIT_FILTERING_OFF");
 
-            case 1:
-                return await ctx.t("EXPLICIT_FILTERING_NOROLE");
+        case 1:
+            return await ctx.t("EXPLICIT_FILTERING_NOROLE");
 
-            case 2:
-                return await ctx.t("EXPLICIT_FILTERING_ON");
+        case 2:
+            return await ctx.t("EXPLICIT_FILTERING_ON");
         }
     }
 }
