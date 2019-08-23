@@ -12,7 +12,7 @@ class RemoveStrikeCommand extends Command {
                 separator: " "
             }),
             description: "Remove a strike from a user."
-        })
+        });
     }
 
     async run(ctx, [caseID, ...reason]) {
@@ -35,7 +35,7 @@ class RemoveStrikeCommand extends Command {
             await ctx.send(await ctx.t("CANNOT_UNSTRIKE", err));
             return;
         }
-        await ctx.send(":ok_hand:")
+        await ctx.send(":ok_hand:");
     }
 }
 
