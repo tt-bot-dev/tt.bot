@@ -16,7 +16,7 @@ class StrikeCommand extends Command {
                 reason: {
                     type: String,
                     description: "the strike reason",
-                    default: "no reason"
+                    default: "No reason provided."
                 }
             })
         });

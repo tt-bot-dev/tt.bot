@@ -14,7 +14,7 @@ class KickCommand extends Command {
                 },
                 reason: {
                     type: String,
-                    default: "no reason",
+                    default: "No reason provided.",
                     description: "The reason for the kick"
                 }
             }),
