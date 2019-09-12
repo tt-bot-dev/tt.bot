@@ -141,7 +141,7 @@ class HelpMenu extends ReactionMenu {
 
     static async getPermissions(ctx) {
         return [true, OwnerCommand.prototype.permissionCheck(ctx),
-            ModCommand.prototype.permissionCheck.call({sosamba: ctx.sosamba}, ctx),
+            await ModCommand.prototype.permissionCheck.call({sosamba: ctx.sosamba}, ctx),
             AdminCommand.prototype.permissionCheck.call({sosamba: ctx.sosamba}, ctx),
             true];
     }
