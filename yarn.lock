@@ -1921,10 +1921,10 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-vm2@^3.8.1:
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/vm2/-/vm2-3.8.1.tgz#82ac7845009aee79852429da49f0f4f114c644e5"
-  integrity sha512-ecR1+KFuP7KK2hpo8ItamW0F9pq4dJOd4o+r6OWvAsx2eXGPshP6uKE24qepGshT8v+TF0jpnzugFJak42LuZQ==
+vm2@^3.8.4:
+  version "3.8.4"
+  resolved "https://registry.yarnpkg.com/vm2/-/vm2-3.8.4.tgz#882be9135467942d84d1af80b6e6549b57c69041"
+  integrity sha512-5HThl+RBO/pwE9SF0kM4nLrpq5vXHBNk4BMX27xztvl0j1RsZ4/PMVJAu9rM9yfOtTo5KroL7XNX3031ExleSw==
 
 vxx@^1.2.0:
   version "1.2.2"
