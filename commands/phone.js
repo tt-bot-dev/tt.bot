@@ -2,7 +2,7 @@ const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
 const { prototype: { permissionCheck: isOwner } } = require("../lib/OwnerCommand");
 const config = require("../config");
 const speakerPhone = require("../lib/speakerPhone.v4");
-const RegisterSymbol = Symbol("tt.bot.phone.register")
+const RegisterSymbol = Symbol("tt.bot.phone.register");
 const CallSymbol = Symbol("tt.bot.phone.call");
 const LookupSymbol = Symbol("tt.bot.phone.lookup");
 const DeleteSymbol = Symbol("tt.bot.phone.delete");
@@ -90,7 +90,7 @@ class PhoneCommand extends Command {
                 private: isPrivate,
                 channelID: ctx.channel.id,
                 guildID: ctx.guild.id
-            })
+            });
             await ctx.send(await ctx.t("NUMBER_CREATED"));
         } else if (action === CallSymbol) {
             const [thisChannelNumber] = await ctx.db.getChannelPhoneNumbers(ctx.guild.id, ctx.channel.id);
@@ -113,19 +113,19 @@ class PhoneCommand extends Command {
                     const answer = await ctx.waitForAnyMessage(otherSideNumber.channelID, ctx => console.log(ctx.msg.content) ||
                         (ctx.msg.content === `${config.prefix}pickup`
                             || ctx.msg.content === `${config.prefix}hangup`),
-                        2 * 60e3);
+                    2 * 60e3);
 
                     if (answer.msg.content === `${config.prefix}pickup`) {
-                        this.speakerPhone.addChannels(ctx.channel, this.sosamba.getChannel(otherSideNumber.channelID), thisChannelNumber, otherSideNumber)
+                        this.speakerPhone.addChannels(ctx.channel, this.sosamba.getChannel(otherSideNumber.channelID), thisChannelNumber, otherSideNumber);
                     } else {
                         for (const cID of [otherSideNumber.channelID, ctx.channel.id]) {
-                            await this.sosamba.createMessage(cID, "The call was hung up.")
+                            await this.sosamba.createMessage(cID, "The call was hung up.");
                         }
                     }
                 } catch (err) {
                     console.error(err);
                     for (const cID of [otherSideNumber.channelID, ctx.channel.id]) {
-                        await this.sosamba.createMessage(cID, "The call timed out.")
+                        await this.sosamba.createMessage(cID, "The call timed out.");
                     }
                 }
             } catch {
@@ -179,13 +179,13 @@ class PhoneCommand extends Command {
                     fields,
                     color: 0x008800
                 }
-            })
+            });
         } else if (action === DeleteSymbol) {
             const phone = ctx.db.getPhoneNumber(number);
             if (!phone || (!isOwner(ctx)
                 && (phone && (phone.guildID !== ctx.guild.id)))
             ) {
-                await ctx.send(await ctx.t("NUMBER_NONEXISTANT"))
+                await ctx.send(await ctx.t("NUMBER_NONEXISTANT"));
                 return;
             }
             await ctx.send(await ctx.t("QUESTION_DELETE_NUM", number));
