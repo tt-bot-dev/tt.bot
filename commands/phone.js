@@ -114,7 +114,7 @@ class PhoneCommand extends Command {
                     const answer = await ctx.waitForAnyMessage(otherSideNumber.channelID,
                         ctx => (ctx.msg.content === `${config.prefix}pickup`
                             || ctx.msg.content === `${config.prefix}hangup`),
-                    2 * 60e3);
+                        2 * 60e3);
 
                     if (answer.msg.content === `${config.prefix}pickup`) {
                         this.speakerPhone.addChannels(ctx.channel, this.sosamba.getChannel(otherSideNumber.channelID), thisChannelNumber, otherSideNumber);
