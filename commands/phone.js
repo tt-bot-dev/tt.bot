@@ -1,3 +1,4 @@
+"use strict";
 const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
 const { prototype: { permissionCheck: isOwner } } = require("../lib/OwnerCommand");
 const config = require("../config");
@@ -110,8 +111,8 @@ class PhoneCommand extends Command {
                 await this.sosamba.createMessage(otherSideNumber.channelID,
                     `Incoming call by ${thisChannelNumber.id} ${!thisChannelNumber.private ? `(#${ctx.channel.name} at ${ctx.guild.name})` : ""}\nType \`${config.prefix}pickup\` to pick up the call. Else, type \`${config.prefix}hangup\`. You have 2 minutes to pick up the call, else the call will be automatically hung up.`);
                 try {
-                    const answer = await ctx.waitForAnyMessage(otherSideNumber.channelID, ctx => console.log(ctx.msg.content) ||
-                        (ctx.msg.content === `${config.prefix}pickup`
+                    const answer = await ctx.waitForAnyMessage(otherSideNumber.channelID,
+                        ctx => (ctx.msg.content === `${config.prefix}pickup`
                             || ctx.msg.content === `${config.prefix}hangup`),
                     2 * 60e3);
 
@@ -158,7 +159,7 @@ class PhoneCommand extends Command {
             const isOnServer = this.sosamba.guilds.has(data.guildID);
             if (!isOnServer) {
                 const phoneNumbersInDelGuild = await ctx.db.getGuildPhoneNumbers(data.guildID);
-                await Promise.all(phoneNumbers.map(async ({ id }) => ctx.db.deletePhoneNumber(id)));
+                await Promise.all(phoneNumbersInDelGuild.map(async ({ id }) => ctx.db.deletePhoneNumber(id)));
                 console.log(`Deleted the phone numbers from ${data.guildID}: ${phoneNumbersInDelGuild.map(d => d.id).join(", ")}`);
             }
 
