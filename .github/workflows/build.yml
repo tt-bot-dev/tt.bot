@@ -36,4 +36,4 @@ jobs:
         GIT_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CI: true
         CURRENT_REPO: ${{ github.repository }}
-      if: github.event_name != 'pull_request' && failed()
+      if: github.event_name != 'pull_request' && failure()
