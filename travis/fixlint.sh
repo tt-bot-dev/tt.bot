@@ -12,5 +12,5 @@ echo "Committing"
 git commit -m "Fix linting issues for $CURRENT_COMMIT"
 
 echo "Pushing"
-git push https://$COMMIT_AUTHOR:$GIT_ACCESS_TOKEN@github.com/$REPOSITORY >/dev/null #2>&1
+git push https://$COMMIT_AUTHOR:$GIT_ACCESS_TOKEN@github.com/$REPOSITORY "HEAD:$CURRENT_BRANCH" >/dev/null #2>&1
 exit 0
