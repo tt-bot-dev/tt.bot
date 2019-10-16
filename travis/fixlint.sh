@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "Checking out the current branch ($CURRENT_BRANCH)...."
+git fetch >/dev/null 2>&1
 git checkout $CURRENT_BRANCH
 git config --global user.name "tt.bot" >/dev/null 2>&1
 # this is on purpose, it's public, feel free to email me! - TTtie 2019
