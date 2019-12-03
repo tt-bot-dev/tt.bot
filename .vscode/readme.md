@@ -1,2 +1,2 @@
-# Just ignore this folder.
-This folder just contains VS Code stuff.
+# .vscode
+This contains various Visual Studio Code configurations.
