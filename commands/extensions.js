@@ -31,7 +31,7 @@ class ExtensionCommand extends Command {
                 }]
             }),
             description: "Manage your extensions from Discord."
-        })
+        });
     }
 
     async run(ctx, [action, id]) {
@@ -61,7 +61,7 @@ class ExtensionCommand extends Command {
                     }))),
                     color: 0x008800
                 }
-            })
+            });
         } else if (action === CreateSymbol) {
             await ctx.send(await ctx.t("QUESTION_EXTENSION_CODE"));
             let codeContext;
@@ -153,7 +153,7 @@ class ExtensionCommand extends Command {
                     } catch {
                         return tryInsert();
                     }
-                }
+                };
                 store = await tryInsert();
                 await ctx.msg.channel.createMessage(await ctx.t("STORE_CREATED", store));
             }
@@ -188,7 +188,7 @@ class ExtensionCommand extends Command {
             const resp = await ctx.askYesNo();
             if (resp) {
                 await ctx.db.deleteGuildExtension(id);
-                await ctx.send(await ctx.t("QUESTION_EXTENSION_DELETE_STORE", ext))
+                await ctx.send(await ctx.t("QUESTION_EXTENSION_DELETE_STORE", ext));
                 const deleteStore = await ctx.askYesNo();
                 if (deleteStore) {
                     const store = await ctx.db.getGuildExtensionStore(ctx.guild.id, ext.store);
@@ -214,20 +214,20 @@ class ExtensionCommand extends Command {
                 description: await ctx.t("EXTENSION_MENU_SUBTEXT",
                     `\n${await ctx.t("MENU_CURRENTLY_SELECTED", isRole)} ${selected.join(", ") || "All"}`),
                 fields: [{
-                    name: await ctx.t(`ALLOWED_CHANNELS_ACTION_ADD`),
-                    value: await ctx.t(`ALLOWED_CHANNELS_ACTION_ADD_DESCRIPTION`, isRole),
+                    name: await ctx.t("ALLOWED_CHANNELS_ACTION_ADD"),
+                    value: await ctx.t("ALLOWED_CHANNELS_ACTION_ADD_DESCRIPTION", isRole),
                     inline: true
                 }, {
-                    name: await ctx.t(`ALLOWED_CHANNELS_ACTION_REMOVE`),
-                    value: await ctx.t(`ALLOWED_CHANNELS_ACTION_REMOVE_DESCRIPTION`, isRole),
+                    name: await ctx.t("ALLOWED_CHANNELS_ACTION_REMOVE"),
+                    value: await ctx.t("ALLOWED_CHANNELS_ACTION_REMOVE_DESCRIPTION", isRole),
                     inline: true
                 }, {
-                    name: await ctx.t(`ALLOWED_CHANNELS_ACTION_DONE`),
-                    value: await ctx.t(`ALLOWED_CHANNELS_ACTION_DONE_DESCRIPTION`, isRole),
+                    name: await ctx.t("ALLOWED_CHANNELS_ACTION_DONE"),
+                    value: await ctx.t("ALLOWED_CHANNELS_ACTION_DONE_DESCRIPTION", isRole),
                     inline: true
                 }]
             }
-        }
+        };
     }
 
     async doQuestionMenu(ctx, isRole) {
@@ -248,11 +248,11 @@ class ExtensionCommand extends Command {
                     const resp = await ctx.waitForMessage(undefined, 30000);
                     if (isRole) {
                         r = await findRole(resp.msg.content.toLowerCase(), ctx, {
-                            name: `the specified role`
+                            name: "the specified role"
                         });
                     } else {
                         r = await findChannel(resp.msg.content.toLowerCase(), ctx, {
-                            name: `the specified role`
+                            name: "the specified role"
                         });
                     }
                     try { await resp.msg.delete(); }
@@ -274,10 +274,10 @@ class ExtensionCommand extends Command {
                     await ctx.send(await ctx.t("QUESTION_ALLOWED_CHANNELS_REMOVE", isRole));
                     const resp = await ctx.waitForMessage(undefined, 30000);
                     if (isRole) r = await findRole(resp.msg.content.toLowerCase(), ctx, {
-                        name: `the specified role`
+                        name: "the specified role"
                     }); else r = await findChannel(resp.msg.content.toLowerCase(), ctx, {
                         name: "the specified channel"
-                    })
+                    });
                     try { await resp.msg.delete(); }
                     catch { }
                 } catch (e) {
