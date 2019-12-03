@@ -46,6 +46,12 @@ class ClearCommand extends Command {
             description: "Clears the desired number of messages."
         });
     }
+
+    async permissionCheck(ctx) {
+        return ctx.member.permission.has("manageMessages") || await super.permissionCheck(ctx);
+    }
+
+
     async clearMessages(ctx, r) {
         const p = [ctx.msg.delete()];
         if (r.context) p.push(r.context.msg.delete());

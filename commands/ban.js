@@ -25,6 +25,11 @@ class BanCommand extends Command {
             description: "Bans a user."
         });
     }
+
+    async permissionCheck(ctx) {
+        return ctx.member.permission.has("banMembers") || await super.permissionCheck(ctx);
+    }
+
     async run(ctx, {user, reason, soft}) {
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
             await user.ban(1, `${bot.getTag(ctx.author)}: ${reason}`);

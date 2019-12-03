@@ -16,6 +16,10 @@ class HackbanCommand extends Command {
         });
     }
 
+    async permissionCheck(ctx) {
+        return ctx.member.permission.has("banMembers") || await super.permissionCheck(ctx);
+    }
+
     async run(ctx, users) {
         if (users.length === 0) {
             await ctx.send({

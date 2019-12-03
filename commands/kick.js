@@ -1,5 +1,5 @@
 "use strict";
-const { SwitchArgumentParser, 
+const { SwitchArgumentParser,
     Serializers: { Member } } = require("sosamba");
 const Command = require("../lib/ModCommand");
 
@@ -20,6 +20,10 @@ class KickCommand extends Command {
             }),
             description: "Kicks a user."
         });
+    }
+
+    async permissionCheck(ctx) {
+        return ctx.member.permission.has("kickMembers") || await super.permissionCheck(ctx);
     }
 
     async run(ctx, { user, reason }) {
