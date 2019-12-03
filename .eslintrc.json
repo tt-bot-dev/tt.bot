@@ -25,10 +25,23 @@
         "no-inner-declarations": "off",
         "no-useless-escape": "off",
         "require-atomic-updates": "off",
-        "strict": ["error", "global"],
-        "eqeqeq": ["error", "always", {
-            "null": "ignore"
-        }]
+        "strict": [
+            "error",
+            "global"
+        ],
+        "eqeqeq": [
+            "error",
+            "always",
+            {
+                "null": "ignore"
+            }
+        ],
+        "no-empty": [
+            "error",
+            {
+                "allowEmptyCatch": true
+            }
+        ]
     },
     "globals": {
         "p": false,
@@ -58,7 +71,6 @@
         "decryptData": true,
         "sentry": true,
         "i18n": true,
-
         "BigInt": true
     }
 }

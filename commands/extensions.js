@@ -1,3 +1,4 @@
+"use strict";
 const { SerializedArgumentParser } = require("sosamba");
 const { role: findRole, channel: findChannel } = require("sosamba/lib/argParsers/switchSerializers/erisObjects");
 const { get } = require("snekfetch");
