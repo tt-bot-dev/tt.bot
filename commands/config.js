@@ -2,8 +2,8 @@
 const { ReactionMenu } = require("sosamba");
 const { role, channel } = require("sosamba/lib/argParsers/switchSerializers/erisObjects");
 const { prefix: defaultPrefix } = require("../config");
-const Command = require("../lib/AdminCommand");
-const ConfigProps = require("../util/config/Properties");
+const Command = require("../lib/commandTypes/AdminCommand");
+const ConfigProps = require("../lib/util/config/Properties");
 
 class ConfigMenu extends ReactionMenu {
     constructor(...args) {

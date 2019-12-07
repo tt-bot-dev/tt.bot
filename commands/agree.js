@@ -1,6 +1,6 @@
 "use strict";
 const { Command } = require("sosamba");
-const dmReply = require("../util/sendReplyToDMs");
+const dmReply = require("../lib/util/sendReplyToDMs");
 
 class AgreeCommand extends Command {
     constructor(...args) {

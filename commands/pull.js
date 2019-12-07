@@ -1,6 +1,6 @@
 "use strict";
 const ExecCommand = require("./exec");
-const Command = require("../lib/OwnerCommand");
+const Command = require("../lib/commandTypes/OwnerCommand");
 
 class PullCommand extends Command {
     constructor(...args) {

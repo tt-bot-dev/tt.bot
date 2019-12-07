@@ -1,5 +1,5 @@
 "use strict";
-const Command = require("../lib/ModCommand");
+const Command = require("../lib/commandTypes/ModCommand");
 const { SimpleArgumentParser } = require("sosamba");
 const { version: sosambaVersion } = require("sosamba/package.json");
 

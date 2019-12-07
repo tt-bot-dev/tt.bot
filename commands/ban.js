@@ -1,6 +1,6 @@
 "use strict";
 const { SwitchArgumentParser, Serializers: { User } } = require("sosamba");
-const Command = require("../lib/ModCommand");
+const Command = require("../lib/commandTypes/ModCommand");
 
 class BanCommand extends Command {
     constructor(sosamba, ...args) {

@@ -1,7 +1,7 @@
 "use strict";
 const { SwitchArgumentParser } = require("sosamba");
 const { user } = require("sosamba/lib/argParsers/switchSerializers/erisObjects");
-const Command = require("../lib/ModCommand");
+const Command = require("../lib/commandTypes/ModCommand");
 const BotSymbol = Symbol("tt.bot.clear.bots");
 const { User } = require("eris");
 // eslint cannot parse bigint literals :(

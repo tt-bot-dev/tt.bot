@@ -1,8 +1,8 @@
 "use strict";
 const { Command, SerializedArgumentParser, ParsingError, ReactionMenu } = require("sosamba");
-const ModCommand = require("../lib/ModCommand");
-const OwnerCommand = require("../lib/OwnerCommand");
-const AdminCommand = require("../lib/AdminCommand");
+const ModCommand = require("../lib/commandTypes/ModCommand");
+const OwnerCommand = require("../lib/commandTypes/OwnerCommand");
+const AdminCommand = require("../lib/commandTypes/AdminCommand");
 class HelpCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {

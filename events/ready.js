@@ -1,6 +1,6 @@
 "use strict";
 const { Event, Logger } = require("sosamba");
-const { WorkerTypes } = require("../util/worker");
+const { WorkerTypes } = require("../lib/util/worker");
 const { version } = require("../package.json");
 const { botsGGKey, topGGKey } = require("../config");
 

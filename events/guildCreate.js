@@ -1,7 +1,7 @@
 "use strict";
 const { Event } = require("sosamba");
 const { serverLogChannel } = require("../config");
-const dm = require("../util/sendReplyToDMs");
+const dm = require("../lib/util/sendReplyToDMs");
 const UserProfile = require("../lib/Structures/UserProfile");
 
 class GuildJoinEvent extends Event {

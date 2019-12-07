@@ -1,6 +1,6 @@
 "use strict";
 const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
-const { prototype: { permissionCheck: isOwner } } = require("../lib/OwnerCommand");
+const { prototype: { permissionCheck: isOwner } } = require("../lib/commandTypes/OwnerCommand");
 const config = require("../config");
 const speakerPhone = require("../lib/speakerPhone.v4");
 const RegisterSymbol = Symbol("tt.bot.phone.register");

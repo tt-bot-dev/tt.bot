@@ -1,6 +1,6 @@
 "use strict";
 const {SimpleArgumentParser} = require("sosamba");
-const Command = require("../lib/ModCommand");
+const Command = require("../lib/commandTypes/ModCommand");
 const { version: sosambaVersion } = require("sosamba/package.json");
 
 class HackbanCommand extends Command {

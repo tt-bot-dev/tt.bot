@@ -1,5 +1,5 @@
 "use strict";
-const Command = require("../lib/ModCommand");
+const Command = require("../lib/commandTypes/ModCommand");
 const { SwitchArgumentParser, Serializers: { Member } } = require("sosamba");
 const UserProfile = require("../lib/Structures/UserProfile");
 

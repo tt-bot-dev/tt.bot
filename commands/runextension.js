@@ -1,5 +1,5 @@
 "use strict";
-const Command = require("../lib/OwnerCommand");
+const Command = require("../lib/commandTypes/OwnerCommand");
 const { inspect } = require("util");
 const ExtensionRunner = require("../lib/extensions/Runner");
 const CensorBuilder = require("../lib/CensorBuilder");

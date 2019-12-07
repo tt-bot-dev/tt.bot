@@ -1,5 +1,5 @@
 "use strict";
-const Command = require("../lib/OwnerCommand");
+const Command = require("../lib/commandTypes/OwnerCommand");
 const CensorBuilder = require("../lib/CensorBuilder");
 const makegist = require("../lib/gist");
 const { spawn } = require("child_process");

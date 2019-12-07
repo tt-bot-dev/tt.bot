@@ -2,7 +2,7 @@
 const { SerializedArgumentParser } = require("sosamba");
 const { role: findRole, channel: findChannel } = require("sosamba/lib/argParsers/switchSerializers/erisObjects");
 const { get } = require("snekfetch");
-const Command = require("../lib/AdminCommand");
+const Command = require("../lib/commandTypes/AdminCommand");
 const MessageAsyncIterator = require("../lib/MessageAsyncIterator");
 const createUUID = require("uuid/v4");
 const ListSymbol = Symbol("tt.bot.extensions.list");
