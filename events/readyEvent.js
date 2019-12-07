@@ -12,7 +12,7 @@ class ReadyEvent extends Event {
         this.posterLog = new Logger({
             level: (this.sosamba.options.log && this.sosamba.options.log.level) ?
                 
-            name: "DBLPoster"
+                name: "DBLPoster"
         });
     }
     async run() {
@@ -24,15 +24,15 @@ class ReadyEvent extends Event {
         }
         this.sosamba.editStatus("online", { name: `Type ${config.prefix}help`, type: 0 });
         await this.postStats();
-        setInterval(() => this.postStats(), 1800000)
+        setInterval(() => this.postStats(), 1800000);
         await this.leaveBotCollectionServers();
         //const blacklist = await this.sosamba.db.getBlacklistedGuilds();
         const blacklist = [];
         await Promise.all(this.sosamba.guilds.map(g => {
             if (blacklist.find(entry =>
                 entry.id === g.id || g.ownerID === b.ownerID)) {
-                    return g.leave()
-                        .then(() => this.log.debug(`Left ${g.name} (${g.id}) for being a blacklisted guild`));
+                return g.leave()
+                    .then(() => this.log.debug(`Left ${g.name} (${g.id}) for being a blacklisted guild`));
             } else {
                 return Promise.resolve();
             }
