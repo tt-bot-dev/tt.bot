@@ -5,7 +5,7 @@ const ShowSymbol = Symbol("tt.bot.tags.show");
 const CreateSymbol = Symbol("tt.bot.tags.create");
 const EditSymbol = Symbol("tt.bot.tags.edit");
 const DeleteSymbol = Symbol("tt.bot.tags.delete");
-const TagObject = require("../lib/structures/TagObject");
+const TagObject = require("../lib/Structures/TagObject");
 const {oid} = require("../config");
 
 class TagCommand extends Command {
