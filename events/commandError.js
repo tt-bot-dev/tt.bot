@@ -10,12 +10,8 @@ class CommandErrorEvent extends Event {
         });
     }
 
-    prerequisites(e) {
-        return e.constructor.name !== "ExtensionError";
-    }
-
     async run(e, ctx) {
-        this.log.error(e);
+        if (e.constructor.name !== "ExtensionError") this.log.error(e);
         try {
             await ctx.send({
                 embed: {
