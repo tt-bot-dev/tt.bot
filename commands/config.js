@@ -144,11 +144,6 @@ class ConfigMenu extends ReactionMenu {
         await this.prepareEmoji();
     }
 
-    async stopCallback(reason) {
-        return super.stopCallback(reason);
-    }
-
-
     async getValueFromProperty(val, propData) {
         if (propData.type === "string") return val || await this.ctx.t("NONE");
         else if (propData.type === "channel") {
