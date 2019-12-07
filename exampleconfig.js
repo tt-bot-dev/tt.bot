@@ -14,16 +14,16 @@ module.exports = {
     oid: "123456789012345678",
 
     /** 
-     * A key to post to https://bots.discord.pw. This is optional.
+     * A key to post to https://discord.bots.gg. This is optional.
      * @type {string}
      */
-    dbotskey: "Heekajkga.s,gkjaůsgkiosdhgirf6g5f655d6d5s9s58s98",
+    botsGGKey: "Heekajkga.s,gkjaůsgkiosdhgirf6g5f655d6d5s9s58s98",
 
     /**
-     * A key to post to https://discordbots.org. This is also optional.
+     * A key to post to https://top.gg. This is also optional.
      * @type {string}
      */
-    dbots2key: "/tbalealelalajioe,e.gokaoklelgoekejfoekeoeke",
+    topGGKey: "/tbalealelalajioe,e.gokaoklelgoekejfoekeoeke",
     
     /**
      * Bot's default prefix.
