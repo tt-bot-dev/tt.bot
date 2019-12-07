@@ -7,10 +7,9 @@ const Prop = {
         descriptionTranslationKey: "CONFIG_PREFIX_DESCRIPTION"
     },
     modRole: {
-        type: "string",
+        type: "role",
         translationKey: "CONFIG_MODROLE",
-        descriptionTranslationKey: "CONFIG_MODROLE_DESCRIPTION",
-        default: "tt.bot mod"
+        descriptionTranslationKey: "CONFIG_MODROLE_DESCRIPTION"
     },
     farewellMessage: {
         type: "string",
