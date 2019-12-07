@@ -16,7 +16,7 @@ class GuildMemberJoinEvent extends Event {
                 try { 
                     await channel.createMessage(
                         this.sosamba.parseMsg(config.greetingMessage, member, guild));
-                } catch(_) {console.error(_)}
+                } catch(_) {console.error(_);}
             } else {
                 await this.sosamba.db.updateGuildConfig({
                     greetingChannelId: null
