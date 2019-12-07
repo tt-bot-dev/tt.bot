@@ -1,6 +1,6 @@
 "use strict";
 const { Event } = require("sosamba");
-const { version: sosambaVersion } = require("sosamba/package.json")
+const { version: sosambaVersion } = require("sosamba/package.json");
 const { version } = require("../package.json");
 
 class CommandErrorEvent extends Event {
