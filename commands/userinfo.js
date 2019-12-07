@@ -1,5 +1,5 @@
 "use strict";
-const { Command, SerializedArgumentParser, 
+const { Command, SerializedArgumentParser,
     Serializers: { Member } } = require("sosamba");
 const moment = require("moment");
 
@@ -37,9 +37,15 @@ class UserCommand extends Command {
                     value: await (async () => {
                         if (!user.game) return await ctx.t("PLAYING_NONE");
                         let str = "";
-                        str += user.game.name + "\n";
-                        if (user.game.details) str += user.game.details + "\n";
-                        if (user.game.state) str += user.game.state;
+                        if (user.game.type !== 4) {
+                            str += user.game.name + "\n";
+                            if (user.game.details) str += user.game.details + "\n";
+                            if (user.game.state) str += user.game.state;
+                        } else {
+                            str = `${user.game.emoji ?
+                                `${user.game.emoji.id ? "(custom emoji)" : user.game.emoji.name}`
+                                : ""} ${user.game.state || ""}`;
+                        }
                         return str.trim() || await ctx.t("SPACE_UNIVERSE");
                     })(),
                     inline: true
@@ -50,7 +56,7 @@ class UserCommand extends Command {
                 }, {
                     name: await ctx.t("ROLES"),
                     value: roles.join(", ").length > 1024 ? await ctx.t("TOOLONG") : roles.join(", "),
-                    inline: true
+                    inline: false
                 }, {
                     name: await ctx.t("CREATED_ON"),
                     value: (await ctx.userProfile && (await ctx.userProfile).timezone) ?
@@ -59,7 +65,9 @@ class UserCommand extends Command {
                     inline: true
                 }, {
                     name: await ctx.t("CURRENT_VOICE"),
-                    value: user.voiceState.channelID ? ctx.guild.channels.get(user.voiceState.channelID).name : await ctx.t("NONE"),
+                    value: ctx.guild.voiceStates.has(user.id) ?
+                        ctx.guild.channels.get(ctx.guild.voiceStates.get(user.id).channelID)
+                            .name : await ctx.t("NONE"),
                     inline: true
                 }],
                 timestamp: new Date(user.joinedAt),
@@ -79,6 +87,8 @@ class UserCommand extends Command {
             return await ctx.t("STREAMING");
         case 2:
             return await ctx.t("LISTENING_TO");
+        case 4:
+            return "Status";
         }
     }
 

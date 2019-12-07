@@ -64,7 +64,7 @@ class ClearCommand extends Command {
         const r = await ctx.askYesNo(true);
         if (!r.response) {
             await ctx.send(await ctx.t("OP_CANCELLED"));
-            setTimeout(this.clearMessages, 2000, ctx, r);
+            setTimeout(() => this.clearMessages(ctx, r), 2000);
             return;
         }
         await this.clearMessages(ctx, r);
