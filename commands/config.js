@@ -41,18 +41,7 @@ class ConfigMenu extends ReactionMenu {
         const valueText = await this.getValueFromProperty(
             (await this.ctx.guildConfig)[prop], propInfo
         );
-        if (!transitionFromQuestion) {
-            try {
-                await this.message.removeReactions();
-            } catch (_) {
-                if (!this.reactionErrored) {
-                    this.reactionErrored = true;
-                    await this.ctx.channel.createMessage(
-                        await this.ctx.t("REACTION_MENU_NO_AUTOREMOVE")
-                    );
-                }
-            }
-        }
+        if (!transitionFromQuestion) await this.cleanReactions();
         await this.ctx.send({
             embed: {
                 color: 0x008800,
@@ -129,9 +118,16 @@ class ConfigMenu extends ReactionMenu {
     async goHome() {
         this.state = ConfigMenu.States.UNAVAILABLE;
         this.currentlyEditing = null;
-        try {
-            await this.message.removeReactions();
-        } catch {
+        await this.cleanReactions();
+        await this.ctx.send(await ConfigMenu.DEFAULT_OBJ(this.ctx));
+        this.state = ConfigMenu.States.MAIN_MENU;
+        await this.prepareEmoji();
+    }
+
+    async cleanReactions() {
+        if (this.sosamba.hasBotPermission(this.ctx.channel, "manageMessages")) {
+            try { await this.message.removeReactions(); } catch {}
+        } else {
             if (!this.reactionErrored) {
                 this.reactionErrored = true;
                 await this.ctx.channel.createMessage(
@@ -139,9 +135,6 @@ class ConfigMenu extends ReactionMenu {
                 );
             }
         }
-        await this.ctx.send(await ConfigMenu.DEFAULT_OBJ(this.ctx));
-        this.state = ConfigMenu.States.MAIN_MENU;
-        await this.prepareEmoji();
     }
 
     async getValueFromProperty(val, propData) {
