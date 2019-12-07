@@ -1,3 +1,4 @@
+"use strict";
 const { Event } = require("sosamba");
 const { serverLogChannel } = require("../config");
 
@@ -17,7 +18,7 @@ class GuildLeaveEvent extends Event {
                 },
                 color: 0x008800
             }
-        })
+        });
     }
 }
 

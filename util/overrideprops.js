@@ -20,7 +20,7 @@ Object.defineProperty(Guild.prototype, "defaultChannel", {
         if (this.channels.filter((c) => c.type === 0).length === 0) return null;
         const defaultChannel = this.channels.filter((c) => c.type === 0 && 
         this.shard.client.hasBotPermission(c, "readMessages"))
-        .sort((a, b) => a.position - b.position)[0];
+            .sort((a, b) => a.position - b.position)[0];
         if (!defaultChannel) return null;
         return this.channels.get(defaultChannel.id);
     },

@@ -1,3 +1,4 @@
+"use strict";
 const { Event } = require("sosamba");
 const { serverLogChannel } = require("../config");
 const dm = require("../util/sendReplyToDMs");
@@ -29,7 +30,7 @@ class GuildJoinEvent extends Event {
                 },
                 color: 0x008800
             }
-        })
+        });
     }
 
     async getWelcomeMessage(owner) {
