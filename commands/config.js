@@ -93,7 +93,7 @@ class ConfigMenu extends ReactionMenu {
             const resp = await this.ctx.waitForMessage(undefined, timeout);
             if (propInfo.type === "string") toSave = resp.msg.content;
             else if (propInfo.type === "role") toSave = (await role(resp.msg.content, this.ctx, {
-                name: `the role input`
+                name: "the role input"
             })).id;
             else if (propInfo.type === "channel") toSave = (await channel(resp.msg.content, this.ctx, {
                 textOnly: true
@@ -218,7 +218,7 @@ class ConfigCommand extends Command {
             await ctx.db.createGuildConfig(ctx._guildConfig = {
                 id: ctx.guild.id,
                 prefix: defaultPrefix
-            })
+            });
         }
 
         const m = await ctx.send(await ConfigMenu.DEFAULT_OBJ(ctx));
