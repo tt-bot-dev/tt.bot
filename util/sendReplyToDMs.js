@@ -1,5 +1,5 @@
 "use strict";
-const { User, Member } = require("eris");
+const { Eris: { User, Member } } = require("sosamba");
 module.exports = async (userOrMember, ...args) => {
     let dmChannel;
     if (userOrMember instanceof User) {
