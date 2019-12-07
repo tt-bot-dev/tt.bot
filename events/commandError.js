@@ -1,3 +1,4 @@
+"use strict";
 const { Event } = require("sosamba");
 const { version: sosambaVersion } = require("sosamba/package.json")
 const { version } = require("../package.json");
@@ -25,7 +26,9 @@ class CommandErrorEvent extends Event {
                         text: `Please tell the command developers about this. | tt.bot v${version} running on Sosamba v${sosambaVersion}`
                     }
                 }
-            })
+            });
         } catch {}
     }
 }
+
+module.exports = CommandErrorEvent;
