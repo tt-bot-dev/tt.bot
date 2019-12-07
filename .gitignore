@@ -1,9 +1,7 @@
 *.exe
 #no
-db
-config.js
-config.json
+/db
+/config.js
+/config.json
 node_modules
 *.asc
-#Todo
-TODO.txt
