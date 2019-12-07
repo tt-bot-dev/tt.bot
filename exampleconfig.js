@@ -68,12 +68,6 @@ module.exports = {
     clientSecret: "9a9a99e89a8e92dg4df6s6s6",
 
     /**
-     * An option for routing DMs to the owners
-     * @type {boolean}
-     */
-    reroutePMs: true,
-
-    /**
      * The date formatting, for the nice display on Discord.
      * @type {string}
      */
@@ -135,12 +129,6 @@ module.exports = {
     dblVoteHookGuild: "",
     dblVoteHookRole: "",
     dblVoteHookSecret: "",
-
-    /**
-     * Allows debug logging
-     * @type {boolean}
-     */
-    debugLogging: false,
 
     /**
      * Allows using Snekfetch (HTTP requests) in extensions
