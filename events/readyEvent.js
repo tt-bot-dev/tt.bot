@@ -11,8 +11,8 @@ class ReadyEvent extends Event {
         });
         this.posterLog = new Logger({
             level: (this.sosamba.options.log && this.sosamba.options.log.level) ?
-                
-                name: "DBLPoster"
+                this.sosamba.options.log.level : undefined,
+            name: "DBLPoster"
         });
     }
     async run() {
@@ -30,7 +30,7 @@ class ReadyEvent extends Event {
         const blacklist = [];
         await Promise.all(this.sosamba.guilds.map(g => {
             if (blacklist.find(entry =>
-                entry.id === g.id || g.ownerID === b.ownerID)) {
+                entry.id === g.id || g.ownerID === entry.ownerID)) {
                 return g.leave()
                     .then(() => this.log.debug(`Left ${g.name} (${g.id}) for being a blacklisted guild`));
             } else {
