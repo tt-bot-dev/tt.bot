@@ -1,1 +1,1 @@
-window.onload=function(){var o=document.querySelector("#yes"),n=document.querySelector("#no");o.addEventListener("click",function(){window.location="/acceptcookie"}),n.addEventListener("click",function(){window.location="https://youtu.be/DLzxrzFCyOs"})};
+"use strict";window.onload=function(){const o=document.querySelector("#yes"),n=document.querySelector("#no");o.addEventListener("click",function(){window.location="/acceptcookie"}),n.addEventListener("click",function(){window.location="https://google.com"})};

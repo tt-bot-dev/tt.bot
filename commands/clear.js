@@ -112,8 +112,8 @@ class ClearCommand extends Command {
             const messageCopy = [...messages];
             const delet = async () => {
                 if (messageCopy.length >= 100) {
-                    const toDelet = messageCopy.splice(0, 100);
-                    await channel.deleteMessages(toDelet);
+                    const toDelete = messageCopy.splice(0, 100);
+                    await channel.deleteMessages(toDelete);
                     await sleep(1000);
                     return delet();
                 } else {

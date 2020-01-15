@@ -2,6 +2,7 @@
 const config = require("../../config");
 const sa = require("snekfetch");
 const APIBase = "https://discordapp.com/api/v6/oauth2";
+const { Eris: { Client } } = require("sosamba");
 
 class Cache {
     constructor(time, getter) {
@@ -40,7 +41,7 @@ class Cache {
 }
 
 const getUserInfo = async token => {
-    const e = new ErisO.Client(`Bearer ${token}`, {
+    const e = new Client(`Bearer ${token}`, {
         restMode: true
     });
     const body = await e.requestHandler.request("GET", "/users/@me", true);

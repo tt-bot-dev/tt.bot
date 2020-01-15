@@ -1,10 +1,10 @@
 "use strict";
-const e = require("express"),
-    app = e(),
+const e = require("polka"),
     util = require("./util"),
     { checkAuth, checkAuthNeg, loadMiddleware, getGuilds, getHost } = util,
     scope = ["identify", "guilds"],
     { createServer: httpsServer } = require("https"),
+    { createServer: httpServer } = require("http"),
     { getAccessToken, logout } = require("./util/auth"),
     csrf = require("csurf"),
     fs = require("fs"),
@@ -17,13 +17,43 @@ const e = require("express"),
             (req.headers["xsrf-token"]) ||
             (req.headers["x-csrf-token"]) ||
             (req.headers["x-xsrf-token"])
+    }),
+    { Logger } = require("sosamba"),
+    serveStatic = require("./util/static"),
+    {availableTypes} = require("../lib/logging");
+
+
+module.exports = function (db, bot, config) {
+    const log = new Logger({
+        name: "Webserver"
     });
-    
+    const app = e({
+        onError: (err, req, res) => {
+            if (err.code && err.code === "ebadcsrftoken".toUpperCase()) {
+                res.status(403);
+                res.render("500", req.makeTemplatingData({
+                    error: "Missing CSRF token! Please redo the action again in order to protect yourself.",
+                    pageTitle: "Cross Site Request Forgery"
+                }));
+                return;
+            }
 
-module.exports = function(db, bot, config) {
-    
+            log.error(err);
+            res.status(500);
+            res.render("500", req.makeTemplatingData({
+                error: (req.user && isO({ author: req.user })) ? err.stack : err.message,
+                pageTitle: "Error"
+            }));
+        },
+        onNoMatch: (rq, rs) => {
+            rs.status(404);
+            rs.render("404", rq.makeTemplatingData({
+                pageTitle: "404"
+            }));
+        }
+    });
 
-    loadMiddleware(app);
+    loadMiddleware(app, bot, log);
     app.get("/", (rq, rs) => {
         rs.render("landing", rq.makeTemplatingData());
     });
@@ -51,49 +81,48 @@ module.exports = function(db, bot, config) {
     app.get("/dashboard/:id", checkAuth(), async (rq, rs) => {
 
         async function makeCfg() {
-            await db.table("configs").insert({
+            const data = {
                 id: rq.params.id,
-                modRole: "tt.bot mod",
                 prefix: config.prefix
-            });
-            return await db.table("configs").get(rq.params.id).run();
+            };
+            await db.createGuildConfig(data);
+            return data;
         }
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.id)) return rs.sendStatus(403);
         else {
-            const data = await db.table("configs").get(rq.params.id) || await makeCfg();
+            const data = await db.getGuildConfig(rq.params.id) || await makeCfg();
             const g = bot.guilds.get(rq.params.id);
             return rs.render("dashboard-server", rq.makeTemplatingData({
                 guild: data,
                 erisGuild: g,
-                pageTitle: `${g.name} Dashboard`,
+                pageTitle: g.name,
+                availableLoggingTypes: availableTypes
             }));
         }
     });
 
     app.get("/dashboard/:id/load.js", checkAuth(), csrfProtection(), async (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.id)) return rs.sendStatus(403);
         else {
             const g = bot.guilds.get(rq.params.id);
-            // No, this isn't incorrect. Read RFC 4329 + we do support just modern browsers.
-            rs.set("Content-Type", "application/javascript");
+            rs.setHeader("Content-Type", "application/javascript");
             return rs.render("cspstuff", {
                 guildID: g.id,
                 csrfToken: rq.csrfToken()
-            });
+            }, false);
         }
     });
     app.get("/dashboard/:id/extensions/:extension/load.js", checkAuth(), csrfProtection(), async (rq, rs) => {
         const { id, extension } = rq.params;
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == id)) return rs.sendStatus(403);
+        if (!guilds.find(g => g.isOnServer && g.id === id)) return rs.sendStatus(403);
         else {
-        // No, this isn't incorrect. Read RFC 4329 + we do support just modern browsers.
-            rs.set("Content-Type", "application/javascript");
+            rs.setHeader("Content-Type", "application/javascript");
             return rs.render("cspextensions", {
                 extension
-            });
+            }, false);
         }
     });
     app.get("/login", checkAuthNeg(), csrfProtection(), function (req, res) {
@@ -102,13 +131,13 @@ module.exports = function(db, bot, config) {
     app.get("/callback", csrfProtection({
         ignoreMethods: ["HEAD", "OPTIONS"]
     }), async function (req, res) {
+        if (req.query.error) return res.redirect("/");
         if (!req.query.code) return res.redirect("/login");
         else {
             try {
                 await getAccessToken(req.query.code, req);
             } catch (err) {
-                //eslint-disable-next-line no-console
-                console.error(err);
+                log.error(err);
                 return res.redirect("/login");
             }
             await (new Promise((rs, rj) => req.session.save(e => e ? rj(e) : rs())));
@@ -118,12 +147,10 @@ module.exports = function(db, bot, config) {
 
     app.get("/dashboard/:id/extensions", checkAuth(), async (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.id)) return rs.sendStatus(403);
         else {
             const g = bot.guilds.get(rq.params.id);
-            const extensions = await db.table("extensions").filter({
-                guildID: g.id
-            });
+            const extensions = await db.getGuildExtensions(rq.params.id);
             rs.render("extensions", rq.makeTemplatingData({
                 erisGuild: g,
                 extensions,
@@ -134,7 +161,7 @@ module.exports = function(db, bot, config) {
 
     app.get("/dashboard/:id/extensions/:extension", checkAuth(), async (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.id)) return rs.sendStatus(403);
         else {
             const g = bot.guilds.get(rq.params.id);
             if (rq.params.extension === "new") {
@@ -149,7 +176,7 @@ module.exports = function(db, bot, config) {
 
                 return;
             }
-            const extension = await db.table("extensions").get(rq.params.extension);
+            const extension = await db.getGuildExtension(rq.params.extension);
             if (!extension || (extension && extension.guildID !== g.id)) {
                 rs.status(404);
                 return rs.render("404", rq.makeTemplatingData({
@@ -169,7 +196,7 @@ module.exports = function(db, bot, config) {
 
     app.get("/dashboard/:id/extensions/:extension/monaco", checkAuth(), async (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.id)) return rs.sendStatus(403);
         else {
             const g = bot.guilds.get(rq.params.id);
             if (rq.params.extension === "new") {
@@ -184,7 +211,7 @@ module.exports = function(db, bot, config) {
 
                 return;
             }
-            const extension = await db.table("extensions").get(rq.params.extension);
+            const extension = await db.getGuildExtension(rq.params.extension);
             if (!extension || (extension && extension.guildID !== g.id)) {
                 rs.status(404);
                 return rs.render("404", rq.makeTemplatingData({
@@ -204,10 +231,10 @@ module.exports = function(db, bot, config) {
 
     app.get("/dashboard/:id/extensions/:extension/delete", checkAuth(), async (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == rq.params.id)) return rs.sendStatus(403);
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.id)) return rs.sendStatus(403);
         else {
             const g = bot.guilds.get(rq.params.id);
-            const extension = await db.table("extensions").get(rq.params.extension);
+            const extension = await db.getGuildExtension(rq.params.extension);
             if (!extension || (extension && extension.guildID !== g.id)) {
                 rs.status(404);
                 return rs.render("404", rq.makeTemplatingData({
@@ -232,47 +259,18 @@ module.exports = function(db, bot, config) {
         res.redirect("/");
     });
 
-    app.use("/api", require("./routes/api")(csrfProtection));
-    app.use("/monaco", e.static(`${__dirname}/../node_modules/monaco-editor/min`));
+    require("./routes/api")(app, csrfProtection, db);
+    app.use("/monaco", serveStatic(app, `${__dirname}/../node_modules/monaco-editor/min`));
     app.get("/tt.bot.d.ts", (rq, rs) => {
-        const s = fs.createReadStream(`${__dirname}/../extensions/tt.bot.d.ts`);
+        const s = fs.createReadStream(`${__dirname}/../lib/extensions/tt.bot.d.ts`);
         s.pipe(rs);
     });
-
-    //eslint-disable-next-line no-unused-vars
-    app.use((rq, rs) => {
-        rs.status(404);
-        rs.render("404", rq.makeTemplatingData({
-            pageTitle: "404"
-        }));
-        return;
-    });
-    //eslint-disable-next-line no-unused-vars
-    app.use((err, req, res, next) => {
-        if (err) {
-            if (err.code && err.code === "ebadcsrftoken".toUpperCase()) {
-                res.status(403);
-                res.render("500", req.makeTemplatingData({
-                    error: "Missing CSRF token! Please redo the action again in order to protect yourself.",
-                    pageTitle: "Cross Site Request Forgery"
-                }));
-                return;
-            }
-            //eslint-disable-next-line no-console
-            console.error(err);
-            res.status(500);
-            res.render("500", req.makeTemplatingData({
-                error: (req.user && isO({ author: req.user })) ? err.stack : err.message,
-                pageTitle: "Error"
-            }));
-        }
-    });
-    app.listen(config.httpPort || 8090, config.webserverip || "0.0.0.0", () => {
+    httpServer(app.handler).listen(config.httpPort || 8090, config.webserverip || "0.0.0.0", () => {
         //eslint-disable-next-line no-console
         console.log("HTTP webserver is running.");
     });
 
-    if (config.httpsPort) httpsServer(config.httpsSettings, app)
+    if (config.httpsPort) httpsServer(config.httpsSettings, app.handler)
         .listen(config.httpsPort, config.webserverip || "0.0.0.0", () => {
             //eslint-disable-next-line no-console
             console.log("HTTPS webserver is running");

@@ -1,4 +1,5 @@
 "use strict";
+const { Eris: { Permission }} = require("sosamba");
 module.exports = {
     checkAuth(api = false) {
         return (req, res, next) => {
@@ -35,7 +36,7 @@ module.exports = {
         return req.user.guilds.filter(g => {
             if (req.bot.guilds.has(g.id)) return req.bot.isAdmin(req.bot.guilds.get(g.id).members.get(req.user.id));
             else {
-                const permission = new ErisO.Permission(g.permissions);
+                const permission = new Permission(g.permissions);
                 return permission.has("administrator") || permission.has("manageServer");
             }
 

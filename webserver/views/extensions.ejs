@@ -1,56 +1,74 @@
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
+
 <body>
-<div class="tttie-container">
-<%- include("./partials/header") %>
-<div class="tttie-body">
-<div class="tttie-center">
-<div>
-<div class="tttie-center text">
-<div>
-<img class="tttie-server-dash-icon" src="<%=erisGuild.dynamicIconURL('png', 256) || '/static/unknown.png'%>"><br>
-<h1>Extensions for <%=erisGuild.name%></h1>
+    <div class="tttie-container">
+        <%- include("./partials/header") %>
+        <div class="tttie-body">
+            <div class="tttie-center">
+                <div>
+                    <div class="tttie-center text">
+                        <div>
+                            <img class="tttie-server-dash-icon"
+                                src="<%=erisGuild.dynamicIconURL('png', 256) || '/static/unknown.png'%>"><br>
+                            <h1>Extensions for <%=erisGuild.name%></h1>
 
-<p>Here's a list of extensions. You can create one, or edit them, even delete them from there.</p>
-</div>
-</div>
-<div>
-<div class="tttie-changes-buttons">
-<a class="tttie-linkbutton" href="/dashboard/<%=erisGuild.id%>/extensions/new"><div class="tttie-button">Create an extension</div></a>
-</div>
-</div>
+                            <p>This is a list of <%=erisGuild.name%>'s extensions.</p>
+                        </div>
+                    </div>
+                    <div>
 
-<div class="tttie-table-wrapper">
-<table class="tttie-table is-responsive">
-<thead>
-    <tr>
-        <th>Name</th>
-        <th>ID</th>
-        <th>Store ID</th>
-        <th>Actions</th>
-    </tr>
-</thead>
-<tbody>
+                        <div class="tttie-changes-buttons">
+                            <a class="tttie-linkbutton" href="/dashboard/<%=erisGuild.id%>">
+                                <div class="tttie-button">Back to config</div>
+                            </a>
+                            <a class="tttie-linkbutton" href="/dashboard/<%=erisGuild.id%>/extensions/new">
+                                <div class="tttie-button">Create an extension</div>
+                            </a>
+                        </div>
+                    </div>
 
-<%extensions.map(e => {%>
-<tr>
-<td><%=e.name%></td>
-<td><%=e.id%></td>
-<td><%=e.store%></td>
-<td>
-<a class="tttie-linkbutton" href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>"><div class="tttie-button">Edit</div></a>
-<a class="tttie-linkbutton nomargin" href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>/monaco"><div class="tttie-button">Edit (Monaco)</div></a>
-<a class="tttie-linkbutton nomargin" href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>/delete"><div class="tttie-button red">Delete</div></a></td>
-</tr>
-<%})%>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
+                    <div class="tttie-table-wrapper">
+                        <table class="tttie-table is-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>ID</th>
+                                    <th>Store ID</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <%extensions.map(e => {%>
+                                <tr>
+                                    <td><%=e.name%></td>
+                                    <td><%=e.id%></td>
+                                    <td><%=e.store%></td>
+                                    <td>
+                                        <a class="tttie-linkbutton"
+                                            href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>">
+                                            <div class="tttie-button">Edit</div>
+                                        </a>
+                                        <a class="tttie-linkbutton nomargin"
+                                            href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>/monaco">
+                                            <div class="tttie-button">Edit using the Monaco Editor</div>
+                                        </a>
+                                        <a class="tttie-linkbutton nomargin"
+                                            href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>/delete">
+                                            <div class="tttie-button red">Delete</div>
+                                        </a></td>
+                                </tr>
+                                <%})%>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
+
 </html>

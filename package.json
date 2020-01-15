@@ -4,36 +4,41 @@
     "description": "A bot with aim for fun and moderation made in JS using Eris.",
     "main": "index.js",
     "dependencies": {
+        "@polka/redirect": "^1.0.0-next.0",
+        "@polka/send-type": "^0.5.2",
         "body-parser": "^1.19.0",
+        "cookie": "^0.4.0",
         "cookie-parser": "^1.4.4",
+        "cookie-signature": "^1.1.0",
         "csurf": "github:tt-bot-dev/csurf",
         "ejs": "^2.6.2",
-        "eris": "git+https://github.com/abalabahaha/eris.git#dev",
-        "express": "^4.17.1",
+        "eris": "github:abalabahaha/eris#dev",
         "express-session": "^1.16.2",
         "express-session-rethinkdb": "^0.4.1",
         "gifwrap": "^0.7.5",
         "jimp": "^0.6.4",
         "jimp-upng": "github:tt-bot-dev/jimp-upng",
+        "mime-types": "^2.1.25",
         "moment": "^2.24.0",
         "moment-timezone": "^0.5.26",
         "monaco-editor": "^0.17.1",
-        "pmx": "^1.6.7",
+        "polka": "^0.5.2",
         "process-as-promised": "^1.0.1",
         "rethinkdbdash": "^2.3.31",
         "snekfetch": "^4.0.4",
         "sosamba": "github:tt-bot-dev/sosamba",
         "uuid": "^3.3.3",
-        "vm2": "^3.8.2",
-        "zlib-sync": "^0.1.6"
+        "vm2": "^3.8.2"
     },
     "devDependencies": {
-        "eslint": "^6.1.0"
+        "eslint": "^6.1.0",
+        "uglify-es": "^3.3.9"
     },
     "scripts": {
         "test": "eslint .",
         "install": "node scripts/dbsetup",
-        "db-setup": "node scripts/dbsetup"
+        "db-setup": "node scripts/dbsetup",
+        "uglify": "node scripts/uglify"
     },
     "repository": {
         "type": "git",

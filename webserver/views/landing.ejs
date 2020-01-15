@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
+
 <body>
-<div class="tttie-container">
-<%- include("./partials/header") %>
-<div class="tttie-body">
-<div class="tttie-center text">
-<div>
-<h1>Hey there!</h1>
-<p>This is the dashboard of <%=bot.user.username%>, an instance of tt.bot.</p>
-<div class="tttie-center"><a href="https://tttie.github.io/ttbot" class="tttie-linkbutton"><div class="tttie-button">View tt.bot's features</div></a></div>
-<p>This tt.bot instance currently knows <b><%=bot.guilds.size%></b> servers and <b><%=bot.users.size%></b> users.</p>
-</div>
-</div>
-</div>
-</div>
+    <div class="tttie-container">
+        <%- include("./partials/header") %>
+        <div class="tttie-body">
+            <div class="tttie-center">
+                <div>
+                    <h1>Welcome to <%=bot.user.username%>'s dashboard!</h1>
+                    <p><%=bot.user.username%> is an instance of tt.bot, an open-source moderation/utility Discord bot.
+                    </p>
+                    <div class="tttie-center">
+                        <a class="tttie-linkbutton" href="https://github.com/tt-bot-dev/tt.bot">
+                            <div class="tttie-button">tt.bot's GitHub repository</div>
+                        </a>
+                        <a class="tttie-linkbutton" href="https://github.com/tt-bot-dev/sosamba">
+                            <div class="tttie-button">Sosamba's GitHub repository (the heart of tt.bot)</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

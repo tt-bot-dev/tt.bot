@@ -14,10 +14,24 @@ class InviteInspectorCommand extends Command {
         let inviteData;
         try {
             inviteData = await this.sosamba.getInvite(args, true);
-        } catch {
+        } catch (err) {
+            if (err.code === 40007) {
+                return ctx.send({
+                    embed: {
+                        color: 0xFF0000,
+                        author: {
+                            name: await ctx.t("OOPS")
+                        },
+                        description: "I cannot get the information about the invite because I'm banned from there.",
+                        footer: {
+                            text: "Please contact the invite authors to unban me and try again."
+                        }
+                    }
+                });
+            }
             return ctx.send({
                 embed: {
-                    color: 0x880000,
+                    color: 0xFF0000,
                     author: {
                         name: await ctx.t("OOPS")
                     },
@@ -53,7 +67,7 @@ class InviteInspectorCommand extends Command {
                     inline: true
                 }],
                 footer: inviteData.inviter ? {
-                    text: await ctx.t("INV_INVITER", bot.getTag(inviteData.inviter)),
+                    text: await ctx.t("INV_INVITER", this.sosamba.getTag(inviteData.inviter)),
                     icon_url: inviteData.avatarURL
                 } : null
             }

@@ -7,17 +7,17 @@
 <div class="tttie-body">
 <div class="tttie-center text">
 <div><h1>Dashboard</h1>
-<p>Huh... you got here? Great! Now you can tweak your server's settings as usual.</p>
+<p>Please pick a guild to manage its settings.</p>
 <div class="tttie-server-list">
 <%guilds.map(g => {%>
 <div class="tttie-center text">
 <div class="tttie-server-box">
 <img class="tttie-server-icon" src="<%=g.icon?`https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=256`:'/static/unknown-user.png'%>"><br>
-    <b><%=g.name%> (<%=g.id%>)</b><br>
+    <b><%=g.name%></b><br>
     <%if (!g.isOnServer) {%>
-    <a href="<%=`https://discordapp.com/oauth2/authorize?client_id=${config.clientID}&scope=bot&guild_id=${g.id}`%>">Add</a>
+    <a class="tttie-linkbutton" href="<%=`https://discordapp.com/oauth2/authorize?client_id=${config.clientID}&scope=bot&guild_id=${g.id}`%>"><div class="tttie-button">Add</div></a>
     <%} else {%>
-    <a href="/dashboard/<%=g.id%>">Dashboard</a>
+    <a class="tttie-linkbutton" href="/dashboard/<%=g.id%>"><div class="tttie-button">Dashboard</div></a>
     <%}%>
     </div>
     </div>

@@ -1,14 +1,14 @@
 "use strict";
-const { Router } = require("express");
-const app = Router();
 const { checkAuth, getGuilds } = require("../util/index");
+const createUUID = require("uuid/v4");
+const uuidregex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const authNeeded = checkAuth(true);
-module.exports = csrf => {
-    app.get("/channels/:guild", authNeeded, (rq, rs) => {
+module.exports = (app, csrf, db) => {
+    app.get("/api/channels/:guild", authNeeded, (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
         else {
-            const guild = bot.guilds.get(rq.params.guild);
+            const guild = rq.bot.guilds.get(rq.params.guild);
             return rs.send(guild.channels.filter(c => c.type === 0).sort((a, b) => a.position - b.position).map(c => ({
                 name: c.name,
                 id: c.id
@@ -16,21 +16,21 @@ module.exports = csrf => {
         }
     });
 
-    app.get("/config/:guild", authNeeded, async (rq, rs) => {
+    app.get("/api/config/:guild", authNeeded, async (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
         else {
-            const data = await db.table("configs").get(rq.params.guild);
+            const data = await db.getGuildConfig(rq.params.guild);
             return rs.send(data);
         }
     });
 
-    app.get("/roles/:guild", authNeeded, (rq, rs) => {
+    app.get("/api/roles/:guild", authNeeded, (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
         else {
-            const guild = bot.guilds.get(rq.params.guild);
-            const highestRole = guild.members.get(bot.user.id).roles
+            const guild = rq.bot.guilds.get(rq.params.guild);
+            const highestRole = guild.members.get(rq.bot.user.id).roles
                 .map(r => guild.roles.get(r))
                 .sort((a, b) => b.position - a.position)[0];
             let roles = guild.roles.filter(r => r.position < highestRole.position);
@@ -42,9 +42,9 @@ module.exports = csrf => {
         }
     });
 
-    app.post("/config/:guild", authNeeded, csrf(), async (rq, rs) => {
+    app.post("/api/config/:guild", authNeeded, csrf(), async (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
         else {
             const props = ["prefix",
                 "modRole",
@@ -56,20 +56,20 @@ module.exports = csrf => {
                 "memberRole",
                 "logChannel",
                 "logEvents",
-                "modlogChannel"]; // filter out the nonsense
+                "modlogChannel"];
             const filteredBody = {};
             Object.keys(rq.body).filter(k => props.includes(k)).forEach(k => {
-                filteredBody[k] = rq.body[k] || undefined;
+                filteredBody[k] = rq.body[k] || null;
             });
 
             filteredBody.id = rq.params.guild;
 
-            await db.table("configs").get(rq.params.guild).replace(filteredBody);
-            return rs.send(await db.table("configs").get(rq.params.guild));
+            await db.updateGuildConfig(rq.params.guild, filteredBody);
+            return rs.send(await db.getGuildConfig(rq.params.guild));
         }
     });
 
-    app.get("/extensions/:guild/:id", authNeeded, async (rq, rs) => {
+    app.get("/api/extensions/:guild/:id", authNeeded, async (rq, rs) => {
         const d = {
             allowedChannels: [],
             allowedRoles: [],
@@ -81,11 +81,11 @@ module.exports = csrf => {
         };
         const { guild, id } = rq.params;
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === guild)) return rs.status(403).send({ error: "Forbidden" });
         else {
             if (id === "new") return rs.send(d);
             const filteredBody = {};
-            const extension = await db.table("extensions").get(id);
+            const extension = await db.getGuildExtension(id);
             if (!extension || (extension && extension.guildID !== guild)) {
                 rs.status(404);
                 rs.send({ error: "Not Found" });
@@ -94,16 +94,15 @@ module.exports = csrf => {
             Object.keys(extension).filter(k => Object.keys(d).includes(k)).forEach(k => {
                 filteredBody[k] = extension[k] || undefined;
             });
-
             filteredBody.id = id;
             rs.send(filteredBody);
         }
     });
 
-    app.post("/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
+    app.post("/api/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
         const { guild, id } = rq.params;
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === guild)) return rs.status(403).send({ error: "Forbidden" });
         else {
             const props = [
                 "code",
@@ -114,7 +113,7 @@ module.exports = csrf => {
                 "store"
             ];
             const filteredBody = {};
-            const extension = id === "new" ? {guildID: guild} : await db.table("extensions").get(id);
+            const extension = id === "new" ? { guildID: guild } : await db.getGuildExtension(id);
             if (!extension || (extension && extension.guildID !== guild)) {
                 rs.status(404);
                 rs.send({ error: "Not Found" });
@@ -126,17 +125,15 @@ module.exports = csrf => {
 
             filteredBody.id = id;
             filteredBody.guildID = guild;
+            if (filteredBody.commandTrigger.length > 20)
+                filteredBody.commandTrigger = filteredBody.commandTrigger.slice(0, 20);
+            if (!uuidregex.test(filteredBody.store)) filteredBody.store = null;
             if (id === "new") {
                 delete filteredBody.id;
                 const tryInsert = async () => {
-                    const id = await db.uuid();
+                    const id = createUUID();
                     try {
-                        await db.table("extension_store").insert({
-                            id: [guild, id],
-                            store: "{}"
-                        }, {
-                            conflict: "error"
-                        });
+                        await db.createGuildExtensionStore(guild, id);
                         return id;
                     } catch (_) {
                         // Try to insert with a different id
@@ -145,41 +142,52 @@ module.exports = csrf => {
                 };
                 //eslint-disable-next-line require-atomic-updates
                 filteredBody.store = filteredBody.store || await tryInsert();
-                const { generated_keys: [newID] } = await db.table("extensions").insert(filteredBody);
-                return rs.send(await db.table("extensions").get(newID));
+                const tryInsertExtension = async () => {
+                    const id = createUUID();
+                    try {
+                        filteredBody.id = id;
+                        await db.createGuildExtension(filteredBody);
+                        return id;
+                    } catch {
+                        return tryInsertExtension();
+                    }
+                };
+
+                const newID = await tryInsertExtension();
+                return rs.send(await db.getGuildExtension(newID));
             } else {
-                await db.table("extensions").get(id).replace(filteredBody);
-                return rs.send(await db.table("extensions").get(id));
+                await db.updateGuildExtension(id, filteredBody);
+                return rs.send(await db.getGuildExtension(id));
             }
         }
     });
 
-    app.delete("/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
+    app.delete("/api/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
         const { guild, id } = rq.params;
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id == guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === guild)) return rs.status(403).send({ error: "Forbidden" });
         else {
-            const extension = await db.table("extensions").get(id);
+            const extension = await db.getGuildExtension(id);
             if (!extension || (extension && extension.guildID !== guild)) {
                 rs.status(404);
                 rs.send({ error: "Not Found" });
                 return;
             }
-        
+
             const { deleteStore } = rq.body;
-            await db.table("extensions").get(id).delete();
+            await db.deleteGuildExtension(id);
             if (deleteStore) {
-                await db.table("extension_store").get([guild, extension.store]).delete();
+                await db.deleteGuildExtensionStore(guild, extension.store);
             }
             return rs.status(204).end();
         }
     });
 
     if (config.dblVoteHook) {
-        app.post("/dblvotes", async (rq, rs) => {
+        app.post("/api/dblvotes", async (rq, rs) => {
             const pass = async () => {
-                if (rq.body.type !== "test") bot.createMessage(config.serverLogChannel, {
-                    content: `<@!${rq.body.user}> (${bot.getTag(await bot.getUserWithoutRESTMode(rq.body.user))}), thank you!\nIf you are here, you should be given a vote role reward if it exists!`,
+                if (rq.body.type !== "test") rq.bot.createMessage(config.serverLogChannel, {
+                    content: `<@!${rq.body.user}> (${rq.bot.getTag(await bot.getUserWithoutRESTMode(rq.body.user))}), thank you!\nIf you are here, you should be given a vote role reward if it exists!`,
                     embed: {
                         color: 0x008800,
                         author: {
@@ -202,7 +210,7 @@ module.exports = csrf => {
                 return;
             }
 
-            const guild = bot.guilds.get(config.dblVoteHookGuild);
+            const guild = rq.bot.guilds.get(config.dblVoteHookGuild);
             if (!guild) return pass();
             const role = guild.roles.get(config.dblVoteHookRole);
             if (!role) return pass();

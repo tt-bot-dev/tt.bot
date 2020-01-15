@@ -1,95 +1,109 @@
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
+
 <body>
-<div class="tttie-container">
-<%- include("./partials/header") %>
-<div class="tttie-body">
-<div class="tttie-center">
-<div>
+    <div class="tttie-container">
+        <%- include("./partials/header") %>
+        <div class="tttie-body">
+            <div class="tttie-center">
+                <div>
 
-<div class="tttie-changes-buttons">
-<a class="tttie-linkbutton" id="save"><div class="tttie-button">Save changes</div></a>
-<a class="tttie-linkbutton" id="reset"><div class="tttie-button red">Reset</div></a>
-<a class="tttie-linkbutton" href="/dashboard/<%=erisGuild.id%>/extensions"><div class="tttie-button">Manage extensions</div></a>
-</div>
-<div class="tttie-center text">
-<div>
-<img class="tttie-server-dash-icon" src="<%=erisGuild.dynamicIconURL('png', 256) || '/static/unknown.png'%>"><br>
-<h1><%=erisGuild.name%> Dashboard</h1>
+                    <div class="tttie-changes-buttons">
+                        <a class="tttie-linkbutton" id="save">
+                            <div class="tttie-button">Save changes</div>
+                        </a>
+                        <a class="tttie-linkbutton" id="reset">
+                            <div class="tttie-button red">Reset</div>
+                        </a>
+                        <a class="tttie-linkbutton" href="/dashboard/<%=erisGuild.id%>/extensions">
+                            <div class="tttie-button">Manage extensions</div>
+                        </a>
+                    </div>
+                    <div class="tttie-center text">
+                        <div>
+                            <img class="tttie-server-dash-icon"
+                                src="<%=erisGuild.dynamicIconURL('png', 256) || '/static/unknown.png'%>"><br>
+                            <h1><%=erisGuild.name%></h1>
+                            <p>Here, you can set <%=erisGuild.name%>'s settings that <%=bot.user.username%> will use.
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div>
+                        <h1>Basic settings</h1>
 
-<p>Here's what you can modify:</p>
-</div>
-</div>
-<div>
-<h1>Moderator role, prefix</h1>
-<p>This section is about the basics of the bot. You can set the prefix you want to use (<code><%=config.prefix%></code> will still work).<br>
-Also, you can set the case insensitive name of your moderator role (You. Yeah, you. You're one of them)</p>
+                        <h3>Prefix</h3>
+                        <p>Using <code><%=config.prefix%></code> as your prefix will continue working.</p>
+                        <textarea type="text" value="..." disabled id="tttie-dash-p"></textarea>
 
-<h3>Prefix</h3>
-<textarea type="text" value="..." disabled id="tttie-dash-p"></textarea>
+                        <h3>Moderator role</h3>
+                        <p>Moderator commands will be restricted to people who have this role, or the ones who have
+                            relevant permissions to run the commands.</p>
+                        <select class="tttie-dashboard-role-picker" disabled id="tttie-dash-mod">
+                            <option value="DASH_LOADING">...</option>
+                        </select>
 
-<h3>Moderator role</h3>
-<input type="text" value="..." disabled id="tttie-dash-mod">
-</div>
+                        
+                        <h3>Modlog channel</h3>
+                        <p>Moderation events run through <%=bot.user.username%> will be sent into the selected channel.</p>
+                        <select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-ml">
+                            <option value="DASH_LOADING">...</option>
+                        </select>
+                    </div>
 
-<div>
-<h1>Farewell and welcome messages</h1>
-<p>These are farewell and welcome messages the bot can send to a specific channel. Both of the events are seperately handled.</p>
+                    <div>
+                        <h1>Farewell and welcome messages</h1>
 
-<h2>Farewell</h2>
-<h3>Message</h3>
-<textarea value="..." disabled id="tttie-dash-fm"></textarea>
-<h3>Channel</h3>
-<select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-fc">
-<option value="DASH_LOADING">...</option>
-</select>
+                        <h3>Farewell message</h3>
+                        <textarea value="..." disabled id="tttie-dash-fm"></textarea>
+                        <h3>Channel to send farewell messages in</h3>
+                        <select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-fc">
+                            <option value="DASH_LOADING">...</option>
+                        </select>
 
+                        <h3>Welcome message</h3>
+                        <textarea value="..." disabled id="tttie-dash-wm"></textarea>
+                        <h3>Channel to send welcome messages in</h3>
+                        <select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-wc">
+                            <option value="DASH_LOADING">...</option>
+                        </select>
+                    </div>
 
-<h2>Welcome</h2>
-<h3>Message</h3>
-<textarea value="..." disabled id="tttie-dash-wm"></textarea>
-<h3>Channel</h3>
-<select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-wc">
-<option value="DASH_LOADING">...</option>
-</select>
-</div>
+                    <div>
+                        <h1>Server rule agreement feature</h1>
+                        <p>This feature adds a requirement for members to type <code><%=config.prefix%>agree</code> in a
+                            channel of your choice.</p>
+                        <h3>Agreement channel</h3>
+                        <p>The command will only run in the selected channel.</p>
+                        <select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-ac">
+                            <option value="DASH_LOADING">...</option>
+                        </select>
 
-<div>
-<h1>Server rule agreement feature</h1>
-<p>This adds a requirement for users to use the <code>agree</code> command in order to view the rest of your server. You will need to set the permissions yourself though.</p>
-<h3>Channel</h3>
-<select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-ac">
-<option value="DASH_LOADING">...</option>
-</select>
-
-<h3>Role</h3>
-<select class="tttie-dashboard-role-picker" disabled id="tttie-dash-mr">
-<option value="DASH_LOADING">...</option>
-</select>
-</div>
-<div>
-<h1>Logging</h1>
-<p>tt.bot features a kind of powerful logging feature. This one will let you choose where you want the logs, and what events you want to log.</p>
-<h3>Channel</h3>
-<select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-loc">
-<option value="DASH_LOADING">...</option>
-</select>
-<h3>Logging types</h3>
-<p>Refer to <a href="">this</a> while modifying this.</p>
-<input type="text" value="..." disabled id="tttie-dash-le"></textarea>
-</div>
-<div>
-<h1>Modlog channel</h1>
-<select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-ml">
-<option value="DASH_LOADING">...</option>
-</select>
-</div>
-</div>
-</div>
-</div>
-<script src="/dashboard/<%=guild.id%>/load.js"></script>
-<script src="/static/js/ttbotapi.js"></script>
-<script src="/static/js/dashboard.js"></script>
+                        <h3>Member role</h3>
+                        <p>The selected role will be given to the people who pass the requirement.</p>
+                        <select class="tttie-dashboard-role-picker" disabled id="tttie-dash-mr">
+                            <option value="DASH_LOADING">...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <h1>Logging</h1>
+                        <h3>Logging channel</h3>
+                        <p>Logs will be sent into this channel.</p>
+                        <select class="tttie-dashboard-channel-picker" disabled id="tttie-dash-loc">
+                            <option value="DASH_LOADING">...</option>
+                        </select>
+                        <h3>Events to log</h3>
+                        <p>Events are separated by semicolons (<code>;</code>). The available choices are:
+                            <ul><% availableLoggingTypes.map(f => { %> <li><code><%=f%></code></li> <%})%></ul></p>
+                        <input type="text" value="..." disabled id="tttie-dash-le"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/dashboard/<%=guild.id%>/load.js"></script>
+        <script src="/static/js/ttbotapi.js"></script>
+        <script src="/static/js/dashboard.js"></script>
 </body>
+
 </html>

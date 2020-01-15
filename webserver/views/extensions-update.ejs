@@ -11,37 +11,37 @@
 <div>
 <h1 id="tttie-title">Extension: Crunching extension data...</h1>
 
-<p>Build your extension here; refer to API documentation for more information.</p>
+<p>Here, you can build your extension.</p>
 </div>
 </div>
 <div class="tttie-changes-buttons">
+<a class="tttie-linkbutton" href="/dashboard/<%=erisGuild.id%>/extensions"><div class="tttie-button">Return to the list</div></a>
 <a class="tttie-linkbutton" id="save"><div class="tttie-button">Save changes</div></a>
 <a class="tttie-linkbutton" id="reset"><div class="tttie-button red">Reset</div></a>
 </div>
 
 <h3>Extension name</h3>
-<p>Here's what you'd like your extension to be called.</p>
 <input type="text" id="tttie-extension-name"></textarea>
 
 <h3>Command trigger</h3>
-<p>This is the command name you would like to use. Keep in mind that native tt.bot commands are prioritized over extensions.</p>
+<p>This is the command name you're going to use to run the extensions. tt.bot's commands are prioritized over extensions.</p>
 <input type="text" id="tttie-extension-cmd"></textarea>
 
 <h3>Allowed roles</h3>
-<p>You can choose what roles would you like to allow to use this extension. However, checking no roles will let everyone use the roles.</p>
+<p>Leaving the listed roles unchecked will let anyone on the server use the extension.</p>
 <div class="tttie-extension-role-list">
-Wait, we are getting the things...
+Wait, we are getting the data...
 </div>
 
 
 <h3>Allowed channels</h3>
-<p>You can choose what channels would you like to allow to use this extension. However, checking no channels will let everyone use the roles.</p>
+<p>Leaving the listed channels unchecked will let the extension run anywhere on the server.</p>
 <div class="tttie-extension-channel-list">
-Wait, we are getting the things...
+Wait, we are getting the data...
 </div>
 
 <h3>Extension code</h3>
-<p>This is the heart of your extension. <%= !isMonaco ? "For compatibility across browsers, we display the default textarea element. Using the default textarea element also uses less data. To switch to a proper code editor" : "You are using the Monaco editor, which might not be compatible on mobile browsers. To use the textarea editor"%>, click <a href="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%><%=isMonaco? '' : '/monaco'%>">here</a></p>
+<p>This is the heart of your extension. <%= !isMonaco ? "For compatibility across browsers, we display the default textarea element. Using the default textarea element also uses less data. To switch to a proper code editor" : "You are using the Monaco editor, which is not compatible with mobile browsers. To use the textarea editor"%>, click <a href="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%><%=isMonaco? '' : '/monaco'%>">here</a></p>
 
 <%if (isMonaco) {%>
     <div class="monaco-container" id="extension-monaco-container"></div>
@@ -51,9 +51,9 @@ Wait, we are getting the things...
     </div>
 <%}%>
 <h3>Store ID</h3>
-<p>This is a powerful feature of tt.bot which allows you to share the storage across extensions. 
+<p>The store under this ID will be used for this extension.
 <%if (extension.id === "new") {%>
-Since you are creating a new extension, to create a new store, leave this field blank.
+To create a new store, leave this field blank.
 <%}%>
 </p>
 <input type="text" id="tttie-extension-store-id"></textarea>

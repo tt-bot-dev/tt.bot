@@ -50,34 +50,34 @@ class ServerCommand extends Command {
                 inline: true
             },
             {
-                name: "Features",
+                name: await ctx.t("FEATURES"),
                 value: await (async () => {
                     let featureStr = "";
                     if (ctx.guild.features.includes("INVITE_SPLASH"))
-                        featureStr += ":cityscape: This server can have an invite splash\n";
+                        featureStr += `:cityscape: ${await ctx.t("ALLOWED_INVITE_SPLASH")}\n`;
                     if (ctx.guild.features.includes("VIP_REGIONS"))
-                        featureStr += ":loud_sound: This server has access to higher-quality voice servers\n";
+                        featureStr += `:loud_sound: ${await ctx.t("ALLOWED_VIP_REGIONS")}\n`;
                     // Please, someone who has access to vanity URLs, if anything breaks, tell me
                     if (ctx.guild.features.includes("VANITY_URL"))
-                        featureStr += `:link: This server can have a ${ctx.guild.vanityURL ? "[" : ""}vanity URL${ctx.guild.vanityURL ? `](https://discord.gg/${ctx.guild.vanityURL})` : ""}\n`;
+                        featureStr += `:link: ${await ctx.t("ALLOWED_VANITY_URL", ctx.guild.vanityURL)}\n`;
                     if (ctx.guild.features.includes("VERIFIED"))
-                        featureStr += ":white_check_mark: This server is verified\n";
+                        featureStr += `:white_check_mark: ${await ctx.t("ALLOWED_VERIFIED")}\n`;
                     if (ctx.guild.features.includes("PARTNERED"))
-                        featureStr += ":star: This server is partnered with Discord\n";
+                        featureStr += `:star: ${await ctx.t("ALLOWED_PARTNERED")}\n`;
                     if (ctx.guild.features.includes("COMMERCE"))
-                        featureStr += ":moneybag: This server has access to commerce features (store channels, for example)\n";
+                        featureStr += `:moneybag: ${await ctx.t("ALLOWED_COMMERCE")}\n`;
                     if (ctx.guild.features.includes("NEWS"))
-                        featureStr += ":newspaper: This server can have announcement channels\n";
+                        featureStr += `:newspaper: ${await ctx.t("ALLOWED_NEWS")}\n`;
                     if (ctx.guild.features.includes("LURKABLE"))
-                        featureStr += ":eyes: This server is lurkable\n";
+                        featureStr += `:eyes: ${await ctx.t("ALLOWED_LURKABLE")}\n`;
                     if (ctx.guild.features.includes("DISCOVERABLE"))
-                        featureStr += ":mag: This server can be found in the server discovery menu\n";
+                        featureStr += `:mag: ${await ctx.t("ALLOWED_DISCOVERABLE")}\n`;
                     if (ctx.guild.features.includes("FEATURABLE"))
-                        featureStr += ":star2: This server can be featured in the server discovery menu\n";
+                        featureStr += `:star2: ${await ctx.t("ALLOWED_FEATURABLE")}\n`;
                     if (ctx.guild.features.includes("ANIMATED_ICON"))
-                        featureStr += ":mountain: This server can have an animated icon\n";
+                        featureStr += `:mountain: ${await ctx.t("ALLOWED_ANIMATED_ICON")}\n`;
                     if (ctx.guild.features.includes("BANNER"))
-                        featureStr += ":sunrise_over_mountains: This server can have a banner\n";
+                        featureStr += `:sunrise_over_mountains: ${await ctx.t("ALLOWED_BANNER")}\n`;
                     return featureStr || await ctx.t("NONE");
                 })()
             }],
