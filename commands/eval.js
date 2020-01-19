@@ -16,14 +16,13 @@ class EvalCommand extends Command {
         let d;
         try {
             d = await new AsyncFunction("ctx", "args",
-                // Thanks JS for not scoping things
                 "require", "__dirname", "__filename", "module", args)
                 .bind(this)(ctx, args, require, __dirname, __filename, module);
         } catch (err) {
             d = err.stack;
         }
         const v = typeof d === "string" ? d : inspect(d);
-        const description = `\`\`\`js\n${v.replace(new CensorBuilder().build(), "no.")}\n\`\`\``;
+        const description = `\`\`\`js\n${v.replace(new CensorBuilder().build(), "/* snip */")}\n\`\`\``;
         if (description.length > 2048) {
             let gist;
             try {
@@ -37,7 +36,7 @@ class EvalCommand extends Command {
                     }
                 });
                 this.log.log(v);
-                return; // we don't replace anything here, because that's console
+                return;
             }
             return await ctx.send({
                 embed: {

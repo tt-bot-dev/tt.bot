@@ -33,7 +33,7 @@ class ManagementCommand extends OwnerCommand {
                     description: "the command"
                 }]
             }),
-            description: "Manages the commands."
+            description: "Manages the commands.",
         });
     }
 
@@ -92,7 +92,7 @@ class ManagementCommand extends OwnerCommand {
                         title: `:x: Cannot load ${what} because I cannot access it`,
                         description: "Please check (and fix) your filesystem permissions.",
                         footer: {
-                            text: "Keep in mind, that the paths are relative to your working directory."
+                            text: "Keep in mind that the paths are relative to your working directory."
                         },
                         color: 0xFF0000
                     }

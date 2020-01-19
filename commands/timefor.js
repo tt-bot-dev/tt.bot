@@ -19,7 +19,8 @@ class TimeForCommand extends Command {
                     description: "the user to get the time for"
                 }]
             }),
-            description: "Gets the current time of a user."
+            description: "Gets the current time of a user.",
+            aliases: ["tf"]
         });
     }
 

@@ -32,12 +32,12 @@ class HelpCommand extends Command {
                     },
                     fields: [{
                         name: await ctx.t("HELP_ARGUMENTS"),
-                        value: `${command.argParser ? `\`${command.argParser.provideUsageString(false) || command.args}\`` : `\`${command.args}\``}
+                        value: `${command.argParser ? `\`${command.argParser.provideUsageString(false) || command.args}\`` : (command.args ? `\`${command.args}\`` : "")}
 
 ${command.argParser ? command.argParser.provideUsageString(true) : ""}`.trim() || await ctx.t("NONE"),
                     }, {
                         name: await ctx.t("HELP_ALIASES"),
-                        value: "NOT_IMPLEMENTED",
+                        value: command.aliases.join(", ") || await ctx.t("NONE"),
                         inline: true
                     }, {
                         name: await ctx.t("HELP_DESCRIPTION"),

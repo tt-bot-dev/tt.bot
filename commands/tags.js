@@ -37,7 +37,8 @@ class TagCommand extends Command {
                 }],
                 separator: " "
             }),
-            description: "Store some data for later retrieval. Keep in mind that the tags are global and accessible by everyone."
+            description: "Store some data for later retrieval. Keep in mind that the tags are global and accessible by everyone.",
+            aliases: ["t"]
         });
     }
 

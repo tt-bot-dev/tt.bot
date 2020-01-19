@@ -1,6 +1,7 @@
 "use strict";
 const { Command, SerializedArgumentParser,
     Serializers: { User } } = require("sosamba");
+const userByID = require("../lib/util/userByID");
 
 class AvatarCommand extends Command {
     constructor(sosamba, ...args) {
@@ -11,11 +12,12 @@ class AvatarCommand extends Command {
                     default: ctx => ctx.author,
                     rest: true,
                     name: "user",
-                    type: User,
+                    type: [User, userByID],
                     description: "the user to get the avatar from"
                 }]
             }),
-            description: "Gets someone's avatar."
+            description: "Gets someone's avatar.",
+            aliases: ["avatar"]
         });
     }
 
@@ -23,13 +25,12 @@ class AvatarCommand extends Command {
         await ctx.send({
             embed: {
                 author: {
-                    name: `${user.nick ? user.nick : user.username} (${user.username}#${user.discriminator})'s avatar`,
-                    icon_url: this.sosamba.user.staticAvatarURL
+                    name: `${this.sosamba.getTag(user)}'s avatar`
                 },
                 image: {
                     url: user.avatarURL
                 },
-                description: await ctx.t("AVATAR_NOT_LOADING", user.user.dynamicAvatarURL("png", 2048))
+                description: await ctx.t("AVATAR_NOT_LOADING", user.dynamicAvatarURL("png", 2048))
             }
         });
     }

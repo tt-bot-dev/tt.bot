@@ -197,7 +197,8 @@ ConfigMenu.DISABLE = "❌";
 class ConfigCommand extends Command {
     constructor(...args) {
         super(...args, {
-            name: "config"
+            name: "config",
+            description: "Lets you manage what I know about your server."
         });
     }
 

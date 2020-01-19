@@ -23,8 +23,8 @@ class ExecCommand extends Command {
                 rs(Buffer.concat(b).toString());
             };
             const s = spawn(cmd, args, {
-                windowsHide: true, // Do not create a window if run inside PM2
-                stdio: ["ignore", "pipe", "pipe"], // Do not pipe stdin
+                windowsHide: true,
+                stdio: ["ignore", "pipe", "pipe"],
                 shell: true,
                 env: Object.assign({}, process.env, {
                     TERM: "dumb"
@@ -43,7 +43,7 @@ class ExecCommand extends Command {
         try { overall = await this.exec(args); }
         catch (err) { overall = err.message; this.log.error(err.stack); }
         const censor = new CensorBuilder();
-        let description = `\`\`\`\n${overall.replace(censor.build(), "no.").replace(ANSIRegex, "")}\n\`\`\``;
+        let description = `\`\`\`\n${overall.replace(censor.build(), "/* snip */").replace(ANSIRegex, "")}\n\`\`\``;
         if (description.length > 2048) {
             let gist;
             try {

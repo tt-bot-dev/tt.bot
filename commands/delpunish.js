@@ -11,7 +11,7 @@ class RemoveStrikeCommand extends Command {
             argParser: new SimpleArgumentParser(sosamba, {
                 separator: " "
             }),
-            description: "Remove a strike from a user."
+            description: "Removes a strike from a user."
         });
     }
 

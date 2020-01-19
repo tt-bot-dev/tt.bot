@@ -14,7 +14,8 @@ class StrikeListCommand extends Command {
                     description: "The user to get the strikes for"
                 }]
             }),
-            description: "Gets user's strikes."
+            description: "Gets user's strikes.",
+            aliases: ["warns"]
         });
     }
 

@@ -32,6 +32,7 @@ class UserCommand extends Command {
                 thumbnail: {
                     url: user.user.avatarURL
                 },
+                /* ==== Do we apply for presence events or not? ==== */
                 fields: [{
                     name: await this.getStatusType(user, ctx),
                     value: await (async () => {
@@ -53,7 +54,9 @@ class UserCommand extends Command {
                     name: await ctx.t("STATUS"),
                     value: await this.getStatus(user, ctx),
                     inline: true
-                }, {
+                }, 
+                /* ==== end of possible snip ==== */
+                {
                     name: await ctx.t("ROLES"),
                     value: roles.join(", ").length > 1024 ? await ctx.t("TOOLONG") : roles.join(", "),
                     inline: false

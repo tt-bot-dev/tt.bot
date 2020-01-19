@@ -43,7 +43,8 @@ class ClearCommand extends Command {
                     description: "determines whether all above settings should be inverted."
                 }
             }),
-            description: "Clears the desired number of messages."
+            description: "Clears the desired number of messages.",
+            aliases: ["clean"]
         });
     }
 

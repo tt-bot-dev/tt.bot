@@ -5,7 +5,8 @@ class ServerCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "serverinfo",
-            description: "Shows the information about the server."
+            description: "Shows the information about the server.",
+            aliases: ["server"]
         });
     }
 
@@ -20,34 +21,27 @@ class ServerCommand extends Command {
             fields: [{
                 name: await ctx.t("MEMBERS"),
                 value: await ctx.t("MEMBER_COUNT", ctx.guild.memberCount),
-                inline: true
             },
             {
                 name: await ctx.t("OWNER"),
                 value: this.sosamba.getTag(ctx.guild.members.get(ctx.guild.ownerID)),
-                inline: true
             }, {
                 name: await ctx.t("GUILD_VERIFICATION_LEVEL"),
                 value: await this.getGuildVerification(ctx),
-                inline: true
             }, {
                 name: await ctx.t("REQUIRES_ADMIN_MFA"),
                 value: ctx.guild.mfaLevel === 1 ? await ctx.t("YES") : await ctx.t("NO"),
-                inline: true
             }, {
                 name: await ctx.t("ROLES"),
                 value: await ctx.t("ROLE_COUNT", ctx.guild.roles.size),
-                inline: true
             }, {
                 name: await ctx.t("EXPLICIT_FILTERING"),
                 value: await this.getExplicitContent(ctx),
-                inline: true
             }, {
                 name: await ctx.t("DEFAULT_NOTIFICATIONS"),
                 value: ctx.guild.defaultNotifications === 1
                     ? await ctx.t("ONLY_MENTIONS")
                     : await ctx.t("ALL_MESSAGES"),
-                inline: true
             },
             {
                 name: await ctx.t("FEATURES"),
@@ -86,9 +80,7 @@ class ServerCommand extends Command {
 **${await ctx.t("VOICE_REGION")}**: ${ctx.guild.region}
 **${await ctx.t("AFK_TIMEOUT")}**: ${await ctx.t("AFK_MINUTES", ctx.guild.afkTimeout)}
 **Nitro Boosters**: ${ctx.guild.premiumSubscriptionCount} (Level ${ctx.guild.premiumTier})`,
-            image: {
-                url: `https://cdn.discordapp.com/splashes/${ctx.guild.id}/${ctx.guild.splash}.png?size=2048`
-            },
+            
             footer: {
                 text: await ctx.t("CREATED_ON")
             },
@@ -96,6 +88,11 @@ class ServerCommand extends Command {
             color: 0x008800
         };
 
+        if (ctx.guild.splash) {
+            splash["image"] = {
+                url: `https://cdn.discordapp.com/splashes/${ctx.guild.id}/${ctx.guild.splash}.png?size=2048`
+            };
+        }
         await ctx.send({ embed });
     }
 

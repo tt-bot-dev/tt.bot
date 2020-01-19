@@ -11,7 +11,7 @@ class UpdateReasonCommand extends Command {
             argParser: new SimpleArgumentParser(sosamba, {
                 separator: " "
             }),
-            description: "Remove a strike from a user."
+            description: "Updates the reason for a strike."
         });
     }
 

@@ -18,7 +18,8 @@ class StrikeCommand extends Command {
                     description: "the strike reason",
                     default: "No reason provided."
                 }
-            })
+            }),
+            aliases: ["warn"]
         });
     }
 

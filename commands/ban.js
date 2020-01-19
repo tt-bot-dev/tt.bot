@@ -1,5 +1,5 @@
 "use strict";
-const { SwitchArgumentParser, Serializers: { User } } = require("sosamba");
+const { SwitchArgumentParser, Serializers: { Member } } = require("sosamba");
 const Command = require("../lib/commandTypes/ModCommand");
 
 class BanCommand extends Command {
@@ -8,7 +8,7 @@ class BanCommand extends Command {
             name: "ban",
             argParser: new SwitchArgumentParser(sosamba, {
                 user: {
-                    type: User,
+                    type: Member,
                     description: "the user to ban"
                 },
                 reason: {
@@ -32,10 +32,10 @@ class BanCommand extends Command {
 
     async run(ctx, {user, reason, soft}) {
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
-            await user.ban(1, `${bot.getTag(ctx.author)}: ${reason}`);
-            if (soft) await user.unban();
-            bot.modLog.addBan(user.id, ctx.msg, reason, soft);
-            await ctx.send(await ctx.t(`${soft ? "SOFT": ""}BAN_DONE`, user));
+            await ctx.guild.banMember(user.id, 1, `${this.sosamba.getTag(ctx.author)}: ${reason}`);
+            if (soft) await ctx.guild.unbanMember(user.id);
+            this.sosamba.modLog.addBan(user.id, ctx, reason, soft);
+            await ctx.send(await ctx.t(`${soft ? "SOFT": ""}BAN_DONE`, user.user));
         } else {
             ctx.send(await ctx.t("ROLE_HIERARCHY_ERROR"));
         }

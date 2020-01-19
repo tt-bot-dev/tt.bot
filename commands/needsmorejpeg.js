@@ -24,7 +24,8 @@ class JPEGCommand extends Command {
                     }
                 ]
             }),
-            description: "Do your pictures need more JPEG? :eyes: Give them to us and we'll handle it for you!"
+            description: "Do your pictures need more JPEG? :eyes: Give them to us and we'll handle it for you!",
+            aliases: ["jpg"]
         });
     }
 

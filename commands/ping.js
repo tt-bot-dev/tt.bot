@@ -5,7 +5,8 @@ class PingCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "ping",
-            description: "Shows my latency to Discord."
+            description: "Shows my latency to Discord.",
+            aliases: ["pong"]
         });
     }
 

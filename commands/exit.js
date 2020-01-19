@@ -15,6 +15,9 @@ class ExitCommand extends Command {
             menu.stopCallback(STOP_REASONS.SHUTDOWN);
         });
         this.sosamba.messageListeners.clear();
+        this.sosamba.disconnect({
+            reconnect: false
+        });
         await ctx.send(":wave:");
         process.exit(0);
     }
