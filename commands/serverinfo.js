@@ -89,7 +89,7 @@ class ServerCommand extends Command {
         };
 
         if (ctx.guild.splash) {
-            splash["image"] = {
+            embed["image"] = {
                 url: `https://cdn.discordapp.com/splashes/${ctx.guild.id}/${ctx.guild.splash}.png?size=2048`
             };
         }
