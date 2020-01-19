@@ -1,10 +1,10 @@
-# Selfhosting guide for tt.bot v3.2.0
+# Selfhosting guide for tt.bot v4.0.0
 > If you want to upgrade instead, go [here][upgrading guide]
 ## Prerequisites
 - Basic sysadmin knowledge
 - [node.js], preferrably version 10 and above
 - [Git]
-- [RethinkDB]
+- The database required to run the DB provider (officially supported is [RethinkDB])
 - Tools required to build native node modules: check the [node-gyp] repository for more information; additional configuration might be required.
 - [Yarn] (optional)
 - A VPS or a spare machine if you want to run your bot 24/7
@@ -29,9 +29,9 @@ Then, run this in your terminal/command prompt.
 $ npm i
 ```
 > If you use Yarn, run this command instead:
-    ```
-    $ yarn
-    ```
+> ```
+> $ yarn
+> ```
 
 ### 4. Run the bot
 Run this in your terminal/command prompt.

@@ -8,12 +8,12 @@ This currently works with:
 # Documentation
 ## User related ttMsg tags
 - `{u.mention}` - Mentions the user.
-- `{u.name}` - Returns the user's username.
-- `{u.discrim}` - Returns user's 4digit number.
+- `{u.name}` - the user's username.
+- `{u.discrim}` - user's discriminator (4digit number).
 - `{u.id}` - Returns user's ID.
 - `{u.tag}` - A convenience shortcut for `{u.name}#{u.discrim}`.
 ## Server related ttMsg tags
-- `{g.name}` - Returns the server name.
-- `{g.id}` - Returns the server ID.
+- `{g.name}` - the server name.
+- `{g.id}` - the server ID.
 - `{g.channels}` - Channel count of the server.
-- `{g.members}` - Member count of the server.
+- `{g.members}` - Member count of the server (prior to v4, how much members in the server the bot knows).

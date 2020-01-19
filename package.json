@@ -37,8 +37,8 @@
     "scripts": {
         "test": "eslint .",
         "install": "node scripts/dbsetup",
-        "db-setup": "node scripts/dbsetup",
-        "uglify": "node scripts/uglify"
+        "db:setup": "node scripts/dbsetup",
+        "web:uglify": "node scripts/uglify"
     },
     "repository": {
         "type": "git",

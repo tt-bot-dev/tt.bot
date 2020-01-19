@@ -16,9 +16,9 @@ Now pull the latest dependencies:
 npm i
 ```
 > If you use Yarn, run this command instead:
-    ```
-    $ yarn
-    ```
+> ```
+> $ yarn
+> ```
 
 Some additional configuration might be needed. Compare `exampleconfig.js` and `config.js` and add the properties as needed.
 
