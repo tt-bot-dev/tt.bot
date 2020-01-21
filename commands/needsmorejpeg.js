@@ -2,6 +2,7 @@
 const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
 const URLRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/;
 const ImageExtensionRegex = /\.(?:png|jpg|bmp)$/i;
+const { read, MIME_JPEG } = require("jimp");
 
 class JPEGCommand extends Command {
     constructor(sosamba, ...args) {
@@ -36,15 +37,14 @@ class JPEGCommand extends Command {
         }
 
         await ctx.channel.sendTyping();
-        const { read, MIME_JPEG } = require("jimp");
         let image;
         try {
             image = await read(url);
         } catch (err) {
             await ctx.send({
                 embed: {
-                    title: ":x: Cannot JPEG-ify the image",
-                    description: "The image cannot be fetched.",
+                    title: await ctx.t("CANNOT_JPEGIFY"),
+                    description: await ctx.t("CANNOT_FETCH_IMAGE"),
                     color: 0xFF0000
                 }
             });
@@ -57,8 +57,8 @@ class JPEGCommand extends Command {
         } catch (err) {
             await ctx.send({
                 embed: {
-                    title: ":x: Cannot JPEG-ify the image due to an internal error",
-                    description: "We're sorry for that.",
+                    title: await ctx.t("CANNOT_JPEGIFY_INTERNAL_ERROR"),
+                    description: await ctx.t("SORRY"),
                     color: 0xFF0000
                 }
             });

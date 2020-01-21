@@ -97,7 +97,8 @@ module.exports = function (db, bot, config) {
                 guild: data,
                 erisGuild: g,
                 pageTitle: g.name,
-                availableLoggingTypes: availableTypes
+                availableLoggingTypes: availableTypes,
+                locales: Object.keys(bot.i18n.languages)
             }));
         }
     });

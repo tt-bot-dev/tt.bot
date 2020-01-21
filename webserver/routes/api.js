@@ -56,7 +56,8 @@ module.exports = (app, csrf, db) => {
                 "memberRole",
                 "logChannel",
                 "logEvents",
-                "modlogChannel"];
+                "modlogChannel",
+                "locale"];
             const filteredBody = {};
             Object.keys(rq.body).filter(k => props.includes(k)).forEach(k => {
                 filteredBody[k] = rq.body[k] || null;

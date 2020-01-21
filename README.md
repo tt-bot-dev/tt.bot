@@ -2,8 +2,7 @@
 [![Discord][discord shield]][discord invite] [![Add me!][tt.bot add shield]][tt.bot invite]
 [![Build Status][gh shield]][gh]
 
-tt.bot is a bot with aim for moderation and fun written in JavaScript using [Node.js] and [Eris] library.  
-Also a real life example of [Sosamba] usage.
+tt.bot is a bot with aim for moderation and utilities written in JavaScript using [Node.js] and the [Sosamba] framework based on the [Eris] library.
 
 # Features
 Check a special page for [tt.bot](https://tttie.github.io/ttbot)
@@ -20,4 +19,4 @@ Read the documentation page [here](./docs/Selfhosting.md)
 [gh]: https://github.com/tt-bot-dev/tt.bot/actions
 [Node.js]: https://nodejs.org
 [Eris]: https://github.com/abalabahaha/eris
-[sosamba]: https://github.com/tt-bot-dev/sosamba
+[Sosamba]: https://github.com/tt-bot-dev/sosamba

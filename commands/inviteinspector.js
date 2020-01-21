@@ -6,7 +6,8 @@ class InviteInspectorCommand extends Command {
         super(...args, {
             name: "inviteinspector",
             args: "<invite code>",
-            description: "Gets information about an invite."
+            description: "Gets information about an invite.",
+            aliases: ["iinspector"]
         });
     }
 
@@ -22,9 +23,9 @@ class InviteInspectorCommand extends Command {
                         author: {
                             name: await ctx.t("OOPS")
                         },
-                        description: "I cannot get the information about the invite because I'm banned from there.",
+                        description: await ctx.t("CANNOT_GET_INVITE_BANNED"),
                         footer: {
-                            text: "Please contact the invite authors to unban me and try again."
+                            text: await ctx.t("CONTACT_GUILD_ADMIN")
                         }
                     }
                 });

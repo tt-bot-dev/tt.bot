@@ -25,7 +25,7 @@ class AvatarCommand extends Command {
         await ctx.send({
             embed: {
                 author: {
-                    name: `${this.sosamba.getTag(user)}'s avatar`
+                    name: await ctx.t("USER_AVATAR", this.sosamba.getTag(user))
                 },
                 image: {
                     url: user.avatarURL

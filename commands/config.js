@@ -87,9 +87,13 @@ class ConfigMenu extends ReactionMenu {
             else if (propInfo.type === "channel") toSave = (await channel(resp.msg.content, this.ctx, {
                 textOnly: true
             })).id;
-        } catch {
+            if (typeof propInfo.validation === "function"
+                && (await propInfo.validation(toSave, this.ctx)) === false) throw new Error();
+        } catch (err) {
+            console.error(err);
             await m.edit(await this.ctx.t("OP_CANCELLED"));
             await this.showSubMenu(prop, true);
+            return;
         }
         await (this.ctx.guildConfig = { [prop]: toSave });
         await m.delete();
@@ -172,6 +176,7 @@ ConfigMenu.MEMBER = "👥";
 ConfigMenu.LOGCHANNEL = "🗒";
 ConfigMenu.LOGEVENTS = ConfigMenu.SUB_MENU_ACTION_EDIT = "📝";
 ConfigMenu.MODLOG = "🛠";
+ConfigMenu.LOCALE = "🗣️";
 ConfigMenu.States = {
     MAIN_MENU: 0,
     SUB_MENU: 1,
@@ -189,7 +194,8 @@ ConfigMenu.EmojiPropMap = {
     [ConfigMenu.MEMBER]: "memberRole",
     [ConfigMenu.LOGCHANNEL]: "logChannel",
     [ConfigMenu.LOGEVENTS]: "logEvents",
-    [ConfigMenu.MODLOG]: "modlogChannel"
+    [ConfigMenu.MODLOG]: "modlogChannel",
+    [ConfigMenu.LOCALE]: "locale"
 };
 ConfigMenu.HOME = "🏠";
 ConfigMenu.DISABLE = "❌";

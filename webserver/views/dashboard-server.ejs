@@ -43,6 +43,13 @@
                         <select class="tttie-dashboard-role-picker" disabled id="tttie-dash-mod">
                             <option value="DASH_LOADING">...</option>
                         </select>
+                        <h3>Locale</h3>
+                        <p>tt.bot will speak in this language when the user hasn't configured a profile.</p>
+                        <select id="tttie-dash-locale">
+                            <% for (const locale of locales) {%>
+                                <option value="<%=locale%>"><%=locale%></option>
+                            <%}%>
+                        </select>
 
                         
                         <h3>Modlog channel</h3>

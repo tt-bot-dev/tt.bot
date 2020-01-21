@@ -38,6 +38,8 @@
         for (const opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-loc option")) if (opt.selected === true) logChannel = opt.value;
         let modlogChannel;
         for (const opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-ml option")) if (opt.selected === true) modlogChannel = opt.value;
+        let locale;
+        for (const opt of document.querySelectorAll("select#tttie-dash-locale option")) if (opt.selected === true) locale = opt.value;
         cb({
             prefix,
             modRole,
@@ -49,7 +51,8 @@
             memberRole,
             logEvents,
             logChannel,
-            modlogChannel
+            modlogChannel,
+            locale
         });
     }
     function setValues(cfg) {
@@ -69,6 +72,7 @@
         for (const opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-loc option")) if (opt.value === cfg.logChannel) opt.selected = true;
         for (const opt of document.querySelectorAll("select.tttie-dashboard-role-picker#tttie-dash-mr option")) if (opt.value === cfg.memberRole) opt.selected = true;
         for (const opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-ml option")) if (opt.value === cfg.modlogChannel) opt.selected = true;
+        for (const opt of document.querySelectorAll("select#tttie-dash-locale option")) if (opt.value === cfg.locale) opt.selected = true;
         inputP.disabled = false;
         inputMod.disabled = false;
         inputFm.disabled = false;

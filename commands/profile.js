@@ -41,7 +41,7 @@ class ProfileCommand extends Command {
             }
         } else if (action === SetupSymbol) {
             if (!(await ctx.userProfile).fake) return ctx.send("you have a profile!");
-            await ctx.send("Hello there! Would you like to set your profile up before I create one? Type y or yes if you want to, n or no if you don't. You have 10 seconds to answer.\n\nKeep in mind that you can still modify the values using other subcommands.");
+            await ctx.send(await ctx.t("PROFILE_CREATE_SETUP"));
             const { response, context } = await ctx.askYesNo(true);
             const profile = {
                 id: ctx.author.id
@@ -50,7 +50,7 @@ class ProfileCommand extends Command {
             if (response) {
                 try { await context.msg.delete(); }
                 catch {/**/ }
-                await ctx.send("What is your timezone? This timezone should be a valid entry in the IANA timezone DB (check <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List> for a list of them)\nYou have 30 seconds to answer. Type \"none\" if you don't want to set one yet.");
+                await ctx.send(await ctx.t("PROFILE_CREATE_TIMEZONE"));
                 const m = await ctx.waitForMessage(async ctx => {
                     if (ctx.msg.content.toLowerCase() === "none") return true;
                     if (!moment.tz.zone(ctx.msg.content)) {
@@ -63,7 +63,7 @@ class ProfileCommand extends Command {
                 try { await m.msg.delete(); }
                 catch {/**/ }
 
-                await ctx.send(`Which language do you speak? Here are the available languages: ${Object.keys(this.sosamba.i18n.languages).join(", ")}\nIn case it is not listed or don't want to set a language yet, type "none". You have 30 seconds to choose.\nYou can help us contributing languages on GitHub: <https://github.com/tt-bot-dev/languages>`);
+                await ctx.send(await ctx.t("PROFILE_CREATE_LOCALE"));
                 const m2 = await ctx.waitForMessage(async ctx => {
                     if (ctx.msg.content.toLowerCase() === "none") return true;
                     if (!Object.prototype.hasOwnProperty
@@ -83,7 +83,7 @@ class ProfileCommand extends Command {
             await ctx.send(await ctx.t("PROFILE_CREATED"));
         } else if (action === TimezoneSymbol) {
             if (!arg) {
-                await ctx.send(`Your current timezone is ${(await ctx.userProfile).timezone}.\nIn order to change it, provide a timezone as an argument.`);
+                await ctx.send(await ctx.t("PROFILE_TIMEZONE", (await ctx.userProfile).timezone));
             } else {
                 if (!moment.tz.zone(arg)) {
                     await ctx.send(await ctx.t("INVALID_TIMEZONE"));
