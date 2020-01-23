@@ -19,7 +19,7 @@ class CommandErrorEvent extends Event {
                     description: `I am unable to run the command because of a coding error:\n\`\`\`js\n${e.stack}\n\`\`\``,
                     color: 0xFF0000,
                     footer: {
-                        text: `Please tell the command developers about this. | tt.bot v${version} running on Sosamba v${sosambaVersion}`
+                        text: `Please report this issue on our support server or on GitHub. | tt.bot v${version} running on Sosamba v${sosambaVersion}`
                     }
                 }
             });
