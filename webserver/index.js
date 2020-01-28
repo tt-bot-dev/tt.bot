@@ -58,11 +58,6 @@ module.exports = function (db, bot, config) {
     app.get("/", (rq, rs) => {
         rs.render("landing", rq.makeTemplatingData());
     });
-
-    app.get("/test", (_, __, nx) => {
-        nx(new Error());
-    });
-
     app.get("/acceptcookie", (rq, rs) => {
         const p = rq.query.redir || "/";
         const { host } = rq.headers;
