@@ -21,7 +21,7 @@ module.exports = (app, bot, log) => {
         log.debug(`${rq.method} ${rq.url}`);
         rq.bot = bot;
         rs.redirect = (...args) => redirect(rs, ...args);
-        rq.protocol = rq.headers["X-Forwarded-Proto"] || (rq.connection.encrypted ? "https" : "http");
+        rq.protocol = rq.headers["x-forwarded-proto"] || (rq.connection.encrypted ? "https" : "http");
         rs.status = status => void (rs.statusCode = status);
         rs.send = body => send(rs, rs.statusCode, body);
         rs.sendStatus = code => {
