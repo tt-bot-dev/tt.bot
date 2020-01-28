@@ -49,14 +49,14 @@ class ReadyEvent extends Event {
     }
     async postStats() {
         if (botsGGKey) try {
-            await this.sosamba.postStatsTo(botsGGKey, `https://discord.bots.gg/api/v1/bots/${this.user.id}/stats`, {
+            await this.sosamba.postStatsTo(botsGGKey, `https://discord.bots.gg/api/v1/bots/${this.sosamba.user.id}/stats`, {
                 guildCount: this.sosamba.guilds.size
             });
         } catch (err) {
             this.posterLog.error("Cannot POST to bots.gg :(", err.body);
         }
         if (topGGKey) try {
-            await this.sosamba.postStatsTo(topGGKey, `https://discordbots.org/api/bots/${this.user.id}/stats`);
+            await this.sosamba.postStatsTo(topGGKey, `https://discordbots.org/api/bots/${this.sosamba.user.id}/stats`);
         } catch (err) {
             this.posterLog.error("Cannot post to top.gg :(", err.body);
         }
