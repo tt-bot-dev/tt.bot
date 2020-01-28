@@ -103,7 +103,7 @@
             }
         }
         for (const opt of inputMod.querySelectorAll("option")) {
-            if (opt.value === cfg.memberRole) {
+            if (opt.value === cfg.modRole) {
                 opt.selected = true;
                 break;
             }
