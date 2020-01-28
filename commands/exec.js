@@ -42,7 +42,7 @@ class ExecCommand extends Command {
         let overall;
         try { overall = await this.exec(args); }
         catch (err) { overall = err.message; this.log.error(err.stack); }
-        const censor = new CensorBuilder();
+        const censor = new CensorBuilder([], this.sosamba);
         let description = `\`\`\`\n${overall.replace(censor.build(), "/* snip */").replace(ANSIRegex, "")}\n\`\`\``;
         if (description.length > 2048) {
             let gist;

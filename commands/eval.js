@@ -22,7 +22,7 @@ class EvalCommand extends Command {
             d = err.stack;
         }
         const v = typeof d === "string" ? d : inspect(d);
-        const description = `\`\`\`js\n${v.replace(new CensorBuilder().build(), "/* snip */")}\n\`\`\``;
+        const description = `\`\`\`js\n${v.replace(new CensorBuilder([], this.sosamba).build(), "/* snip */")}\n\`\`\``;
         if (description.length > 2048) {
             let gist;
             try {

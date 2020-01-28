@@ -27,7 +27,7 @@ class RunExtensionCommand extends Command {
         });
         let d = err || "Ran successfully!";
         const v = typeof d === "string" ? d : inspect(d);
-        const description = `\`\`\`js\n${v.replace(new CensorBuilder().build(), "no.")}\n\`\`\``;
+        const description = `\`\`\`js\n${v.replace(new CensorBuilder([], this.sosamba).build(), "no.")}\n\`\`\``;
         if (description.length > 2048) {
             let gist;
             try {
