@@ -3,26 +3,35 @@
 <%- include("./partials/head") %>
 
 <body>
-    <div class="tttie-container">
-        <%- include("./partials/header") %>
-        <div class="tttie-body">
-            <div class="tttie-center">
-                <div>
-                    <h1>Welcome to <%=bot.user.username%>'s dashboard!</h1>
-                    <p><%=bot.user.username%> is an instance of tt.bot, an open-source moderation/utility Discord bot.
-                    </p>
-                    <div class="tttie-center">
-                        <a class="tttie-linkbutton" href="https://github.com/tt-bot-dev/tt.bot">
-                            <div class="tttie-button">tt.bot's GitHub repository</div>
-                        </a>
-                        <a class="tttie-linkbutton" href="https://github.com/tt-bot-dev/sosamba">
-                            <div class="tttie-button">Sosamba's GitHub repository (the heart of tt.bot)</div>
-                        </a>
-                    </div>
+    <section class="hero is-fullheight is-primary">
+        <div class="hero-head"><%- include("./partials/header", { isLanding: true }) %></div>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <img class="bot-image is-round" src="<%=bot.user.dynamicAvatarURL("png", 2048)%>">
+                <h1 class="title is-1 is-size-3-mobile"><%=bot.user.username%></h1>
+                <em>an instance of tt.bot, an open-source moderation/utility Discord bot, powered by the Sosamba
+                    framework.</em>
+                <div class="hero-buttons">
+                    <a href="https://discordapp.com/oauth2/authorize?client_id=<%=config.clientID%>&scope=bot"
+                        class="button is-large is-primary">
+                        <span class="icon"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                        <span>Add to a server</span>
+                    </a>
+                </div>
+                <div class="hero-buttons">
+                    <a class="button" href="https://github.com/tt-bot-dev/tt.bot">
+                        <span class="icon"><i class="fab fa-github" aria-hidden="true"></i></span>
+                        <span>tt.bot's GitHub</span>
+                    </a>
+                    <a class="button" href="https://github.com/tt-bot-dev/sosamba">
+                        <span class="icon"><i class="fab fa-github" aria-hidden="true"></i></span>
+                        <span>Sosamba's GitHub</span>
+                    </a>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+    <%- include("partials/footer") %>
 </body>
 
 </html>

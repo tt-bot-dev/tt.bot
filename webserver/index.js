@@ -20,7 +20,8 @@ const e = require("polka"),
     }),
     { Logger } = require("sosamba"),
     serveStatic = require("./util/static"),
-    {availableTypes} = require("../lib/logging");
+    { availableTypes } = require("../lib/logging"),
+    UserProfile = require("../lib/Structures/UserProfile");
 
 
 module.exports = function (db, bot, config) {
@@ -57,6 +58,10 @@ module.exports = function (db, bot, config) {
     app.get("/", (rq, rs) => {
         rs.render("landing", rq.makeTemplatingData());
     });
+
+    app.get("/test", (_, __, nx) => {
+        nx(new Error());
+    })
 
     app.get("/acceptcookie", (rq, rs) => {
         const p = rq.query.redir || "/";
@@ -101,6 +106,13 @@ module.exports = function (db, bot, config) {
                 locales: Object.keys(bot.i18n.languages)
             }));
         }
+    });
+
+    app.get("/profile/load.js", checkAuth(), csrfProtection(), async (rq, rs) => {
+        rs.setHeader("Content-Type", "application/javascript");
+        return rs.render("cspprofile", {
+            csrfToken: rq.csrfToken()
+        }, false);
     });
 
     app.get("/dashboard/:id/load.js", checkAuth(), csrfProtection(), async (rq, rs) => {
@@ -230,33 +242,25 @@ module.exports = function (db, bot, config) {
         }
     });
 
-    app.get("/dashboard/:id/extensions/:extension/delete", checkAuth(), async (rq, rs) => {
-        const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id === rq.params.id)) return rs.sendStatus(403);
-        else {
-            const g = bot.guilds.get(rq.params.id);
-            const extension = await db.getGuildExtension(rq.params.extension);
-            if (!extension || (extension && extension.guildID !== g.id)) {
-                rs.status(404);
-                return rs.render("404", rq.makeTemplatingData({
-                    pageTitle: "404"
-                }));
-            }
-
-            rs.render("extensions-delete", rq.makeTemplatingData({
-                erisGuild: g,
-                extension: {
-                    name: extension.name,
-                    id: extension.id,
-                    store: extension.store
-                },
-                isMonaco: false
+    app.get("/profile", checkAuth(), async (rq, rs) => {
+        const profileData = await db.getUserProfile(rq.user.id);
+        if (!profileData) {
+            return rs.render("profile-create", rq.makeTemplatingData({
+                pageTitle: "Profile",
+                locales: Object.keys(bot.i18n.languages),
+            }));
+        } else {
+            const profile = new UserProfile(profileData);
+            return rs.render("profile", rq.makeTemplatingData({
+                pageTitle: "Profile",
+                locales: Object.keys(bot.i18n.languages),
+                profile
             }));
         }
-    });
+    })
 
-    app.get("/logout", checkAuth(), function (req, res) {
-        logout(req, res);
+    app.get("/logout", checkAuth(), async function (req, res) {
+        await logout(req, res);
         res.redirect("/");
     });
 

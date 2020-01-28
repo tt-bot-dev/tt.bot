@@ -12,7 +12,8 @@ const config = require("../../config"),
     redirect = require("@polka/redirect"),
     { STATUS_CODES } = require("http"),
     { sign } = require("cookie-signature"),
-    { serialize } = require("cookie");
+    { serialize } = require("cookie"),
+    { version } = require("../../package.json");
 module.exports = (app, bot, log) => {
 
     const sessionStore = new SessionStore(bot.db, log, {});
@@ -60,7 +61,7 @@ module.exports = (app, bot, log) => {
         };
         nx();
     });
-    app.use("/static", serveStatic(app, `${__dirname}/../static`));
+    if (config.serveStatic) app.use("/static", serveStatic(app, `${__dirname}/../static`));
     app.use(body.urlencoded({
         extended: true,
         parameterLimit: 10000,
@@ -70,20 +71,19 @@ module.exports = (app, bot, log) => {
         parameterLimit: 10000,
         limit: "5mb"
     }));
-    app.use((rq, rs, nx) => {
+    app.use((rq, _, nx) => {
         rq.makeTemplatingData = function (...objects) {
             let obj = {
                 user: rq.signedIn ? {
-                    username: rq.user.username,
-                    discriminator: rq.user.discriminator,
+                    ...rq.user,
                     avatar: rq.user.avatar ? `https://cdn.discordapp.com/avatars/${rq.user.id}/${rq.user.avatar}.png` : `https://cdn.discordapp.com/embed/avatars/${rq.user.discriminator % 5}.png`,
-                    id: rq.user.id
                 } : null,
                 pageTitle: "",
                 isHTTP: !rq.secure,
                 host: rq.headers.host,
                 bot: rq.bot,
-                config
+                config,
+                ttbotVersion: version
             };
             if (objects.length === 0) return obj;
             return Object.assign(obj, ...objects);

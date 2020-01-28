@@ -1,24 +1,44 @@
-  <div class="tttie-double-navbar-holder"><div class="tttie-navbar">
-  <ul class="tttie-navbar-list">
-  <li class="tttie-navbar-item has-icon">
-  <a class="tttie-navbar-link" href="/"><img class="tttie-navbar-tttie-icon" src="/static/icon.png" alt="<%=bot.user.username%>, an instance of tt.bot"></a>
-  <% if(user) {%><li class="tttie-navbar-item"><a class="tttie-navbar-link" href="/dashboard">Dashboard</a></li><%}%>
-  </ul>
-  </div>
-  <div class="tttie-navbar">
-  <ul class="tttie-navbar-list">
-  
-  <%if (user){ %>
-    <li class="tttie-navbar-item has-icon"><img class="tttie-navbar-tttie-icon rounded" src="<%=user.avatar%>" alt="<%=bot.getTag(user)%>"></li>
-    
-        <span style="margin-left: 8px"></span>
-        <li class="tttie-navbar-item"><%=bot.getTag(user)%></li>
-        <span style="margin-left: 8px"></span>
-        <li class="tttie-navbar-item"><a class="tttie-navbar-link" href="/logout">Logout</a></li>
-  <%} else {%>
-    <li class="tttie-navbar-item has-icon"><img class="tttie-navbar-tttie-icon rounded" src="/static/unknown-user.png" alt="Unknown person"></li>
-    <li class="tttie-navbar-item"><a class="tttie-navbar-link" href="/login">Log in</a></li>
-  <%}%>
-  </ul>
-  </div>
-  </div>
+<div class="hero <%=isLanding ? "" :"is-primary"%>">
+  <nav class="navbar <%=isLanding ? "is-transparent": ""%>">
+    <div class="container">
+      <div class="navbar-brand">
+        <a href="/" class="navbar-item bot-bar-item">
+          <figure class="image"><img src="<%=bot.user.dynamicAvatarURL("png", 128)%>" alt="<%=bot.user.username%>"
+              class="is-rounded"></figure>
+          <span><%=bot.user.username%></span>
+        </a>
+        <a role="button" class="navbar-burger has-text-light" aria-label="Menu" aria-expanded="false" data-target="tttie-navbar-menu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="tttie-navbar-menu">
+        <div class="navbar-start">
+          <% if (user) { %>
+          <a href="/dashboard" class="navbar-item">Dashboard</a>
+          <% } %>
+        </div>
+        <div class="navbar-end">
+          <% if (user) { %>
+          <a href="/profile" class="navbar-item bot-bar-item">
+            <figure class="image is-inline-block"><img src="<%=user.avatar%>" alt="<%=bot.getTag(user)%>" class="is-rounded"></figure>
+            <span class="is-inline-block"><%=bot.getTag(user)%></span>
+          </a>
+          <a href="/logout" class="navbar-item">
+            <span class="icon"><i class="fa fa-sign-out-alt"></i></span>
+            <span>Logout</span>
+          </a>
+          <% } else { %>
+          <a href="/login" class="navbar-item">
+            <span class="icon"><i class="fa fa-sign-in-alt"></i></span>
+            <span>Login</span>
+          </a>
+          <% } %>
+        </div>
+
+      </div>
+
+    </div>
+  </nav>
+</div>

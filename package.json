@@ -31,14 +31,17 @@
         "vm2": "^3.8.2"
     },
     "devDependencies": {
+        "bulma": "^0.8.0",
         "eslint": "^6.1.0",
+        "node-sass": "^4.13.1",
         "uglify-es": "^3.3.9"
     },
     "scripts": {
         "test": "eslint .",
         "install": "node scripts/dbsetup",
         "db:setup": "node scripts/dbsetup",
-        "web:uglify": "node scripts/uglify"
+        "web:js:uglify": "node scripts/uglify",
+        "web:css:build": "node-sass --omit-source-map-url webserver/web-files/bulma.scss webserver/static/css/bulma.css"
     },
     "repository": {
         "type": "git",

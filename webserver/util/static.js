@@ -4,6 +4,7 @@ const { lookup } = require("mime-types");
 
 
 module.exports = (polka, root) => async (rq, rs, nx) => {
+    if (rs.finished || rs.writableEnded) return;
     const path = `${root}/${rq.path}`;
     let stat;
     try {
@@ -20,7 +21,6 @@ module.exports = (polka, root) => async (rq, rs, nx) => {
             polka.onNoMatch(rq, rs, nx);
             return;
         }
-
         rs.setHeader("Content-Type", "text/html,charset=utf-8");
         promises.readFile(`${path}/index.html`)
             .then(b => {

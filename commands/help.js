@@ -61,7 +61,8 @@ ${command.argParser ? command.argParser.provideUsageString(true) : ""}`.trim() |
                     return true;
                 })
                 .map(e => ({
-                    id: e.id
+                    id: e.commandTrigger,
+                    description: `${e.name} (${e.id})`
                 }));
             const permissions = await HelpMenu.getPermissions(ctx);
 

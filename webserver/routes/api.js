@@ -3,10 +3,15 @@ const { checkAuth, getGuilds } = require("../util/index");
 const createUUID = require("uuid/v4");
 const uuidregex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const authNeeded = checkAuth(true);
+const UserProfile = require("../../lib/Structures/UserProfile");
+const moment = require("moment");
 module.exports = (app, csrf, db) => {
     app.get("/api/channels/:guild", authNeeded, (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) {
+            rs.status(403);
+            return rs.send({ error: "Forbidden" });
+        }
         else {
             const guild = rq.bot.guilds.get(rq.params.guild);
             return rs.send(guild.channels.filter(c => c.type === 0).sort((a, b) => a.position - b.position).map(c => ({
@@ -18,7 +23,10 @@ module.exports = (app, csrf, db) => {
 
     app.get("/api/config/:guild", authNeeded, async (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) {
+            rs.status(403);
+            return rs.send({ error: "Forbidden" });
+        }
         else {
             const data = await db.getGuildConfig(rq.params.guild);
             return rs.send(data);
@@ -27,7 +35,10 @@ module.exports = (app, csrf, db) => {
 
     app.get("/api/roles/:guild", authNeeded, (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) {
+            rs.status(403);
+            return rs.send({ error: "Forbidden" });
+        }
         else {
             const guild = rq.bot.guilds.get(rq.params.guild);
             const highestRole = guild.members.get(rq.bot.user.id).roles
@@ -44,7 +55,10 @@ module.exports = (app, csrf, db) => {
 
     app.post("/api/config/:guild", authNeeded, csrf(), async (rq, rs) => {
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) {
+            rs.status(403);
+            return rs.send({ error: "Forbidden" });
+        }
         else {
             const props = ["prefix",
                 "modRole",
@@ -103,7 +117,10 @@ module.exports = (app, csrf, db) => {
     app.post("/api/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
         const { guild, id } = rq.params;
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id === guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === guild)) {
+            rs.status(403);
+            return rs.send({ error: "Forbidden" });
+        }
         else {
             const props = [
                 "code",
@@ -126,6 +143,16 @@ module.exports = (app, csrf, db) => {
 
             filteredBody.id = id;
             filteredBody.guildID = guild;
+            if (!filteredBody.name) {
+                rs.status(400);
+                rs.send({ error: "Extension name missing" });
+                return;
+            }
+            if (!filteredBody.commandTrigger) {
+                rs.status(400);
+                rs.send({ error: "Command trigger missing" });
+                return;
+            }
             if (filteredBody.commandTrigger.length > 20)
                 filteredBody.commandTrigger = filteredBody.commandTrigger.slice(0, 20);
             if (!uuidregex.test(filteredBody.store)) filteredBody.store = null;
@@ -166,7 +193,10 @@ module.exports = (app, csrf, db) => {
     app.delete("/api/extensions/:guild/:id", authNeeded, csrf(), async (rq, rs) => {
         const { guild, id } = rq.params;
         const guilds = getGuilds(rq, rs);
-        if (!guilds.find(g => g.isOnServer && g.id === guild)) return rs.status(403).send({ error: "Forbidden" });
+        if (!guilds.find(g => g.isOnServer && g.id === guild)) {
+            rs.status(403);
+            return rs.send({ error: "Forbidden" });
+        }
         else {
             const extension = await db.getGuildExtension(id);
             if (!extension || (extension && extension.guildID !== guild)) {
@@ -180,9 +210,63 @@ module.exports = (app, csrf, db) => {
             if (deleteStore) {
                 await db.deleteGuildExtensionStore(guild, extension.store);
             }
-            return rs.status(204).end();
+            rs.status(204);
+            return rs.end();
         }
     });
+
+    app.get("/api/profile", authNeeded, csrf(), async (rq, rs) => {
+        const profileData = await db.getUserProfile(rq.user.id);
+        if (!profileData) {
+            rs.status(404);
+            rs.send({ error: "Not Found" });
+        }
+        const profile = new UserProfile(profileData);
+        rs.send({
+            ...profile,
+            csrfToken: rq.csrfToken()
+        });
+    });
+
+    app.post("/api/profile", authNeeded, csrf(), async (rq, rs) => {
+        const props = ["timezone",
+            "locale"];
+        const filteredBody = {};
+        Object.keys(rq.body).filter(k => props.includes(k)).forEach(k => {
+            filteredBody[k] = rq.body[k] || null;
+        });
+        filteredBody.id = rq.user.id;
+        if (!Object.keys(rq.bot.i18n.languages).includes(filteredBody.locale)) {
+            rs.status(400);
+            rs.send({
+                error: "Invalid locale"
+            });
+            return;
+        }
+        if (!moment.tz.zone(filteredBody.timezone)) {
+            rs.status(400);
+            rs.send({
+                error: "Invalid timezone. Refer to https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List for a list of correct timezones"
+            });
+            return;
+        }
+
+        const profile = UserProfile.create(filteredBody);
+        if (!await db.getUserProfile(rq.user.id)) {
+            await db.createUserProfile(profile);
+        } else {
+            await db.updateUserProfile(rq.user.id, profile);
+        }
+
+        const profileData = await db.getUserProfile(rq.user.id);
+        return rs.send(new UserProfile(profileData));
+    });
+
+    app.delete("/api/profile", authNeeded, csrf(), async (rq, rs) => {
+        await db.deleteUserProfile(rq.user.id);
+        rs.status(204);
+        rs.end();
+    })
 
     if (config.dblVoteHook) {
         app.post("/api/dblvotes", async (rq, rs) => {
@@ -200,9 +284,10 @@ module.exports = (app, csrf, db) => {
                 });
                 rs.send({ status: "OK" });
             };
-            if (!rq.headers.authorization || (rq.headers.authorization !== config.dblVoteHookSecret)) return rs.status(403).send({
-                error: "Forbidden"
-            });
+            if (!rq.headers.authorization || (rq.headers.authorization !== config.dblVoteHookSecret)) {
+                rs.status(403);
+                return rs.send({ error: "Forbidden" });
+            }
 
             if (rq.body.type === "test") {
                 //eslint-disable-next-line no-console

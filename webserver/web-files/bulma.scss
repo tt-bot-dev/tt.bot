@@ -1,0 +1,153 @@
+@charset "utf-8";
+
+$primary: #008800;
+
+.bot-image {
+    width: 90vw;
+    max-width: 200px;
+}
+
+.is-round {
+    border-radius: 100%;
+}
+
+.navbar-item.bot-bar-item {
+    span {
+        margin-left: 8px;
+    }
+}
+
+.navbar-menu {
+    &.is-active {
+        .is-inline-block {
+            vertical-align: middle;
+        }
+    }
+}
+
+.navbar {
+    .navbar-item.bot-bar-item {
+        figure.image {
+            width: 28px;
+            height: 28px;
+        }
+    }
+}
+
+div.tttie-changes-buttons {
+    position: sticky;
+    top: 0px;
+    background-color: #fff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    z-index: 35;
+}
+
+div#menu aside.menu {
+    position: sticky;
+    top: 20px;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    &.bot-setting {
+        margin-bottom: 0.25rem !important;
+    }
+}
+label.checkbox {
+    input[type="checkbox"] + span {
+        margin-left: 5px;
+    }
+}
+
+@mixin keyframes($name) {
+    @-webkit-keyframes #{$name} {
+      @content; 
+    }
+    @-moz-keyframes #{$name} {
+      @content;
+    }
+    @-ms-keyframes #{$name} {
+      @content;
+    }
+    @keyframes #{$name} {
+      @content;
+    } 
+  }
+  
+
+@include keyframes(tttie-slide-in) {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: none;
+        opacity: 1;
+    }
+}
+
+@include keyframes(tttie-slide-out) {
+    from {
+        transform: none;
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+@include keyframes(tttie-fade-in) {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@include keyframes(tttie-fade-out) {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+.tttie-slide-in {
+    animation: tttie-slide-in cubic-bezier(0.4, 0.0, 0.2, 1) normal 250ms;
+}
+
+.tttie-slide-out {
+    animation: tttie-slide-out cubic-bezier(0.4, 0.0, 0.2, 1) normal 200ms;
+}
+
+.tttie-fade-in {
+    animation: tttie-fade-in cubic-bezier(0.4, 0.0, 0.2, 1) normal 250ms;
+}
+
+.tttie-fade-out {
+    animation: tttie-fade-out cubic-bezier(0.4, 0.0, 0.2, 1) normal 200ms;
+}
+header.modal-card-head p.modal-card-title {
+    flex-shrink: initial;
+}
+div.monaco-wrapper {
+    display: flex;
+    .monaco-container {
+        flex: 1;
+        height: 600px;
+        .monaco-editor {
+            position: absolute;
+        }
+    }
+}
+
+@import "../../node_modules/bulma/bulma.sass";

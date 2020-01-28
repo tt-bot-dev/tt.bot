@@ -37,7 +37,7 @@ module.exports = {
             if (req.bot.guilds.has(g.id)) return req.bot.isAdmin(req.bot.guilds.get(g.id).members.get(req.user.id));
             else {
                 const permission = new Permission(g.permissions);
-                return permission.has("administrator") || permission.has("manageServer");
+                return permission.has("administrator") || permission.has("manageGuild");
             }
 
         }).map(g => Object.assign({}, g, {

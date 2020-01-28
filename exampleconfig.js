@@ -38,6 +38,16 @@ module.exports = {
     webserverip: "127.0.0.1",
 
     /**
+     * Whether to serve static content or not
+     * THIS IS NOT RELIABLE IN PRODUCTION ENVIRONMENTS.
+     * If you'd like to serve static content through
+     * a different web server, point /static to webserver/static
+     * @type {boolean}
+     * @default false
+     */
+    serveStatic: true,
+
+    /**
      * Configures the website display URL. 
      * This can be a function taking a URL if you for example want to use
      * alternative links.

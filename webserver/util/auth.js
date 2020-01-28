@@ -27,7 +27,7 @@ class Cache {
     }
 
     _fetch(item) {
-        return this._getter(item).then(data => {
+        return this._getter(item, this).then(data => {
             //eslint-disable-next-line no-console
             if (data.error) console.error(data.error);
             this._cache[item] = { time: Date.now(), data };
@@ -40,24 +40,26 @@ class Cache {
     }
 }
 
-const getUserInfo = async token => {
+const getUserInfo = async (token, cache) => {
     const e = new Client(`Bearer ${token}`, {
         restMode: true
     });
-    const body = await e.requestHandler.request("GET", "/users/@me", true);
-    const guilds = await e.requestHandler.request("GET", "/users/@me/guilds", true);
-    return {
-        id: body.id,
-        username: body.username,
-        discriminator: body.discriminator,
-        avatar: body.avatar,
-        guilds
-    };
+    try {
+        const body = await e.requestHandler.request("GET", "/users/@me", true);
+        const guilds = await e.requestHandler.request("GET", "/users/@me/guilds", true);
+        return {
+            ...body,
+            guilds
+        };
+    } catch (err) {
+        if (err.code === "ETIMEDOUT") return cache._cache[token].data;
+        else throw err;
+    }
 };
 
-const c = new Cache(6e4, async token => {
+const c = new Cache(6e4, async (token, cache) => {
     try {
-        return await getUserInfo(token);
+        return await getUserInfo(token, cache);
     } catch (e) {
         return { error: e };
     }
@@ -116,6 +118,7 @@ const auth = {
         const { body } = r;
         const dateAfterReq = Date.now();
         const d = await auth.getUserInfo(body.access_token);
+        if (d.error) console.error(d.error);
         req.session.tokenData = {
             accessToken: body.access_token,
             refreshToken: body.refresh_token,

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<%- include("./partials/head") %>
+
+<body>
+    <section class="hero is-primary">
+        <div class="hero-head"><%- include("./partials/header", { isLanding: false }) %></div>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <img class="is-round" src="<%=user.avatar%>" height="128" width="128">
+                <h2 class="title is-2 is-size-4-mobile">Hello, <%=bot.getTag(user)%></h2>
+                <h4 class="subtitle is-4 is-size-5-mobile">Here you can manage data <%=bot.user.username%> knows about you.</h4>
+            </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="buttons">
+                <button class="button" id="save" data-isNew="false">
+                    <span class="icon"><i class="fa fa-save"></i></span>
+                    <span>Save</span>
+                </button>
+                <button class="button is-danger" id="delete">
+                    <span class="icon"><i class="fa fa-trash"></i></span>
+                    <span>Delete the profile</span>
+                </button>
+                
+                <button class="button" id="autofill">
+                    <span class="icon"><i class="fa fa-edit"></i></span>
+                    <span>Autofill from browser</span>
+                </button>
+            </div>
+            <div class="content">
+                <h6 class="bot-setting is-size-5">Locale</h6>
+                <p><%=bot.user.username%> will speak in this language.</p>
+                <div class="select is-loading">
+                    <select id="tttie-profile-locale">
+                        <option value="" selected disabled>Please select a locale</option>
+                        <% for (const locale of locales) {%>
+                        <option value="<%=locale%>">
+                            <%=locale%>
+                        </option>
+                        <%}%>
+                    </select>
+                </div>
+            </div>
+
+            <div class="content">
+                <h6 class="bot-setting is-size-5">Timezone</h6>
+                <p><%=bot.user.username%> will display date and time using this timezone.</p>
+                
+                <div class="control is-loading">
+                    <input type="text" class="input" id="tttie-profile-tz">
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+    <%- include("partials/footer") %>
+    <script src="/profile/load.js"></script>
+    <script src="/static/js/ttbotapi.js"></script>
+    <script defer src="/static/js/profile.js"></script>
+</body>
+
+</html>

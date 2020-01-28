@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
-<body>
-<div class="tttie-container">
-<%- include("./partials/header") %>
-<div class="tttie-body">
-<div class="tttie-center text">
-<div>
-<h1>404</h1>
-<p>I'm sorry, but there's no path like this.</p>
 
-<div class="tttie-center">
-<a class="tttie-linkbutton" href="/"><div class="tttie-button">Go home</div></a>
-</div>
-</div>
-</div>
-</div>
-</div>
+<body>
+    <section class="hero is-fullheight is-primary">
+        <div class="hero-head"><%- include("./partials/header", { isLanding: true }) %></div>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title is-1 is-size-3-mobile">404</h1>
+                <em>Content not found :(</em>
+                <div class="hero-buttons">
+                    <a href="/"
+                        class="button is-large is-primary">
+                        <span class="icon"><i class="fa fa-home"></i></span>
+                        <span>Go home</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <%- include("partials/footer") %>
 </body>
+
 </html>

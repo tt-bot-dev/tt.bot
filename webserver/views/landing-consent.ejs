@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
+
 <body>
-<div class="tttie-container">
-<div class="tttie-body">
-<div class="tttie-center">
-<div>
-<h1>Welcome!</h1>
-Before we start, here's some data collection paperwork.<br>
-Here is what do we collect about you:<br>
-<ul>
-<li>Your authentication data (OAuth2 tokens)</li>
-<%if (isHTTP) { %>
-<li>You are accessing this web page insecurely. This means that anyone can intercept your traffic.</li>
-<%}%>
+    <div class="tttie-container">
+        <div class="tttie-body">
+            <div class="tttie-center">
+                <div>
+                    <h1>Welcome!</h1>
+                    Before we start, here's some data collection paperwork.<br>
+                    Here is what do we collect about you:<br>
+                    <ul>
+                        <li>Your authentication data (OAuth2 tokens)</li>
+                        <%if (isHTTP) { %>
+                        <li>You are accessing this web page insecurely. This means that anyone can intercept your
+                            traffic.</li>
+                        <%}%>
 <li>Some more data that the instance owner(s) might collect. Please contact them for more info about it.</li>
 </ul>
 

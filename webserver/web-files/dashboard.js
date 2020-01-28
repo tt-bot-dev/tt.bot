@@ -57,39 +57,105 @@
     }
     function setValues(cfg) {
         const inputP = document.querySelector("#tttie-dash-p");
-        const inputMod = document.querySelector("#tttie-dash-mod");
         const inputFm = document.querySelector("#tttie-dash-fm");
+        const inputMod = document.querySelector("#tttie-dash-mod");
         const inputWm = document.querySelector("#tttie-dash-wm");
         const inputLe = document.querySelector("#tttie-dash-le");
+        const inputMl = document.querySelector("#tttie-dash-ml");
+        const inputAc = document.querySelector("#tttie-dash-ac");
+        const inputWc = document.querySelector("#tttie-dash-wc");
+        const inputFc = document.querySelector("#tttie-dash-fc");
+        const inputMr = document.querySelector("#tttie-dash-mr");
+        const inputLc = document.querySelector("#tttie-dash-loc");
+        const inputLocale = document.querySelector("#tttie-dash-locale");
         inputP.value = cfg.prefix || "";
-        inputMod.value = cfg.modRole || "";
         inputFm.value = cfg.farewellMessage || "";
         inputWm.value = cfg.greetingMessage || "";
         inputLe.value = cfg.logEvents || "";
-        for (const opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-fc option")) if (opt.value === cfg.farewellChannelId) opt.selected = true;
-        for (const opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-wc option")) if (opt.value === cfg.greetingChannelId) opt.selected = true;
-        for (const opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-ac option")) if (opt.value === cfg.agreeChannel) opt.selected = true;
-        for (const opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-loc option")) if (opt.value === cfg.logChannel) opt.selected = true;
-        for (const opt of document.querySelectorAll("select.tttie-dashboard-role-picker#tttie-dash-mr option")) if (opt.value === cfg.memberRole) opt.selected = true;
-        for (const opt of document.querySelectorAll("select.tttie-dashboard-channel-picker#tttie-dash-ml option")) if (opt.value === cfg.modlogChannel) opt.selected = true;
-        for (const opt of document.querySelectorAll("select#tttie-dash-locale option")) if (opt.value === cfg.locale) opt.selected = true;
+        for (const opt of inputFc.querySelectorAll("option")) {
+            if (opt.value === cfg.farewellChannelId) {
+                opt.selected = true;
+                break;
+            }
+        }
+        for (const opt of inputWc.querySelectorAll("option")) {
+            if (opt.value === cfg.greetingChannelId) {
+                opt.selected = true;
+                break;
+            }
+        }
+        for (const opt of inputAc.querySelectorAll("option")) {
+            if (opt.value === cfg.agreeChannel) {
+                opt.selected = true;
+                break;
+            }
+        }
+        for (const opt of inputLc.querySelectorAll("option")) {
+            if (opt.value === cfg.logChannel) {
+                opt.selected = true;
+                break;
+            }
+        }
+        for (const opt of inputMr.querySelectorAll("option")) {
+            if (opt.value === cfg.memberRole) {
+                opt.selected = true;
+                break;
+            }
+        }
+        for (const opt of inputMod.querySelectorAll("option")) {
+            if (opt.value === cfg.memberRole) {
+                opt.selected = true;
+                break;
+            }
+        }
+        for (const opt of inputMl.querySelectorAll("option")) {
+            if (opt.value === cfg.modlogChannel) {
+                opt.selected = true;
+                break;
+            }
+        }
+        for (const opt of inputLocale.querySelectorAll("option")) {
+            if (opt.value === cfg.locale) {
+                opt.selected = true;
+                break;
+            }
+        }
+        inputP.parentElement.classList.remove("is-loading");
         inputP.disabled = false;
+        inputMod.parentElement.classList.remove("is-loading");
         inputMod.disabled = false;
+        inputMl.parentElement.classList.remove("is-loading");
+        inputMl.disabled = false;
+        inputFm.parentElement.classList.remove("is-loading");
         inputFm.disabled = false;
+        inputWm.parentElement.classList.remove("is-loading");
         inputWm.disabled = false;
+        inputAc.parentElement.classList.remove("is-loading");
+        inputAc.disabled = false;
+        inputWc.parentElement.classList.remove("is-loading");
+        inputWc.disabled = false;
+        inputFc.parentElement.classList.remove("is-loading");
+        inputFc.disabled = false;
+        inputLe.parentElement.classList.remove("is-loading");
         inputLe.disabled = false;
+        inputLc.parentElement.classList.remove("is-loading");
+        inputLc.disabled = false;
+        inputMr.parentElement.classList.remove("is-loading");
+        inputMr.disabled = false;
+        inputLocale.parentElement.classList.remove("is-loading");
+        inputLocale.disabled = false;
     }
 
     window.addEventListener("load", () => {
         const pickers = document.querySelectorAll("select.tttie-dashboard-channel-picker");
         const rPickers = document.querySelectorAll("select.tttie-dashboard-role-picker");
-        win.ttbot.bindToSaveButton(document.querySelector("a.tttie-linkbutton#save"), setValues, dataCollector);
-        win.ttbot.bindToResetButton(document.querySelector("a.tttie-linkbutton#reset"), setValues);
+        win.ttbot.bindToSaveButton(document.querySelector("button#save"), setValues, dataCollector);
+        win.ttbot.bindToResetButton(document.querySelector("button#reset"), setValues);
         win.ttbot.getAvailableChannels().then(c => {
             pickers.forEach(loadPickers(true, c));
             return win.ttbot.getAvailableRoles();
         }).then(r => {
-            rPickers.forEach(loadPickers(false, 
+            rPickers.forEach(loadPickers(false,
                 r.filter(r => r.id !== win.ttbot.guildId)
             ));
         }).then(() => {
