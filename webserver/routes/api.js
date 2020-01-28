@@ -266,7 +266,7 @@ module.exports = (app, csrf, db) => {
         await db.deleteUserProfile(rq.user.id);
         rs.status(204);
         rs.end();
-    })
+    });
 
     if (config.dblVoteHook) {
         app.post("/api/dblvotes", async (rq, rs) => {

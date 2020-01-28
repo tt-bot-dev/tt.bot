@@ -11,7 +11,7 @@
             }, { 
                 once: true
             });
-        }
+        };
         const modal = document.createElement("div");
         modal.classList.add("modal", "is-active", "tttie-fade-in");
 
@@ -46,11 +46,11 @@
         
         modalBody.append(document.createTextNode(
             `Are you sure you want to delete the extension ${extData.name} (${extData.id})?`
-            ),
-            document.createElement("br"),
-            modalBodyIrreversible,
-            document.createElement("br"),
-            checkBoxLabel);
+        ),
+        document.createElement("br"),
+        modalBodyIrreversible,
+        document.createElement("br"),
+        checkBoxLabel);
 
         const modalFooter = document.createElement("footer");
         modalFooter.classList.add("modal-card-foot");
@@ -72,7 +72,7 @@
                 deleteButton.addEventListener("click", () => {
                     destroyNotification();
                     clearTimeout(autoDeleteTimeout);
-                })
+                });
                 const destroyNotification = () => void notification.remove();
                 notification.append(
                     "The extension ",
@@ -82,7 +82,7 @@
                     ") has been deleted."
                 );
                 extensions.prepend(notification);
-                const autoDeleteTimeout = setTimeout(() => destroyNotification(), 10000)
+                const autoDeleteTimeout = setTimeout(() => destroyNotification(), 10000);
             });
         });
 
@@ -91,7 +91,7 @@
         cancelButton.innerText = "Cancel";
         cancelButton.addEventListener("click", () => {
             destroyModal();
-        })
+        });
 
         modalFooter.append(deleteButton, cancelButton);
 
@@ -104,7 +104,7 @@
             modalCard);
 
         document.body.appendChild(modal);
-    }
+    };
     const extensions = document.querySelector("div.extension-list");
     const extensionBoxes = extensions.querySelectorAll("article.media");
     for (const box of extensionBoxes) {
@@ -112,6 +112,6 @@
         if (!deleteButton) continue;
         deleteButton.addEventListener("click", () => {
             createExtensionDeleteModal(extensions)(box);
-        })
+        });
     }
 })(window);

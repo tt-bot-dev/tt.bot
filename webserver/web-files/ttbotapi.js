@@ -21,7 +21,7 @@
                     }, {
                         once: true
                     });
-                }
+                };
                 const modal = document.createElement("div");
                 modal.classList.add("modal", "is-active", "tttie-fade-in");
 
@@ -62,7 +62,7 @@
                 cancelButton.innerText = "Close";
                 cancelButton.addEventListener("click", () => {
                     destroyModal();
-                })
+                });
 
                 modalFooter.append(cancelButton);
 
@@ -78,11 +78,11 @@
                 const err = new Error();
                 err.res = r;
                 throw err;
-            })
+            });
         } else {
             return r;
         }
-    }
+    };
     ttbot.saveDashboardChanges = data => {
         return fetch(`/api/config/${ttbot.guildId}`, {
             credentials: "include",
@@ -164,7 +164,7 @@
         }).then(() => undefined);
     };
 
-    ttbot.getProfile = () => fetch(`/api/profile`, {
+    ttbot.getProfile = () => fetch("/api/profile", {
         credentials: "include"
     }).then(r => r.json()).then(p => {
         ttbot.csrfToken = p.csrfToken;
@@ -172,7 +172,7 @@
         return ttbot.userProfile = p;
     });
 
-    ttbot.updateProfile = data => fetch(`/api/profile`, {
+    ttbot.updateProfile = data => fetch("/api/profile", {
         credentials: "include",
         body: JSON.stringify(data),
         method: "POST",
@@ -182,7 +182,7 @@
         }
     }).then(r => r.json()).then(p => ttbot.userProfile = p);
 
-    ttbot.deleteProfile = () => fetch(`/api/profile`, {
+    ttbot.deleteProfile = () => fetch("/api/profile", {
         credentials: "include",
         method: "DELETE",
         headers: {

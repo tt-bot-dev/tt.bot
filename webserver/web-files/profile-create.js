@@ -34,14 +34,14 @@
             saveButton.classList.add("is-loading");
             const d = {
                 timezone: timezoneField.value
-            }
+            };
             const locales = localeSelector.querySelectorAll("option");
             for (const locale of locales) {
                 if (locale.selected) {
                     d.locale = locale.value;
                     break;
                 }
-            };
+            }
 
             w.ttbot.updateProfile(d).then(() => {
                 w.location.reload();

@@ -61,7 +61,7 @@ module.exports = function (db, bot, config) {
 
     app.get("/test", (_, __, nx) => {
         nx(new Error());
-    })
+    });
 
     app.get("/acceptcookie", (rq, rs) => {
         const p = rq.query.redir || "/";
@@ -257,7 +257,7 @@ module.exports = function (db, bot, config) {
                 profile
             }));
         }
-    })
+    });
 
     app.get("/logout", checkAuth(), async function (req, res) {
         await logout(req, res);

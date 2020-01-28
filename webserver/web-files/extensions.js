@@ -163,6 +163,6 @@
                 setValues(cfg);
             });
         });
-    })
+    });
 
 })(window);

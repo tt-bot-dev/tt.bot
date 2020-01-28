@@ -15,7 +15,7 @@ for (const f of readdirSync(`${__dirname}/../webserver/web-files`, {
     });
     if (o.error) {
         //eslint-disable-next-line no-console
-        console.error(`Cannot minify ${f.name}:`)
+        console.error(`Cannot minify ${f.name}:`);
         console.error(o.error);
         continue;
     }

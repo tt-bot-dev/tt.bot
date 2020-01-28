@@ -10,7 +10,7 @@
             }, {
                 once: true
             });
-        }
+        };
         const modal = document.createElement("div");
         modal.classList.add("modal", "is-active", "tttie-fade-in");
 
@@ -34,7 +34,7 @@
 
         const modalBodyIrreversible = document.createElement("b");
         modalBodyIrreversible.innerText = "This action is irreversible!";
-        modalBody.append(`Are you sure you want to delete your profile? `,
+        modalBody.append("Are you sure you want to delete your profile? ",
             modalBodyIrreversible
         );
 
@@ -56,7 +56,7 @@
         cancelButton.innerText = "Cancel";
         cancelButton.addEventListener("click", () => {
             destroyModal();
-        })
+        });
 
         modalFooter.append(deleteButton, cancelButton);
 
@@ -70,7 +70,7 @@
             modalCard);
 
         document.body.appendChild(modal);
-    }
+    };
     w.addEventListener("load", () => {
         const langMap = {
             "en-US": "en",
@@ -104,28 +104,28 @@
 
         deleteButton.addEventListener("click", () => {
             createDeleteModal();
-        })
+        });
 
         saveButton.addEventListener("click", () => {
             saveButton.disabled = true;
             saveButton.classList.add("is-loading");
             const d = {
                 timezone: timezoneField.value
-            }
+            };
             const locales = localeSelector.querySelectorAll("option");
             for (const locale of locales) {
                 if (locale.selected) {
                     d.locale = locale.value;
                     break;
                 }
-            };
+            }
 
             w.ttbot.updateProfile(d).then(p => {
                 setVals(p);
                 saveButton.classList.remove("is-loading");
                 saveButton.disabled = false;
             });
-        })
+        });
 
         const setVals = profile => {
             const locales = localeSelector.querySelectorAll("option");
@@ -138,8 +138,8 @@
             }
             timezoneField.value = profile.timezone;
             timezoneField.parentElement.classList.remove("is-loading");
-        }
+        };
 
         w.ttbot.getProfile().then(setVals);
-    })
+    });
 })(window);

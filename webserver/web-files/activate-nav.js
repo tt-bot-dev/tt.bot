@@ -12,7 +12,7 @@
                 link.classList.remove("is-active");
             }
         }
-    }
+    };
     
     document.addEventListener("DOMContentLoaded", () => {
         const navbar = document.querySelector("nav.navbar");
@@ -28,4 +28,4 @@
             targetElement.classList.toggle("is-active");
         });
     });
-})()
+})();
