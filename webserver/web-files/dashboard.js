@@ -148,7 +148,8 @@
 
     window.addEventListener("load", () => {
         const pickers = document.querySelectorAll("select.tttie-dashboard-channel-picker");
-        const rPickers = document.querySelectorAll("select.tttie-dashboard-role-picker");
+        const rPickers = document.querySelectorAll("select.tttie-dashboard-role-picker:not(.no-role-hierarchy)");
+        const pickersWithoutRoleHierarchy = document.querySelectorAll("select.tttie-dashboard-role-picker.no-role-hierarchy");
         win.ttbot.bindToSaveButton(document.querySelector("button#save"), setValues, dataCollector);
         win.ttbot.bindToResetButton(document.querySelector("button#reset"), setValues);
         win.ttbot.getAvailableChannels().then(c => {
@@ -158,6 +159,11 @@
             rPickers.forEach(loadPickers(false,
                 r.filter(r => r.id !== win.ttbot.guildId)
             ));
+            return win.ttbot.getAvailableRoles(true);
+        }).then(r => {
+            pickersWithoutRoleHierarchy.forEach(
+                loadPickers(false, r.filter(r => r.id !== win.ttbot.guildId))
+            )
         }).then(() => {
             win.ttbot.getConfig().then(setValues);
         });

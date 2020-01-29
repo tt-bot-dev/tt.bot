@@ -10,15 +10,15 @@ class SoftbanCommand extends Command {
             argParser: new SwitchArgumentParser(sosamba, {
                 user: {
                     type: User,
-                    description: "the user to ban"
+                    description: "the user to softban"
                 },
                 reason: {
                     type: String,
                     default: "No reason provided.",
-                    description: "the optional reason for the ban"
+                    description: "the optional reason for the softban"
                 }
             }),
-            description: "Bans a user."
+            description: "Softbans a user."
         });
     }
 
