@@ -163,7 +163,7 @@
         }).then(r => {
             pickersWithoutRoleHierarchy.forEach(
                 loadPickers(false, r.filter(r => r.id !== win.ttbot.guildId))
-            )
+            );
         }).then(() => {
             win.ttbot.getConfig().then(setValues);
         });
