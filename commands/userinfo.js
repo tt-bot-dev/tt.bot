@@ -16,7 +16,8 @@ class UserCommand extends Command {
                     description: "the user to get the information for"
                 }]
             }),
-            description: "Gets some information about the user."
+            description: "Gets some information about the user.",
+            aliases: ["uinfo"]
         });
     }
 

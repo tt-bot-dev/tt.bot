@@ -46,9 +46,9 @@ class HackbanCommand extends Command {
     }
 
     async doBan(ctx, id, send, mass) {
-        let userToBan = bot.users.get(id);
+        let userToBan = this.sosamba.users.get(id);
         if (!userToBan) try {
-            userToBan = await bot.getUserWithoutRESTMode(id);
+            userToBan = await this.sosamba.getUserWithoutRESTMode(id);
         } catch {
             if (send) await ctx.send({
                 embed: {
