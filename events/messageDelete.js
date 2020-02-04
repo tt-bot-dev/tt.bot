@@ -10,14 +10,14 @@ class MessageDeleteLogger extends Event {
     }
 
     async prerequisites(msg) {
-        return msg.channel.guild && !msg.author.bot;
+        return !!msg.channel.guild;
     }
 
     async run(msg) {
         const logConfig = await logging.getInfo(msg.channel.guild.id, this.sosamba.db);
         if (!msg.author) {
             if (logConfig.logEvents.includes("messageUnknownDelete")) await logging.handlers.unknownDelete(logConfig, msg);
-        } else if (logConfig.logEvents.includes("messageDelete")) {
+        } else if (logConfig.logEvents.includes("messageDelete") && !msg.author.bot) {
             await logging.handlers.delete(logConfig, msg);
         }
     }

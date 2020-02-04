@@ -11,13 +11,13 @@ class MessageUpdateLogger extends Event {
 
     async prerequisites(msg, old) {
         return old && msg.author && !msg.author.bot && msg.channel.guild
-        && old.content !== msg.content;
+        && old.content !== msg.content;;
     }
 
     async run(msg, old) {
         const logConfig = await logging.getInfo(msg.channel.guild.id, this.sosamba.db);
         if (logConfig.logEvents.includes("messageUpdate")) {
-            await logging.handlers.update(config, msg, old);
+            await logging.handlers.update(logConfig, msg, old);
         }
     }
 }
