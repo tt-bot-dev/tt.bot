@@ -11,7 +11,7 @@ class MessageUpdateLogger extends Event {
 
     async prerequisites(msg, old) {
         return old && msg.author && !msg.author.bot && msg.channel.guild
-        && old.content !== msg.content;;
+        && old.content !== msg.content;
     }
 
     async run(msg, old) {
