@@ -15,7 +15,8 @@ class GuildBanEvent extends Event {
             await logging.handlers.ban(logConfig, guild, user, false);
         }
         const config = await this.sosamba.db.getGuildConfig(guild.id);
-        if (config && config.modlogChannel) {
+        if (config && config.modlogChannel && 
+            guild.members.get(this.sosamba.user.id).permission.has("viewAuditLogs")) {
             let auditLog;
             try {
                 auditLog = await guild.getAuditLogs(50, null, 22);
