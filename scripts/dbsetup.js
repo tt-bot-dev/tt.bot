@@ -1,5 +1,8 @@
 /* eslint-disable no-console */
 "use strict";
+if (process.env.CI) {
+    process.exit(0);
+}
 const { database } = require("../config");
 let db;
 try {
