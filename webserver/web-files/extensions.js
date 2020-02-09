@@ -101,7 +101,7 @@
         }
         function setValues(cfg, reset, update) {
 
-            if (!reset || !update) {
+            if (!reset && !update) {
                 if (cfg.id === "new") document.title += " - New extension";
                 else document.title += " - Extension: " + cfg.name;
             }
@@ -160,7 +160,7 @@
             setValues(d);
             bindToSaveButton(document.querySelector("button#save"), setValues, dataCollector);
             bindToResetButton(document.querySelector("button#reset"), cfg => {
-                setValues(cfg);
+                setValues(cfg, true);
             });
         });
     });
