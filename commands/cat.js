@@ -1,6 +1,6 @@
 "use strict";
 const { Command } = require("sosamba");
-const { get } = require("snekfetch");
+const { get } = require("chainfetch");
 
 class CatCommand extends Command {
     constructor(...args) {
@@ -11,7 +11,7 @@ class CatCommand extends Command {
     }
 
     async run(ctx) {
-        const { body } = await get("https://aws.random.cat/meow");
+        const { body } = await get("https://aws.random.cat/meow").toJSON();
         await ctx.send({
             embed: {
                 image: {

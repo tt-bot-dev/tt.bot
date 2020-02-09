@@ -139,10 +139,4 @@ module.exports = {
     dblVoteHookGuild: "",
     dblVoteHookRole: "",
     dblVoteHookSecret: "",
-
-    /**
-     * Allows using Snekfetch (HTTP requests) in extensions
-     * @type {boolean}
-     */
-    enableSnekfetchInExtensions: false
 };

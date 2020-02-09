@@ -486,3 +486,7 @@ declare module "tt.bot" {
         wipeData(): Promise<object | Error>
     }
 }
+
+declare module "node-fetch" {
+    export = fetch;
+}

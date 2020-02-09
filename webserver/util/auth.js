@@ -1,6 +1,6 @@
 "use strict";
 const config = require("../../config");
-const sa = require("snekfetch");
+const sa = require("chainfetch");
 const APIBase = "https://discordapp.com/api/v6/oauth2";
 const { Eris: { Client } } = require("sosamba");
 
@@ -91,7 +91,8 @@ const auth = {
             .attach({
                 refresh_token: code,
                 grant_type: "refresh_token",
-            });
+            })
+            .toJSON();
         const { body } = dat;
         const dateAfterReq = Date.now();
         const d = await c.get(body.access_token);
@@ -114,7 +115,8 @@ const auth = {
                 code,
                 grant_type: "authorization_code",
                 redirect_uri: `${req.protocol}://${req.headers.host}/callback`
-            });
+            })
+            .toJSON();
         const { body } = r;
         const dateAfterReq = Date.now();
         const d = await auth.getUserInfo(body.access_token);

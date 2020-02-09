@@ -27,6 +27,7 @@ class EvalCommand extends Command {
             let gist;
             try {
                 gist = await makegist("exec.md", description, "Evaluated code");
+                if (!gist.ok) throw new Error();
             } catch (err) {
                 await ctx.send({
                     embed: {

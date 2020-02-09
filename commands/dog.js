@@ -1,6 +1,6 @@
 "use strict";
 const { Command } = require("sosamba");
-const { get } = require("snekfetch");
+const { get } = require("chainfetch");
 
 class DogCommand extends Command {
     constructor(...args) {
@@ -11,7 +11,7 @@ class DogCommand extends Command {
     }
 
     async run(ctx) {
-        const { body } = await get("https://random.dog/woof.json");
+        const { body } = await get("https://random.dog/woof.json?filter=mp4,webm").toJSON();
 
         ctx.send({
             embed: {

@@ -261,9 +261,15 @@ module.exports = function (db, bot, config) {
 
     require("./routes/api")(app, csrfProtection, db);
     app.use("/monaco", serveStatic(app, `${__dirname}/../node_modules/monaco-editor/min`));
-    app.get("/tt.bot.d.ts", (rq, rs) => {
-        const s = fs.createReadStream(`${__dirname}/../lib/extensions/tt.bot.d.ts`);
-        s.pipe(rs);
+    app.get("/tt.bot.d.ts", async (_, rs) => {
+        let result = "";
+        const ttbotTs = await fs.promises.readFile(`${__dirname}/../lib/extensions/tt.bot.d.ts`);
+        const chainfetchTs = await fs.promises.readFile(require.resolve("chainfetch/typings/index.d.ts"));
+        
+        result += ttbotTs;
+        result += "\n";
+        result += chainfetchTs;
+        rs.end(result);
     });
     httpServer(app.handler).listen(config.httpPort || 8090, config.webserverip || "0.0.0.0", () => {
         //eslint-disable-next-line no-console

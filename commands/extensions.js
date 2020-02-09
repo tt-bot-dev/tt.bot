@@ -1,7 +1,7 @@
 "use strict";
 const { SerializedArgumentParser } = require("sosamba");
 const { role: findRole, channel: findChannel } = require("sosamba/lib/argParsers/switchSerializers/erisObjects");
-const { get } = require("snekfetch");
+const { get } = require("chainfetch");
 const Command = require("../lib/commandTypes/AdminCommand");
 const MessageAsyncIterator = require("../lib/MessageAsyncIterator");
 const createUUID = require("uuid/v4");
@@ -65,7 +65,7 @@ class ExtensionCommand extends Command {
             });
         } else if (action === CreateSymbol) {
             await ctx.send(await ctx.t("QUESTION_EXTENSION_CODE"));
-            let codeContext;
+            let codeContext, jsCode;
             try {
                 codeContext = await ctx.waitForMessage(c => {
                     if (c.msg.attachments.length === 0) return false;
@@ -78,8 +78,13 @@ class ExtensionCommand extends Command {
                 return;
             }
 
-            const { body } = await get(codeContext.codeAttachment.url);
-            const jsCode = body.toString();
+            try {
+                const { body } = await get(codeContext.codeAttachment.url).toString();
+                jsCode = body;
+            } catch {
+                await ctx.send(await ctx.t("OP_CANCELLED"));
+                return;
+            }
             try {
                 await codeContext.msg.delete();
             } catch { }
