@@ -1,7 +1,2 @@
-extensions/
 webserver/static
 languages/
-
-# old commands and events
-_commands/
-_events

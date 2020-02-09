@@ -16,9 +16,10 @@ declare module "tt.bot" {
     type UserResolvable = User | Member | Message | string;
     type RoleResolvable = Role | string;
     type MessageResolvable = Message | string;
-    type GuildChannel = TextChannel | VoiceChannel | CategoryChannel;
+    type GuildChannel = TextChannel | VoiceChannel | CategoryChannel | Channel;
     type OverwriteResolvable = UserResolvable | RoleResolvable;
 
+    //#region eris
     // ===================== ERIS TYPINGS =====================
 
     type MessageContent = string | { content?: string, tts?: boolean, disableEveryone?: boolean, embed?: EmbedOptions };
@@ -54,7 +55,28 @@ declare module "tt.bot" {
     type Emoji = {
         roles: string[],
     } & EmojiBase;
-    interface GamePresence { name: string; type?: number; url?: string; }
+    interface GamePresence {
+        name: string;
+        type?: 0 | 1 | 2 | 3 | 4;
+        url?: string;
+        timestamps?: { start: number; end?: number };
+        application_id?: string;
+        sync_id?: string;
+        details?: string;
+        state?: string;
+        party?: { id?: string };
+        assets?: {
+            small_text?: string;
+            small_image?: string;
+            large_text?: string;
+            large_image?: string;
+            [key: string]: any;
+        };
+        instance?: boolean;
+        flags?: number;
+        // the stuff attached to this object apparently varies even more than documented, so...
+        [key: string]: any;
+    }
     interface Permission {
         public allow: number;
         public deny: number;
@@ -123,7 +145,31 @@ declare module "tt.bot" {
         public update(obj: T, extra?: any, replace?: boolean): T;
         public remove(obj: T | { id: string }): T;
     }
-    // ===================== ERIS TYPINGS END =====================
+    interface Activity {
+        application_id?: string;
+        assets?: ActivityAssets[];
+        created_at: number;
+        details?: string;
+        id: string;
+        name: string;
+        state?: string;
+        type: 0 | 1 | 2 | 3 | 4;
+        url?: string;
+    }
+
+    interface ActivityAssets {
+        large_image: string;
+    }
+
+    type Status = "online" | "idle" | "dnd" | "offline";
+
+    interface ClientStatus {
+        web: Status;
+        desktop: Status;
+        mobile: Status;
+    }
+
+    //#endregion eris
     interface GuildBan {
         reason?: string;
         user: User;
@@ -134,9 +180,16 @@ declare module "tt.bot" {
             text: 0,
             dm: 1,
             voice: 2,
-            category: 4
+            category: 4,
+            news: 5,
+            news: 6
+        };
+        AuditLogActions: {
+            [key: string]: number;
+        };
+        ExtensionFlags: {
+            SNEKFETCH_ENABLED: 1
         }
-        AuditLogActions: {}
     }
 
     interface Invitable {
@@ -216,6 +269,7 @@ declare module "tt.bot" {
     }
 
     class Member implements UserData {
+        activities: Activity[];
         game: GamePresence;
         get guild(): Guild;
         joinedAt: number;
@@ -223,7 +277,7 @@ declare module "tt.bot" {
         permission: Permission;
         roles: Role[];
         staticAvatarURL: string;
-        status: string;
+        status: Status;
         get user(): User;
         voiceState: VoiceState
         addRole(role: RoleResolvable, reason?: string): Promise<boolean>;
@@ -241,7 +295,8 @@ declare module "tt.bot" {
         createdAt: number;
         get channels(): Collection<Channel>;
         defaultNotifications: number;
-        emoji: Emoji[];
+        description: string;
+        emojis: Emoji[];
         explicitContentFilter: string;
         features: string[];
         icon: string;
@@ -249,6 +304,8 @@ declare module "tt.bot" {
         id: string;
         joinedAt: number;
         large: boolean;
+        maxMembers: number;
+        maxPresences: number;
         memberCount: number;
         get members(): Collection<Member>;
         get me(): Member;
@@ -256,6 +313,9 @@ declare module "tt.bot" {
         name: number;
         ownerID: string;
         get owner(): Member;
+        preferredLocale: string;
+        premiumSubscriptionCount: number;
+        premiumTier: number;
         get roles(): Collection<Role>;
         splash: string;
         systemChannelID: string;
@@ -271,6 +331,8 @@ declare module "tt.bot" {
         deleteRole(role: RoleResolvable, reason?: string): Promise<boolean>;
         delete(): Promise<boolean>
         dynamicIconURL(format: string, size: number): string;
+        dynamicSplashURL(format: string, size: number): string;
+        dynamicBannerURL(format: string, size: number): string;
         edit(options: GuildOptions, reason?: string): Promise<Guild | boolean>;
         editEmoji(emojiID: string, options: EmojiOptions, reason?: string): Promise<Emoji | boolean>;
         editMember(member: UserResolvable, options: MemberOptions, reason?: string): Promise<boolean>;
@@ -283,6 +345,7 @@ declare module "tt.bot" {
         getBan(user: UserResolvable): Promise<GuildBan | boolean>;
         getBans(): Promise<GuildBan[] | boolean>
         getInvites(): Promise<Invite[] | boolean>;
+        getPruneCount(days: number): Promise<number | boolean>;
         getWebhooks(): Promise<Webhook[] | boolean>;
         kickMember(user: UserResolvable, reason?: string): Promise<boolean>;
         pruneMembers(days: number, reason?: string): Promise<number | boolean>;
@@ -350,7 +413,7 @@ declare module "tt.bot" {
         deleteMessages(messages: MessageResolvable[]): Promise<boolean>;
         editMessage(message: MessageResolvable, content: MessageContent): Promise<Message | boolean>;
         getInvites(): Promise<Invite[] | boolean>;
-        getMessage(id): Message;
+        getMessage(id: string): Message;
         getMessageReaction(id: MessageResolvable, reaction: string, limit?: number, before?: string, after?: string): Promise<User[] | boolean>;
         getMessages(limit?: number, before?: string, after?: string, around?: number): Promise<Message[] | boolean>;
         getPins(): Promise<Message[] | boolean>;
@@ -361,7 +424,6 @@ declare module "tt.bot" {
         removeMessageReactions(message: MessageResolvable): Promise<boolean>;
         sendTyping(): Promise<boolean>;
         unpinMessage(message: MessageResolvable): Promise<boolean>;
-
     }
 
     class Role implements Mentionable {
@@ -373,7 +435,7 @@ declare module "tt.bot" {
         managed: boolean;
         mentionable: boolean;
         name: string;
-        permissions: Permission
+        permissions: Permission;
         position: number;
         delete(): Promise<boolean>;
         edit(options: RoleOptions, reason: string): Promise<Role | boolean>;
@@ -416,8 +478,9 @@ declare module "tt.bot" {
     }
 
     class Extension {
-        id: string;
-        name: string;
+        readonly id: string;
+        readonly name: string;
+        readonly flags: number;
         store: object;
         updateData(data: string | object): Promise<object | Error>
         wipeData(): Promise<object | Error>
