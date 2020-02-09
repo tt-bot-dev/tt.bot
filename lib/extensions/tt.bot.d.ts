@@ -88,8 +88,8 @@ declare module "tt.bot" {
         afkTimeout?: number;
         ownerID?: string;
         splash?: string;
-      }
-      interface MemberOptions { roles?: string[]; nick?: string; mute?: boolean; deaf?: boolean; channelID?: string; }
+    }
+    interface MemberOptions { roles?: string[]; nick?: string; mute?: boolean; deaf?: boolean; channelID?: string; }
     interface RoleOptions { name?: string; permissions?: number; color?: number; hoist?: boolean; mentionable?: boolean; }
 
     interface Webhook {
@@ -100,10 +100,10 @@ declare module "tt.bot" {
         guild_id: string;
         id: string;
         user: {
-          username: string,
-          discriminator: string,
-          id: string,
-          avatar?: string,
+            username: string,
+            discriminator: string,
+            id: string,
+            avatar?: string,
         };
     }
     interface CreateInviteOptions {
@@ -174,10 +174,17 @@ declare module "tt.bot" {
         mentionEveryone: boolean;
         mentions: User[];
         mentionsMembers: Member[];
+        messageReference?: {
+            messageID?: string;
+            channelID?: string;
+            guildID?: string;
+        }
         pinned: boolean;
         reactions: {
-            count: number;
-            me: boolean;
+            [emoji: string]: {
+                count: number;
+                me: boolean;
+            }
         }
         roleMentions: Role[];
         timestamp: number;
@@ -412,7 +419,7 @@ declare module "tt.bot" {
         id: string;
         name: string;
         store: object;
-        updateData(data: string | object): Promise<object|Error>
-        wipeData(): Promise<object|Error>
+        updateData(data: string | object): Promise<object | Error>
+        wipeData(): Promise<object | Error>
     }
 }
