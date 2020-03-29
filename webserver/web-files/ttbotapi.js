@@ -1,6 +1,6 @@
 "use strict";
 (function (w) {
-    const ttbot = (window.ttbot || (window.ttbot = {}));
+    const ttbot = window.ttbot || (window.ttbot = {});
     if (!ttbot.guildId) ttbot.guildId = null;
     if (!ttbot.csrfToken) ttbot.csrfToken = null;
     ttbot.guildConfig = null;

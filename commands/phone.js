@@ -112,8 +112,8 @@ class PhoneCommand extends Command {
                     `Incoming call by ${thisChannelNumber.id} ${!thisChannelNumber.private ? `(#${ctx.channel.name} at ${ctx.guild.name})` : ""}\nType \`${config.prefix}pickup\` to pick up the call. Else, type \`${config.prefix}hangup\`. You have 2 minutes to pick up the call, else the call will be automatically hung up.`);
                 try {
                     const answer = await ctx.waitForAnyMessage(otherSideNumber.channelID,
-                        ctx => (ctx.msg.content === `${config.prefix}pickup`
-                            || ctx.msg.content === `${config.prefix}hangup`),
+                        ctx => ctx.msg.content === `${config.prefix}pickup`
+                            || ctx.msg.content === `${config.prefix}hangup`,
                         2 * 60e3);
 
                     if (answer.msg.content === `${config.prefix}pickup`) {
@@ -183,8 +183,8 @@ class PhoneCommand extends Command {
             });
         } else if (action === DeleteSymbol) {
             const phone = ctx.db.getPhoneNumber(number);
-            if (!phone || (!isOwner(ctx)
-                && (phone && (phone.guildID !== ctx.guild.id)))
+            if (!phone || !isOwner(ctx)
+                && (phone && phone.guildID !== ctx.guild.id)
             ) {
                 await ctx.send(await ctx.t("NUMBER_NONEXISTANT"));
                 return;

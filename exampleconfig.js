@@ -126,17 +126,18 @@ module.exports = {
     encryptionIv: "",
 
     /**
-     * If to enable the /api/dblvotes endpoint or not
-     * @type {boolean}
+     * The webhook details to post extension scope requests in
      */
-    dblVoteHook: false,
-
-    /**
-     * If the above is enabled, these are the options for that feature.
-     * dblVoteHookGuild and dblVoteHookRole are the guild/role IDs.
-     * dblVoteHookSecret should be some piece of random entropy. This one is required.
-     */
-    dblVoteHookGuild: "",
-    dblVoteHookRole: "",
-    dblVoteHookSecret: "",
+    extensionFlagRequest: {
+        /**
+         * The webhook ID
+         * @type {string}
+         */
+        id: "1",
+        /**
+         * The webhook token
+         * @type {string}
+         */
+        token: "nEsprAvedLiVo"
+    }
 };

@@ -1,5 +1,13 @@
 "use strict";
 (function (w) {
+    const flagMapping = {
+        httpRequests: 1,
+        guildSettings: 1 << 1,
+        dangerousGuildSettings: 1 << 2,
+        guildModerative: 1 << 3,
+        guildMembersMeta: 1 << 4,
+        mentionEveryone: 1 << 5
+    };
     (w.__loadMonaco || (cb => w.addEventListener("load", cb)))(function () {
         function loadPickers(isChannel, c) {
             return el => {
@@ -73,6 +81,14 @@
                     });
             }
 
+            let flagNum = 0;
+            document.querySelectorAll("input.tttie-extension-flags")
+                .forEach(box => {
+                    if (Object.prototype.hasOwnProperty.call(flagMapping, box.id) && box.checked) {
+                        flagNum |= flagMapping[box.id];
+                    }
+                });
+
             const store = document.querySelector("input#tttie-extension-store-id");
             if (ttbot.extension !== "new" && !store.value) cb(false);
 
@@ -96,7 +112,8 @@
                 commandTrigger: commandTrigger.value,
                 code: code,
                 name: name.value,
-                store: store.value || null
+                store: store.value || null,
+                flags: flagNum
             });
         }
         function setValues(cfg, reset, update) {
@@ -137,6 +154,38 @@
             const commandTrigger = document.querySelector("input#tttie-extension-cmd");
             commandTrigger.value = cfg.commandTrigger;
             commandTrigger.parentElement.classList.remove("is-loading");
+
+            const flagBoxes = document.querySelectorAll("input.tttie-extension-flags");
+
+            const isPendingApprovalTags = document.createElement("span");
+            isPendingApprovalTags.classList.add("tags", "has-addons", "is-inline-flex", "requires-approval");
+            const pendingApprovalTag = document.createElement("span");
+            pendingApprovalTag.classList.add("tag", "is-info", "is-marginless");
+            pendingApprovalTag.innerText = "Pending approval";
+            const loadingTag = document.createElement("span");
+            loadingTag.classList.add("tag", "is-info", "is-marginless", "is-loading");
+            isPendingApprovalTags.append(pendingApprovalTag, loadingTag);
+
+            for (const box of flagBoxes) {
+                const loadingSelector = box.parentElement.parentElement.querySelector("span.tags.requires-approval");
+                if (Object.prototype.hasOwnProperty.call(flagMapping, box.id)) {
+                    if (cfg.flags & flagMapping[box.id]) {
+                        box.checked = true;
+                        if (loadingSelector) loadingSelector.remove();
+                    }
+                    else if (cfg.privilegedFlags & flagMapping[box.id]) {
+                        box.checked = true;
+                        if (!loadingSelector) box.parentElement.insertAdjacentElement("afterend", isPendingApprovalTags.cloneNode(true));
+                    } else {
+                        box.checked = false;
+                        if (loadingSelector) loadingSelector.remove();
+                    }
+                } else {
+                    box.checked = false;
+                    if (loadingSelector) loadingSelector.remove();
+                }
+            }
+
 
             const ta = document.querySelector("textarea#tttie-textarea-code");
             if (!ta && document.querySelector("div.monaco-container#extension-monaco-container")) {

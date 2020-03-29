@@ -1,5 +1,6 @@
 "use strict";
-const { Eris: { Permission }} = require("sosamba");
+const { Eris: { Permission } } = require("sosamba");
+const OwnerCommand = require("../../lib/commandTypes/OwnerCommand");
 module.exports = {
     checkAuth(api = false) {
         return (req, res, next) => {
@@ -33,6 +34,20 @@ module.exports = {
     getGuilds(req, res) {
         if (!req.user) return res.redirect("/login");
         if (!req.user.guilds) return res.redirect("/login");
+        if (OwnerCommand.prototype.permissionCheck.call(null, {
+            author: req.user
+        })) {
+            return [
+                ...req.bot.guilds.values(),
+
+                ...req.user.guilds.filter(g => {
+                    const permission = new Permission(g.permissions);
+                    return !req.bot.guilds.has(g.id) && (permission.has("administrator") || permission.has("manageGuild"));
+                })
+            ].map(g => Object.assign({}, g, {
+                isOnServer: req.bot.guilds.has(g.id)
+            }))
+        }
         return req.user.guilds.filter(g => {
             if (req.bot.guilds.has(g.id)) return req.bot.isAdmin(req.bot.guilds.get(g.id).members.get(req.user.id));
             else {
@@ -41,8 +56,8 @@ module.exports = {
             }
 
         }).map(g => Object.assign({}, g, {
-            isOnServer: req.bot.guilds.has(g.id)
-        }));
+                isOnServer: req.bot.guilds.has(g.id)
+            }));
     },
 
     getHost(host) {

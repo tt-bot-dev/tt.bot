@@ -6,6 +6,10 @@
             modalCard.classList.remove("tttie-slide-in");
             modalCard.classList.add("tttie-slide-out");
             modalBg.classList.add("tttie-fade-out");
+            if (w.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                modal.remove();
+                return;
+            }
             modalCard.addEventListener("animationend", () => {
                 modal.remove();
             }, { 

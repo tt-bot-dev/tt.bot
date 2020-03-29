@@ -10,7 +10,7 @@ class AgreeCommand extends Command {
         });
     }
     async run(ctx) {
-        const { memberRole, agreeChannel } = (await ctx.guildConfig || {});
+        const { memberRole, agreeChannel } = await ctx.guildConfig || {};
         if (!memberRole || !agreeChannel) return;
         if (ctx.channel.id !== agreeChannel) return;
         if (!ctx.guild.roles.has(memberRole)) return;

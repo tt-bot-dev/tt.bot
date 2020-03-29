@@ -2,7 +2,7 @@
 const { Event, Logger } = require("sosamba");
 const { WorkerTypes } = require("../lib/util/worker");
 const { version } = require("../package.json");
-const { botsGGKey, topGGKey } = require("../config");
+const { botsGGKey, topGGKey, workerCount, prefix } = require("../config");
 
 class ReadyEvent extends Event {
     constructor(...args) {
@@ -10,19 +10,19 @@ class ReadyEvent extends Event {
             name: "ready"
         });
         this.posterLog = new Logger({
-            level: (this.sosamba.options.log && this.sosamba.options.log.level) ?
+            level: this.sosamba.options.log && this.sosamba.options.log.level ?
                 this.sosamba.options.log.level : undefined,
             name: "DBLPoster"
         });
     }
     async run() {
         if (!this.sosamba.workers.workersRan) {
-            for (let i = 0; i < config.workerCount; i++) {
+            for (let i = 0; i < workerCount; i++) {
                 await Promise.all(Object.values(WorkerTypes).map(w => this.sosamba.workers.startWorker(w)));
                 this.sosamba.workers.workersRan = true;
             }
         }
-        this.sosamba.editStatus("online", { name: `Type ${config.prefix}help`, type: 0 });
+        this.sosamba.editStatus("online", { name: `Type ${prefix}help`, type: 0 });
         await this.postStats();
         setInterval(() => this.postStats(), 1800000);
         await this.leaveBotCollectionServers();

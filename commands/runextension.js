@@ -14,7 +14,7 @@ class RunExtensionCommand extends Command {
     }
 
     async run(ctx, args) {
-        let { error: err } = ExtensionRunner(ctx.msg, this.sosamba, args, {
+        let { error: err } = ExtensionRunner(ctx, this.sosamba, args, {
             id: "eval",
             name: "Evaluated extension",
             data: {

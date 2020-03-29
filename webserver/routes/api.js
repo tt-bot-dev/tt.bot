@@ -5,6 +5,9 @@ const uuidregex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[
 const authNeeded = checkAuth(true);
 const UserProfile = require("../../lib/Structures/UserProfile");
 const moment = require("moment");
+const { ExtensionFlags } = require("../../lib/extensions/API/Constants");
+const PRIVILEGED_SCOPES = ["httpRequests", "dangerousGuildSettings"];
+const { extensionFlagRequest, prefix, webserverDisplay } = require("../../config");
 module.exports = (app, csrf, db) => {
     app.get("/api/channels/:guild", authNeeded, (rq, rs) => {
         const guilds = getGuilds(rq, rs);
@@ -43,7 +46,9 @@ module.exports = (app, csrf, db) => {
             const guild = rq.bot.guilds.get(rq.params.guild);
             const highestRole = guild.members.get(rq.bot.user.id).roles
                 .map(r => guild.roles.get(r))
-                .sort((a, b) => b.position - a.position)[0];
+                .sort((a, b) => b.position - a.position)[0] || {
+                    position: -1
+                };
             let roles = guild.roles.filter(r => r.position < highestRole.position);
             if (rq.query.ignoreHierarchy === "true") roles = [...guild.roles.values()];
             return rs.send(roles.sort((a, b) => b.position - a.position).map(r => ({
@@ -92,7 +97,9 @@ module.exports = (app, csrf, db) => {
             store: null,
             code: "const { message } = require(\"tt.bot\");\n\nmessage.reply(\"hi!\")",
             name: "My cool extension",
-            id: "new"
+            id: "new",
+            flags: 0,
+            privilegedFlags: 0
         };
         const { guild, id } = rq.params;
         const guilds = getGuilds(rq, rs);
@@ -101,13 +108,13 @@ module.exports = (app, csrf, db) => {
             if (id === "new") return rs.send(d);
             const filteredBody = {};
             const extension = await db.getGuildExtension(id);
-            if (!extension || (extension && extension.guildID !== guild)) {
+            if (!extension || extension && extension.guildID !== guild) {
                 rs.status(404);
                 rs.send({ error: "Not Found" });
                 return;
             }
             Object.keys(extension).filter(k => Object.keys(d).includes(k)).forEach(k => {
-                filteredBody[k] = extension[k] || undefined;
+                filteredBody[k] = extension[k] != null ? extension[k] : undefined;
             });
             filteredBody.id = id;
             rs.send(filteredBody);
@@ -128,11 +135,12 @@ module.exports = (app, csrf, db) => {
                 "allowedRoles",
                 "commandTrigger",
                 "name",
-                "store"
+                "store",
+                "flags"
             ];
             const filteredBody = {};
             const extension = id === "new" ? { guildID: guild } : await db.getGuildExtension(id);
-            if (!extension || (extension && extension.guildID !== guild)) {
+            if (!extension || extension && extension.guildID !== guild) {
                 rs.status(404);
                 rs.send({ error: "Not Found" });
                 return;
@@ -153,6 +161,35 @@ module.exports = (app, csrf, db) => {
                 rs.send({ error: "Command trigger missing" });
                 return;
             }
+
+            const reqFlags = [];
+            // If the extension code changed, consider the extension untrusted
+            if ((filteredBody.flags ^ extension.flags 
+                || filteredBody.flags ^ extension.privilegedFlags) || filteredBody.code !== extension.code) {
+                let flagNum = 0;
+                let privScopeFlagNum = 0;
+                for (const scope of Object.keys(ExtensionFlags)) {
+                    if (filteredBody.flags & ExtensionFlags[scope]
+                        && PRIVILEGED_SCOPES.includes(scope)) {
+                        if ((filteredBody.code !== extension.code || 
+                        (!(extension.flags & ExtensionFlags[scope]))
+                        && !(extension.privilegedFlags & ExtensionFlags[scope]))) {
+                            reqFlags.push(scope);
+                            privScopeFlagNum |= ExtensionFlags[scope];
+                        }
+                        else {
+                            if (extension.privilegedFlags & ExtensionFlags[scope]) privScopeFlagNum |= ExtensionFlags[scope];
+                            else flagNum |= ExtensionFlags[scope];
+                        }
+                    } else if (filteredBody.flags & ExtensionFlags[scope]) {
+                        flagNum |= ExtensionFlags[scope];
+                    }
+                }
+                filteredBody.privilegedFlags = privScopeFlagNum;
+                filteredBody.flags = flagNum;
+            }
+
+            console.log(filteredBody.flags, filteredBody.privilegedFlags);
             if (filteredBody.commandTrigger.length > 20)
                 filteredBody.commandTrigger = filteredBody.commandTrigger.slice(0, 20);
             if (!uuidregex.test(filteredBody.store)) filteredBody.store = null;
@@ -182,10 +219,24 @@ module.exports = (app, csrf, db) => {
                 };
 
                 const newID = await tryInsertExtension();
-                return rs.send(await db.getGuildExtension(newID));
+                rs.send(await db.getGuildExtension(newID));
             } else {
                 await db.updateGuildExtension(id, filteredBody);
-                return rs.send(await db.getGuildExtension(id));
+                rs.send(await db.getGuildExtension(id));
+            }
+
+            if (reqFlags.length) {
+                await rq.bot.executeWebhook(extensionFlagRequest.id, extensionFlagRequest.token, {
+                    content: filteredBody.id,
+                    embeds: [{
+                        title: `"${filteredBody.name}" requested a privileged flag`,
+                        description: `**Requested scopes:**\n${reqFlags.join(", ")}\n\n[View the extension](${webserverDisplay(`/dashboard/${filteredBody.guildID}/extensions/${filteredBody.id}`)})`,
+                        color: 0x008800,
+                        footer: {
+                            text: `Type ${prefix}allowextflag ${filteredBody.id} <flags> to grant these extension flags`
+                        }
+                    }]
+                });
             }
         }
     });
@@ -199,7 +250,7 @@ module.exports = (app, csrf, db) => {
         }
         else {
             const extension = await db.getGuildExtension(id);
-            if (!extension || (extension && extension.guildID !== guild)) {
+            if (!extension || extension && extension.guildID !== guild) {
                 rs.status(404);
                 rs.send({ error: "Not Found" });
                 return;
@@ -267,44 +318,5 @@ module.exports = (app, csrf, db) => {
         rs.status(204);
         rs.end();
     });
-
-    if (config.dblVoteHook) {
-        app.post("/api/dblvotes", async (rq, rs) => {
-            const pass = async () => {
-                if (rq.body.type !== "test") rq.bot.createMessage(config.serverLogChannel, {
-                    content: `<@!${rq.body.user}> (${rq.bot.getTag(await bot.getUserWithoutRESTMode(rq.body.user))}), thank you!\nIf you are here, you should be given a vote role reward if it exists!`,
-                    embed: {
-                        color: 0x008800,
-                        author: {
-                            name: "Vote feed"
-                        },
-                        description: `Oh wait, you didn't vote for me yet? Go ahead and do that [here](https://discordbots.org/bot/${bot.user.id}/vote), if you wish!`,
-                        timestamp: new Date()
-                    }
-                });
-                rs.send({ status: "OK" });
-            };
-            if (!rq.headers.authorization || (rq.headers.authorization !== config.dblVoteHookSecret)) {
-                rs.status(403);
-                return rs.send({ error: "Forbidden" });
-            }
-
-            if (rq.body.type === "test") {
-                //eslint-disable-next-line no-console
-                console.log("Test passed.");
-                pass();
-                return;
-            }
-
-            const guild = rq.bot.guilds.get(config.dblVoteHookGuild);
-            if (!guild) return pass();
-            const role = guild.roles.get(config.dblVoteHookRole);
-            if (!role) return pass();
-            const member = guild.members.get(rq.body.user);
-            if (!member) return pass();
-            if (!member.roles.includes(role.id)) await member.addRole(role.id, "Voting on discordbots.org");
-            return pass();
-        });
-    }
     return app;
 };

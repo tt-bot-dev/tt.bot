@@ -50,7 +50,7 @@ class JPEGCommand extends Command {
             });
             return;
         }
-        image.quality((Math.random() * 5) + 1);
+        image.quality(Math.random() * 5 + 1);
         let file;
         try {
             file = await image.getBufferAsync(MIME_JPEG);

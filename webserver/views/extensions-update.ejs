@@ -7,8 +7,8 @@
         <div class="hero-head"><%- include("./partials/header", { isLanding: true }) %></div>
         <div class="hero-body">
             <div class="container">
-                <h2 class="title is-2 tttie-title">Loading extension data...</h2>
-                <h4 class="subtitle is-4">Build your extension here.</h4>
+                <h2 class="title is-2 is-size-4-mobile tttie-title">Loading extension data...</h2>
+                <h4 class="subtitle is-4 is-size-5-mobile">Build your extension here.</h4>
             </div>
         </div>
     </section>
@@ -79,7 +79,6 @@
                         <div class="control is-loading">
                             <input class="input" type="text" id="tttie-extension-name">
                         </div>
-
                     </div>
                     <div class="content">
                         <h6 class="bot-setting is-size-5">Command trigger</h6>
@@ -103,6 +102,88 @@
                         </p>
                         <div class="control is-loading is-expanded">
                             <input class="input" type="text" id="tttie-extension-store-id">
+                        </div>
+                    </div>
+                    
+                    <div class="content">
+                        <h6 class="bot-setting is-size-5">Extension privileges</h6>
+                            <p>Checkboxes below set the access to privileged functions in extensions.
+                        </p>
+                        <article class="message is-danger">
+                            <div class="message-header">Warning!</div>
+                            <div class="message-body">Keep in mind that the tt.bot development team is <b>NOT</b> responsible for any damage 
+                                done to your server by granting dangerous extension privileges to malicious extensions.</div>
+                        </article>
+                        <div class="field">
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="httpRequests"> 
+                                    HTTP Requests 
+                                </label> 
+                                <span class="tags has-addons is-inline-flex">
+                                    <span class="tag is-marginless">
+                                        Privileged
+                                    </span>
+                                    
+                                    <span class="tag is-marginless">
+                                        <span class="icon"><i class="fas fa-shield-alt"></i></span> 
+                                    </span>
+                                </span>
+                                <p class="help">Allows the extension to make HTTP requests using <a href="https://npm.im/node-fetch">node-fetch</a> or <a href="https://npm.im/chainfetch">chainfetch</a> NPM modules.</p>
+                            </div>
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="guildSettings"> 
+                                    Edit Server Settings
+                                </label>
+                                <p class="help">Allows the extension to edit server settings, channels, roles, to create and get invites and to delete emojis.</p>
+                            </div>
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="dangerousGuildSettings"> 
+                                    Edit Dangerous Server Settings
+                                </label>
+                                
+                                <span class="tags has-addons is-inline-flex">
+                                    <span class="tag is-marginless">
+                                        Privileged
+                                    </span>
+                                    
+                                    <span class="tag is-marginless">
+                                        <span class="icon"><i class="fas fa-shield-alt"></i></span> 
+                                    </span>
+                                </span>
+                                <p class="help">Allows the extension to perform dangerous actions on the server.<br>
+                                    Dangerous actions include:
+                                </p>
+                                <ul class="help">
+                                    <li>Editing server name, icon, default notification settings, verification level and explicit content scanning</li>
+                                    <li>Removing channels, roles and invites</li>
+                                    <li>Pruning members</li>
+                                </ul>
+                            </div>
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="guildModerative"> 
+                                    Moderate Server
+                                </label>
+                                <p class="help">Allows the extension to perform moderative actions on the server (kicking/banning/deleting messages).</p>
+                            </div>
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="guildMembersMeta"> 
+                                    Edit Server Member Metadata
+                                </label>
+                                <p class="help">Allows the extension to edit metadata of server members (roles, nickname, deaf/mute status).</p>
+                            </div>
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="mentionEveryone"> 
+                                    Mention Everyone
+                                </label>
+                                <p class="help">Allows the extension to send messages that mention roles, @everyone/@here or users.
+                                    If disabled, the extension can only mention the author of a message when replying using <code>Message#reply</code> or when sending a message to a user.</p>
+                            </div>
                         </div>
                     </div>
 

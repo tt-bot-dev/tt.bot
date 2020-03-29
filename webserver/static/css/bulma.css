@@ -11,9 +11,10 @@
 .navbar-menu.is-active .is-inline-block {
   vertical-align: middle; }
 
-.navbar .navbar-item.bot-bar-item figure.image {
-  width: 28px;
-  height: 28px; }
+.navbar .navbar-item.bot-bar-item img {
+  width: auto;
+  height: 100%;
+  border-radius: 32px; }
 
 div.tttie-changes-buttons {
   position: sticky;
@@ -149,17 +150,21 @@ label.checkbox input[type="checkbox"] + span {
   to {
     opacity: 0; } }
 
-.tttie-slide-in {
-  animation: tttie-slide-in cubic-bezier(0.4, 0, 0.2, 1) normal 250ms; }
-
-.tttie-slide-out {
-  animation: tttie-slide-out cubic-bezier(0.4, 0, 0.2, 1) normal 200ms; }
-
 .tttie-fade-in {
   animation: tttie-fade-in cubic-bezier(0.4, 0, 0.2, 1) normal 250ms; }
 
 .tttie-fade-out {
   animation: tttie-fade-out cubic-bezier(0.4, 0, 0.2, 1) normal 200ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tttie-slide-in, .tttie-slide-out {
+    animation: none; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .tttie-slide-in {
+    animation: tttie-slide-in cubic-bezier(0.4, 0, 0.2, 1) normal 250ms; }
+  .tttie-slide-out {
+    animation: tttie-slide-out cubic-bezier(0.4, 0, 0.2, 1) normal 200ms; } }
 
 header.modal-card-head p.modal-card-title {
   flex-shrink: initial; }
@@ -172,6 +177,9 @@ div.monaco-wrapper {
     div.monaco-wrapper .monaco-container .monaco-editor {
       position: absolute; }
 
+/*.control.is-extension-flag.is-loading::before {
+    content: "Pending approval";
+}*/
 /*! bulma.io v0.8.0 | MIT License | github.com/jgthms/bulma */
 @keyframes spinAround {
   from {
@@ -7274,3 +7282,20 @@ label.panel-block {
 .footer {
   background-color: #fafafa;
   padding: 3rem 1.5rem 6rem; }
+
+.control.is-extension-flag {
+  padding-bottom: 10px; }
+  .control.is-extension-flag .tags {
+    margin-left: 1rem;
+    margin-bottom: 0; }
+    .control.is-extension-flag .tags .tag.is-loading::after {
+      animation: spinAround 500ms infinite linear;
+      border: 2px solid #dbdbdb;
+      border-radius: 290486px;
+      border-right-color: transparent;
+      border-top-color: transparent;
+      content: "";
+      display: block;
+      height: 1em;
+      position: relative;
+      width: 1em; }

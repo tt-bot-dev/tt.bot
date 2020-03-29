@@ -10,18 +10,19 @@ const e = require("polka"),
     fs = require("fs"),
     csrfProtection = csrf({
         value: req =>
-            (req.body && req.body._csrf) ||
-            (req.query && req.query._csrf) ||
-            (req.query && req.query.state) ||
-            (req.headers["csrf-token"]) ||
-            (req.headers["xsrf-token"]) ||
-            (req.headers["x-csrf-token"]) ||
-            (req.headers["x-xsrf-token"])
+            req.body && req.body._csrf ||
+            req.query && req.query._csrf ||
+            req.query && req.query.state ||
+            req.headers["csrf-token"] ||
+            req.headers["xsrf-token"] ||
+            req.headers["x-csrf-token"] ||
+            req.headers["x-xsrf-token"]
     }),
     { Logger } = require("sosamba"),
     serveStatic = require("./util/static"),
     { availableTypes } = require("../lib/logging"),
-    UserProfile = require("../lib/Structures/UserProfile");
+    UserProfile = require("../lib/Structures/UserProfile"),
+    OwnerCommand = require("../lib/commandTypes/OwnerCommand");
 
 
 module.exports = function (db, bot, config) {
@@ -42,7 +43,7 @@ module.exports = function (db, bot, config) {
             log.error(err);
             res.status(500);
             res.render("500", req.makeTemplatingData({
-                error: (req.user && isO({ author: req.user })) ? err.stack : err.message,
+                error: req.user && OwnerCommand.prototype.permissionCheck.call(null, { author: req.user }) ? err.stack : err.message,
                 pageTitle: "Error"
             }));
         },
@@ -148,7 +149,7 @@ module.exports = function (db, bot, config) {
                 log.error(err);
                 return res.redirect("/login");
             }
-            await (new Promise((rs, rj) => req.session.save(e => e ? rj(e) : rs())));
+            await new Promise((rs, rj) => req.session.save(e => e ? rj(e) : rs()));
             return res.redirect("/");
         }
     });
@@ -185,7 +186,7 @@ module.exports = function (db, bot, config) {
                 return;
             }
             const extension = await db.getGuildExtension(rq.params.extension);
-            if (!extension || (extension && extension.guildID !== g.id)) {
+            if (!extension || extension && extension.guildID !== g.id) {
                 rs.status(404);
                 return rs.render("404", rq.makeTemplatingData({
                     pageTitle: "404"
@@ -220,7 +221,7 @@ module.exports = function (db, bot, config) {
                 return;
             }
             const extension = await db.getGuildExtension(rq.params.extension);
-            if (!extension || (extension && extension.guildID !== g.id)) {
+            if (!extension || extension && extension.guildID !== g.id) {
                 rs.status(404);
                 return rs.render("404", rq.makeTemplatingData({
                     pageTitle: "404"

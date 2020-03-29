@@ -127,7 +127,7 @@ class ProfileCommand extends Command {
             if (language === "en") continue;
             const termsInForeign = terms.filter(term => Object.prototype.hasOwnProperty
                 .call(translation, term)).length;
-            s[language] = ((termsInForeign / terms.length) * 100).toFixed(2);
+            s[language] = (termsInForeign / terms.length * 100).toFixed(2);
         }
         return s;
     }

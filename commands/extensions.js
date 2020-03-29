@@ -45,7 +45,7 @@ class ExtensionCommand extends Command {
             let page = 0;
             if (id > 1) page = parseInt(id - 1);
             if (isNaN(page)) page = 0;
-            const pageIndex = page === 0 ? 0 : (page * 25 - 1);
+            const pageIndex = page === 0 ? 0 : page * 25 - 1;
 
             const ext = extensions.slice(pageIndex, (page + 1) * 25 - 1);
             if (ext.length === 0) {
@@ -105,7 +105,7 @@ class ExtensionCommand extends Command {
             let trigger;
             try {
                 trigger = await ctx.waitForMessage(c =>
-                    (!c.msg.content.includes(" ")) && c.msg.content.length <= 20
+                    !c.msg.content.includes(" ") && c.msg.content.length <= 20
                     && !this.sosamba.commands.has(c.msg.content.toLowerCase())
                 );
             } catch {
@@ -185,7 +185,7 @@ class ExtensionCommand extends Command {
             await ctx.send(await ctx.t("EXTENSION_CREATED", extensionName, await tryInsertExtension()));
         } else if (action === DeleteSymbol) {
             const ext = await ctx.db.getGuildExtension(id);
-            if (!ext || (ext && ext.guildID !== ctx.guild.id)) {
+            if (!ext || ext && ext.guildID !== ctx.guild.id) {
                 await ctx.send(await ctx.t("EXTENSION_NONEXISTANT"));
                 return;
             }

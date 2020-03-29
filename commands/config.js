@@ -88,7 +88,7 @@ class ConfigMenu extends ReactionMenu {
                 textOnly: true
             })).id;
             if (typeof propInfo.validation === "function"
-                && (await propInfo.validation(toSave, this.ctx)) === false) throw new Error();
+                && await propInfo.validation(toSave, this.ctx) === false) throw new Error();
         } catch (err) {
             console.error(err);
             await m.edit(await this.ctx.t("OP_CANCELLED"));
@@ -209,7 +209,7 @@ class ConfigCommand extends Command {
     }
 
     async run(ctx) {
-        if (!(await ctx.guildConfig)) {
+        if (!await ctx.guildConfig) {
             await ctx.db.createGuildConfig(ctx._guildConfig = {
                 id: ctx.guild.id,
                 prefix: defaultPrefix

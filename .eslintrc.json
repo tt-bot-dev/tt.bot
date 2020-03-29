@@ -41,36 +41,10 @@
             {
                 "allowEmptyCatch": true
             }
-        ]
+        ],
+        "no-extra-parens": "error"
     },
     "globals": {
-        "p": false,
-        "cmds": true,
-        "fs": false,
-        "speakerPhoneBinds": true,
-        "userQuery": false,
-        "keymetrics": false,
-        "decimalToHex": false,
-        "translations": true,
-        "format": true,
-        "getUptime": false,
-        "bot": true,
-        "connected": true,
-        "isO": false,
-        "cmdAliases": true,
-        "Eris": true,
-        "ErisO": true,
-        "config": true,
-        "cmdWrap": true,
-        "db": true,
-        "moment": true,
-        "queries": true,
-        "rld": true,
-        "momentTz": true,
-        "encryptData": true,
-        "decryptData": true,
-        "sentry": true,
-        "i18n": true,
         "BigInt": true
     }
 }

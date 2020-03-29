@@ -69,7 +69,7 @@ class ClearCommand extends Command {
             return;
         }
         await this.clearMessages(ctx, r);
-        const oldestPossibleSnowflake = (BigInt(Date.now()) - D_EPOCH) << BigInt(22);
+        const oldestPossibleSnowflake = BigInt(Date.now()) - D_EPOCH << BigInt(22);
         const msgs = await ctx.channel.getMessages(messages > 1000 ? 1000 : messages);
         const toDelete = msgs.filter(msg => {
             const v = this.matchesCriteriaContaining(msg, contains) && this.matchesCriteriaFrom(msg, from) && this.matchesCriteriaMentions(msg, mentions);

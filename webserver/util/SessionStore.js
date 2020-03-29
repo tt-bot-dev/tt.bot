@@ -1,6 +1,6 @@
 "use strict";
 function noop() {}
-module.exports = session => class SessionStore extends ((session.session && session.session.Store) ? session.session.Store : session.Store) {
+module.exports = session => class SessionStore extends (session.session && session.session.Store ? session.session.Store : session.Store) {
     constructor(db, logger, options) {
         super(options);
         this.db = db;
