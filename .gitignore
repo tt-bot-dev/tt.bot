@@ -1,3 +1,6 @@
 /config.js
 /config.json
 node_modules/
+
+# Useful license preambles
+license-preambles.txt

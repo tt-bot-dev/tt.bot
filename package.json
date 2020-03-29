@@ -52,7 +52,7 @@
         "url": "git+https://github.com/tt-bot-dev/tt.bot.git"
     },
     "author": "TTtie",
-    "license": "MIT",
+    "license": "AGPL-3.0-or-later",
     "bugs": {
         "url": "https://github.com/tt-bot-dev/tt.bot/issues"
     },
