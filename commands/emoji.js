@@ -52,7 +52,7 @@ class EmojiCommand extends Command {
                 }
             }
         }, {
-            file: Buffer.from(b.image, "base64"),
+            file: Buffer.from(b.image),
             name: b.isGif ? "image.gif" : "image.png"
         });
     }
