@@ -47,8 +47,8 @@ module.exports = (app, csrf, db) => {
             const highestRole = guild.members.get(rq.bot.user.id).roles
                 .map(r => guild.roles.get(r))
                 .sort((a, b) => b.position - a.position)[0] || {
-                    position: -1
-                };
+                position: -1
+            };
             let roles = guild.roles.filter(r => r.position < highestRole.position);
             if (rq.query.ignoreHierarchy === "true") roles = [...guild.roles.values()];
             return rs.send(roles.sort((a, b) => b.position - a.position).map(r => ({
@@ -164,16 +164,16 @@ module.exports = (app, csrf, db) => {
 
             const reqFlags = [];
             // If the extension code changed, consider the extension untrusted
-            if ((filteredBody.flags ^ extension.flags 
-                || filteredBody.flags ^ extension.privilegedFlags) || filteredBody.code !== extension.code) {
+            if (filteredBody.flags ^ extension.flags 
+                || filteredBody.flags ^ extension.privilegedFlags || filteredBody.code !== extension.code) {
                 let flagNum = 0;
                 let privScopeFlagNum = 0;
                 for (const scope of Object.keys(ExtensionFlags)) {
                     if (filteredBody.flags & ExtensionFlags[scope]
                         && PRIVILEGED_SCOPES.includes(scope)) {
-                        if ((filteredBody.code !== extension.code || 
-                        (!(extension.flags & ExtensionFlags[scope]))
-                        && !(extension.privilegedFlags & ExtensionFlags[scope]))) {
+                        if (filteredBody.code !== extension.code || 
+                        !(extension.flags & ExtensionFlags[scope])
+                        && !(extension.privilegedFlags & ExtensionFlags[scope])) {
                             reqFlags.push(scope);
                             privScopeFlagNum |= ExtensionFlags[scope];
                         }

@@ -46,7 +46,7 @@ module.exports = {
                 })
             ].map(g => Object.assign({}, g, {
                 isOnServer: req.bot.guilds.has(g.id)
-            }))
+            }));
         }
         return req.user.guilds.filter(g => {
             if (req.bot.guilds.has(g.id)) return req.bot.isAdmin(req.bot.guilds.get(g.id).members.get(req.user.id));
@@ -56,8 +56,8 @@ module.exports = {
             }
 
         }).map(g => Object.assign({}, g, {
-                isOnServer: req.bot.guilds.has(g.id)
-            }));
+            isOnServer: req.bot.guilds.has(g.id)
+        }));
     },
 
     getHost(host) {

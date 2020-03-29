@@ -102,7 +102,7 @@ class UserCommand extends Command {
                         text: "They're not in this server, so that's everything I know 😥"
                     }
                 }
-            })
+            });
         }
         
     }
