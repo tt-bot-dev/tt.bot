@@ -41,7 +41,14 @@ declare module "tt.bot" {
     //#region eris
     // ===================== ERIS TYPINGS =====================
 
-    type MessageContent = string | { content?: string, tts?: boolean, disableEveryone?: boolean, embed?: EmbedOptions };
+    type MessageContent = string | {
+        content?: string, tts?: boolean, disableEveryone?: boolean, embed?: EmbedOptions,
+        allowedMentions?: {
+            everyone?: boolean;
+            users?: boolean | string[];
+            roles?: boolean | string[];
+        }
+    };
     interface Attachment { url: string; proxy_url: string; size: number; id: string; filename: string; }
     interface EmbedBase {
         title?: string;
@@ -97,26 +104,26 @@ declare module "tt.bot" {
         [key: string]: any;
     }
     interface Permission {
-        public allow: number;
-        public deny: number;
-        public json: { [s: string]: boolean };
-        public has(permission: string): boolean;
+        allow: number;
+        deny: number;
+        json: { [s: string]: boolean };
+        has(permission: string): boolean;
     }
     interface PermissionOverwrite extends Permission {
-        public id: string;
-        public createdAt: number;
-        public type: string;
+        id: string;
+        createdAt: number;
+        type: string;
     }
     interface VoiceState {
-        public id: string;
-        public createdAt: number;
-        public sessionID?: string;
-        public channelID?: string;
-        public mute: boolean;
-        public deaf: boolean;
-        public suppress: boolean;
-        public selfMute: boolean;
-        public selfDeaf: boolean;
+        id: string;
+        createdAt: number;
+        sessionID?: string;
+        channelID?: string;
+        mute: boolean;
+        deaf: boolean;
+        suppress: boolean;
+        selfMute: boolean;
+        selfDeaf: boolean;
     }
 
     interface GuildOptions {
@@ -153,16 +160,16 @@ declare module "tt.bot" {
         temporary?: boolean;
     }
     interface Collection<T extends { id: string | number }> extends Map<string | number, T> {
-        public baseObject: new (...args: any[]) => T;
-        public limit?: number;
-        public constructor(baseObject: new (...args: any[]) => T, limit?: number);
-        public add(obj: T, extra?: any, replace?: boolean): T;
-        public find(func: (i: T) => boolean): T;
-        public random(): T;
-        public filter(func: (i: T) => boolean): T[];
-        public map<R>(func: (i: T) => R): R[];
-        public update(obj: T, extra?: any, replace?: boolean): T;
-        public remove(obj: T | { id: string }): T;
+        baseObject: new (...args: any[]) => T;
+        limit?: number;
+        constructor(baseObject: new (...args: any[]) => T, limit?: number);
+        add(obj: T, extra?: any, replace?: boolean): T;
+        find(func: (i: T) => boolean): T;
+        random(): T;
+        filter(func: (i: T) => boolean): T[];
+        map<R>(func: (i: T) => R): R[];
+        update(obj: T, extra?: any, replace?: boolean): T;
+        remove(obj: T | { id: string }): T;
     }
     interface Activity {
         application_id?: string;
@@ -201,13 +208,18 @@ declare module "tt.bot" {
             voice: 2,
             category: 4,
             news: 5,
-            news: 6
+            store: 6
         };
         AuditLogActions: {
             [key: string]: number;
         };
         ExtensionFlags: {
-            SNEKFETCH_ENABLED: 1
+            httpRequests: 1,
+            guildSettings: 2,
+            dangerousGuildSettings: 4,
+            guildModerative: 8,
+            guildMembersMeta: 16,
+            mentionEveryone: 32
         }
     }
 
@@ -274,7 +286,7 @@ declare module "tt.bot" {
         reply(content: MessageContent, file?: MessageFile): Promise<Message | boolean>;
     }
 
-    interface UserData implements Textable, Mentionable {
+    interface UserData extends Textable, Mentionable {
         avatar: string;
         avatarURL: string;
         bot: boolean;
@@ -288,6 +300,18 @@ declare module "tt.bot" {
     }
 
     class Member implements UserData {
+        avatar: string;
+        avatarURL: string;
+        bot: boolean;
+        createdAt: number;
+        defaultAvatar: string;
+        defaultAvatarURL: string;
+        discriminator: string;
+        id: string;
+        username: string;
+        createMessage(content: MessageContent, file: MessageFile): Promise<boolean | Message>;
+        mention: string;
+        toString(): string;
         activities: Activity[];
         game: GamePresence;
         get guild(): Guild;
@@ -343,7 +367,7 @@ declare module "tt.bot" {
         verificationLevel: number;
         addMemberRole(member: UserResolvable, role: RoleResolvable, reason?: string): Promise<boolean>;
         banMember(user: UserResolvable, deleteMessageDays: number, reason?: string): Promise<boolean>;
-        createChannel(name: string, type: number, reason?: string, parent: CategoryChannel): Promise<GuildChannel>;
+        createChannel(name: string, type: number, reason?: string, parent?: CategoryChannel): Promise<GuildChannel>;
         createEmoji(options: EmojiOptions, reason?: string): Promise<Emoji | boolean>;
         createRole(options: RoleOptions, reason?: string): Promise<Role | boolean>;
         deleteEmoji(emojiID: string, reason?: string): Promise<boolean>;
@@ -391,6 +415,19 @@ declare module "tt.bot" {
     }
 
     class User implements UserData {
+        avatar: string;
+        avatarURL: string;
+        bot: boolean;
+        createdAt: number;
+        defaultAvatar: string;
+        defaultAvatarURL: string;
+        discriminator: string;
+        id: string;
+        staticAvatarURL: string;
+        username: string;
+        createMessage(content: MessageContent, file: MessageFile): Promise<boolean | Message>;
+        mention: string;
+        toString(): string;
         dynamicAvatarURL(format: string, size: number): string;
     }
 
@@ -422,6 +459,8 @@ declare module "tt.bot" {
 
 
     class TextChannel extends Channel implements Invitable, Textable, Mentionable {
+        createInvite(options: CreateInviteOptions, reason?: string): Promise<boolean | Invite>;
+        createMessage(content: MessageContent, file: MessageFile): Promise<boolean | Message>;
         get lastMessage(): Message;
         lastPinTimestamp: number;
         get messages(): Collection<Message>;
@@ -446,6 +485,8 @@ declare module "tt.bot" {
     }
 
     class Role implements Mentionable {
+        mention: string;
+        toString(): string;
         color: number;
         createdAt: number;
         get guild(): Guild;
@@ -476,22 +517,22 @@ declare module "tt.bot" {
     class Invite {
         code: string;
         channel: { id: string, name: string };
-        guild: {
-            id: string,
-            name: string,
-            splash?: string,
-            icon?: string,
-            textChannelCount?: number,
-            voiceChannelCount?: number,
-        }?;
+        guild?: {
+            id: string;
+            name: string;
+            splash?: string;
+            icon?: string;
+            textChannelCount?: number;
+            voiceChannelCount?: number;
+        };
         user: User;
         uses: number;
         maxUses: number;
         maxAge: number;
         temporary: number;
         revoked: boolean;
-        presenceCount: number?;
-        memberCount: number?;
+        presenceCount?: number;
+        memberCount?: number;
         delete(): Promise<boolean>;
         get createdAt(): number;
     }
