@@ -55,31 +55,7 @@ class UserCommand extends Command {
                     thumbnail: {
                         url: user.user.avatarURL
                     },
-                    /* ==== Do we apply for presence events or not? ==== */
                     fields: [{
-                        name: await this.getStatusType(user, ctx),
-                        value: await (async () => {
-                            if (!user.game) return await ctx.t("PLAYING_NONE");
-                            let str = "";
-                            if (user.game.type !== 4) {
-                                str += user.game.name + "\n";
-                                if (user.game.details) str += user.game.details + "\n";
-                                if (user.game.state) str += user.game.state;
-                            } else {
-                                str = `${user.game.emoji ?
-                                    `${user.game.emoji.id ? "(custom emoji)" : user.game.emoji.name}`
-                                    : ""} ${user.game.state || ""}`;
-                            }
-                            return str.trim() || await ctx.t("SPACE_UNIVERSE");
-                        })(),
-                        inline: true
-                    }, {
-                        name: await ctx.t("STATUS"),
-                        value: await this.getStatus(user, ctx),
-                        inline: true
-                    }, 
-                    /* ==== end of possible snip ==== */
-                    {
                         name: await ctx.t("ROLES"),
                         value: roles.join(", ").length > 1024 ? await ctx.t("TOOLONG") : roles.join(", "),
                         inline: false
@@ -124,34 +100,6 @@ class UserCommand extends Command {
             });
         }
         
-    }
-
-    async getStatusType(user, ctx) {
-        if (!user.game) return await ctx.t("PLAYING");
-        switch (user.game.type) {
-        case 0:
-            return await ctx.t("PLAYING");
-        case 1:
-            return await ctx.t("STREAMING");
-        case 2:
-            return await ctx.t("LISTENING_TO");
-        case 4:
-            return "Status";
-        }
-    }
-
-    async getStatus(user, ctx) {
-        switch (user.status) {
-        case "online":
-            return await ctx.t("ONLINE");
-        case "idle":
-            return await ctx.t("IDLE");
-        case "dnd":
-            return await ctx.t("DND");
-        case "invisible":
-        case "offline":
-            return await ctx.t("OFFLINE");
-        }
     }
 }
 

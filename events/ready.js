@@ -41,7 +41,7 @@ class ReadyEvent extends Event {
                 this.sosamba.workers.workersRan = true;
             }
         }
-        this.sosamba.editStatus("online", { name: `Type ${prefix}help`, type: 0 });
+        this.sosamba.editStatus("online", { name: `Type ${prefix}help | v${version}`, type: 0 });
         await this.postStats();
         setInterval(() => this.postStats(), 1800000);
         await this.leaveBotCollectionServers();
