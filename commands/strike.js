@@ -59,7 +59,7 @@ class StrikeCommand extends Command {
                     timestamp: new Date()
                 }
             });
-        } catch {/**/}
+        } catch {}
         await ctx.send(":ok_hand:");
     }
 }
