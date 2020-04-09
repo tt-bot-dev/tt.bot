@@ -45,8 +45,7 @@ class ReadyEvent extends Event {
         await this.postStats();
         setInterval(() => this.postStats(), 1800000);
         await this.leaveBotCollectionServers();
-        //const blacklist = await this.sosamba.db.getBlacklistedGuilds();
-        const blacklist = [];
+        const blacklist = await this.sosamba.db.getBlacklistedGuilds();
         await Promise.all(this.sosamba.guilds.map(g => {
             if (blacklist.find(entry =>
                 entry.id === g.id || g.ownerID === entry.ownerID)) {

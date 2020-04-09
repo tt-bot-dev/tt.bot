@@ -28,6 +28,10 @@ class GuildLeaveEvent extends Event {
         });
     }
 
+    prerequisites(guild) {
+        return !guild.__automaticallyLeft;
+    }
+
     async run(guild) {
         await this.sosamba.createMessage(serverLogChannel, {
             embed: {

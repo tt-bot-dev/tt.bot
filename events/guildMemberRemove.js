@@ -35,7 +35,7 @@ class GuildMemberLeaveEvent extends Event {
                 try { 
                     await channel.createMessage(
                         this.sosamba.parseMsg(config.farewellMessage, member, guild));
-                } catch(_) {console.error(_);}
+                } catch {}
             } else {
                 await this.sosamba.db.updateGuildConfig({
                     farewellChannelId: null

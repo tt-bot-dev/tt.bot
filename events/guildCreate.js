@@ -31,9 +31,10 @@ class GuildJoinEvent extends Event {
     }
 
     async run(guild) {
-        const blacklist = [];
+        const blacklist = await this.sosamba.db.getBlacklistedGuilds();
         if (this.sosamba.botCollectionServers.includes(guild)
         || blacklist.find(entry => entry.id === guild.id || entry.ownerID === guild.ownerID)) {
+            guild.__automaticallyLeft = true;
             await guild.leave();
             return;
         }
