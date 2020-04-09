@@ -50,7 +50,7 @@
         "type": "git",
         "url": "git+https://github.com/tt-bot-dev/tt.bot.git"
     },
-    "author": "TTtie",
+    "author": "TTtie <me@tttie.cz>",
     "license": "AGPL-3.0-or-later",
     "bugs": {
         "url": "https://github.com/tt-bot-dev/tt.bot/issues"
