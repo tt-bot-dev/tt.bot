@@ -25,7 +25,7 @@ class BlacklistManagerCommand extends Command {
                     default: SerializedArgumentParser.None
                 }]
             })
-        })
+        });
     }
 
     async run(ctx, [action, guildID, ...reasonSplit]) {
@@ -61,7 +61,7 @@ class BlacklistManagerCommand extends Command {
             await this.sosamba.guilds.filter(g => g.id === guildID || g.ownerID === ownerID)
                 .forEach(g => {
                     g.__automaticallyLeft = true;
-                    g.leave()
+                    g.leave();
                 });
             await ctx.send(":ok_hand:");
         } else if (action === RemoveSymbol) {
