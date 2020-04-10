@@ -21,7 +21,9 @@
 window.onload = function () {
     const yesButton = document.querySelector("#yes");
     const noButton = document.querySelector("#no");
-    function accept() { window.location = "/acceptcookie"; }
+    function accept() {
+        window.location = "/acceptcookie"; 
+    }
     function deny() {
         window.location = "https://google.com";
     }

@@ -91,7 +91,8 @@ along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
                                 have relevant permissions to run the commands.</p>
 
                             <div class="select is-loading">
-                                <select class="tttie-dashboard-role-picker no-role-hierarchy" disabled id="tttie-dash-mod">
+                                <select class="tttie-dashboard-role-picker no-role-hierarchy" disabled
+                                    id="tttie-dash-mod">
                                     <option value="DASH_LOADING">...</option>
                                 </select>
                             </div>
@@ -130,7 +131,8 @@ along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
                             <div class="content">
                                 <h6 class="bot-setting is-size-5">Farewell message</h6>
                                 <p><a href="https://github.com/tt-bot-dev/tt.bot/blob/master/docs/ttMsg.md">ttMsg</a>
-                                    can be used in the farewell message.</p>
+                                    can be used in the farewell message. Keep in mind that only the user who joined can
+                                    be mentioned in the message.</p>
                                 <div class="control is-loading">
                                     <textarea class="textarea is-loading" value="..." disabled
                                         id="tttie-dash-fm"></textarea>
@@ -151,7 +153,8 @@ along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
                             <div class="content">
                                 <h6 class="bot-setting is-size-5">Welcome message</h6>
                                 <p><a href="https://github.com/tt-bot-dev/tt.bot/blob/master/docs/ttMsg.md">ttMsg</a>
-                                    can be used in the welcome message.</p>
+                                    can be used in the welcome message. Keep in mind that only the user who joined can
+                                    be mentioned in the message.</p>
                                 <div class="control is-loading">
                                     <textarea class="textarea" value="..." disabled id="tttie-dash-wm"></textarea>
                                 </div>
@@ -178,7 +181,8 @@ along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
 
                             <div class="content">
                                 <h6 class="bot-setting is-size-5">Member role</h6>
-                                <p>The selected role will be given to the people who type <code><%=config.prefix%>agree</code> in the channel selected above.</p>
+                                <p>The selected role will be given to the people who type
+                                    <code><%=config.prefix%>agree</code> in the channel selected above.</p>
 
                                 <div class="select is-loading">
                                     <select class="tttie-dashboard-role-picker" disabled id="tttie-dash-mr">

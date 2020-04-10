@@ -22,7 +22,7 @@ const Command = require("../lib/commandTypes/OwnerCommand");
 const { inspect } = require("util");
 const ExtensionRunner = require("../lib/extensions/Runner");
 const CensorBuilder = require("../lib/CensorBuilder");
-const makegist = require("../lib/gist");
+const makeGist = require("../lib/gist");
 const { prefix } = require("../config");
 class RunExtensionCommand extends Command {
     constructor(sosamba, ...args) {
@@ -50,7 +50,7 @@ class RunExtensionCommand extends Command {
         if (description.length > 2048) {
             let gist;
             try {
-                gist = await makegist("exec.md", description, "Evaluated code");
+                gist = await makeGist("exec.md", description, "Evaluated code");
                 if (!gist.ok) throw new Error();
             } catch (err) {
                 await ctx.send({
@@ -61,7 +61,7 @@ class RunExtensionCommand extends Command {
                     }
                 });
                 this.log.log(v);
-                return; // we don't replace anything here, because that's console
+                return;
             }
             return await ctx.send({
                 embed: {

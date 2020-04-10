@@ -15,6 +15,7 @@
         "cookie-signature": "^1.1.0",
         "csurf": "github:tt-bot-dev/csurf",
         "ejs": "^3.0.2",
+        "emoji-regex": "^9.0.0",
         "eris": "github:abalabahaha/eris#dev",
         "express-session": "^1.17.0",
         "express-session-rethinkdb": "^0.4.1",

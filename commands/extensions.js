@@ -280,8 +280,9 @@ class ExtensionCommand extends Command {
                             name: "the specified role"
                         });
                     }
-                    try { await resp.msg.delete(); }
-                    catch { }
+                    try {
+                        await resp.msg.delete(); 
+                    } catch { }
                 } catch (e) {
                     console.error(e);
                     await ctx.send(await ctx.t("COMMAND_ERROR"));
@@ -303,8 +304,9 @@ class ExtensionCommand extends Command {
                     }); else r = await findChannel(resp.msg.content.toLowerCase(), ctx, {
                         name: "the specified channel"
                     });
-                    try { await resp.msg.delete(); }
-                    catch { }
+                    try {
+                        await resp.msg.delete(); 
+                    } catch { }
                 } catch (e) {
                     console.error(e);
                     await ctx.send(await ctx.t("COMMAND_ERROR"));

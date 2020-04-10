@@ -19,13 +19,13 @@
 
 "use strict";
 const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
+const OwnerCommand = require("../lib/commandTypes/OwnerCommand");
 const { version: sosambaVersion } = require("sosamba/package.json");
 const ShowSymbol = Symbol("tt.bot.tags.show");
 const CreateSymbol = Symbol("tt.bot.tags.create");
 const EditSymbol = Symbol("tt.bot.tags.edit");
 const DeleteSymbol = Symbol("tt.bot.tags.delete");
 const TagObject = require("../lib/Structures/TagObject");
-const { oid } = require("../config");
 
 class TagCommand extends Command {
     constructor(sosamba, ...args) {
@@ -77,7 +77,7 @@ class TagCommand extends Command {
         } else if (action === DeleteSymbol) {
             const d = await ctx.db.getTag(ctx.encryptData(tag));
             if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
-            if (!oid.includes(ctx.author.id) && ctx.author.id !== d.owner) {
+            if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== d.owner) {
                 return await ctx.send(await ctx.t("TAG_NOTOWNER"));
             } else {
                 await ctx.db.deleteTag(ctx.encryptData(tag));
@@ -102,7 +102,7 @@ class TagCommand extends Command {
             const d = await ctx.db.getTag(ctx.encryptData(tag));
             if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
             const data = new TagObject(d);
-            if (!oid.includes(ctx.author.id) && ctx.author.id !== data.owner) {
+            if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== data.owner) {
                 return await ctx.send(await ctx.t("TAG_NOTOWNER"));
             } else {
                 data.content = val;

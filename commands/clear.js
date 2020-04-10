@@ -78,7 +78,7 @@ class ClearCommand extends Command {
         await Promise.all(p);
         return true;
     }
-    async run(ctx, {messages, contains, mentions, from, invert}) {
+    async run(ctx, { messages, contains, mentions, from, invert }) {
         if (!ctx.channel.permissionsOf(ctx.sosamba.user.id).has("manageMessages")) return ctx.send(await ctx.t("MISSING_PERMISSIONS"));
         await ctx.send(await ctx.t("CLEAR_CONFIRM"));
         const r = await ctx.askYesNo(true);
@@ -128,7 +128,6 @@ class ClearCommand extends Command {
         } else if (messages.length > 1 && messages.length <= 100) {
             return await channel.deleteMessages(messages);
         } else {
-            // More than 100 messages, huh?
             const messageCopy = [...messages];
             const delet = async () => {
                 if (messageCopy.length >= 100) {

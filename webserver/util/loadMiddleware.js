@@ -52,12 +52,12 @@ module.exports = (app, bot, log) => {
             if (!p.endsWith(".ejs")) p += ".ejs";
             ejs.renderFile(p, data, (err, str) => {
                 if (err) nx(err);
-                else send(rs, 200, str, isHTML ? {"Content-Type": "text/html"} : {});
+                else send(rs, 200, str, isHTML ? { "Content-Type": "text/html" } : {});
             });
         };
         rs.cookie = (name, value, options) => {
             const opts = Object.assign({}, options);
-            const {secret} = rq;
+            const { secret } = rq;
           
             let val = typeof value === "object"
                 ? "j:" + JSON.stringify(value)

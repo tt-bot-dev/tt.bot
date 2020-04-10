@@ -161,15 +161,15 @@ class HelpMenu extends ReactionMenu {
 
     static async getPermissions(ctx) {
         return [true, OwnerCommand.prototype.permissionCheck(ctx),
-            await ModCommand.prototype.permissionCheck.call({sosamba: ctx.sosamba}, ctx),
-            AdminCommand.prototype.permissionCheck.call({sosamba: ctx.sosamba}, ctx),
+            await ModCommand.prototype.permissionCheck.call({ sosamba: ctx.sosamba }, ctx),
+            AdminCommand.prototype.permissionCheck.call({ sosamba: ctx.sosamba }, ctx),
             true];
     }
 
     static async DEFAULT_OBJ(ctx, permissions) {
         return {
             embed: {
-                description: await ctx.t("HELP_HOME", HelpMenu, permissions, {t: ctx.t.bind(ctx)}),
+                description: await ctx.t("HELP_HOME", HelpMenu, permissions, { t: ctx.t.bind(ctx) }),
                 color: 0x008800
             }
         };

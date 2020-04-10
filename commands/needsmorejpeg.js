@@ -19,6 +19,7 @@
 
 "use strict";
 const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
+const { version: sosambaVersion } = require("sosamba/package.json");
 const URLRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/;
 const ImageExtensionRegex = /\.(?:png|jpg|bmp)$/i;
 const { read, MIME_JPEG } = require("jimp");
@@ -51,7 +52,16 @@ class JPEGCommand extends Command {
 
     async run(ctx, [url]) {
         if (!url) {
-            await ctx.send(await ctx.t("ARGS_MISSING"));
+            await ctx.send({
+                embed: {
+                    title: ":x: Argument required",
+                    description: "The argument `url` is required.",
+                    color: 0xFF0000,
+                    footer: {
+                        text: `Sosamba v${sosambaVersion}`
+                    }
+                }
+            });
             return;
         }
 

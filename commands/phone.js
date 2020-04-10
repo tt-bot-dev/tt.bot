@@ -21,7 +21,7 @@
 const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
 const { prototype: { permissionCheck: isOwner } } = require("../lib/commandTypes/OwnerCommand");
 const config = require("../config");
-const speakerPhone = require("../lib/speakerPhone.v4");
+const PhoneMessageListener = require("../lib/speakerPhone.v4");
 const RegisterSymbol = Symbol("tt.bot.phone.register");
 const CallSymbol = Symbol("tt.bot.phone.call");
 const LookupSymbol = Symbol("tt.bot.phone.lookup");
@@ -74,7 +74,7 @@ class PhoneCommand extends Command {
             description: "Talk with people across Discord."
         });
 
-        this.speakerPhone = sosamba.messageListeners.add(new speakerPhone(sosamba));
+        this.speakerPhone = sosamba.messageListeners.add(new PhoneMessageListener(sosamba));
     }
 
     async run(ctx, [action, number]) {
@@ -127,8 +127,10 @@ class PhoneCommand extends Command {
             await ctx.send(await ctx.t("CALLING"));
 
             try {
-                await this.sosamba.createMessage(otherSideNumber.channelID,
-                    `Incoming call by ${thisChannelNumber.id} ${!thisChannelNumber.private ? `(#${ctx.channel.name} at ${ctx.guild.name})` : ""}\nType \`${config.prefix}pickup\` to pick up the call. Else, type \`${config.prefix}hangup\`. You have 2 minutes to pick up the call, else the call will be automatically hung up.`);
+                await this.sosamba.createMessage(otherSideNumber.channelID, {
+                    content: `Incoming call by ${thisChannelNumber.id} ${!thisChannelNumber.private ? `(#${ctx.channel.name} at ${ctx.guild.name})` : ""}\nType \`${config.prefix}pickup\` to pick up the call. Else, type \`${config.prefix}hangup\`. You have 2 minutes to pick up the call, else the call will be automatically hung up.`,
+                    allowedMentions: {}
+                });
                 try {
                     const answer = await ctx.waitForAnyMessage(otherSideNumber.channelID,
                         ctx => ctx.msg.content === `${config.prefix}pickup`
@@ -179,7 +181,7 @@ class PhoneCommand extends Command {
             if (!isOnServer) {
                 const phoneNumbersInDelGuild = await ctx.db.getGuildPhoneNumbers(data.guildID);
                 await Promise.all(phoneNumbersInDelGuild.map(async ({ id }) => ctx.db.deletePhoneNumber(id)));
-                console.log(`Deleted the phone numbers from ${data.guildID}: ${phoneNumbersInDelGuild.map(d => d.id).join(", ")}`);
+                this.log.info(`Deleted the phone numbers from ${data.guildID}: ${phoneNumbersInDelGuild.map(d => d.id).join(", ")}`);
             }
 
             const c = this.sosamba.getChannel(data.channelID);

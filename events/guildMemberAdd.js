@@ -34,7 +34,14 @@ class GuildMemberJoinEvent extends Event {
             if (channel) {
                 try { 
                     await channel.createMessage(
-                        this.sosamba.parseMsg(config.greetingMessage, member, guild));
+                        {
+                            content: this.sosamba.parseMsg(config.greetingMessage, member, guild),
+                            allowedMentions: {
+                                users: [member.id],
+                                everyone: false,
+                                roles: false
+                            }
+                        });
                 } catch {}
             } else {
                 await this.sosamba.db.updateGuildConfig({

@@ -40,8 +40,7 @@ class GuildJoinEvent extends Event {
         }
         try {
             await dm(guild.members.get(guild.ownerID), await this.getWelcomeMessage(guild.ownerID));
-        }
-        catch { }
+        } catch { }
         await this.sosamba.createMessage(serverLogChannel, {
             embed: {
                 author: {

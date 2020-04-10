@@ -59,7 +59,7 @@ class ProfileCommand extends Command {
                 ctx.send(await ctx.t("PROFILE_DELETED"));
             }
         } else if (action === SetupSymbol) {
-            if (!(await ctx.userProfile).fake) return ctx.send("you have a profile!");
+            if (!(await ctx.userProfile).fake) return ctx.send("You have a profile already!");
             await ctx.send(await ctx.t("PROFILE_CREATE_SETUP"));
             const { response, context } = await ctx.askYesNo(true);
             const profile = {
@@ -67,8 +67,9 @@ class ProfileCommand extends Command {
             };
 
             if (response) {
-                try { await context.msg.delete(); }
-                catch {/**/ }
+                try {
+                    await context.msg.delete(); 
+                } catch {/**/ }
                 await ctx.send(await ctx.t("PROFILE_CREATE_TIMEZONE"));
                 const m = await ctx.waitForMessage(async ctx => {
                     if (ctx.msg.content.toLowerCase() === "none") return true;
@@ -79,8 +80,9 @@ class ProfileCommand extends Command {
                     return true;
                 }, 30000);
                 if (m.msg.content !== "none") profile.timezone = m.msg.content;
-                try { await m.msg.delete(); }
-                catch {/**/ }
+                try {
+                    await m.msg.delete(); 
+                } catch {/**/ }
 
                 await ctx.send(await ctx.t("PROFILE_CREATE_LOCALE"));
                 const m2 = await ctx.waitForMessage(async ctx => {
@@ -93,8 +95,9 @@ class ProfileCommand extends Command {
                     return true;
                 }, 30000);
                 if (m2.msg.content !== "none") profile.locale = m2.msg.content;
-                try { await m2.msg.delete(); }
-                catch {/**/ }
+                try {
+                    await m2.msg.delete(); 
+                } catch {/**/ }
             }
             const toWrite = UserProfile.create(profile);
             await ctx.db.createUserProfile(toWrite);

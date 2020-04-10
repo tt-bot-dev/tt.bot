@@ -42,7 +42,15 @@
                 "allowEmptyCatch": true
             }
         ],
-        "no-extra-parens": "error"
+        "no-extra-parens": "error",
+        "brace-style": [ 
+            "error", 
+            "1tbs"
+        ],
+        "object-curly-spacing": [ 
+            "error",
+            "always"
+        ]
     },
     "globals": {
         "BigInt": true

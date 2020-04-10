@@ -20,7 +20,7 @@
 "use strict";
 (function (w) {
     const createExtensionDeleteModal = extensions => box => {
-        const {dataset: extData} = box;
+        const { dataset: extData } = box;
         const destroyModal = () => {
             modalCard.classList.remove("tttie-slide-in");
             modalCard.classList.add("tttie-slide-out");

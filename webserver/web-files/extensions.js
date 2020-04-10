@@ -191,8 +191,7 @@
                     if (cfg.flags & flagMapping[box.id]) {
                         box.checked = true;
                         if (loadingSelector) loadingSelector.remove();
-                    }
-                    else if (cfg.privilegedFlags & flagMapping[box.id]) {
+                    } else if (cfg.privilegedFlags & flagMapping[box.id]) {
                         box.checked = true;
                         if (!loadingSelector) box.parentElement.insertAdjacentElement("afterend", isPendingApprovalTags.cloneNode(true));
                     } else {

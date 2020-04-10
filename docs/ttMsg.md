@@ -17,12 +17,8 @@ You should have received a copy of the GNU Affero General Public License
 along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
 -->
 # ttMsg
-ttMsg exposes some parts of data to the users.
+ttMsg is a simple but not feature-rich text tagging system for messages. These work in tags, welcome and farewell messages.
 
-This currently works with:
-- Welcome messages
-- Farewell messages
-- Tags
 # Documentation
 ## User related ttMsg tags
 - `{u.mention}` - Mentions the user.

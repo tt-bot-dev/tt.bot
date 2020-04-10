@@ -18,7 +18,20 @@
  */
 
 "use strict";
-const { Command, SerializedArgumentParser } = require("sosamba");
+const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
+const Regexes = require("../lib/e2p/regexes");
+const UnicodeEmojiRegex = require("emoji-regex")();
+const EmojiSerializer = val => {
+    if (Regexes.EmojiRegex.test(val) ||
+        Regexes.EmojiSkinToneMobile.test(val) ||
+        Regexes.EmojiSkinToneText.test(val) ||
+        Regexes.EmojiText.test(val) ||
+        Regexes.EmojiTextSkinTone.test(val) ||
+        UnicodeEmojiRegex.test(val)) return val;
+    throw new ParsingError("Invalid emoji");
+};
+
+EmojiSerializer.typeHint = "Emoji";
 
 class EmojiCommand extends Command {
     constructor(sosamba, ...args) {
@@ -29,24 +42,25 @@ class EmojiCommand extends Command {
                 filterEmptyArguments: true,
                 args: [{
                     name: "emojis",
-                    rest: true,
-                    type: String,
+                    restSplit: true,
+                    type: EmojiSerializer,
                     description: "the emojis to convert into a picture"
-                }]
+                }],
+                allowQuotedString: false
             }),
             description: "Render up to 5 emojis as a picture."
         });
     }
-    async run(ctx, [emojis]) {
+    async run(ctx, input) {
+        if (input.length > 5) input = input.slice(0, 5);
         await ctx.send(await ctx.t("IMAGE_GENERATING"));
         const t = process.hrtime();
         let b;
         try {
-            b = await this.sosamba.workers.sendToRandom(0, "generateImage", {input: emojis}).promise;
+            b = await this.sosamba.workers.sendToRandom(0, "generateImage", { input }).promise;
             if (b && b.err) throw b.err;
         } catch(err) {
-            //eslint-disable-next-line no-console
-            console.error(err);
+            this.log.error(err);
             ctx.send(await ctx.t("ERROR", err));
             return;
         }

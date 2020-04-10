@@ -26,7 +26,7 @@ class AgreeCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "agree",
-            description: "If the server has set up the agreement feature, agrees to the server's rules.",
+            description: "If the server has set up the rule agreement feature, agrees to the server's rules.",
         });
     }
     async run(ctx) {

@@ -33,8 +33,7 @@ module.exports = (app, csrf, db) => {
         if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) {
             rs.status(403);
             return rs.send({ error: "Forbidden" });
-        }
-        else {
+        } else {
             const guild = rq.bot.guilds.get(rq.params.guild);
             return rs.send(guild.channels.filter(c => c.type === 0).sort((a, b) => a.position - b.position).map(c => ({
                 name: c.name,
@@ -48,8 +47,7 @@ module.exports = (app, csrf, db) => {
         if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) {
             rs.status(403);
             return rs.send({ error: "Forbidden" });
-        }
-        else {
+        } else {
             const data = await db.getGuildConfig(rq.params.guild);
             return rs.send(data);
         }
@@ -60,8 +58,7 @@ module.exports = (app, csrf, db) => {
         if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) {
             rs.status(403);
             return rs.send({ error: "Forbidden" });
-        }
-        else {
+        } else {
             const guild = rq.bot.guilds.get(rq.params.guild);
             const highestRole = guild.members.get(rq.bot.user.id).roles
                 .map(r => guild.roles.get(r))
@@ -82,8 +79,7 @@ module.exports = (app, csrf, db) => {
         if (!guilds.find(g => g.isOnServer && g.id === rq.params.guild)) {
             rs.status(403);
             return rs.send({ error: "Forbidden" });
-        }
-        else {
+        } else {
             const props = ["prefix",
                 "modRole",
                 "farewellMessage",
@@ -146,8 +142,7 @@ module.exports = (app, csrf, db) => {
         if (!guilds.find(g => g.isOnServer && g.id === guild)) {
             rs.status(403);
             return rs.send({ error: "Forbidden" });
-        }
-        else {
+        } else {
             const props = [
                 "code",
                 "allowedChannels",
@@ -195,8 +190,7 @@ module.exports = (app, csrf, db) => {
                         && !(extension.privilegedFlags & ExtensionFlags[scope])) {
                             reqFlags.push(scope);
                             privScopeFlagNum |= ExtensionFlags[scope];
-                        }
-                        else {
+                        } else {
                             if (extension.privilegedFlags & ExtensionFlags[scope]) privScopeFlagNum |= ExtensionFlags[scope];
                             else flagNum |= ExtensionFlags[scope];
                         }
@@ -266,8 +260,7 @@ module.exports = (app, csrf, db) => {
         if (!guilds.find(g => g.isOnServer && g.id === guild)) {
             rs.status(403);
             return rs.send({ error: "Forbidden" });
-        }
-        else {
+        } else {
             const extension = await db.getGuildExtension(id);
             if (!extension || extension && extension.guildID !== guild) {
                 rs.status(404);

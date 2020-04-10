@@ -32,9 +32,9 @@ class InfoCommand extends Command {
     }
 
     async run(ctx) {
-        const ownerStrings = Array.isArray(config.oid) ? 
-            config.oid.map(i => this.getOwnerInfo(i, this.sosamba.users.get(i))) : 
-            [this.getOwnerInfo(config.oid, this.sosamba.users.get(config.oid))];
+        const ownerStrings = Array.isArray(config) ? 
+            config.ownerID.map(i => this.getOwnerInfo(i, this.sosamba.users.get(i))) : 
+            [this.getOwnerInfo(config.ownerID, this.sosamba.users.get(config.ownerID))];
         await ctx.send({
             embed: {
                 author: {

@@ -20,7 +20,7 @@
 "use strict";
 const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
 const OwnerCommand = require("../lib/commandTypes/OwnerCommand");
-const { promises: { stat }} = require("fs");
+const { promises: { stat } } = require("fs");
 const { relative, parse, join } = require("path");
 const UnloadSymbol = Symbol("tt.bot.manage.unload");
 const LoadSymbol = Symbol("tt.bot.manage.load");

@@ -1,3 +1,4 @@
+"use strict";
 const Command = require("../lib/commandTypes/OwnerCommand");
 const { SerializedArgumentParser } = require("sosamba");
 const QuerySymbol = Symbol("tt.bot.blacklist.query");

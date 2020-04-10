@@ -49,7 +49,7 @@ class BanCommand extends Command {
         return ctx.member.permission.has("banMembers") || await super.permissionCheck(ctx);
     }
 
-    async run(ctx, {user, reason, soft}) {
+    async run(ctx, { user, reason, soft }) {
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
             await ctx.guild.banMember(user.id, 1, `${this.sosamba.getTag(ctx.author)}: ${reason}`);
             if (soft) await ctx.guild.unbanMember(user.id);

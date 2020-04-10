@@ -149,7 +149,9 @@ class ConfigMenu extends ReactionMenu {
 
     async cleanReactions() {
         if (this.sosamba.hasBotPermission(this.ctx.channel, "manageMessages")) {
-            try { await this.message.removeReactions(); } catch {}
+            try {
+                await this.message.removeReactions(); 
+            } catch {}
         } else {
             if (!this.reactionErrored) {
                 this.reactionErrored = true;
