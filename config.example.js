@@ -30,7 +30,7 @@ module.exports = {
      * Owners of the bot
      * @type {string|string[]}
      */
-    oid: "123456789012345678",
+    ownerID: "123456789012345678",
 
     /** 
      * A key to post to https://discord.bots.gg. This is optional.
