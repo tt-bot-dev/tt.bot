@@ -35,6 +35,7 @@
         "workers-as-promised": "github:tt-bot-dev/WorkersAsPromised"
     },
     "devDependencies": {
+        "@tt-bot-dev/eslint-config": "^1.0.1",
         "bulma": "^0.8.1",
         "eslint": "^6.8.0",
         "node-sass": "^4.13.1",
