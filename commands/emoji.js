@@ -20,14 +20,14 @@
 "use strict";
 const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
 const Regexes = require("../lib/e2p/regexes");
-const UnicodeEmojiRegex = require("emoji-regex")();
+const UnicodeEmojiRegex = require("emoji-regex");
 const EmojiSerializer = val => {
     if (Regexes.EmojiRegex.test(val) ||
         Regexes.EmojiSkinToneMobile.test(val) ||
         Regexes.EmojiSkinToneText.test(val) ||
         Regexes.EmojiText.test(val) ||
         Regexes.EmojiTextSkinTone.test(val) ||
-        UnicodeEmojiRegex.test(val)) return val;
+        UnicodeEmojiRegex().test(val)) return val;
     throw new ParsingError("Invalid emoji");
 };
 
