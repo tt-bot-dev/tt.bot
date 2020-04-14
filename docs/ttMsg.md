@@ -22,12 +22,13 @@ ttMsg is a simple but not feature-rich text tagging system for messages. These w
 # Documentation
 ## User related ttMsg tags
 - `{u.mention}` - Mentions the user.
-- `{u.name}` - the user's username.
-- `{u.discrim}` - user's discriminator (4digit number).
-- `{u.id}` - Returns user's ID.
+- `{u.name}` - retrieves the username of the user
+- `{u.discrim}` - retrieves the discriminator (4 digit number) of the user.
+- `{u.id}` - retrieves the ID of the user
 - `{u.tag}` - A convenience shortcut for `{u.name}#{u.discrim}`.
 ## Server related ttMsg tags
-- `{g.name}` - the server name.
-- `{g.id}` - the server ID.
-- `{g.channels}` - Channel count of the server.
-- `{g.members}` - Member count of the server (prior to v4, how much members in the server the bot knows).
+- `{g.name}` - retrieves the server name
+- `{g.id}`  - retrieves the server ID.
+- `{g.channels}` - retrieves the channel count of the server.
+- `{g.members}` - retrieves the member count of the server (prior to v4, how much members in the server the bot knows).
+- `{g.roles}` - retrieves the role count of the server

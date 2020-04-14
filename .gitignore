@@ -2,5 +2,9 @@
 /config.json
 node_modules/
 
+# don't.
+package-lock.json
+yarn.lock
+
 # Useful license preambles
 license-preambles.txt

@@ -32,7 +32,7 @@ class InfoCommand extends Command {
     }
 
     async run(ctx) {
-        const ownerStrings = Array.isArray(config) ? 
+        const ownerStrings = Array.isArray(config.ownerID) ? 
             config.ownerID.map(i => this.getOwnerInfo(i, this.sosamba.users.get(i))) : 
             [this.getOwnerInfo(config.ownerID, this.sosamba.users.get(config.ownerID))];
         await ctx.send({
@@ -48,6 +48,10 @@ class InfoCommand extends Command {
                 }, {
                     name: await ctx.t("INFO_AUTHORS"),
                     value: await ctx.t("INFO_OWNERS", ownerStrings),
+                    inline: true
+                }, {
+                    name: await ctx.t("INFO_DONATE"),
+                    value: "https://ko-fi.com/tttie",
                     inline: true
                 }, {
                     name: await ctx.t("INFO_VERSIONS"),

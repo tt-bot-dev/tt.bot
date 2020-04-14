@@ -21,6 +21,8 @@
 
 $primary: #008800;
 
+$custom-colors: ("blurple": (#7289da));
+
 .bot-image {
     width: 90vw;
     max-width: 200px;
@@ -70,6 +72,10 @@ div#menu aside.menu {
 body {
     margin: 0;
     padding: 0;
+}
+
+:root {
+    scroll-behavior: smooth;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -178,9 +184,6 @@ div.monaco-wrapper {
         }
     }
 }
-/*.control.is-extension-flag.is-loading::before {
-    content: "Pending approval";
-}*/
 @import "../../node_modules/bulma/bulma.sass";
 
 .control.is-extension-flag {

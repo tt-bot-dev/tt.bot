@@ -26,6 +26,7 @@ const RegisterSymbol = Symbol("tt.bot.phone.register");
 const CallSymbol = Symbol("tt.bot.phone.call");
 const LookupSymbol = Symbol("tt.bot.phone.lookup");
 const DeleteSymbol = Symbol("tt.bot.phone.delete");
+const { version: sosambaVersion } = require("sosamba/package.json");
 
 
 const convertNumber = input => input
@@ -54,7 +55,10 @@ class PhoneCommand extends Command {
                     type: (val, ctx) => {
                         if (val === "register" && sosamba.isAdmin(ctx.member)) return RegisterSymbol;
                         if (val === "call") return CallSymbol;
-                        if (val === "lookup") return LookupSymbol;
+                        if (val === "lookup") {
+                            ctx.action = LookupSymbol;
+                            return LookupSymbol;
+                        }
                         if (val === "delete" && sosamba.isAdmin(ctx.member)) return DeleteSymbol;
                         throw new ParsingError("Invalid action");
                     },
@@ -63,11 +67,13 @@ class PhoneCommand extends Command {
                     name: "number",
                     type: async (val, ctx) => {
                         const num = convertNumber(val);
-                        console.log(num);
-                        if (!checkValidNumber(num))
+                        if (!checkValidNumber(num)) {
+                            if (ctx.action === LookupSymbol) return undefined;
                             throw new ParsingError(await ctx.t("NUMBER_INVALID", true));
+                        }
                         return num;
                     },
+                    default: SerializedArgumentParser.None,
                     rest: true
                 }]
             }),
@@ -76,9 +82,27 @@ class PhoneCommand extends Command {
 
         this.speakerPhone = sosamba.messageListeners.add(new PhoneMessageListener(sosamba));
     }
+    
+    async checkHasNumber(ctx, number) {
+        if (!number) {
+            await ctx.send({
+                embed: {
+                    title: ":x: Argument required",
+                    description: `The argument \`number\` is required.`,
+                    color: 0xFF0000,
+                    footer: {
+                        text: `Sosamba v${sosambaVersion}`
+                    }
+                }
+            })
+            return;
+        }
+        return true;
+    }
 
     async run(ctx, [action, number]) {
         if (action === RegisterSymbol) {
+            if (!await this.checkHasNumber(ctx, number)) return;
             const phones = await ctx.db.getGuildPhoneNumbers(ctx.guild.id);
             if (phones.length > 0 && !isOwner({
                 author: {
@@ -113,6 +137,7 @@ class PhoneCommand extends Command {
             });
             await ctx.send(await ctx.t("NUMBER_CREATED"));
         } else if (action === CallSymbol) {
+            if (!await this.checkHasNumber(ctx, number)) return;
             const [thisChannelNumber] = await ctx.db.getChannelPhoneNumbers(ctx.guild.id, ctx.channel.id);
             if (!thisChannelNumber) {
                 await ctx.send(await ctx.t("CALLER_NO_NUMBER"));
@@ -163,7 +188,9 @@ class PhoneCommand extends Command {
 
             }
         } else if (action === LookupSymbol) {
-            const data = await ctx.db.getPhoneNumber(number);
+            let data;
+            if (number) data = await ctx.db.getPhoneNumber(number);
+            else [data] = await ctx.db.getChannelPhoneNumbers(ctx.guild.id, ctx.channel.id);
 
             if (!data) {
                 await ctx.send(await ctx.t("NUMBER_NONEXISTANT"));
@@ -203,6 +230,7 @@ class PhoneCommand extends Command {
                 }
             });
         } else if (action === DeleteSymbol) {
+            if (!await this.checkHasNumber(ctx, number)) return;
             const phone = ctx.db.getPhoneNumber(number);
             if (!phone || !isOwner(ctx)
                 && (phone && phone.guildID !== ctx.guild.id)

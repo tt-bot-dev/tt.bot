@@ -21,7 +21,7 @@ along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
     <div class="container">
       <div class="navbar-brand">
         <a href="/" class="navbar-item bot-bar-item">
-          <img src="<%=bot.user.dynamicAvatarURL("png", 128)%>" alt="<%=bot.user.username%>"
+          <img src="<%=bot.user.dynamicAvatarURL("png", 32)%>" alt="<%=bot.user.username%>"
               class="is-rounded">
           <span><%=bot.user.username%></span>
         </a>
@@ -34,8 +34,19 @@ along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
       <div class="navbar-menu" id="tttie-navbar-menu">
         <div class="navbar-start">
           <% if (user) { %>
-          <a href="/dashboard" class="navbar-item">Dashboard</a>
+          <a href="/dashboard" class="navbar-item">
+            <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
+            <span>Dashboard</span>
+          </a>
           <% } %>
+          <a href="https://discord.gg/pGN5dMq" class="navbar-item">
+            <span class="icon"><i class="fab fa-discord"></i></span>
+            <span>Discord</span>
+          </a>
+          <a href="https://ko-fi.com/tttie" class="navbar-item">
+            <span class="icon"><i class="fas fa-heart"></i></span>
+            <span>Donate</span>
+          </a>
         </div>
         <div class="navbar-end">
           <% if (user) { %>
