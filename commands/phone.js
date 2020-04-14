@@ -88,13 +88,13 @@ class PhoneCommand extends Command {
             await ctx.send({
                 embed: {
                     title: ":x: Argument required",
-                    description: `The argument \`number\` is required.`,
+                    description: "The argument `number` is required.",
                     color: 0xFF0000,
                     footer: {
                         text: `Sosamba v${sosambaVersion}`
                     }
                 }
-            })
+            });
             return;
         }
         return true;
