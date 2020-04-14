@@ -33,17 +33,19 @@ class ReadyEvent extends Event {
                 this.sosamba.options.log.level : undefined,
             name: "DBLPoster"
         });
+        this.firedUp = false;
     }
     async run() {
-        if (!this.sosamba.workers.workersRan) {
+        if (!this.firedUp) {
             for (let i = 0; i < workerCount; i++) {
                 await Promise.all(Object.values(WorkerTypes).map(w => this.sosamba.workers.startWorker(w)));
                 this.sosamba.workers.workersRan = true;
             }
+            await this.postStats();
+            setInterval(() => this.postStats(), 1800000);
+            this.firedUp = true;
         }
         this.sosamba.editStatus("online", { name: `Type ${prefix}help | v${version}`, type: 0 });
-        await this.postStats();
-        setInterval(() => this.postStats(), 1800000);
         await this.leaveBotCollectionServers();
         const blacklist = await this.sosamba.db.getBlacklistedGuilds();
         await Promise.all(this.sosamba.guilds.map(g => {
