@@ -27,7 +27,7 @@ tt.bot is a simple to use moderation/utility bot written in JavaScript using [No
 - **Emoji to picutre**: A simple way to convert your magnificient emoji to an animated PNG image!
 > *Rendering APNGs is not currently supported by Discord, thereby, the preview will display as a still image.*
 - **Extensions**: Is tt.bot's command suite not enough for you? Build your own commands using a powerful JavaScript API.
-- **Free software**: tt.bot is free software distributed under the [GNU AGPL v3 or later](./LICENSE). Translations for tt.bot are licensed under the [MIT License](./languages/LICENSE).
+- **Free software**: tt.bot is free software distributed under the [GNU AGPL v3 or later](./LICENSE). Translations for tt.bot are licensed under the [MIT License][language-license].
 - **Cross-server telephony**: Chat with anyone using tt.bot across Discord.
 > *Setup is required in order to use tt.bot's telephony features.*
 - **Customizability**: Most of tt.bot's behavior is opt-out by default, allowing you to enable only the features you truly want. You can even make tt.bot speak a different language or let tt.bot display time in your timezone!
@@ -46,3 +46,4 @@ tt.bot is a simple to use moderation/utility bot written in JavaScript using [No
 [Node.js]: https://nodejs.org
 [Eris]: https://github.com/abalabahaha/eris
 [Sosamba]: https://github.com/tt-bot-dev/sosamba
+[language-license]: https://github.com/tt-bot-dev/languages/blob/v4-wip/LICENSE

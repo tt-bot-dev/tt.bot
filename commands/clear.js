@@ -31,7 +31,6 @@ class ClearCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "clear",
-            args: "<messages:Number> [contains:String] [mentions:User]",
             argParser: new SwitchArgumentParser(sosamba, {
                 messages: {
                     type: Number,
