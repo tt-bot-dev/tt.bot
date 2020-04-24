@@ -1,6 +1,8 @@
 /config.js
 /config.json
 node_modules/
+# if hosting using docker
+rethinkdb_data/
 
 # don't.
 package-lock.json
