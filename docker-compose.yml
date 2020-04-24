@@ -6,7 +6,7 @@ services:
         volumes: 
             - ./rethinkdb_data:/data
         restart: always
-        networks: [internal_net]
+        networks: [external_net]
     bot:
         build: "."
         environment: 
@@ -15,9 +15,7 @@ services:
             - "127.0.0.1:8826:8826"
         restart: always
         depends_on: [db]
-        networks: [internal_net, external_net]
+        networks: [external_net]
 
 networks:
-    internal_net:
-        internal: true
     external_net:
