@@ -12,7 +12,7 @@ services:
         environment: 
             NODE_ENV: production
         ports:
-            - "8826"
+            - "127.0.0.1:8826:8826"
         restart: always
         depends_on: [db]
         networks: [internal_net, external_net]
