@@ -1,4 +1,5 @@
 FROM node:alpine
+RUN apk add git
 
 COPY . /app
 WORKDIR /app
