@@ -13,6 +13,8 @@ services:
             NODE_ENV: production
         ports:
             - "127.0.0.1:8826:8826"
+        volumes:
+            - ./config.js:/app/config.js
         restart: always
         depends_on: [db]
         networks: [external_net]
