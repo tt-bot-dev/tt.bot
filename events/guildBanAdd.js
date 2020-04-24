@@ -1,30 +1,55 @@
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+"use strict";
+const { Event } = require("sosamba");
 const logging = require("../lib/logging");
-module.exports = async function (guild, user) {
-    const config = await logging.getInfo(guild.id);
-    if (config.logEvents.includes("guildBan")) {
-        await logging.handlers.ban(config, guild, user, false);
+
+class GuildBanEvent extends Event {
+    constructor(...args) {
+        super(...args, {
+            name: "guildBanAdd"
+        });
     }
-    const guildData = await db.table("configs").get(guild.id);
-    if (guildData) {
-        let m;
-        try {
-            m = await guild.getAuditLogs(50, null, 22);
-        } catch(_) {
-            // Eslint pls
+
+    async run(guild, user) {
+        const logConfig = await logging.getInfo(guild.id, this.sosamba.db);
+        if (logConfig.logEvents.includes("guildBan")) {
+            await logging.handlers.ban(logConfig, guild, user, false);
         }
-        let entry;
-        if (m) entry = m.entries.find(a => a.targetID == user.id);
-        // Don't log bans coming from us
-        if (entry && entry.user.id !== this.user.id) this.modLog.addBan(user.id, {
-            guildConfig: guildData,
-            author: entry ? entry.user : {
-                username: "Unknown User",
-                discriminator: "0000",
-                avatarURL: "https://cdn.discordapp.com/embed/avatars/0.png",
-                id: "Unknown"
-            },
-            guild
-        }, entry ? entry.reason : null);
+        const config = await this.sosamba.db.getGuildConfig(guild.id);
+        if (config && config.modlogChannel && 
+            guild.members.get(this.sosamba.user.id).permission.has("viewAuditLogs")) {
+            let auditLog;
+            try {
+                auditLog = await guild.getAuditLogs(50, null, 22);
+            } catch {}
+            if (auditLog) {
+                const entry = auditLog.entries.find(entry => entry.targetID === user.id);
+                if (entry && entry.user.id !== this.sosamba.user.id) this.sosamba.modLog.addBan(user.id, {
+                    guildConfig: config,
+                    author: entry.user,
+                    guild
+                }, entry.reason);
+            }
+        }
     }
-};
-module.exports.isEvent = true;
+}
+
+module.exports = GuildBanEvent;

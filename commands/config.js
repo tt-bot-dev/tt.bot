@@ -1,237 +1,186 @@
-const ReactionMenu = require("../util/reactionmenu");
-const ConfigProps = require("../util/config/Properties");
-const yN = require("../util/askYesNo");
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+"use strict";
+const { ReactionMenu } = require("sosamba");
+const { role, channel } = require("sosamba/lib/argParsers/switchSerializers/erisObjects");
+const { prefix: defaultPrefix } = require("../config");
+const Command = require("../lib/commandTypes/AdminCommand");
+const ConfigProps = require("../lib/util/config/Properties");
+
 class ConfigMenu extends ReactionMenu {
-    constructor(msg, msg2) {
-        super(msg2.id, msg.channel.id, msg.author.id, {});
-        this.options = {
-            stopCallback: this.stopCallback.bind(this)
-        };
-        this.ogMsg = msg;
-        this.pgMsg = msg2;
+    constructor(...args) {
+        super(...args);
+        delete this.callbacks;
+        this.timeout = 5 * 6e4;
+        this.state = ConfigMenu.States.MAIN_MENU;
         this.reactionErrored = false;
-        this.state = ConfigMenu.states.MAIN_MENU;
-        try {
-            this.prepareEmoji().then(() => {
-                this.ready = true;
-            });
-        } catch (_) {
-            // Do nothing. It will show the user a list of reactions, so they have no problem with it.
+    }
+
+    get callbacks() {
+        const o = {};
+        if (this.state === ConfigMenu.States.MAIN_MENU) {
+            for (const EmojiProp in ConfigMenu.EmojiPropMap) {
+                if (!Object.prototype.hasOwnProperty
+                    .call(ConfigMenu.EmojiPropMap, EmojiProp)) continue;
+                o[EmojiProp] = () =>
+                    this.showSubMenu(ConfigMenu.EmojiPropMap[EmojiProp]);
+            }
+        } else if (this.state === ConfigMenu.States.SUB_MENU) {
+            o[ConfigMenu.HOME] = () => this.goHome();
+            o[ConfigMenu.SUB_MENU_ACTION_EDIT] = () => this.setProperty();
+            o[ConfigMenu.DISABLE] = () => this.resetProperty();
         }
+
+        return o;
     }
 
-    async prepareEmoji() {
-        const arr = [ReactionMenu.STOP];
-        const mainMenu = [ConfigMenu.PREFIX,
-            ConfigMenu.MODROLE,
-            ConfigMenu.FAREWELL,
-            ConfigMenu.FAREWELLCHANNEL,
-            ConfigMenu.GREETING,
-            ConfigMenu.GREETINGCHANNEL,
-            ConfigMenu.AGREE,
-            ConfigMenu.MEMBER,
-            ConfigMenu.LOGCHANNEL,
-            ConfigMenu.LOGEVENTS,
-            ConfigMenu.MODLOG];
-        const subMenu = [ConfigMenu.SUB_MENU_ACTION_EDIT, ConfigMenu.DISABLE, ConfigMenu.HOME];
-        let finalArr = [...arr];
-        if (this.state === ConfigMenu.states.MAIN_MENU) finalArr = [...arr, ...mainMenu];
-        else if (this.state === ConfigMenu.states.SUB_MENU) finalArr = [...arr, ...subMenu];
-        for (const e of finalArr) await this.pgMsg.addReaction(e);
-    }
+    set callbacks(_) { }
 
-    async stopCallback(reason) {
-        try {
-            this.curProp = null;
-            this.state = 0;
-            this.ready = false;
-            if (reason === ReactionMenu.MANUAL_EXIT) {
-                await this.pgMsg.delete();
-                await this.ogMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_MANUAL")).then(m => setTimeout(() => m.delete(), 5000));
-            }
-            /*case ReactionMenu.TIMEOUT:
-                this.ogMsg.channel.createMessage(`The menu has expired.`)*/
-            else if (reason === ReactionMenu.MESSAGE_DELETE)
-                await this.ogMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_MESSAGE_DELETE")).then(m => setTimeout(() => m.delete(), 5000));
-            else if (reason === ReactionMenu.CHANNEL_DELETE)
-                await bot.users.get(this.authorID).getDMChannel().then(dm => dm.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_CHANNEL_DELETE")));
-        //eslint-disable-next-line
-        } catch (_) { } 
-    }
-    handleReactionAdd(msg, emoji, id) {
-        if (!super.handleReactionAdd(msg, emoji, id)) return;
-        if (!this.ready) return;
-        if (this.stopped) return;
-        try {
-            this.pgMsg.removeReaction(emoji.name, id);
-        } catch (_) {
-            if (!this.reactionErrored) {
-                this.reactionErrored = true;
-                this.pgMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_NO_AUTOREMOVE"));
-            }
-        }
-        this.getCb(emoji.name);
-    }
-
-    async getCb(e) {
-        if (this.state === ConfigMenu.states.MAIN_MENU) {
-            if (!ConfigMenu.emojiPropMap[e]) return;
-            this.showSubMenu(ConfigMenu.emojiPropMap[e]);
-        } else if (this.state === ConfigMenu.states.SUB_MENU) {
-            if (e === ConfigMenu.HOME) {
-                this.goHome();
-            }
-            else if (e === ConfigMenu.SUB_MENU_ACTION_EDIT) {
-                if (!this.curProp) throw new Error("No cProp, this shouldn't happen!");
-                this.state = ConfigMenu.states.QUESTION;
-                let toSave = "";
-                const { cProp, cat } = this.curProp;
-                if (cProp.type === "string") {
-                    const question = await this.pgMsg.channel.createMessage(this.ogMsg.t("QUESTION_STRING_VAL"));
-                    const [m] = await bot.waitForEvent("messageCreate", 60000, m => {
-                        if (m.author.id !== this.ogMsg.author.id) return;
-                        if (m.channel.id !== this.ogMsg.channel.id) return;
-                        return true;
-                    });
-                    toSave = m.content;
-                    await question.delete();
-                    try {
-                        await m.delete();
-                    } catch (_) { //eslint-disable-line no-empty
-
-                    }
-                } else {
-                    const question = await this.pgMsg.channel.createMessage(cProp.type === "channel" ? this.ogMsg.t("QUESTION_CHANNEL_VAL") : this.ogMsg.t("QUESTION_ROLE_VAL"));
-                    const [m] = await bot.waitForEvent("messageCreate", 30000, m => {
-                        if (m.author.id !== this.ogMsg.author.id) return;
-                        if (m.channel.id !== this.ogMsg.channel.id) return;
-                        return true;
-                    });
-                    m.t = this.ogMsg.t;
-                    let c;
-                    try {
-                        let qType;
-                        if (cProp.type === "channel") qType = "channel";
-                        else qType = "roleCompat";
-                        c = await queries[qType](m.content, m, true);
-                    } catch (_) {
-                        console.error(_);
-                        await this.pgMsg.channel.createMessage(this.ogMsg.t("ERROR", _));
-                        return;
-                    }
-
-                    toSave = c.id;
-                    await question.delete();
-                    try {
-                        await m.delete();
-                    } catch (_) {//eslint-disable-line no-empty
-
-                    }
-                }
-
-                this.ogMsg.guildConfig[cat] = toSave;
-                await db.table("configs").update(this.ogMsg.guildConfig);
-                this.state = ConfigMenu.states.SUB_MENU;
-                this.showSubMenu(cat, true);
-            } else if (e === ConfigMenu.DISABLE) {
-                if (!this.curProp) throw new Error("No cProp, this shouldn't happen!");
-                this.state = ConfigMenu.states.QUESTION;
-                const { cProp, cat } = this.curProp;
-                const m = await this.pgMsg.channel.createMessage(
-                    cProp.default ? this.ogMsg.t("QUESTION_RESET", this.ogMsg.t(ConfigProps[cat].translationKey)) : this.ogMsg.t("QUESTION_DISABLE", this.ogMsg.t(ConfigProps[cat].translationKey))
-                );
-                const r = await yN(this.ogMsg);
-                await m.delete();
-                if (r) {
-                    if (cProp.default) {
-                        this.ogMsg.guildConfig[cat] = cProp.default;
-                    } else {
-                        delete this.ogMsg.guildConfig[cat];
-                    }
-                    await db.table("configs").replace(this.ogMsg.guildConfig);
-                } else {
-                    this.pgMsg.channel.createMessage(this.ogMsg.t("OP_CANCELLED"));
-                }
-                this.state = ConfigMenu.states.SUB_MENU;
-                this.showSubMenu(cat, true);
-            }
-        }
-    }
-
-    async goHome() {
-        this.state = ConfigMenu.states.MAIN_MENU;
-        this.ready = false;
-        this.curProp = null;
-        try {
-            await this.pgMsg.removeReactions();
-        } catch (_) {
-            if (!this.reactionErrored) {
-                this.reactionErrored = true;
-                this.pgMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_NO_AUTOREMOVE"));
-            }
-        }
-        await this.pgMsg.edit(ConfigMenu.DEFAULT_OBJ(this.ogMsg));
-        await this.prepareEmoji().then(() => this.ready = true);
-    }
-
-    async showSubMenu(cat, fromEditMode = false) {
-        this.ready = false;
-        if (!fromEditMode) this.state = ConfigMenu.states.SUB_MENU;
-        const cProp = ConfigProps[cat];
-        this.curProp = { cProp, cat };
-        const p = this.getValFromProp(this.ogMsg.guildConfig[cat], cProp) || this.ogMsg.t("NONE");
-        if (!fromEditMode) {
-            try {
-                await this.pgMsg.removeReactions();
-            } catch (_) {
-                if (!this.reactionErrored) {
-                    this.reactionErrored = true;
-                    this.pgMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_NO_AUTOREMOVE"));
-                }
-            }
-        }
-        await this.pgMsg.edit({
+    async showSubMenu(prop, transitionFromQuestion = false) {
+        this.state = ConfigMenu.States.UNAVAILABLE;
+        const propInfo = ConfigProps[prop];
+        this.currentlyEditing = { prop, propInfo };
+        const valueText = await this.getValueFromProperty(
+            (await this.ctx.guildConfig)[prop], propInfo
+        );
+        if (!transitionFromQuestion) await this.cleanReactions();
+        await this.ctx.send({
             embed: {
                 color: 0x008800,
-                title: this.ogMsg.t(cProp.translationKey),
-                description: this.ogMsg.t("SETTING_CURRENT_VAL", p),
+                title: await this.ctx.t(propInfo.translationKey),
+                description: await this.ctx.t("SETTING_CURRENT_VAL", valueText),
                 fields: [{
-                    name: this.ogMsg.t("SETTING_SET"),
-                    value: this.ogMsg.t("SETTING_SET_DESCRIPTION")
+                    name: await this.ctx.t("SETTING_SET"),
+                    value: await this.ctx.t("SETTING_SET_DESCRIPTION")
                 }, {
-                    name: cProp.default ? this.ogMsg.t("SETTING_RESET") : this.ogMsg.t("SETTING_DISABLE"),
-                    value: cProp.default ? this.ogMsg.t("SETTING_RESET_DESCRIPTION", cProp.default) : this.ogMsg.t("SETTING_DISABLE_DESCRIPTION")
+                    name: await this.ctx.t(propInfo.default ? "SETTING_RESET" : "SETTING_DISABLE"),
+                    value: propInfo.default ? await this.ctx.t("SETTING_RESET_DESCRIPTION", propInfo.default) : await this.ctx.t("SETTING_DISABLE_DESCRIPTION")
                 }, {
-                    name: this.ogMsg.t("SETTING_HOME"),
-                    value: this.ogMsg.t("SETTING_HOME_DESCRIPTION")
+                    name: await this.ctx.t("SETTING_HOME"),
+                    value: await this.ctx.t("SETTING_HOME_DESCRIPTION")
                 }]
             }
         });
-        if (!fromEditMode) await this.prepareEmoji().then(() => this.ready = true);
-        else this.ready = true;
+        this.state = ConfigMenu.States.SUB_MENU;
+        await this.prepareEmoji();
     }
 
-    getValFromProp(prop, cProp) {
-        if (cProp.type === "string") return prop;
-        else if (cProp.type === "channel") {
-            const chan = this.ogMsg.guild.channels.get(prop);
-            return `#${chan ? chan.name : this.ogMsg.t("NONE")}`;
+    async setProperty() {
+        this.state = ConfigMenu.States.QUESTION;
+        let translationKey = "", timeout = 0, toSave;
+        const { prop, propInfo } = this.currentlyEditing;
+        if (propInfo.type === "string") {
+            translationKey = "QUESTION_STRING_VAL";
+            timeout = 60000;
+        } else if (propInfo.type === "role") {
+            translationKey = "QUESTION_ROLE_VAL";
+            timeout = 30000;
+        } else if (propInfo.type === "channel") {
+            translationKey = "QUESTION_CHANNEL_VAL";
+            timeout = 30000;
         }
-        else if (cProp.type === "role") {
-            const role = this.ogMsg.guild.roles.get(prop);
-            return `${role ? role.mention : this.ogMsg.t("NONE")}`;
+        const m = await this.ctx.channel.createMessage(await this.ctx.t(translationKey));
+        try {
+            const resp = await this.ctx.waitForMessage(undefined, timeout);
+            if (propInfo.type === "string") toSave = resp.msg.content;
+            else if (propInfo.type === "role") toSave = (await role(resp.msg.content, this.ctx, {
+                name: "the role input"
+            })).id;
+            else if (propInfo.type === "channel") toSave = (await channel(resp.msg.content, this.ctx, {
+                textOnly: true
+            })).id;
+            if (typeof propInfo.validation === "function"
+                && await propInfo.validation(toSave, this.ctx) === false) throw new Error();
+        } catch (err) {
+            console.error(err);
+            await m.edit(await this.ctx.t("OP_CANCELLED"));
+            await this.showSubMenu(prop, true);
+            return;
+        }
+        await (this.ctx.guildConfig = { [prop]: toSave });
+        await m.delete();
+        await this.showSubMenu(prop, true);
+    }
+
+    async resetProperty() {
+        this.state = ConfigMenu.States.QUESTION;
+        const { prop, propInfo } = this.currentlyEditing;
+        const m = await this.ctx.channel.createMessage(
+            await this.ctx.t(propInfo.default ? "QUESTION_RESET" : "QUESTION_DISABLE",
+                await this.ctx.t(ConfigProps[prop].translationKey))
+        );
+        const resp = await this.ctx.askYesNo();
+        if (resp) {
+            await (this.ctx.guildConfig = { [prop]: propInfo.default ? propInfo.default : null });
+            await m.delete();
+        } else {
+            await m.edit(await this.ctx.t("OP_CANCELLED"));
+            setTimeout(() => m.delete().then(null, () => ""), 5000);
+        }
+        this.state = ConfigMenu.States.SUB_MENU;
+        await this.showSubMenu(prop, true);
+    }
+
+    async goHome() {
+        this.state = ConfigMenu.States.UNAVAILABLE;
+        this.currentlyEditing = null;
+        await this.cleanReactions();
+        await this.ctx.send(await ConfigMenu.DEFAULT_OBJ(this.ctx));
+        this.state = ConfigMenu.States.MAIN_MENU;
+        await this.prepareEmoji();
+    }
+
+    async cleanReactions() {
+        if (this.sosamba.hasBotPermission(this.ctx.channel, "manageMessages")) {
+            try {
+                await this.message.removeReactions(); 
+            } catch {}
+        } else {
+            if (!this.reactionErrored) {
+                this.reactionErrored = true;
+                await this.ctx.channel.createMessage(
+                    await this.ctx.t("REACTION_MENU_NO_AUTOREMOVE")
+                );
+            }
         }
     }
 
-    static DEFAULT_OBJ(msg) {
+    async getValueFromProperty(val, propData) {
+        if (propData.type === "string") return val || await this.ctx.t("NONE");
+        else if (propData.type === "channel") {
+            const chan = this.ctx.guild.channels.get(val);
+            return `#${chan ? chan.name : await this.ctx.t("NONE")}`;
+        } else if (propData.type === "role") {
+            const role = this.ctx.guild.roles.get(val);
+            return role ? role.mention : await this.ctx.t("NONE");
+        }
+    }
+    static async DEFAULT_OBJ(ctx) {
         return {
             embed: {
-                description: msg.t("WELCOME_TO_CONFIG"),
+                description: await ctx.t("WELCOME_TO_CONFIG"),
                 color: 0x008800,
-                fields: Object.values(ConfigProps).map(n => ({
-                    name: msg.t(n.translationKey),
-                    value: msg.t(n.descriptionTranslationKey)
-                }))
+                fields: await Promise.all(Object.values(ConfigProps).map(async n => ({
+                    name: await ctx.t(n.translationKey),
+                    value: await ctx.t(n.descriptionTranslationKey)
+                })))
             }
         };
     }
@@ -248,12 +197,14 @@ ConfigMenu.MEMBER = "👥";
 ConfigMenu.LOGCHANNEL = "🗒";
 ConfigMenu.LOGEVENTS = ConfigMenu.SUB_MENU_ACTION_EDIT = "📝";
 ConfigMenu.MODLOG = "🛠";
-ConfigMenu.states = {
+ConfigMenu.LOCALE = "🗣️";
+ConfigMenu.States = {
     MAIN_MENU: 0,
     SUB_MENU: 1,
-    QUESTION: 2
+    QUESTION: 2,
+    UNAVAILABLE: 3
 };
-ConfigMenu.emojiPropMap = {
+ConfigMenu.EmojiPropMap = {
     [ConfigMenu.PREFIX]: "prefix",
     [ConfigMenu.MODROLE]: "modRole",
     [ConfigMenu.FAREWELL]: "farewellMessage",
@@ -264,28 +215,31 @@ ConfigMenu.emojiPropMap = {
     [ConfigMenu.MEMBER]: "memberRole",
     [ConfigMenu.LOGCHANNEL]: "logChannel",
     [ConfigMenu.LOGEVENTS]: "logEvents",
-    [ConfigMenu.MODLOG]: "modlogChannel"
+    [ConfigMenu.MODLOG]: "modlogChannel",
+    [ConfigMenu.LOCALE]: "locale"
 };
 ConfigMenu.HOME = "🏠";
 ConfigMenu.DISABLE = "❌";
-module.exports = {
-    exec: async function (msg) {
-        async function makeCfg() {
-            await db.table("configs").insert({
-                id: msg.guild.id,
-                modRole: "tt.bot mod",
-                prefix: config.prefix
+
+class ConfigCommand extends Command {
+    constructor(...args) {
+        super(...args, {
+            name: "config",
+            description: "Lets you manage what I know about your server."
+        });
+    }
+
+    async run(ctx) {
+        if (!await ctx.guildConfig) {
+            await ctx.db.createGuildConfig(ctx._guildConfig = {
+                id: ctx.guild.id,
+                prefix: defaultPrefix
             });
-            return msg.guildConfig = await db.table("configs").get(msg.guild.id).run();
         }
-        msg.guildConfig || await makeCfg();
-        const m = await msg.channel.createMessage(ConfigMenu.DEFAULT_OBJ(msg));
-        const menu = new ConfigMenu(msg, m);
-        menu.start();
-    },
-    isCmd: true,
-    name: "config",
-    display: true,
-    category: 4,
-    description: "Lets you configure your server.",
-};
+
+        const m = await ctx.send(await ConfigMenu.DEFAULT_OBJ(ctx));
+        ctx.registerReactionMenu(new ConfigMenu(ctx, m));
+    }
+}
+
+module.exports = ConfigCommand;

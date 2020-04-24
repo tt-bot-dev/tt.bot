@@ -1,0 +1,59 @@
+# Copyright (C) 2020 tt.bot dev team
+# 
+# This file is part of tt.bot.
+# 
+# tt.bot is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# tt.bot is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+# 
+# You should have received a copy of the GNU Affero General Public License
+# along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+
+name: lint
+
+on:
+  push:
+    branches-ignore:
+      dependabot/**
+  pull_request:
+    branches-ignore:
+      dependabot/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Get Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: ">=10.0.0"
+    - name: npm install
+      run: npm install
+      env:
+        CI: true
+    - name: Set up the environment
+      run:
+        chmod +x -R ./travis
+    - name: Run the tests
+      run: ./travis/test.sh
+      env:
+        CI: true
+      if: github.actor != 'tt-bot' && github.actor != 'github-actions'
+    - name: Fix linting issues
+      run: ./travis/fixlint.sh
+      env:
+        CURRENT_BRANCH: ${{ github.ref }}
+        CURRENT_COMMIT: ${{ github.sha }}
+        COMMIT_AUTHOR: ${{ github.actor }}
+        GIT_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CI: true
+        CURRENT_REPO: ${{ github.repository }}
+      if: github.event_name != 'pull_request' && failure()

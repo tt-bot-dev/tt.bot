@@ -1,5 +1,27 @@
-const sa = require("snekfetch");
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+"use strict";
+const config = require("../../config");
+const sa = require("chainfetch");
 const APIBase = "https://discordapp.com/api/v6/oauth2";
+const { Eris: { Client } } = require("sosamba");
 
 class Cache {
     constructor(time, getter) {
@@ -24,7 +46,8 @@ class Cache {
     }
 
     _fetch(item) {
-        return this._getter(item).then(data => {
+        return this._getter(item, this).then(data => {
+            //eslint-disable-next-line no-console
             if (data.error) console.error(data.error);
             this._cache[item] = { time: Date.now(), data };
             return data;
@@ -36,28 +59,26 @@ class Cache {
     }
 }
 
-const getUserInfo = async token => {
+const getUserInfo = async (token, cache) => {
+    const e = new Client(`Bearer ${token}`, {
+        restMode: true
+    });
     try {
-        const e = new ErisO.Client(`Bearer ${token}`, {
-            restMode: true
-        });
         const body = await e.requestHandler.request("GET", "/users/@me", true);
         const guilds = await e.requestHandler.request("GET", "/users/@me/guilds", true);
         return {
-            id: body.id,
-            username: body.username,
-            discriminator: body.discriminator,
-            avatar: body.avatar,
+            ...body,
             guilds
         };
     } catch (err) {
-        throw err;
+        if (err.code === "ETIMEDOUT") return cache._cache[token].data;
+        else throw err;
     }
 };
 
-const c = new Cache(6e4, async token => {
+const c = new Cache(6e4, async (token, cache) => {
     try {
-        return await getUserInfo(token);
+        return await getUserInfo(token, cache);
     } catch (e) {
         return { error: e };
     }
@@ -69,7 +90,6 @@ const auth = {
         else {
             if (Date.now() - rq.session.tokenData.date >= rq.session.tokenData.expiry) {
                 try {
-                    console.log("Refreshing a token.");
                     await auth.refreshToken(rq.session.refreshToken, rq);
                 } catch (err) {
                     return nx();
@@ -85,24 +105,20 @@ const auth = {
     },
 
     async refreshToken(code, req) {
-        let dat;
-        try {
-            dat = sa.post(`${APIBase}/token`)
-                .set("Authorization", `Basic ${Buffer.from(`${config.clientID}:${config.clientSecret}`).toString("base64")}`)
-                .attach({
-                    refresh_token: code,
-                    grant_type: "refresh_token",
-                });
-        } catch (err) {
-            throw err;
-        }
+        let dat = await sa.post(`${APIBase}/token`)
+            .set("Authorization", `Basic ${Buffer.from(`${config.clientID}:${config.clientSecret}`).toString("base64")}`)
+            .attach({
+                refresh_token: code,
+                grant_type: "refresh_token",
+            })
+            .toJSON();
         const { body } = dat;
         const dateAfterReq = Date.now();
         const d = await c.get(body.access_token);
         req.session.tokenData = {
             accessToken: body.access_token,
             refreshToken: body.refreshToken,
-            expiry: (body.expires_in * 1000), // Expiry is in seconds, convert to ms
+            expiry: body.expires_in * 1000, // Expiry is in seconds, convert to ms
             date: dateAfterReq,
             redirURI: `${req.protocol}://${req.headers.host}/callback`,
         };
@@ -111,26 +127,23 @@ const auth = {
     },
 
     async getAccessToken(code, req) {
-        let r;
-        try {
-            r = await sa.post(`${APIBase}/token`)
-                .attach({
-                    client_id: config.clientID,
-                    client_secret: config.clientSecret,
-                    code,
-                    grant_type: "authorization_code",
-                    redirect_uri: `${req.protocol}://${req.headers.host}/callback`
-                });
-        } catch (err) {
-            throw err;
-        }
+        let r = await sa.post(`${APIBase}/token`)
+            .attach({
+                client_id: config.clientID,
+                client_secret: config.clientSecret,
+                code,
+                grant_type: "authorization_code",
+                redirect_uri: `${req.protocol}://${req.headers.host}/callback`
+            })
+            .toJSON();
         const { body } = r;
         const dateAfterReq = Date.now();
         const d = await auth.getUserInfo(body.access_token);
+        if (d.error) console.error(d.error);
         req.session.tokenData = {
             accessToken: body.access_token,
             refreshToken: body.refresh_token,
-            expiry: body.expires_in,
+            expiry: body.expires_in * 1000,
             date: dateAfterReq,
             redirURI: `${req.protocol}://${req.headers.host}/callback`,
         };
@@ -141,23 +154,19 @@ const auth = {
     getUserInfo,
 
     async logout(req) {
-        try {
-            await sa.post(`${APIBase}/token/revoke`)
-                .set("Authorization", `Basic ${Buffer.from(`${config.clientID}:${config.clientSecret}`).toString("base64")}`)
-                .attach({
-                    token: req.session.tokenData.accessToken,
-                    token_type_hint: "access_token"
-                });
-            await sa.post(`${APIBase}/token/revoke`)
-                .set("Authorization", `Basic ${Buffer.from(`${config.clientID}:${config.clientSecret}`).toString("base64")}`)
-                .attach({
-                    token: req.session.tokenData.refreshToken,
-                    token_type_hint: "refresh_token"
-                });
-            req.session.destroy();
-        } catch (err) {
-            throw err;
-        }
+        await sa.post(`${APIBase}/token/revoke`)
+            .set("Authorization", `Basic ${Buffer.from(`${config.clientID}:${config.clientSecret}`).toString("base64")}`)
+            .attach({
+                token: req.session.tokenData.accessToken,
+                token_type_hint: "access_token"
+            });
+        await sa.post(`${APIBase}/token/revoke`)
+            .set("Authorization", `Basic ${Buffer.from(`${config.clientID}:${config.clientSecret}`).toString("base64")}`)
+            .attach({
+                token: req.session.tokenData.refreshToken,
+                token_type_hint: "refresh_token"
+            });
+        req.session.destroy();
     }
 };
 

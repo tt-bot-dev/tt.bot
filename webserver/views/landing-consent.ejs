@@ -1,34 +1,61 @@
+<%#
+Copyright (C) 2020 tt.bot dev team
+ 
+This file is part of tt.bot.
+ 
+tt.bot is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+ 
+tt.bot is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+ 
+You should have received a copy of the GNU Affero General Public License
+along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+%>
+
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
+
 <body>
-<div class="tttie-container">
-<div class="tttie-body">
-<div class="tttie-center">
-<div>
-<h1>Hey there!</h1>
-Before we start, we need some sort of consent from you for us to collect the data.<br>
-Here is what do we collect about you:<br>
-<ul>
-<li>Your authentication data, pretty straightforward, isn't it?</li>
-<%if (isHTTP) { %>
-<li>You are accessing this web page insecurely. This means, anyone can intercept your traffic. If you want, use HTTPS instead.</li>
-<%}%>
-<li>Some more data that the instance owner(s) might collect. Please contact these for more info about it.</li>
-</ul>
+    <section class="hero is-warning">
+        <div class="hero-head"><%- include("./partials/header", { isLanding: true }) %></div>
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title is-1 is-size-3-mobile">Welcome!</h1>
+                <h3 class="subtitle is-3 is-size-5-mobile">Before we start, here's some paperwork:</em>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="content">
 
-Do you agree with this?<br>
+                Here is what do we collect about you:<br>
+                <ul>
+                    <li>Your authentication data (OAuth2 tokens)</li>
+                    <%if (isHTTP) { %>
+                    <li>You are accessing this web page insecurely. This means that anyone can intercept your
+                        traffic.</li>
+                    <%}%>
+                    <li>Some more data that the instance owner(s) might collect. Please contact them for more info about it.</li>
+                </ul>
 
-<p>Also sorry IE/Edge users, you won't be able to access this :(</p>
-<p>Your browser doesn't support serverside cookie setting, which we use to give the consent.</p>
-
-<div class="tttie-center"><a class="tttie-linkbutton" id="yes"><div class="tttie-button">Yes</div></a>
-<a class="tttie-linkbutton" id="no"><div class="tttie-button">Eh no.</div></a>
-</div>
-</div>
-</div>
-</div>
-</div>
-<script src="/static/js/data-consent.js"></script>
+                Do you agree with this?
+    
+            </div>
+            <div class="buttons">
+                <button class="button is-primary" id="yes">I agree</button>
+                <button class="button is-danger" id="no">I disagree</button>
+            </div>
+        </div>
+    </section>
+    <%- include("partials/footer") %>
+    <script src="/static/js/data-consent.js"></script>
 </body>
+
 </html>

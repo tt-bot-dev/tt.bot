@@ -1,57 +1,67 @@
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+"use strict";
+const Command = require("../lib/commandTypes/ModCommand");
+const { SwitchArgumentParser, Serializers: { Member } } = require("sosamba");
 const UserProfile = require("../lib/Structures/UserProfile");
 
-module.exports = {
-    exec: async function (msg, args) {
-        let splitargs = args.split(" | ");
-        let options = {};
-        splitargs.forEach(async fe => {
-            if (fe.match(/(user:([^]{0,37}))/i)) {
-                if (!options.user) {
-                    options.user = fe.replace(/user:/, "").replace(/ \\\| /g, " | ");
+class StrikeCommand extends Command {
+    constructor(sosamba, ...args) {
+        super(sosamba, ...args, {
+            name: "strike",
+            description: "Strikes a user.",
+            argParser: new SwitchArgumentParser(sosamba, {
+                user: {
+                    type: Member,
+                    description: "the user to strike"
+                },
+                reason: {
+                    type: String,
+                    description: "the strike reason",
+                    default: "No reason provided."
                 }
-            } else if (fe.match(/(reason:([^]{0,400}))/i)) {
-                if (!options.reason) {
-                    options.reason = fe.replace(/reason:/, "").replace(/ \\\| /g, " | ");
-                }
-            } else {
-                msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``));
-            }
+            }),
+            aliases: ["warn"]
         });
-        
-        if (!options.user) return msg.channel.createMessage(msg.t("ARGS_MISSING"));
-        let user;
+    }
+
+    async run(ctx, { user, reason }) {
+        if (user.bot) return ctx.send(await ctx.t("BOTS_NOT_STRIKABLE"));
+        await this.sosamba.modLog.addStrike(user.id, ctx, reason);
+        const dm = await user.user.getDMChannel();
+        const p = await ctx.db.getUserProfile(user.id);
+        const prof = new UserProfile(p || {});
         try {
-            user = await userQuery(options.user, msg, true);
-        } catch(err) {
-            return;
-        }
-        try {
-            if (user.bot) {
-                msg.channel.createMessage(msg.t("BOTS_NOT_STRIKABLE"));
-                return;
-            }
-            await bot.modLog.addStrike(user.id, msg, options.reason);
-            const dm = await user.user.getDMChannel();
-            const p = await db.table("profile").get(user.id);
-            const prof = p ? new UserProfile(p) : {};
-            dm.createMessage({
+            await dm.createMessage({
                 embed: {
-                    title: i18n.getTranslation("YOU_GOT_STRIKED", prof.locale || "en"),
-                    description: i18n.getTranslation("STRIKE_DETAILS", prof.locale || "en", bot.getTag(msg.author), options.reason),
+                    title: await this.sosamba.i18n.getTranslation("YOU_GOT_STRIKED", prof.locale || "en"),
+                    description: await this.sosamba.i18n.getTranslation("STRIKE_DETAILS", prof.locale || "en", this.sosamba.getTag(ctx.author), reason),
                     footer: {
-                        text: i18n.getTranslation("PAY_ATTENTION", prof.locale || "en")
+                        text: await this.sosamba.i18n.getTranslation("PAY_ATTENTION", prof.locale || "en")
                     },
                     timestamp: new Date()
                 }
             });
-        } catch(err) {
-            msg.channel.createMessage(msg.t("ERROR", err));
-        }
-    },
-    isCmd: true,
-    display: true,
-    category: 3,
-    description: "Strike someone",
-    args: "<user:<user>>[ | <reason:<reason>>]",
-    aliases: ["warn"]
-};
+        } catch {}
+        await ctx.send(":ok_hand:");
+    }
+}
+
+module.exports = StrikeCommand;

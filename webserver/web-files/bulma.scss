@@ -1,0 +1,199 @@
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+@charset "utf-8";
+
+$primary: #008800;
+
+$custom-colors: ("blurple": (#7289da));
+
+.bot-image {
+    width: 90vw;
+    max-width: 200px;
+}
+
+.is-round {
+    border-radius: 100%;
+}
+
+.navbar-item.bot-bar-item {
+    span {
+        margin-left: 8px;
+    }
+}
+
+.navbar-menu {
+    &.is-active {
+        .is-inline-block {
+            vertical-align: middle;
+        }
+    }
+}
+
+.navbar {
+    .navbar-item.bot-bar-item {
+        img {
+            width: auto;
+            height: 100%;
+            border-radius: 32px;
+        }
+    }
+}
+
+div.tttie-changes-buttons {
+    position: sticky;
+    top: 0px;
+    background-color: #fff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    z-index: 35;
+}
+
+div#menu aside.menu {
+    position: sticky;
+    top: 20px;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    &.bot-setting {
+        margin-bottom: 0.25rem !important;
+    }
+}
+label.checkbox {
+    input[type="checkbox"] + span {
+        margin-left: 5px;
+    }
+}
+
+@mixin keyframes($name) {
+    @-webkit-keyframes #{$name} {
+      @content; 
+    }
+    @-moz-keyframes #{$name} {
+      @content;
+    }
+    @-ms-keyframes #{$name} {
+      @content;
+    }
+    @keyframes #{$name} {
+      @content;
+    } 
+}
+
+
+@include keyframes(tttie-slide-in) {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: none;
+        opacity: 1;
+    }
+}
+
+@include keyframes(tttie-slide-out) {
+    from {
+        transform: none;
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+@include keyframes(tttie-fade-in) {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@include keyframes(tttie-fade-out) {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.tttie-fade-in {
+    animation: tttie-fade-in cubic-bezier(0.4, 0.0, 0.2, 1) normal 250ms;
+}
+
+.tttie-fade-out {
+    animation: tttie-fade-out cubic-bezier(0.4, 0.0, 0.2, 1) normal 200ms;
+}
+@media (prefers-reduced-motion: reduce) {
+    .tttie-slide-in, .tttie-slide-out {
+        animation: none
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .tttie-slide-in {
+        animation: tttie-slide-in cubic-bezier(0.4, 0.0, 0.2, 1) normal 250ms;
+    }
+    
+    .tttie-slide-out {
+        animation: tttie-slide-out cubic-bezier(0.4, 0.0, 0.2, 1) normal 200ms;
+    }
+}
+
+header.modal-card-head p.modal-card-title {
+    flex-shrink: initial;
+}
+div.monaco-wrapper {
+    display: flex;
+    .monaco-container {
+        flex: 1;
+        height: 600px;
+        .monaco-editor {
+            position: absolute;
+        }
+    }
+}
+@import "../../node_modules/bulma/bulma.sass";
+
+.control.is-extension-flag {
+    .tags {
+        margin-left: 1rem;
+        margin-bottom: 0;
+        .tag.is-loading::after {
+            @include loader;
+        }
+    }
+    padding-bottom: 10px;
+}
+// @import "../../node_modules/bulma-checkradio/src/sass/index.sass";

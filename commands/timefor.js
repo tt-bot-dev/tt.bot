@@ -1,25 +1,59 @@
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+"use strict";
+const { Command, SerializedArgumentParser, Serializers: {
+    User
+} } = require("sosamba");
 const UserProfile = require("../lib/Structures/UserProfile");
-module.exports = {
-    exec: async function (msg, args) {
-        let user;
-        if (args) {
-            try {
-                user = await userQuery(args, msg, true);
-            } catch(e) {
-                return;
-            }
-        }
-        let data;
-        if (args && user) data = await db.table("profile").get(user.id);
-        if (!data && user) return msg.channel.createMessage(msg.t("PROFILE_SPECIFIC_NONEXISTENT", bot.getTag(user)));
-        let profile = data ? new UserProfile(data) : msg.userProfile;
-        if (!profile.timezone) return msg.channel.createMessage(msg.t("NO_TZ"));
-        return msg.channel.createMessage(msg.t("TIME_FOR", moment(new Date()).tz(profile.timezone).format(config.tzDateFormat), data? bot.getTag(user) : bot.getTag(msg.author)));
-    },
-    isCmd: true,
-    display: true,
-    category: 1,
-    description: "Shows what time is it for a certain user.",
-    aliases: ["tf", "time"],
-    args: "[user]"
-};
+const moment = require("moment");
+const { tzDateFormat } = require("../config");
+
+class TimeForCommand extends Command {
+    constructor(sosamba, ...args) {
+        super(sosamba, ...args, {
+            name: "timefor",
+            argParser: new SerializedArgumentParser(sosamba, {
+                args: [{
+                    default: ctx => ctx.author,
+                    name: "user",
+                    rest: true,
+                    type: User,
+                    description: "the user to get the time for"
+                }]
+            }),
+            description: "Gets the current time of a user.",
+            aliases: ["tf"]
+        });
+    }
+
+    async run(ctx, [user]) {
+        const profile = await ctx.db.getUserProfile(user.id);
+        if (!profile) return await ctx.send(
+            await ctx.t(`PROFILE${user.id === ctx.author.id ? "" : "_SPECIFIC"}_NONEXISTENT`,
+                this.sosamba.getTag(user)));
+        const data = new UserProfile(profile);
+        if (!data.timezone) return await ctx.send(await ctx.t("NO_TZ"));
+        return ctx.send(await ctx.t("TIME_FOR",
+            moment(new Date()).tz(data.timezone)
+                .format(tzDateFormat), this.sosamba.getTag(user)));
+    }
+}
+
+module.exports = TimeForCommand;

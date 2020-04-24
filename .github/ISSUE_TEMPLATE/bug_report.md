@@ -1,13 +1,12 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-
+about: Create a report to help us improve tt.bot
 ---
 
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+**Steps To Reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
@@ -17,7 +16,7 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**A few questions:**
+**Environment:**
 - [ ] This happens on official tt.bot
 - [ ] This happens on a selfhosted instance
 
@@ -25,6 +24,7 @@ A clear and concise description of what you expected to happen.
 
 **Node.js**: 
 **tt.bot**: 
+**Sosamba**:
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.

@@ -1,30 +1,49 @@
-module.exports = {
-    exec: function(msg) {
-        return bot.createMessage(msg.channel.id, ":ping_pong:").then(m =>{
-            m.edit({
-                content: "",
-                embed: {
-                    title: msg.t("PONG"),
-                    description: msg.t("PING_LATENCY", m.timestamp - msg.timestamp),
-                    footer: {
-                        text: msg.t("PING_DISCORD_LATENCY", msg.guild.shard.latency)
-                    },
-                    color: 0x008800
-                }
-            });
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+"use strict";
+const { Command } = require("sosamba");
+
+class PingCommand extends Command {
+    constructor(...args) {
+        super(...args, {
+            name: "ping",
+            description: "Shows my latency to Discord.",
+            aliases: ["pong"]
         });
-    },
-    isCmd: true,
-    display: true,
-    category: 1,
-    description: "Check if the bot is working.",
-    aliases: [
-        "pang",
-        "pong",
-        "pung",
-        "pwng",
-        "peng",
-        "b1ng",
-        "b0ng"
-    ]
-};
+    }
+
+    async run(ctx) {
+        const m = await ctx.send(":ping_pong:");
+
+        await ctx.send({
+            content: "",
+            embed: {
+                title: await ctx.t("PONG"),
+                description: await ctx.t("PING_LATENCY", m.timestamp - ctx.msg.timestamp),
+                footer: {
+                    text: await ctx.t("PING_DISCORD_LATENCY", ctx.guild.shard.latency)
+                },
+                color: 0x008800
+            }
+        });
+    }
+}
+
+module.exports = PingCommand;

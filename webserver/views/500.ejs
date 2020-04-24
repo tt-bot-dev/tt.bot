@@ -1,23 +1,50 @@
+<%#
+Copyright (C) 2020 tt.bot dev team
+ 
+This file is part of tt.bot.
+ 
+tt.bot is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+ 
+tt.bot is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+ 
+You should have received a copy of the GNU Affero General Public License
+along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+%>
+
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
+
 <body>
-<div class="tttie-container">
-<%- include("./partials/header") %>
-<div class="tttie-body">
-<div class="tttie-center text">
-<div>
-<h1>500</h1>
-<p>I'm sorry, but something bad has occured.</p>
-<div class="tttie-center">
-<pre><%=error%></pre>
-</div>
-<div class="tttie-center">
-<a class="tttie-linkbutton" href="/"><div class="tttie-button">Go home</div></a>
-</div>
-</div>
-</div>
-</div>
-</div>
+    <section class="hero is-danger">
+        <div class="hero-head"><%- include("./partials/header", { isLanding: true }) %></div>
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title is-1 is-size-3-mobile">500</h1>
+                <h3 class="subtitle is-3 is-size-5-mobile">Something bad has occured :(</em>
+                <div class="hero-buttons">
+                    <a href="/"
+                        class="button is-large is-danger">
+                        <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>
+                        <span>Go home</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <b>Here's what happened:</b><br>
+            <pre><code><%=error%></code></pre>
+        </div>
+    </section>
+    <%- include("partials/footer") %>
 </body>
+
 </html>

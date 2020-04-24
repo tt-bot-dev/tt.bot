@@ -1,47 +1,60 @@
-module.exports = {
-    exec: async function (msg, args) {
-        if (args) {
-            let splitargs = args.split(" | ");
-            let options = {};
-            splitargs.forEach(async fe => {
-                if (fe.match(/(user:([^]{0,36}))/i)) {
-                    if (!options.user) {
-                        options.user = fe.replace(/user:/, "").replace(/ \\\| /g, " | ");
-                    }
-                } else if (fe.match(/(reason:([^]{0,400}))/i)) {
-                    if (!options.reason) {
-                        options.reason = fe.replace(/reason:/, "").replace(/ \\\| /g, " | ");
-                    }
-                } else {
-                    msg.channel.createMessage(msg.t("INVALID_ARG", `\`${fe}\``));
-                }
-            });
-            try {
-                
-                if (!options.user) {
-                    msg.channel.createMessage(msg.t("ARGS_MISSING"));
-                    return;
-                }
-                let user = await userQuery(options.user, msg, true);
-                if (bot.passesRoleHierarchy(msg.member, user)) {
-                    await user.kick(`${bot.getTag(msg.author)}: ${options.reason || "no reason"}`);
-                    bot.modLog.addKick(user.id, msg, options.reason);
-                    await msg.channel.createMessage(msg.t("KICK_DONE", user));
-                } else {
-                    msg.channel.createMessage(msg.t("ROLE_HIERARCHY_ERROR"));
-                }
-            } catch (err) {
-                bot.createMessage(msg.channel.id, msg.t("ERROR", err)).then(null, console.error);
-                console.error(err);
-            }
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
+"use strict";
+const { SwitchArgumentParser,
+    Serializers: { Member } } = require("sosamba");
+const Command = require("../lib/commandTypes/ModCommand");
+
+class KickCommand extends Command {
+    constructor(sosamba, ...args) {
+        super(sosamba, ...args, {
+            name: "kick",
+            argParser: new SwitchArgumentParser(sosamba, {
+                user: {
+                    type: Member,
+                    description: "The user to kick"
+                },
+                reason: {
+                    type: String,
+                    default: "No reason provided.",
+                    description: "The reason for the kick"
+                }
+            }),
+            description: "Kicks a user."
+        });
+    }
+
+    async permissionCheck(ctx) {
+        return ctx.member.permission.has("kickMembers") || await super.permissionCheck(ctx);
+    }
+
+    async run(ctx, { user, reason }) {
+        if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
+            if (!this.sosamba.hasBotPermission(ctx.channel, "kickMembers")) return ctx.send(await ctx.t("ERROR", "I don't have the permissions to kick the user."));
+            await user.kick(`${this.sosamba.getTag(ctx.author)}: ${reason}`);
+            this.sosamba.modLog.addKick(user.id, ctx.msg, reason);
+            await ctx.send(await ctx.t("KICK_DONE", user));
         } else {
-            return await bot.createMessage(msg.channel.id, msg.t("ARGS_MISSING"));
+            await ctx.send(await ctx.t("ROLE_HIERARCHY_ERROR"));
         }
-    },
-    isCmd: true,
-    display: true,
-    category: 3,
-    description: "Kicks an user.\nThe command uses `\u200b | \u200b` as separators (note the spaces). Use ` \\| ` to escape the separation in your queries.\nThe order of the switches doesn't matter.",
-    args: "<user:<user>>[ | <reason:<reason>>]"
-};
+    }
+}
+
+module.exports = KickCommand;

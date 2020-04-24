@@ -1,56 +1,93 @@
+<%#
+Copyright (C) 2020 tt.bot dev team
+ 
+This file is part of tt.bot.
+ 
+tt.bot is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+ 
+tt.bot is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+ 
+You should have received a copy of the GNU Affero General Public License
+along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+%>
+
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
+
 <body>
-<div class="tttie-container">
-<%- include("./partials/header") %>
-<div class="tttie-body">
-<div class="tttie-center">
-<div>
-<div class="tttie-center text">
-<div>
-<img class="tttie-server-dash-icon" src="<%=erisGuild.dynamicIconURL('png', 256) || '/static/unknown.png'%>"><br>
-<h1>Extensions for <%=erisGuild.name%></h1>
-
-<p>Here's a list of extensions. You can create one, or edit them, even delete them from there.</p>
-</div>
-</div>
-<div>
-<div class="tttie-changes-buttons">
-<a class="tttie-linkbutton" href="/dashboard/<%=erisGuild.id%>/extensions/new"><div class="tttie-button">Create an extension</div></a>
-</div>
-</div>
-
-<div class="tttie-table-wrapper">
-<table class="tttie-table is-responsive">
-<thead>
-    <tr>
-        <th>Name</th>
-        <th>ID</th>
-        <th>Store ID</th>
-        <th>Actions</th>
-    </tr>
-</thead>
-<tbody>
-
-<%extensions.map(e => {%>
-<tr>
-<td><%=e.name%></td>
-<td><%=e.id%></td>
-<td><%=e.store%></td>
-<td>
-<a class="tttie-linkbutton" href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>"><div class="tttie-button">Edit</div></a>
-<a class="tttie-linkbutton nomargin" href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>/monaco"><div class="tttie-button">Edit (Monaco)</div></a>
-<a class="tttie-linkbutton nomargin" href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>/delete"><div class="tttie-button red">Delete</div></a></td>
-</tr>
-<%})%>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-
+    <section class="hero is-primary">
+        <div class="hero-head"><%- include("./partials/header", { isLanding: false }) %></div>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <img class="is-round"
+                    src="<%= erisGuild.icon ? erisGuild.dynamicIconURL('png', 256) : "https://cdn.discordapp.com/embed/avatars/0.png"%>"
+                    height="128" width="128">
+                    <h2 class="title is-2 is-size-4-mobile">Extensions for <%= erisGuild.name %></h2>
+                    <h4 class="subtitle is-4 is-size-5-mobile">Please pick an extension to manage it.</h4>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-one-quarter" id="menu">
+                    <aside class="menu">
+                        <ul class="menu-list">
+                            <li>
+                                <a href="/dashboard/<%=erisGuild.id%>">Server settings</a>
+                            </li>
+                            <li><a href="/dashboard/<%=erisGuild.id%>/extensions" class="is-active">Extensions</a></li>
+                        </ul>
+                    </aside>
+                </div>
+                <div class="column">
+                    <div class="tttie-changes-buttons">
+                        <div class="buttons">
+                            <a href="/dashboard/<%=erisGuild.id%>" class="button">
+                                <span class="icon"><i class="fa fa-arrow-left"></i></span>
+                                <span>Back</span>
+                            </a>
+                            <a href="/dashboard/<%=erisGuild.id%>/extensions/new" class="button">
+                                <span class="icon"><i class="fa fa-plus"></i></span>
+                                <span>Create an extension</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="extension-list">
+                        <%extensions.map(e => {%>
+                        <article class="media" data-id="<%=e.id%>" data-name="<%=e.name%>" data-store="<%=e.store%>">
+                            <div class="media-content is-clipped">
+                                <b><%=e.name%> (<%=e.id%>)</b><br>
+                                Store ID: <%=e.store%>
+                            </div>
+                            <div class="media-right">
+                                <div class="buttons">
+                                    <a href="/dashboard/<%=erisGuild.id%>/extensions/<%=e.id%>" class="button">
+                                        <span class="icon"><i class="fa fa-edit"></i></span>
+                                    </a>
+                                    <button class="button is-danger delete-extension">
+                                        <span class="icon"><i class="fa fa-trash"></i></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </article>
+                        <%})%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="/dashboard/<%=erisGuild.id%>/load.js"></script>
+    <script src="/static/js/ttbotapi.js"></script>
+    <script src="/static/js/extensions-delete.js"></script>
+    <%- include("partials/footer") %>
 </body>
+
 </html>

@@ -1,19 +1,268 @@
+<%#
+Copyright (C) 2020 tt.bot dev team
+ 
+This file is part of tt.bot.
+ 
+tt.bot is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+ 
+tt.bot is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+ 
+You should have received a copy of the GNU Affero General Public License
+along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+%>
+
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
+
 <body>
-<div class="tttie-container">
-<%- include("./partials/header") %>
-<div class="tttie-body">
-<div class="tttie-center text">
-<div>
-<h1>Hey there!</h1>
-<p>This is the dashboard of <%=bot.user.username%>, an instance of tt.bot.</p>
-<div class="tttie-center"><a href="https://tttie.github.io/ttbot" class="tttie-linkbutton"><div class="tttie-button">View tt.bot's features</div></a></div>
-<p>This tt.bot instance currently knows <b><%=bot.guilds.size%></b> servers and <b><%=bot.users.size%></b> users.</p>
-</div>
-</div>
-</div>
-</div>
+    <section class="hero is-fullheight is-primary">
+        <div class="hero-head"><%- include("./partials/header", { isLanding: true }) %></div>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <img class="bot-image is-round" src="<%=bot.user.dynamicAvatarURL("png", 256)%>">
+                <h1 class="title is-1 is-size-3-mobile"><%=bot.user.username%></h1>
+                <em>an instance of tt.bot, an open-source moderation/utility Discord bot.</em>
+                <div class="hero-buttons">
+                    <a href="https://discordapp.com/oauth2/authorize?client_id=<%=config.clientID%>&amp;scope=bot"
+                        class="button is-large is-primary">
+                        <span class="icon"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                        <span>Add to a server</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-footer">
+            <div class="tabs is-centered is-fullwidth is-boxed">
+                <div class="container">
+                    <ul>
+                        <li><a href="#stats">Stats</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#team">Team</a></li>
+                        <li><a href="#more">More</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="hero is-dark is-bold" id="stats">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <div class="columns">
+                    <div class="column">
+                        <h1 class="title is-1 is-size-3-mobile"><%=bot.guilds.size%></h1>
+                        <h3 class="subtitle is-3 is-size-5-mobile">server<%=bot.guilds.size === 1 ? "" : "s"%></h3>
+                    </div>
+                    <div class="column">
+                        <h1 class="title is-1 is-size-3-mobile"><%=bot.users.size%></h1>
+                        <h3 class="subtitle is-3 is-size-5-mobile">known user<%=bot.users.size === 1 ? "" : "s"%></h3>
+                    </div>
+                    <div class="column">
+                        <h1 class="title is-1 is-size-3-mobile"><%=Math.floor(
+                            bot.shards.reduce((a, b) => a.latency + b.latency, { latency: 0 })
+                            / bot.shards.size
+                        )%> ms</h1>
+                        <h3 class="subtitle is-3 is-size-5-mobile">latency</h3>
+                    </div>
+                    <div class="column">
+                        <h1 class="title is-1 is-size-3-mobile"><%=ttbotVersion%></h1>
+                        <h3 class="subtitle is-3 is-size-5-mobile">version</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="hero" id="features">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title is-1 is-size-3-mobile">Features</h1>
+                <h3 class="subtitle is-3 is-size-5-mobile">tt.bot has plenty of features for you to enjoy. Here are some
+                    of them:</h3>
+                <div class="columns has-text-centered">
+                    <div class="column">
+                        <span class="icon is-large"><i class="fas fa-smile fa-3x"></i></span>
+                        <h4 class="subtitle is-3 is-size-5-mobile">Emoji to picture</h4>
+                        <p>A simple way to convert your magnificient emoji to an animated PNG image!</p>
+                        <p><em>Rendering APNGs is not currently supported by Discord,
+                                thereby, the preview will display as a still image.</em></p>
+                    </div>
+                    <div class="column">
+                        <span class="icon is-large"><i class="fas fa-puzzle-piece fa-3x"></i></span>
+                        <h4 class="subtitle is-3 is-size-5-mobile">Extensions</h4>
+                        <p>Is tt.bot's command suite not enough for you? Build your own commands using a powerful
+                            JavaScript API.</p>
+                    </div>
+                    <div class="column">
+                        <span class="icon is-large"><i class="fas fa-heart fa-3x"></i></span>
+                        <h4 class="subtitle is-3 is-size-5-mobile">Free software</h4>
+                        <p>tt.bot is free software distributed under the <a
+                                href="https://github.com/tt-bot-dev/tt.bot/blob/master/LICENSE">GNU AGPL v3 or
+                                later</a>. Translations for tt.bot are licensed
+                            under the <a href="https://github.com/tt-bot-dev/languages/blob/master/LICENSE">MIT License</a>.</p>
+                    </div>
+                </div>
+                <div class="columns has-text-centered">
+                    <div class="column">
+                        <span class="icon is-large"><i class="fas fa-phone fa-3x"></i></span>
+                        <h4 class="subtitle is-3 is-size-5-mobile">Cross-server telephony</h4>
+                        <p>Chat with anyone using tt.bot across Discord.</p>
+                        <em>Setup is required in order to use tt.bot's telephony features.</em>
+                    </div>
+                    <div class="column">
+                        <span class="icon is-large"><i class="fas fa-cog fa-3x"></i></span>
+                        <h4 class="subtitle is-3 is-size-5-mobile">Customizability</h4>
+                        <p>Most of tt.bot's behavior is opt-out by default, allowing you to enable only the features you
+                            truly want. You can even make tt.bot speak a different language or let tt.bot display time
+                            in your timezone!
+                        </p>
+                    </div>
+                    <div class="column">
+                        <span class="icon is-large"><i class="fas fa-gavel fa-3x"></i></span>
+                        <h4 class="subtitle is-3 is-size-5-mobile">Moderation</h4>
+                        <p>tt.bot features a simple to use moderation suite in order to help server moderators keep
+                            their server clean.</p>
+                    </div>
+                </div>
+                <div class="columns has-text-centered">
+                    <div class="column">
+                        <span class="icon is-large"><i class="fas fa-user fa-3x"></i></span>
+                        <h4 class="subtitle is-3 is-size-5-mobile">Welcome/leave messages</h4>
+                        <p>Say hello/goodbye to your members with your own custom message.</p>
+                    </div>
+                    <div class="column">
+                        <span class="icon is-large"><i class="fas fa-scroll fa-3x"></i></span>
+                        <h4 class="subtitle is-3 is-size-5-mobile">Logging</h4>
+                        <p>Log certain events on your server with simple and clean output.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="hero" id="team">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title is-1 is-size-3-mobile">The team</h1>
+                <h3 class="subtitle is-3 is-size-5-mobile">These people keep up the wheels.</h3>
+                <hr>
+                <p class="title is-3 has-text-centered">Maintainers</p>
+                <p class="subtitle is-5 has-text-centered">These people do the heavy work on tt.bot.</p>
+
+                <div class="columns">
+                    <div class="column is-one-third">
+                        <div class="card">
+                            <div class="card-image">
+                                <figure class="image">
+                                    <img src="https://avatars1.githubusercontent.com/u/17570452" alt="TTtie">
+                                </figure>
+                            </div>
+                            <div class="card-content">
+                                <p class="title is-3">TTtie</p>
+                                <p class="subtitle is-5">Project Lead, Maintainer, Translator (Czech)</p>
+                            </div>
+                            <footer class="card-footer">
+                                <a href="https://tttie.cz" class="card-footer-item">Website</a>
+                                <a href="https://github.com/TTtie" class="card-footer-item">GitHub</a>
+                            </footer>
+                        </div>
+                    </div>
+                    <div class="column is-one-third">
+                        <div class="card">
+                            <div class="card-image">
+                                <figure class="image">
+                                    <img src="https://avatars3.githubusercontent.com/u/17960496" alt="Vladdy">
+                                </figure>
+                            </div>
+                            <div class="card-content">
+                                <p class="title is-3">Vladdy</p>
+                                <p class="subtitle is-5">Maintainer</p>
+                            </div>
+                            <footer class="card-footer">
+                                <a href="https://twitter.com/WolfgalVlad" class="card-footer-item">Twitter</a>
+                                <a href="https://github.com/vladfrangu" class="card-footer-item">GitHub</a>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <p class="title is-3 has-text-centered">Translators</p>
+                <p class="subtitle is-5 has-text-centered">These people make tt.bot speak different languages.</p>
+                <div class="columns">
+                    <div class="column is-one-third">
+                        <div class="card">
+                            <div class="card-image">
+                                <figure class="image">
+                                    <img src="https://avatars1.githubusercontent.com/u/13377926" alt="Morc">
+                                </figure>
+                            </div>
+                            <div class="card-content">
+                                <p class="title is-3">Morc</p>
+                                <p class="subtitle is-5">Translator (Slovak, Slovak (Nitránske nárečí))</p>
+                            </div>
+                            <footer class="card-footer">
+                                <a href="https://twitter.com/TheMorc" class="card-footer-item">Twitter</a>
+                                <a href="https://github.com/TheMorc" class="card-footer-item">GitHub</a>
+                            </footer>
+                        </div>
+                    </div>
+                    <div class="column is-one-third">
+                        <div class="card">
+                            <div class="card-image">
+                                <figure class="image">
+                                    <img src="https://avatars3.githubusercontent.com/u/41591304" alt="DZ-Radon">
+                                </figure>
+                            </div>
+                            <div class="card-content">
+                                <p class="title is-3">DZ-Radon</p>
+                                <p class="subtitle is-5">Translator (Romanian)</p>
+                            </div>
+                            <footer class="card-footer">
+                                <a href="https://github.com/DZ-Radon" class="card-footer-item">GitHub</a>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <p class="title is-3 has-text-centered">Would you like to become one of the translators?</p>
+                <div class="buttons are-large is-centered">
+                    <a href="https://github.com/tt-bot-dev/languages" class="button">
+                        <span class="icon"><i class="fab fa-github"></i></span>
+                        <span>Start here</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="hero is-primary is-medium" id="more">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h3 class="title is-3 is-size-5-mobile">Convinced?</h3>
+                <div class="hero-buttons">
+                    <a href="https://discordapp.com/oauth2/authorize?client_id=<%=config.clientID%>&amp;scope=bot"
+                        class="button is-large is-primary">
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                        <span>Get started today</span>
+                    </a>
+                </div>
+                <div class="hero-buttons">
+                    <a href="https://github.com/tt-bot-dev/tt.bot" class="button is-medium">
+                        <span class="icon"><i class="fab fa-github"></i></span>
+                        <span>GitHub</span>
+                    </a>
+                    <a href="https://discord.gg/pGN5dMq" class="button is-blurple is-medium">
+                        <span class="icon"><i class="fab fa-discord"></i></span>
+                        <span>Discord</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <%- include("partials/footer") %>
 </body>
+
 </html>

@@ -1,23 +1,45 @@
+<%#
+Copyright (C) 2020 tt.bot dev team
+ 
+This file is part of tt.bot.
+ 
+tt.bot is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+ 
+tt.bot is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+ 
+You should have received a copy of the GNU Affero General Public License
+along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+%>
 <head>
-<title><%=bot.user.username%> <%= pageTitle ? `- ${pageTitle}` : "" %></title>
-<meta charset="utf-8">
-  <meta name="description" content="tt.bot web panel. Might not work for some. If you wish to configure your server and it doesn't. Please use tt.config.">
-  <meta property="og:title" content="tt.bot web panel">
+  <title><%=bot.user.username%> <%= pageTitle ? `- ${pageTitle}` : "" %></title>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="An open source moderation/utlity bot.">
+  <meta property="og:title" content="tt.bot">
   <meta property="og:type" content="website">
   <meta property="og:image" content="<%=host%>/icon.png">
   <meta property="og:url" content="<%=host%>">
-  <meta property="og:description" content="tt.bot web panel. Might not work for some. If you wish to configure your server and it doesn't. Please use tt.config.">
+  <meta property="og:description"
+  content="An open source moderation/utlity bot.">
   <meta property="og:site_name" content="tt.bot">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="tt.bot web panel.">
+  <meta name="apple-mobile-web-app-title" content="tt.bot.">
   <link rel="apple-touch-icon-precomposed" href="/static/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <link rel="apple-touch-icon" href="/static/icon.png" />
   <link rel="icon" sizes="192x192" href="/static/icon.png">
   <link rel="shortcut icon" href="/static/icon.png">
-<meta name="theme-color" content="#101111">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/static/css/tttie.css">
+  <meta name="theme-color" content="#008800">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/css/bulma.css">
+  <script src="/static/js/activate-nav.js"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.13.0/js/all.js"></script>
 </head>

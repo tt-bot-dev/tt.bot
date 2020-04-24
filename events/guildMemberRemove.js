@@ -1,18 +1,54 @@
-module.exports = async function(g, m) {
-    let server;
-    try {
-        server = await db.table("configs").get(g.id).run();
-    } catch(err) {
-        return;
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+"use strict";
+const { Event } = require("sosamba");
+
+class GuildMemberLeaveEvent extends Event {
+    constructor(...args) {
+        super(...args, {
+            name: "guildMemberRemove"
+        });
     }
-    if (server && server.farewellChannelId && server.farewellMessage) {
-        let channel = g.channels.get(server.farewellChannelId);
-        if (channel) channel.createMessage(bot.parseMsg(server.farewellMessage, m, g));
-        else {
-            delete server.greetingChannelId;
-            delete server.greetingMessage;
-            await db.table("configs").get(g.id).update(server).run();
+
+    async run(guild, member) {
+        const config = await this.sosamba.db.getGuildConfig(guild.id);
+        if (config && config.farewellChannelId && config.farewellMessage) {
+            const channel = guild.channels.get(config.farewellChannelId);
+            if (channel) {
+                try { 
+                    await channel.createMessage({
+                        content: this.sosamba.parseMsg(config.farewellMessage, member, guild),
+                        allowedMentions: {
+                            users: [member.id],
+                            roles: false,
+                            everyone: false
+                        }
+                    });
+                } catch {}
+            } else {
+                await this.sosamba.db.updateGuildConfig({
+                    farewellChannelId: null
+                });
+            }
         }
-    } else return;
-};
-module.exports.isEvent = true;
+    }
+}
+
+module.exports = GuildMemberLeaveEvent;

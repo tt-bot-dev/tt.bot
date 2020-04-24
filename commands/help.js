@@ -1,139 +1,179 @@
-const ReactionMenu = require("../util/reactionmenu");
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+"use strict";
+const { Command, SerializedArgumentParser, ParsingError, ReactionMenu } = require("sosamba");
+const ModCommand = require("../lib/commandTypes/ModCommand");
+const OwnerCommand = require("../lib/commandTypes/OwnerCommand");
+const AdminCommand = require("../lib/commandTypes/AdminCommand");
+class HelpCommand extends Command {
+    constructor(sosamba, ...args) {
+        super(sosamba, ...args, {
+            name: "help",
+            argParser: new SerializedArgumentParser(sosamba, {
+                args: [{
+                    name: "command",
+                    type: (val) => {
+                        if (!this.sosamba.commands.has(val)) throw new ParsingError("Command not found");
+                        return this.sosamba.commands.get(val);
+                    },
+                    default: SerializedArgumentParser.None,
+                    description: "The command to get help about"
+                }]
+            }),
+            displayInHelp: false,
+            description: "Gets information on how to use me."
+        });
+    }
+
+    async run(ctx, [command]) {
+        if (command) {
+            await ctx.send({
+                embed: {
+                    author: {
+                        name: await ctx.t("HELP_FOR_COMMAND", command.id)
+                    },
+                    fields: [{
+                        name: await ctx.t("HELP_ARGUMENTS"),
+                        value: `${command.argParser ? `\`${command.argParser.provideUsageString(false) || command.args}\`` : command.args ? `\`${command.args}\`` : ""}
+
+${command.argParser ? command.argParser.provideUsageString(true) : ""}`.trim() || await ctx.t("NONE"),
+                    }, {
+                        name: await ctx.t("HELP_ALIASES"),
+                        value: command.aliases.join(", ") || await ctx.t("NONE"),
+                        inline: true
+                    }, {
+                        name: await ctx.t("HELP_DESCRIPTION"),
+                        value: command.description || await ctx.t("NONE"),
+                        inline: true
+                    }],
+                    color: 0x008800
+                }
+            });
+        } else {
+            const ownerCommands = this.sosamba.commands.filter(c => c instanceof OwnerCommand).filter(e => e.displayInHelp);
+            const adminCommands = this.sosamba.commands.filter(c => c instanceof AdminCommand).filter(e => e.displayInHelp);
+            const modCommands = this.sosamba.commands.filter(c => c instanceof ModCommand).filter(e => e.displayInHelp);
+            const generalCommands = this.sosamba.commands.filter(c => 
+                !ownerCommands.includes(c) && !adminCommands.includes(c) && !modCommands.includes(c))
+                .filter(e => e.displayInHelp);
+            const extensionCommands = (await ctx.db.getGuildExtensions(ctx.guild.id))
+                .filter(e => {
+                    if (e.allowedChannels.length !== 0 && !e.allowedChannels.includes(ctx.channel.id)) return;
+                    if (e.allowedRoles.length !== 0 && !e.allowedRoles.find(r => ctx.member.roles.includes(r))) return;
+                    return true;
+                })
+                .map(e => ({
+                    id: e.commandTrigger,
+                    description: `${e.name} (${e.id})`
+                }));
+            const permissions = await HelpMenu.getPermissions(ctx);
+
+            const m = await ctx.send(await HelpMenu.DEFAULT_OBJ(ctx, permissions));
+            ctx.registerReactionMenu(new HelpMenu(ctx, m, {
+                owner: ownerCommands,
+                admin: adminCommands,
+                mod: modCommands, 
+                general: generalCommands,
+                extensions: extensionCommands
+            }, permissions));
+        }
+    }
+}
+
 class HelpMenu extends ReactionMenu {
-    constructor(msg, msg2, commands, permissions) {
-        super(msg2.id, msg.channel.id, msg.author.id, {});
-        this.options = {
-            stopCallback: this.stopCallback.bind(this)
-        };
+    constructor(ctx, msg, commands, permissions) {
+        super(ctx, msg);
         this.commands = commands;
         this.permissions = permissions;
-        this.ogMsg = msg;
-        this.pgMsg = msg2;
-        this.reactionErrored = false;
-        try {
-            this.prepareEmoji();
-        } catch (_) {
-            // Do nothing. It will show the user a list of reactions, so they have no problem with it.
-        }
+        this.timeout = 60000;
+        this.callbacks = {
+            [HelpMenu.HOME]: async () => this.ctx.send(await HelpMenu.DEFAULT_OBJ(this.ctx, this.permissions)),
+            [HelpMenu.PUBLIC]: async () => this.listCommands(HelpMenu.PUBLIC),
+        };
+        if (this.permissions[1]) this.callbacks[HelpMenu.OWNER] = async () => this.listCommands(HelpMenu.OWNER);
+        if (this.permissions[2]) this.callbacks[HelpMenu.MOD] = async () => this.listCommands(HelpMenu.MOD);
+        if (this.permissions[3]) this.callbacks[HelpMenu.ADMIN] = async () => this.listCommands(HelpMenu.ADMIN);
+        
+        this.callbacks[HelpMenu.EXTENSION] = async () => this.listCommands(HelpMenu.EXTENSION);
     }
 
-    async prepareEmoji() {
-        const arr = [HelpMenu.HOME, ReactionMenu.STOP];
-        const permissiveArr = [HelpMenu.PUBLIC, HelpMenu.OWNER, HelpMenu.MOD, HelpMenu.ADMIN, HelpMenu.EXTENSION].filter((_, i) => this.permissions[i]);
-        const toAdd = [...arr, ...permissiveArr];
-        for (const e of toAdd) await this.pgMsg.addReaction(e);
-    }
-
-    async stopCallback(reason) {
-        try {
-            if (reason === ReactionMenu.MANUAL_EXIT) {
-                await this.pgMsg.delete();
-                await this.ogMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_MANUAL")).then(m => setTimeout(() => m.delete(), 5000));
-            }
-            /*case ReactionMenu.TIMEOUT:
-                this.ogMsg.channel.createMessage(`The menu has expired.`)*/
-            else if (reason === ReactionMenu.MESSAGE_DELETE)
-                await this.ogMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_MESSAGE_DELETE")).then(m => setTimeout(() => m.delete(), 5000));
-            else if (reason === ReactionMenu.CHANNEL_DELETE)
-                await bot.users.get(this.authorID).getDMChannel().then(dm => dm.createMessage(this.ogMsg.t("REACTION_MENU_EXIT_CHANNEL_DELETE")));
-        } catch (_) {} //eslint-disable-line no-empty
-    }
-
-    hasPermission(emoji) {
-        if (emoji === HelpMenu.HOME) return true;
-        if (emoji === HelpMenu.PUBLIC) return true;
-        if (emoji === HelpMenu.OWNER) return this.permissions[1];
-        if (emoji === HelpMenu.MOD) return this.permissions[2];
-        if (emoji === HelpMenu.ADMIN) return this.permissions[3];
-        if (emoji === HelpMenu.EXTENSION) return true;
-    }
-
-    handleReactionAdd(msg, emoji, id) {
-        if (!super.handleReactionAdd(msg, emoji, id)) return;
-        if (this.stopped) return;
-        let catName = this.getCategoryName(emoji.name);
-        if (catName === 1) {
-            console.log(`${emoji.name} isn't a category`);
-            return;
-        }
-        if (!this.hasPermission(emoji.name)) return;
-        try {
-            this.pgMsg.removeReaction(emoji.name, id);
-        } catch (_) {
-            if (!this.reactionErrored) {
-                this.reactionErrored = true;
-                this.pgMsg.channel.createMessage(this.ogMsg.t("REACTION_MENU_NO_AUTOREMOVE"));
-            }
-        }
-        this.getCb(emoji.name)(emoji, id);
-    }
-
-
-    listCommands(emoji) {
-        const fields = this.getCommands(emoji.name).map(({ name, obj }) => ({
-            name,
-            value: obj.description || this.ogMsg.t("HELP_NO_DESCRIPTION"),
-            inline: true
-        }));
-        this.pgMsg.edit({
+    async listCommands(e) {
+        const fields = await Promise.all(this.getCommands(e).sort((a, b) => a.id.localeCompare(b.id)).map(async c => ({
+            name: c.id,
+            value: c.description || await this.ctx.t("HELP_NO_DESCRIPTION")
+        })));
+        await this.ctx.send({
             embed: {
                 color: 0x008800,
                 author: {
-                    name: `${emoji.name} ${this.getCategoryName(emoji.name)}`
+                    name: `${e} ${await this.getCategoryName(e)}`
                 },
                 fields,
                 footer: {
-                    text: this.ogMsg.t("HELP_REMINDER")
+                    text: await this.ctx.t("HELP_REMINDER")
                 }
             }
         });
     }
 
     getCommands(e) {
-        if (e === HelpMenu.PUBLIC) return this.commands.public;
+        if (e === HelpMenu.PUBLIC) return this.commands.general;
         else if (e === HelpMenu.OWNER) return this.commands.owner;
         else if (e === HelpMenu.MOD) return this.commands.mod;
         else if (e === HelpMenu.ADMIN) return this.commands.admin;
         else if (e === HelpMenu.EXTENSION) return this.commands.extensions;
-        else console.log("I got here for some reason");
+        else return null;
     }
 
-    getCategoryName(e) {
-        if (e === HelpMenu.ADMIN) return this.ogMsg.t("HELP_ADMIN");
-        else if (e === HelpMenu.PUBLIC) return this.ogMsg.t("HELP_PUBLIC");
-        else if (e === HelpMenu.MOD) return this.ogMsg.t("HELP_MOD");
-        else if (e === HelpMenu.OWNER) return this.ogMsg.t("HELP_OWNER");
+    async getCategoryName(e) {
+        if (e === HelpMenu.ADMIN) return await this.ctx.t("HELP_ADMIN");
+        else if (e === HelpMenu.PUBLIC) return await this.ctx.t("HELP_PUBLIC");
+        else if (e === HelpMenu.MOD) return await this.ctx.t("HELP_MOD");
+        else if (e === HelpMenu.OWNER) return await this.ctx.t("HELP_OWNER");
         else if (e === HelpMenu.EXTENSION) return "Extensions";
         else if (e === HelpMenu.HOME) return 0;
         else return 1;
     }
 
-    getCb(e) {
-        switch (e) {
-        case HelpMenu.ADMIN:
-        case HelpMenu.PUBLIC:
-        case HelpMenu.MOD:
-        case HelpMenu.OWNER:
-        case HelpMenu.EXTENSION:
-            return this.listCommands.bind(this);
-        case HelpMenu.HOME:
-            return () => this.pgMsg.edit(HelpMenu.DEFAULT_OBJ(this.permissions, HelpMenu.MESSAGES));
-        }
+    async canRunCallback(emoji) {
+        if ([HelpMenu.HOME, HelpMenu.PUBLIC, HelpMenu.EXTENSION].includes(emoji)) return true;
+        if (emoji === HelpMenu.OWNER) return this.permissions[1];
+        if (emoji === HelpMenu.MOD) return this.permissions[2];
+        if (emoji === HelpMenu.ADMIN) return this.permissions[3];
     }
 
-    static async getPermissions(msg) {
-        return [true, isO(msg), await bot.isModerator(msg.member), bot.isAdmin(msg.member), true];
+    static async getPermissions(ctx) {
+        return [true, OwnerCommand.prototype.permissionCheck(ctx),
+            await ModCommand.prototype.permissionCheck.call({ sosamba: ctx.sosamba }, ctx),
+            AdminCommand.prototype.permissionCheck.call({ sosamba: ctx.sosamba }, ctx),
+            true];
     }
 
-    static DEFAULT_OBJ(msg, permissions) {
+    static async DEFAULT_OBJ(ctx, permissions) {
         return {
             embed: {
-                description: msg.t("HELP_HOME", HelpMenu, permissions, { t: msg.t }),
+                description: await ctx.t("HELP_HOME", HelpMenu, permissions, { t: ctx.t.bind(ctx) }),
                 color: 0x008800
             }
         };
     }
-
 }
 HelpMenu.ADMIN = "\u{1F6E0}";
 HelpMenu.MOD = "\u{1F528}";
@@ -141,95 +181,10 @@ HelpMenu.OWNER = "\u{1F6AB}";
 HelpMenu.PUBLIC = "\u{1F465}";
 HelpMenu.EXTENSION = "🔧";
 HelpMenu.HOME = "🏠";
-HelpMenu.MESSAGES = msg => [`${HelpMenu.PUBLIC} ${msg.t("HELP_PUBLIC")}`,
-    `${HelpMenu.OWNER} ${msg.t("HELP_OWNER")}`,
-    `${HelpMenu.MOD} ${msg.t("HELP_MOD")}`,
-    `${HelpMenu.ADMIN} ${msg.t("HELP_ADMIN")}`,
+HelpMenu.MESSAGES = async ctx => [`${HelpMenu.PUBLIC} ${await ctx.t("HELP_PUBLIC")}`,
+    `${HelpMenu.OWNER} ${await ctx.t("HELP_OWNER")}`,
+    `${HelpMenu.MOD} ${await ctx.t("HELP_MOD")}`,
+    `${HelpMenu.ADMIN} ${await ctx.t("HELP_ADMIN")}`,
     `${HelpMenu.EXTENSION} Extensions`];
-module.exports = {
-    exec: async function (msg, args) {
-        if (args == "") {
-            let gencmds = [];
-            let ocmds = [];
-            let modcmds = [];
-            let admincmds = [];
-            function doThings(fe) {
-                let cat = cmds[fe].category;
-                if (cat && cmds[fe].display) {
-                    if (cat == 1) gencmds.push({
-                        name: fe,
-                        obj: cmds[fe]
-                    });
-                    else if (cat == 2) ocmds.push({
-                        name: fe,
-                        obj: cmds[fe]
-                    });
-                    else if (cat == 3) modcmds.push({
-                        name: fe,
-                        obj: cmds[fe]
-                    });
-                    else if (cat == 4) admincmds.push({
-                        name: fe,
-                        obj: cmds[fe]
-                    });
-                }
-            }
 
-            const extensions = (await db.table("extensions").filter({
-                guildID: msg.guild.id
-            })).filter(e => {
-                if (e.allowedChannels.length !== 0 && !e.allowedChannels.includes(msg.channel.id)) return;
-                if (e.allowedRoles.length !== 0 && !e.allowedRoles.find(r => msg.member.roles.includes(r))) return;
-                return true;
-            }).map(e => ({
-                name: e.commandTrigger,
-                obj: e
-            }));
-
-            Object.keys(cmds).forEach(doThings);
-            const permissions = await HelpMenu.getPermissions(msg);
-            const m = await msg.channel.createMessage(HelpMenu.DEFAULT_OBJ(msg, permissions));
-            const helpMenu = new HelpMenu(msg, m, {
-                public: gencmds,
-                owner: ocmds,
-                mod: modcmds,
-                admin: admincmds,
-                extensions
-            }, permissions);
-            helpMenu.start();
-        } else {
-            let c;
-            let cname;
-            if (cmdAliases[args]) { c = cmds[cmdAliases[args]]; cname = cmdAliases[args]; }
-            else { c = cmds[args]; cname = args; }
-            msg.channel.createMessage({
-                embed: {
-                    author: { name: msg.t("HELP_FOR_COMMAND", cname) },
-                    fields: [{
-                        name: msg.t("HELP_ARGUMENTS"),
-                        value: c.args || msg.t("NONE"),
-                        inline: true
-                    }, {
-                        name: msg.t("HELP_ALIASES"),
-                        value: c.aliases ? c.aliases.join(", ") : msg.t("NONE"),
-                        inline: true
-                    }, {
-                        name: msg.t("HELP_DESCRIPTION"),
-                        value: c.description || msg.t("NONE"),
-                        inline: false
-                    }],
-                    color: 0x008800
-                }
-            });
-        }
-    },
-    isCmd: true,
-    category: 1,
-    display: false,
-    description: "New to tt.bot? This command is for you!",
-    args: "[command]",
-    aliases: [
-        "cmds",
-        "commands"
-    ]
-};
+module.exports = HelpCommand;

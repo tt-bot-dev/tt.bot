@@ -1,18 +1,55 @@
-module.exports = async function (g, m) {
-    let server;
-    try {
-        server = await db.table("configs").get(g.id).run();
-    } catch (err) {
-        return;
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+"use strict";
+const { Event } = require("sosamba");
+
+class GuildMemberJoinEvent extends Event {
+    constructor(...args) {
+        super(...args, {
+            name: "guildMemberAdd"
+        });
     }
-    if (server && server.greetingChannelId && server.greetingMessage) {
-        let channel = g.channels.get(server.greetingChannelId);
-        if (channel) channel.createMessage(bot.parseMsg(server.greetingMessage, m, g));
-        else {
-            delete server.greetingChannelId;
-            delete server.greetingMessage;
-            await db.table("configs").get(g.id).update(server).run();
+
+    async run(guild, member) {
+        const config = await this.sosamba.db.getGuildConfig(guild.id);
+        if (config && config.greetingChannelId && config.greetingMessage) {
+            const channel = guild.channels.get(config.greetingChannelId);
+            if (channel) {
+                try { 
+                    await channel.createMessage(
+                        {
+                            content: this.sosamba.parseMsg(config.greetingMessage, member, guild),
+                            allowedMentions: {
+                                users: [member.id],
+                                everyone: false,
+                                roles: false
+                            }
+                        });
+                } catch {}
+            } else {
+                await this.sosamba.db.updateGuildConfig({
+                    greetingChannelId: null
+                });
+            }
         }
-    } else return;
-};
-module.exports.isEvent = true;
+    }
+}
+
+module.exports = GuildMemberJoinEvent;

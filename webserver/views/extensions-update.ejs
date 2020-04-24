@@ -1,75 +1,260 @@
+<%#
+Copyright (C) 2020 tt.bot dev team
+ 
+This file is part of tt.bot.
+ 
+tt.bot is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+ 
+tt.bot is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+ 
+You should have received a copy of the GNU Affero General Public License
+along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+%>
+
 <!DOCTYPE html>
 <html>
 <%- include("./partials/head") %>
+
 <body>
-<div class="tttie-container">
-<%- include("./partials/header") %>
-<div class="tttie-body">
-<div class="tttie-center">
-<div>
-<div class="tttie-center text">
-<div>
-<h1 id="tttie-title">Extension: Crunching extension data...</h1>
+    <section class="hero is-primary">
+        <div class="hero-head"><%- include("./partials/header", { isLanding: true }) %></div>
+        <div class="hero-body">
+            <div class="container">
+                <h2 class="title is-2 is-size-4-mobile tttie-title">Loading extension data...</h2>
+                <h4 class="subtitle is-4 is-size-5-mobile">Build your extension here.</h4>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-one-quarter" id="menu">
+                    <aside class="menu">
+                        <ul class="menu-list">
+                            <li>
+                                <a href="/dashboard/<%=erisGuild.id%>">Server settings</a>
+                            </li>
+                            <li><a href="/dashboard/<%=erisGuild.id%>/extensions">Extensions</a>
+                                <ul>
+                                    <li>
+                                        <a href="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%><%= isMonaco ? "/monaco" : ""%>"
+                                            class="is-active"><span class="tttie-title">Loading...</span>
+                                            (<%=extension.id%>)</a>
+                                        <ul>
+                                            <li>
+                                                <a
+                                                    href="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%><%= isMonaco ? "/monaco" : ""%>#basic-settings">
+                                                    Basic settings
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a
+                                                    href="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%><%= isMonaco ? "/monaco" : ""%>#extension-code">
+                                                    Extension code
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a
+                                                    href="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%><%= isMonaco ? "/monaco" : ""%>#permissions">
+                                                    Permissions
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </aside>
+                </div>
+                <div class="column">
+                    <div class="tttie-changes-buttons">
+                        <div class="buttons">
+                            <a href="#" class="button">
+                                <span class="icon"><i class="fa fa-arrow-up"></i></span>
+                                <span>Back to top</span>
+                            </a>
 
-<p>Build your extension here; refer to API documentation for more information.</p>
-</div>
-</div>
-<div class="tttie-changes-buttons">
-<a class="tttie-linkbutton" id="save"><div class="tttie-button">Save changes</div></a>
-<a class="tttie-linkbutton" id="reset"><div class="tttie-button red">Reset</div></a>
-</div>
+                            <button class="button" id="save">
+                                <span class="icon"><i class="fa fa-save"></i></span>
+                                <span>Save changes</span>
 
-<h3>Extension name</h3>
-<p>Here's what you'd like your extension to be called.</p>
-<input type="text" id="tttie-extension-name"></textarea>
+                            </button>
+                            <button class="button is-danger" id="reset">
+                                <span class="icon"><i class="fa fa-times"></i></span>
+                                <span>Reset settings</span>
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="title is-size-3" id="basic-settings">Basic settings</h3>
+                    <div class="content">
+                        <h6 class="bot-setting is-size-5">Extension name</h6>
+                        <p>This is how the extension will be called in the help menu and the dashboard.</p>
+                        <div class="control is-loading">
+                            <input class="input" type="text" id="tttie-extension-name">
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h6 class="bot-setting is-size-5">Command trigger</h6>
+                        <p>The command name used to invoke the extension. tt.bot's commands are
+                            prioritized over extensions.</p>
+                        <div class="field has-addons">
+                            <div class="control">
+                                <div class="button is-static"><%=config.prefix%></div>
+                            </div>
+                            <div class="control is-loading is-expanded">
+                                <input class="input" type="text" id="tttie-extension-cmd">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h6 class="bot-setting is-size-5">Store ID</h6>
+                        <p>The store under this ID will be used for this extension.
+                            <%if (extension.id === "new") {%>
+                            To create a new store, leave this field blank.
+                            <%}%>
+                        </p>
+                        <div class="control is-loading is-expanded">
+                            <input class="input" type="text" id="tttie-extension-store-id">
+                        </div>
+                    </div>
+                    
+                    <div class="content">
+                        <h6 class="bot-setting is-size-5">Extension privileges</h6>
+                            <p>Checkboxes below set the access to privileged functions in extensions.
+                        </p>
+                        <article class="message is-danger">
+                            <div class="message-header">Warning!</div>
+                            <div class="message-body">Keep in mind that the tt.bot development team is <b>NOT</b> responsible for any damage 
+                                done to your server by granting dangerous extension privileges to malicious extensions.</div>
+                        </article>
+                        <div class="field">
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="httpRequests"> 
+                                    HTTP Requests 
+                                </label> 
+                                <span class="tags has-addons is-inline-flex">
+                                    <span class="tag is-marginless">
+                                        Privileged
+                                    </span>
+                                    
+                                    <span class="tag is-marginless">
+                                        <span class="icon"><i class="fas fa-shield-alt"></i></span> 
+                                    </span>
+                                </span>
+                                <p class="help">Allows the extension to make HTTP requests using <a href="https://npm.im/node-fetch">node-fetch</a> or <a href="https://npm.im/chainfetch">chainfetch</a> NPM modules.</p>
+                            </div>
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="guildSettings"> 
+                                    Edit Server Settings
+                                </label>
+                                <p class="help">Allows the extension to edit server settings, channels, roles, to create and get invites and to delete emojis.</p>
+                            </div>
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="dangerousGuildSettings"> 
+                                    Edit Dangerous Server Settings
+                                </label>
+                                
+                                <span class="tags has-addons is-inline-flex">
+                                    <span class="tag is-marginless">
+                                        Privileged
+                                    </span>
+                                    
+                                    <span class="tag is-marginless">
+                                        <span class="icon"><i class="fas fa-shield-alt"></i></span> 
+                                    </span>
+                                </span>
+                                <p class="help">Allows the extension to perform dangerous actions on the server.<br>
+                                    Dangerous actions include:
+                                </p>
+                                <ul class="help">
+                                    <li>Editing server name, icon, default notification settings, verification level and explicit content scanning</li>
+                                    <li>Removing channels, roles and invites</li>
+                                    <li>Pruning members</li>
+                                </ul>
+                            </div>
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="guildModerative"> 
+                                    Moderate Server
+                                </label>
+                                <p class="help">Allows the extension to perform moderative actions on the server (kicking/banning/deleting messages).</p>
+                            </div>
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="guildMembersMeta"> 
+                                    Edit Server Member Metadata
+                                </label>
+                                <p class="help">Allows the extension to edit metadata of server members (roles, nickname, deaf/mute status).</p>
+                            </div>
+                            <div class="control is-extension-flag">
+                                <label class="checkbox">
+                                    <input type="checkbox" class="tttie-extension-flags" id="mentionEveryone"> 
+                                    Mention Everyone
+                                </label>
+                                <p class="help">Allows the extension to send messages that mention roles, @everyone/@here or users.
+                                    If disabled, the extension can only mention the author of a message when replying using <code>Message#reply</code> or when sending a message to a user.</p>
+                            </div>
+                        </div>
+                    </div>
 
-<h3>Command trigger</h3>
-<p>This is the command name you would like to use. Keep in mind that native tt.bot commands are prioritized over extensions.</p>
-<input type="text" id="tttie-extension-cmd"></textarea>
+                    <div class="content">
+                        <h6 class="bot-setting is-size-5" id="extension-code">Extension code</h6>
+                        <p>This is the heart of your extension.</p>
+                        <a class="button is-fullwidth"
+                            href="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%><%=isMonaco? '' : '/monaco'%>">Switch
+                            to <%= isMonaco ? "textarea" : "code" %> editor</a>
+                            <br>
+                            <%if (isMonaco) {%>
+                            <div class="monaco-wrapper">
+                                <div class="monaco-container" id="extension-monaco-container"></div>
+                            </div>
+                            <%} else {%>
+                            <div class="control is-loading">
+                                <textarea class="textarea is-family-monospace" id="tttie-textarea-code"
+                                    rows="15"></textarea>
+                            </div>
+                            <%}%>
+                    </div>
 
-<h3>Allowed roles</h3>
-<p>You can choose what roles would you like to allow to use this extension. However, checking no roles will let everyone use the roles.</p>
-<div class="tttie-extension-role-list">
-Wait, we are getting the things...
-</div>
+                    <h3 class="title is-size-3" id="permissions">Permissions</h3>
+                    <div class="content">
+                        <h6 class="bot-setting is-size-5">Allowed roles</h6>
+                        <p>Leaving the listed roles unchecked will let anyone on the server use the extension.</p>
+                        <div class="tttie-extension-role-list field">
+                            <div class="button is-loading is-fullwidth is-static"></div>
+                        </div>
+                    </div>
 
-
-<h3>Allowed channels</h3>
-<p>You can choose what channels would you like to allow to use this extension. However, checking no channels will let everyone use the roles.</p>
-<div class="tttie-extension-channel-list">
-Wait, we are getting the things...
-</div>
-
-<h3>Extension code</h3>
-<p>This is the heart of your extension. <%= !isMonaco ? "For compatibility across browsers, we display the default textarea element. Using the default textarea element also uses less data. To switch to a proper code editor" : "You are using the Monaco editor, which might not be compatible on mobile browsers. To use the textarea editor"%>, click <a href="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%><%=isMonaco? '' : '/monaco'%>">here</a></p>
-
-<%if (isMonaco) {%>
-    <div class="monaco-container" id="extension-monaco-container"></div>
-<%} else {%>
-<div class="tttie-textarea-wrapper">
-    <textarea class="tttie-textarea" id="tttie-textarea-code" rows="15"><%=extension.code%></textarea>
-    </div>
-<%}%>
-<h3>Store ID</h3>
-<p>This is a powerful feature of tt.bot which allows you to share the storage across extensions. 
-<%if (extension.id === "new") {%>
-Since you are creating a new extension, to create a new store, leave this field blank.
-<%}%>
-</p>
-<input type="text" id="tttie-extension-store-id"></textarea>
-<%if (isMonaco) {%>
-<script src="/monaco/vs/loader.js"></script>
-<script src="/static/js/loadMonaco.js"></script>
-<%}%>
-<script src="/dashboard/<%=erisGuild.id%>/load.js"></script>
-<script src="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%>/load.js"></script>
-<script src="/static/js/ttbotapi.js"></script>
-<script src="/static/js/extensions.js"></script>
-
-</div>
-</div>
-</div>
-</div>
-</div>
+                    <div class="content">
+                        <h6 class="bot-setting is-size-5">Allowed channels</h6>
+                        <p>Leaving the listed channels unchecked will let the extension run anywhere on the server.</p>
+                        <div class="tttie-extension-channel-list field">
+                            <div class="button is-loading is-fullwidth is-static"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    <script src="/dashboard/<%=erisGuild.id%>/load.js"></script>
+    <script src="/dashboard/<%=erisGuild.id%>/extensions/<%=extension.id%>/load.js"></script>
+    <script src="/static/js/ttbotapi.js"></script>
+    <%if (isMonaco) {%>
+    <script src="/monaco/vs/loader.js"></script>
+    <script src="/static/js/loadMonaco.js"></script>
+    <%}%>
+    <script defer src="/static/js/extensions.js"></script>
 </body>
+
 </html>

@@ -1,29 +1,60 @@
-module.exports = {
-    exec: async function (msg, args) {
-        let user;
-        try {
-            user = await userQuery(args || msg.author.id, msg, true);
-        } catch (err) {
-            return;
-        }
+/**
+ * Copyright (C) 2020 tt.bot dev team
+ * 
+ * This file is part of tt.bot.
+ * 
+ * tt.bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * tt.bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+"use strict";
+const { Command, SerializedArgumentParser, Serializers: { User } } = require("sosamba");
+
+class StrikeListCommand extends Command {
+    constructor(sosamba, ...args) {
+        super(sosamba, ...args, {
+            name: "strikes",
+            argParser: new SerializedArgumentParser(sosamba, {
+                args: [{
+                    name: "user",
+                    type: User,
+                    default: ctx => ctx.author,
+                    rest: true,
+                    description: "The user to get the strikes for"
+                }]
+            }),
+            description: "Gets user's strikes.",
+            aliases: ["warns"]
+        });
+    }
+
+    async run(ctx, [user]) {
         if (user.bot) {
-            msg.channel.createMessage(msg.t("BOTS_NOT_STRIKABLE"));
+            await ctx.send(await ctx.t("BOTS_NOT_STRIKABLE"));
             return;
         }
-        try {
-            const strikes = await bot.modLog.getUserStrikes(user.id, msg);
-            if (strikes > 25) {
-                let strikeStr = strikes.map(s => `${s.id} - ${s.reason}`);
-                msg.channel.createMessage(msg.t("TOO_MUCH_STRIKES"), {
-                    file: Buffer.from(strikeStr.join("\r\n")),
-                    name: "strikes.txt"
-                });
-                return;
-            }
-            await msg.channel.createMessage({
+        const strikes = await this.sosamba.modLog.getUserStrikes(user.id, ctx);
+        if (strikes > 25) {
+            const strikeStr = strikes.map(s => `${s.id} - ${s.reason}`);
+            await ctx.send(await ctx.t("TOO_MUCH_STRIKES"), {
+                file: Buffer.from(strikeStr.join("\r\n")),
+                name: "strikes.txt"
+            });
+        } else {
+            await ctx.send({
                 embed: {
                     author: {
-                        name: msg.t("STRIKE_OVERVIEW", bot.getTag(user))
+                        name: await ctx.t("STRIKE_OVERVIEW", this.sosamba.getTag(user))
                     },
                     fields: strikes.map(s => ({
                         name: `ID: ${s.id}`,
@@ -31,13 +62,8 @@ module.exports = {
                     }))
                 }
             });
-        } catch (err) {
-            msg.channel.createMessage(msg.t("ERROR", err));
         }
-    },
-    isCmd: true,
-    display: true,
-    category: 1,
-    description: "Get user's strikes.",
-    args: "[user]",
-};
+    }
+}
+
+module.exports = StrikeListCommand;
