@@ -1,6 +1,7 @@
 FROM node:alpine
 RUN apk add git
 
+USER bot
 COPY . /app
 WORKDIR /app
 RUN npm i
