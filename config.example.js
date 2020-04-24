@@ -104,6 +104,8 @@ module.exports = {
     tzDateFormat: "D[.] M[.] YYYY [at] H:mm [(]Z[)]",
     /**
      * The database options for the bot
+     * If using the Docker image with the default RDB provider,
+     * set options.servers to [{ host: "db" }]
      * @type {object}
      */
     database: {
