@@ -46,4 +46,4 @@ tt.bot is a simple to use moderation/utility bot written in JavaScript using [No
 [Node.js]: https://nodejs.org
 [Eris]: https://github.com/abalabahaha/eris
 [Sosamba]: https://github.com/tt-bot-dev/sosamba
-[language-license]: https://github.com/tt-bot-dev/languages/blob/v4-wip/LICENSE
+[language-license]: https://github.com/tt-bot-dev/languages/blob/master/LICENSE
