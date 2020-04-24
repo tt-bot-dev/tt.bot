@@ -6,9 +6,12 @@ services:
         internal: true
         volumes: 
             - ./rethinkdb_data:/data
+        restart: always
     bot:
         build: "."
         environment: 
             NODE_ENV: production
         ports:
             - "8826"
+        restart: always
+        depends_on: [db]
