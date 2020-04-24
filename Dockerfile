@@ -1,11 +1,11 @@
 FROM node:alpine
 RUN apk add git
 
-USER nobody
 ENV HOME /app
 COPY . /app
 WORKDIR /app
 RUN npm i
+USER nobody
 
 EXPOSE 8826
 
