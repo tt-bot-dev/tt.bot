@@ -1,6 +1,6 @@
 {
     "name": "tt.bot",
-    "version": "4.0.0",
+    "version": "4.1.0",
     "description": "A bot with aim for moderation and utilities made in JS using Eris.",
     "main": "index.js",
     "dependencies": {

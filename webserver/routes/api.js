@@ -19,7 +19,7 @@
 
 "use strict";
 const { checkAuth, getGuilds } = require("../util/index");
-const createUUID = require("uuid/v4");
+const { v4: createUUID } = require("uuid");
 const uuidregex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const authNeeded = checkAuth(true);
 const UserProfile = require("../../lib/Structures/UserProfile");

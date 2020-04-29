@@ -61,11 +61,12 @@ class ReadyEvent extends Event {
     }
 
     async leaveBotCollectionServers() {
-        await Promise.all(this.sosamba.botCollectionServers
+        // This is not effective with intents
+        /*await Promise.all(this.sosamba.botCollectionServers
             .map(g => g.leave()
                 .then(
                     () => this.log.debug(`Left ${g.name} (${g.id}) for being a bot collection guild`))
-            ));
+            ));*/
     }
     async postStats() {
         if (botsGGKey) try {
