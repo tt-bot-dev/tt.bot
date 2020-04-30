@@ -68,7 +68,12 @@ module.exports = {
             }));
         }
         return req.user.guilds.filter(g => {
-            if (req.bot.guilds.has(g.id)) return req.bot.isAdmin(req.bot.guilds.get(g.id).members.get(req.user.id));
+            if (req.bot.guilds.has(g.id)) return req.bot.isAdmin({
+                guild: req.bot.guilds.get(g.id),
+                permission: new Permission(g.permissions),
+                id: req.user.id,
+                user: req.user
+            });
             else {
                 const permission = new Permission(g.permissions);
                 return permission.has("administrator") || permission.has("manageGuild");

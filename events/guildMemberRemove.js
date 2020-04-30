@@ -34,7 +34,7 @@ class GuildMemberLeaveEvent extends Event {
             if (channel) {
                 try { 
                     await channel.createMessage({
-                        content: this.sosamba.parseMsg(config.farewellMessage, member, guild),
+                        content: this.sosamba.parseMsg(config.farewellMessage, member.user, guild),
                         allowedMentions: {
                             users: [member.id],
                             roles: false,
