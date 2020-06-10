@@ -39,6 +39,11 @@ class BanCommand extends Command {
                     type: Boolean,
                     default: false,
                     description: "determines if this ban is a softban."
+                },
+                days: {
+                    type: Number,
+                    default: 0,
+                    description: "the amount of days worth of messages to purge"
                 }
             }),
             description: "Bans a user."
@@ -49,9 +54,9 @@ class BanCommand extends Command {
         return ctx.member.permission.has("banMembers") || await super.permissionCheck(ctx);
     }
 
-    async run(ctx, { user, reason, soft }) {
+    async run(ctx, { user, reason, soft, days }) {
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
-            await ctx.guild.banMember(user.id, 1, `${this.sosamba.getTag(ctx.author)}: ${reason}`);
+            await ctx.guild.banMember(user.id, days, `${this.sosamba.getTag(ctx.author)}: ${reason}`);
             if (soft) await ctx.guild.unbanMember(user.id);
             this.sosamba.modLog.addBan(user.id, ctx, reason, soft);
             await ctx.send(await ctx.t(`${soft ? "SOFT": ""}BAN_DONE`, user.user));
