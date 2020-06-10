@@ -50,7 +50,9 @@ class ClearCommand extends Command {
                 from: {
                     type: async (val, ctx) => {
                         if (val === "bots") return BotSymbol;
-                        else return user(val, ctx);
+                        else return user(val, ctx, {
+                            isFromArgParser: true
+                        });
                     },
                     default: SwitchArgumentParser.None,
                     description: "an optional argument that filters the messages by their author - use `bots` in order to specify bots as an author."
