@@ -1,5 +1,5 @@
 FROM node:alpine
-RUN apk add git
+RUN apk add git python2
 
 ENV HOME /app
 COPY . /app
