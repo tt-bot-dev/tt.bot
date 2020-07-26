@@ -20,6 +20,7 @@
 
 "use strict";
 const { SerializedArgumentParser, Eris: { GuildChannel, Constants: ErisConstants } } = require("sosamba");
+const { PunishTypes } = require("../lib/modlog/constants");
 const Command = require("../lib/commandTypes/ModCommand");
 
 class LockCommand extends Command {
@@ -50,7 +51,7 @@ class LockCommand extends Command {
 
         let { allow, deny } = basePermissions;
         
-        allow &= ~(ErisConstants.Permissions.sendMessages);
+        allow &= ~ErisConstants.Permissions.sendMessages;
         deny |= ErisConstants.Permissions.sendMessages;
 
         if (channel.permissionsOf(ctx.author.id).has("sendMessages")) {
@@ -67,9 +68,9 @@ class LockCommand extends Command {
             });
         }
         
-        await channel.editPermission(ctx.guild.id, allow, deny, "role", `${this.sosamba.getTag(ctx.author)}: ${reason}`);
+        await channel.editPermission(ctx.guild.id, allow, deny, "role", encodeURIComponent(`${this.sosamba.getTag(ctx.author)}: ${reason}`));
+        this.sosamba.modLog.createPunishment(ctx, PunishTypes.LOCK, undefined, reason).catch(() => void 0);
         await ctx.send(`:ok_hand: Locked ${channel.mention}`);
-        // return 
     }
 
 

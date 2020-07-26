@@ -80,7 +80,10 @@ class ClearCommand extends Command {
         return true;
     }
     async run(ctx, { messages, contains, mentions, from, invert }) {
-        if (!ctx.channel.permissionsOf(ctx.sosamba.user.id).has("manageMessages")) return ctx.send(await ctx.t("MISSING_PERMISSIONS"));
+        if (!this.sosamba.hasBotPermission(ctx.channel, "manageMessages")) {
+            await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
+            return;
+        }
         await ctx.send(await ctx.t("CLEAR_CONFIRM"));
         const r = await ctx.askYesNo(true);
         if (!r.response) {
