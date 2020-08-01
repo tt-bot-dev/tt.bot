@@ -55,7 +55,7 @@ class InfoCommand extends Command {
                     inline: true
                 }, {
                     name: await ctx.t("INFO_VERSIONS"),
-                    value: `tt.bot: ${require("../package.json").version}\nSosamba: ${require("sosamba/package.json").version}\nEris: ${require("../node_modules/eris/package.json").version}\nNode.js: ${process.versions.node}\nV8: ${process.versions.v8}`,
+                    value: `tt.bot: ${require("../package.json").version}\nSosamba: ${require("sosamba/package.json").version}\nEris: ${require("../node_modules/eris/package.json").version}\nNode.js: ${process.versions.node}\nV8: ${process.versions.v8}\n[Privacy](https://tttie.cz/privacy/tt.bot.html)`,
                     inline: true
                 },
                 {
