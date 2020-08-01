@@ -160,5 +160,6 @@ module.exports = {
          * @type {string}
          */
         token: "nEsprAvedLiVo"
-    }
+    },
+    announcementChannelID: "123456789012345678"
 };
