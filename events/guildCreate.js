@@ -76,6 +76,10 @@ class GuildJoinEvent extends Event {
                     value: await this.sosamba.i18n.getTranslation("FREE_SOFTWARE_DESCRIPTION", lang)
                 },
                 {
+                    name: ":newspaper: Updates",
+                    value: "You can opt into receiving updates about tt.bot by typing `tt.botupdates` into a channel where you want to receive them. This requires the bot to have the Manage Webhooks permission."
+                },
+                {
                     name: await this.sosamba.i18n.getTranslation("THANKS_FOR_CHOOSING", lang),
                     value: await this.sosamba.i18n.getTranslation("WISHING_GOOD_LUCK", lang)
                 }],
