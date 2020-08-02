@@ -52,7 +52,7 @@ class KickCommand extends Command {
                 await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
                 return;
             }
-            await user.kick(`${this.sosamba.getTag(ctx.author)}: ${reason}`);
+            await user.kick(encodeURIComponent(`${this.sosamba.getTag(ctx.author)}: ${reason}`));
             this.sosamba.modLog.createPunishment(ctx, PunishTypes.KICK, user.id, reason);
             await ctx.send(await ctx.t("KICK_DONE", user));
         } else {
