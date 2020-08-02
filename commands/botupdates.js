@@ -30,6 +30,10 @@ class UpdateFollowCommand extends Command {
         });
     }
 
+    async permissionCheck(ctx) {
+        return await super.permissionCheck(ctx) && ctx.channel.type === 0;
+    }
+
     async run(ctx) {
         if (!ctx.sosamba.hasBotPermission(ctx.channel, "manageWebhooks")) {
             await ctx.send({
