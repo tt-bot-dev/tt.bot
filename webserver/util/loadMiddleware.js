@@ -41,6 +41,7 @@ module.exports = (app, bot, log) => {
         rq.bot = bot;
         rs.redirect = (...args) => redirect(rs, ...args);
         rq.protocol = rq.headers["x-forwarded-proto"] || (rq.connection.encrypted ? "https" : "http");
+        rq.secure = rq.protocol === "https";
         rs.status = status => void (rs.statusCode = status);
         rs.send = body => send(rs, rs.statusCode, body);
         rs.sendStatus = code => {
