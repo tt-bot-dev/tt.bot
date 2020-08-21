@@ -280,6 +280,16 @@ module.exports = function (db, bot, config) {
         result += chainfetchTs;
         rs.end(result);
     });
+    app.get("/robots.txt", async (_, rs) => {
+        rs.end(`User-agent: *
+Disallow: /static
+Disallow: /monaco
+Disallow: /dashboard
+Disallow: /login
+Disallow: /tt.bot.d.ts
+Disallow: /api`);
+    });
+
     httpServer(app.handler).listen(config.httpPort || 8090, config.webserverip || "0.0.0.0", () => {
         //eslint-disable-next-line no-console
         console.log("HTTP webserver is running.");
