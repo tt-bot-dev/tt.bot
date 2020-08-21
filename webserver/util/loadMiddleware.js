@@ -22,7 +22,6 @@ const config = require("../../config"),
     ejs = require("ejs"),
     cookieparser = require("cookie-parser"),
     session = require("express-session"),
-    cookies = require("./cookies"),
     body = require("body-parser"),
     auth = require("./auth"),
     SessionStore = require("./SessionStore")(session),
@@ -111,7 +110,6 @@ module.exports = (app, bot, log) => {
         nx();
     });
     app.use(cookieparser(config.clientSecret));
-    app.use(cookies);
     app.use(session({
         secret: config.clientSecret,
         resave: false,

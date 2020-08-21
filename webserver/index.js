@@ -78,7 +78,8 @@ module.exports = function (db, bot, config) {
     app.get("/", (rq, rs) => {
         rs.render("landing", rq.makeTemplatingData());
     });
-    app.get("/acceptcookie", (rq, rs) => {
+    
+    /*app.get("/acceptcookie", (rq, rs) => {
         const p = rq.query.redir || "/";
         const { host } = rq.headers;
         const domain = getHost(host);
@@ -88,7 +89,7 @@ module.exports = function (db, bot, config) {
             domain
         });
         rs.redirect(p.startsWith("/") ? p : "/"); // prevent redirecting somewhere we are not supposed to
-    });
+    });*/
 
     app.get("/dashboard", checkAuth(), (rq, rs) => {
         const guilds = getGuilds(rq, rs);
