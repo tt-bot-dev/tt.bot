@@ -79,18 +79,6 @@ module.exports = function (db, bot, config) {
         rs.render("landing", rq.makeTemplatingData());
     });
     
-    /*app.get("/acceptcookie", (rq, rs) => {
-        const p = rq.query.redir || "/";
-        const { host } = rq.headers;
-        const domain = getHost(host);
-        if (rq.signedCookies.dataOk !== "ok") rs.cookie("dataOk", "ok", { //yeah dont
-            signed: true,
-            expires: new Date("Fri, 31 Dec 9999 23:59:59 GMT"),
-            domain
-        });
-        rs.redirect(p.startsWith("/") ? p : "/"); // prevent redirecting somewhere we are not supposed to
-    });*/
-
     app.get("/dashboard", checkAuth(), (rq, rs) => {
         const guilds = getGuilds(rq, rs);
         rs.render("dashboard", rq.makeTemplatingData({
