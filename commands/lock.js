@@ -1,4 +1,3 @@
-
 /**
  * Copyright (C) 2020 tt.bot dev team
  * 
@@ -27,7 +26,7 @@ class LockCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "lock",
-            description: "Locks a channel by restricting all users from posting in the channel",
+            description: "Locks a channel by restricting all users from posting in the channel.\nBeware that while using Discord permissions, you must have the permissions to manage permissions in **both** source and destination channel.",
             argParser: new SerializedArgumentParser(sosamba, {
                 args: [{
                     name: "channel",
@@ -46,7 +45,20 @@ class LockCommand extends Command {
         });
     }
 
+    async permissionCheck(ctx) {
+        // this should be bound to the channel instead, if possible
+        return ctx.channel.permissionsOf(ctx.author.id).has("manageRoles") || await super.permissionCheck(ctx);
+    }
+
     async run(ctx, [ channel, reason ]) {
+        if (!(await super.permissionCheck(ctx)) || !channel.permissionsOf(ctx.author.id).has("manageRoles")) {
+            await ctx.send("You cannot lock the channel as you're missing permissions to do this in the target channel.");
+            return;
+        }
+        if (!channel.permissionsOf(this.sosamba.user.id).has("manageRoles")) {
+            await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
+            return;
+        }
         const basePermissions = channel.permissionOverwrites.get(ctx.guild.id);
 
         let { allow, deny } = basePermissions;
@@ -54,19 +66,17 @@ class LockCommand extends Command {
         allow &= ~ErisConstants.Permissions.sendMessages;
         deny |= ErisConstants.Permissions.sendMessages;
 
-        if (channel.permissionsOf(ctx.author.id).has("sendMessages")) {
-            await channel.createMessage({
-                embed: {
-                    title: "🔐 This channel has been locked",
-                    description: reason || "No reason provided. Please contact the moderators for further information.",
-                    color: 0xFF0000,
-                    footer: {
-                        text: `Locked by ${this.sosamba.getTag(ctx.author)}`,
-                        icon_url: ctx.author.avatarURL
-                    }
+        await channel.createMessage({
+            embed: {
+                title: "🔐 This channel has been locked",
+                description: reason || "No reason provided. Please contact the moderators for further information.",
+                color: 0xFF0000,
+                footer: {
+                    text: `Locked by ${this.sosamba.getTag(ctx.author)}`,
+                    icon_url: ctx.author.avatarURL
                 }
-            });
-        }
+            }
+        });
         
         await channel.editPermission(ctx.guild.id, allow, deny, "role", encodeURIComponent(`${this.sosamba.getTag(ctx.author)}: ${reason}`));
         this.sosamba.modLog.createPunishment(ctx, PunishTypes.LOCK, undefined, reason).catch(() => void 0);

@@ -1,4 +1,3 @@
-
 /**
  * Copyright (C) 2020 tt.bot dev team
  * 
@@ -23,11 +22,11 @@ const { SerializedArgumentParser, Eris: { GuildChannel, Constants: ErisConstants
 const { PunishTypes } = require("../lib/modlog/constants");
 const Command = require("../lib/commandTypes/ModCommand");
 
-class LockCommand extends Command {
+class UnlockCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
-            name: "lock",
-            description: "Unlocks a channel by allowing all users from posting in the channel",
+            name: "unlock",
+            description: "Unlocks a channel by allowing all users from posting in the channel.\nBeware that while using Discord permissions, you must have the permissions to manage permissions in **both** source and destination channel.",
             argParser: new SerializedArgumentParser(sosamba, {
                 args: [{
                     name: "channel",
@@ -46,7 +45,20 @@ class LockCommand extends Command {
         });
     }
 
+    async permissionCheck(ctx) {
+        // this should be bound to the channel instead, if possible
+        return ctx.member.permission.has("manageRoles") || await super.permissionCheck(ctx);
+    }
+
     async run(ctx, [ channel, reason ]) {
+        if (!(await super.permissionCheck(ctx)) || !channel.permissionsOf(ctx.author.id).has("manageRoles")) {
+            await ctx.send("You cannot lock the channel as you're missing permissions to do this in the target channel.");
+            return;
+        }
+        if (!channel.permissionsOf(this.sosamba.user.id).has("manageRoles")) {
+            await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
+            return;
+        }
         const basePermissions = channel.permissionOverwrites.get(ctx.guild.id);
 
         let { allow, deny } = basePermissions;
@@ -75,4 +87,4 @@ class LockCommand extends Command {
 
 }
 
-module.exports = LockCommand;
+module.exports = UnlockCommand;

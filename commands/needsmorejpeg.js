@@ -23,6 +23,12 @@ const { version: sosambaVersion } = require("sosamba/package.json");
 const URLRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/;
 const ImageExtensionRegex = /\.(?:png|jpg|bmp)$/i;
 const { read, MIME_JPEG } = require("jimp");
+const URLResolver = str => {
+                            if (!URLRegex.test(str)) throw new ParsingError("The input is not an URL");
+                            if (!ImageExtensionRegex.test(str)) throw new ParsingError("The input is an invalid or unsupported image. The valid formats are PNG, JPEG and BMP.");
+                            return str;
+                        };
+URLResolver.typeHint = "URL/attachment";
 
 class JPEGCommand extends Command {
     constructor(sosamba, ...args) {
@@ -32,11 +38,7 @@ class JPEGCommand extends Command {
                 args: [
                     {
                         name: "url",
-                        type: str => {
-                            if (!URLRegex.test(str)) throw new ParsingError("The input is not an URL");
-                            if (!ImageExtensionRegex.test(str)) throw new ParsingError("The input is an invalid or unsupported image. The valid formats are PNG, JPEG and BMP.");
-                            return str;
-                        },
+                        type: URLResolver,
                         default: ctx => {
                             const images = ctx.msg.attachments.filter(i => i.height && i.width);
                             return images.length > 0 && ImageExtensionRegex.test(images[0].url) && images[0].url;

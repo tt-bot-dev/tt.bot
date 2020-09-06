@@ -23,18 +23,19 @@ const { SerializedArgumentParser } = require("sosamba");
 const QuerySymbol = Symbol("tt.bot.blacklist.query");
 const AddSymbol = Symbol("tt.bot.blacklist.add");
 const RemoveSymbol = Symbol("tt.bot.blacklist.remove");
-
+const ActionResolver = val => {
+                        if (val === "query") return QuerySymbol;
+                        else if (val === "add") return AddSymbol;
+                        else if (val === "remove") return RemoveSymbol;
+                    };
+ActionResolver.typeHint = "query|add|remove";
 class BlacklistManagerCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "blacklist",
             argParser: new SerializedArgumentParser(sosamba, {
                 args: [{
-                    type: val => {
-                        if (val === "query") return QuerySymbol;
-                        else if (val === "add") return AddSymbol;
-                        else if (val === "remove") return RemoveSymbol;
-                    },
+                    type: ActionResolver, 
                     name: "action",
                     description: "the action to do"
                 }, {

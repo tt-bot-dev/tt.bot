@@ -28,6 +28,13 @@ const ListSymbol = Symbol("tt.bot.extensions.list");
 const CreateSymbol = Symbol("tt.bot.extensions.create");
 const DeleteSymbol = Symbol("tt.bot.extensions.delete");
 const uuidregex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+const ActionResolver = val => {
+                        if (val === "list") return ListSymbol;
+                        else if (val === "create") return CreateSymbol;
+                        else if (val === "delete") return DeleteSymbol;
+};
+ActionResolver.typeHint = "list|create|delete";
+
 
 class ExtensionCommand extends Command {
     constructor(sosamba, ...args) {
@@ -38,11 +45,7 @@ class ExtensionCommand extends Command {
                 args: [{
                     name: "action",
                     description: "The action to do: `list`, `create`, `delete`",
-                    type: val => {
-                        if (val === "list") return ListSymbol;
-                        else if (val === "create") return CreateSymbol;
-                        else if (val === "delete") return DeleteSymbol;
-                    }
+                    type: ActionResolver
                 }, {
                     name: "arg",
                     description: "When used with `list`, specifies the page.\nWhen used with `delete`, specifies the extension ID.",

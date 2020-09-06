@@ -26,6 +26,13 @@ const { User } = require("eris");
 // eslint cannot parse bigint literals :(
 const D_EPOCH = BigInt(1421280000000);
 const sleep = ms => new Promise(rs => setTimeout(rs, ms));
+const FromResolver = async (val, ctx) => {
+                        if (val === "bots") return BotSymbol;
+                        else return user(val, ctx, {
+                            isFromArgParser: true
+                        });
+                    };
+FromResolver.typeHint = "User|\"bots\"";
 
 class ClearCommand extends Command {
     constructor(sosamba, ...args) {
@@ -48,12 +55,7 @@ class ClearCommand extends Command {
                     description: "an optional argument that filters the messages by mentions"
                 },
                 from: {
-                    type: async (val, ctx) => {
-                        if (val === "bots") return BotSymbol;
-                        else return user(val, ctx, {
-                            isFromArgParser: true
-                        });
-                    },
+                    type: FromResolver,
                     default: SwitchArgumentParser.None,
                     description: "an optional argument that filters the messages by their author - use `bots` in order to specify bots as an author."
                 },

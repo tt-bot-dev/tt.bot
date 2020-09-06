@@ -25,6 +25,21 @@ const { relative, parse, join } = require("path");
 const UnloadSymbol = Symbol("tt.bot.manage.unload");
 const LoadSymbol = Symbol("tt.bot.manage.load");
 const ReloadSymbol = Symbol("tt.bot.manage.reload");
+const ActionResolver = a => {
+                        const action = a.toLowerCase();
+                        if (action === "unload") return UnloadSymbol;
+                        if (action === "load") return LoadSymbol;
+                        if (action === "reload") return ReloadSymbol;
+                        throw new ParsingError("Invalid action");
+                    };
+const CommandResolver = a => {
+                        const cmd = a.toLowerCase();
+                        if (this.sosamba.commands.has(cmd)) return this.sosamba.commands.get(cmd);
+                        return a;
+                    }
+
+ActionResolver.typeHint = "unload|load|reload";
+CommandResolver.typeHint = "Command";
 
 
 class ManagementCommand extends OwnerCommand {
@@ -34,21 +49,11 @@ class ManagementCommand extends OwnerCommand {
             argParser: new SerializedArgumentParser(sosamba, {
                 args: [{
                     name: "action",
-                    type: a => {
-                        const action = a.toLowerCase();
-                        if (action === "unload") return UnloadSymbol;
-                        if (action === "load") return LoadSymbol;
-                        if (action === "reload") return ReloadSymbol;
-                        throw new ParsingError("Invalid action");
-                    },
+                    type: ActionResolver,
                     description: "the action to do with the command"
                 }, {
                     name: "what",
-                    type: a => {
-                        const cmd = a.toLowerCase();
-                        if (this.sosamba.commands.has(cmd)) return this.sosamba.commands.get(cmd);
-                        return a;
-                    },
+                    type: CommandResolver,
                     description: "the command"
                 }]
             }),

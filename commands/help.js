@@ -22,6 +22,11 @@ const { Command, SerializedArgumentParser, ParsingError, ReactionMenu } = requir
 const ModCommand = require("../lib/commandTypes/ModCommand");
 const OwnerCommand = require("../lib/commandTypes/OwnerCommand");
 const AdminCommand = require("../lib/commandTypes/AdminCommand");
+const CommandResolver = (val) => {
+                        if (!this.sosamba.commands.has(val)) throw new ParsingError("Command not found");
+                        return this.sosamba.commands.get(val);
+                    };
+CommandResolver.typeHint = "Command";
 class HelpCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
@@ -29,10 +34,7 @@ class HelpCommand extends Command {
             argParser: new SerializedArgumentParser(sosamba, {
                 args: [{
                     name: "command",
-                    type: (val) => {
-                        if (!this.sosamba.commands.has(val)) throw new ParsingError("Command not found");
-                        return this.sosamba.commands.get(val);
-                    },
+                    type: CommandResolver,
                     default: SerializedArgumentParser.None,
                     description: "The command to get help about"
                 }]

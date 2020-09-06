@@ -43,6 +43,27 @@ const convertNumber = input => input
 const checkValidNumber = n => !isNaN(n) &&
     n.length === 14 && // TTBOT and the 9-digit number
     /^88268/.test(n);
+const ActionResolver = (val, ctx) => {
+                        if (val === "register" && ctx.sosamba.isAdmin(ctx.member)) return RegisterSymbol;
+                        if (val === "call") return CallSymbol;
+                        if (val === "lookup") {
+                            ctx.action = LookupSymbol;
+                            return LookupSymbol;
+                        }
+                        if (val === "delete" && ctx.sosamba.isAdmin(ctx.member)) return DeleteSymbol;
+                        throw new ParsingError("Invalid action");
+                    };
+
+const NumberResolver = async (val, ctx) => {
+                        const num = convertNumber(val);
+                        if (!checkValidNumber(num)) {
+                            if (ctx.action === LookupSymbol) return undefined;
+                            throw new ParsingError(await ctx.t("NUMBER_INVALID", true));
+                        }
+                        return num;
+                    };
+ActionResolver.typeHint = "register|call|lookup|delete";
+NumberResolver.typeHint = "TTBOT XXX YYY ZZZ";
 
 class PhoneCommand extends Command {
     constructor(sosamba, ...args) {
@@ -52,27 +73,11 @@ class PhoneCommand extends Command {
                 allowQuotedString: true,
                 args: [{
                     name: "action",
-                    type: (val, ctx) => {
-                        if (val === "register" && sosamba.isAdmin(ctx.member)) return RegisterSymbol;
-                        if (val === "call") return CallSymbol;
-                        if (val === "lookup") {
-                            ctx.action = LookupSymbol;
-                            return LookupSymbol;
-                        }
-                        if (val === "delete" && sosamba.isAdmin(ctx.member)) return DeleteSymbol;
-                        throw new ParsingError("Invalid action");
-                    },
+                    type: ActionResolver,
                     description: "the action to do",
                 }, {
                     name: "number",
-                    type: async (val, ctx) => {
-                        const num = convertNumber(val);
-                        if (!checkValidNumber(num)) {
-                            if (ctx.action === LookupSymbol) return undefined;
-                            throw new ParsingError(await ctx.t("NUMBER_INVALID", true));
-                        }
-                        return num;
-                    },
+                    type: NumberResolver,
                     default: SerializedArgumentParser.None,
                     rest: true
                 }]
