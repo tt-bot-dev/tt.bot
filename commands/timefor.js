@@ -39,7 +39,7 @@ class TimeForCommand extends Command {
                 }]
             }),
             description: "Gets the current time of a user.",
-            aliases: ["tf"]
+            aliases: ["tf", "time"]
         });
     }
 

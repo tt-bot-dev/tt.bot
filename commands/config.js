@@ -225,7 +225,8 @@ class ConfigCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "config",
-            description: "Lets you manage what I know about your server."
+            description: "Lets you manage what I know about your server.",
+            aliases: ["settings"]
         });
     }
 

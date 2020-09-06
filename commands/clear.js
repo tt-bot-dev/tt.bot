@@ -66,7 +66,7 @@ class ClearCommand extends Command {
                 }
             }),
             description: "Clears the desired number of messages.",
-            aliases: ["clean"]
+            aliases: ["clean", "prune", "purge"]
         });
     }
 

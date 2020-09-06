@@ -25,7 +25,8 @@ class DogCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "dog",
-            description: "Gets a random dog picture."
+            description: "Gets a random dog picture.",
+            aliases: ["woof"]
         });
     }
 

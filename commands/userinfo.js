@@ -38,7 +38,7 @@ class UserCommand extends Command {
                 }]
             }),
             description: "Gets some information about the user.",
-            aliases: ["uinfo"]
+            aliases: ["uinfo", "user", "whois"]
         });
     }
 

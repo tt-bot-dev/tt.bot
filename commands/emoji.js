@@ -48,7 +48,8 @@ class EmojiCommand extends Command {
                 }],
                 allowQuotedString: false
             }),
-            description: "Render up to 5 emojis as a picture."
+            description: "Render up to 5 emojis as a picture.",
+            aliases: ["e2p"]
         });
     }
     async run(ctx, input) {

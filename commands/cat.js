@@ -25,7 +25,8 @@ class CatCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "cat",
-            description: "Gets a random cat picture."
+            description: "Gets a random cat picture.",
+            aliases: ["meow"]
         });
     }
 

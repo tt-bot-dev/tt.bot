@@ -40,7 +40,8 @@ class HelpCommand extends Command {
                 }]
             }),
             displayInHelp: false,
-            description: "Gets information on how to use me."
+            description: "Gets information on how to use me.",
+            aliases: ["commands"]
         });
     }
 

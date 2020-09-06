@@ -57,7 +57,7 @@ class TagCommand extends Command {
                 separator: " "
             }),
             description: "Store some data for later retrieval. Keep in mind that the tags are global and accessible by everyone.\n[ttMsg](https://github.com/tt-bot-dev/tt.bot/blob/master/docs/ttMsg.md) can be used in tags.",
-            aliases: ["t"]
+            aliases: ["t", "tag"]
         });
     }
 
