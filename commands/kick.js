@@ -48,7 +48,7 @@ class KickCommand extends Command {
 
     async run(ctx, { user, reason }) {
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
-            if (!this.sosamba.hasBotPermission(ctx.channel, "kickMembers")){
+            if (!this.sosamba.hasBotPermission(ctx.channel, "kickMembers") || !this.sosamba.passesRoleHierarchy(ctx.guild.members.get(this.sosamba.user.id), user)){
                 await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
                 return;
             }

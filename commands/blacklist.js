@@ -75,15 +75,15 @@ class BlacklistManagerCommand extends Command {
                 }
             });
         } else if (action === AddSymbol) {
-            const guild = await this.sosamba.guilds.get(guildID);
+            const guild = this.sosamba.guilds.get(guildID);
             let ownerID;
             if (guild) ({ ownerID } = guild);
             await ctx.db.addBlacklistedGuild(guildID, ownerID, reasonSplit.join(" "));
-            await this.sosamba.guilds.filter(g => g.id === guildID || g.ownerID === ownerID)
-                .forEach(g => {
+            await Promise.all(this.sosamba.guilds.filter(g => g.id === guildID || g.ownerID === ownerID)
+                .map(g => {
                     g.__automaticallyLeft = true;
-                    g.leave();
-                });
+                    return g.leave();
+                }));
             await ctx.send(":ok_hand:");
         } else if (action === RemoveSymbol) {
             await ctx.db.removeBlacklistedGuild(guildID);

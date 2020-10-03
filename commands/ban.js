@@ -57,7 +57,7 @@ class BanCommand extends Command {
 
     async run(ctx, { user, reason, soft, days }) {
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
-            if (!this.sosamba.hasBotPermission(ctx.channel, "banMembers")) {
+            if (!this.sosamba.hasBotPermission(ctx.channel, "banMembers") || !this.sosamba.passesRoleHierarchy(ctx.guild.members.get(this.sosamba.user.id), user)) {
                 await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
                 return;
             }
