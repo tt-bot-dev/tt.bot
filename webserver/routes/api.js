@@ -23,10 +23,19 @@ const { v4: createUUID } = require("uuid");
 const uuidregex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 const authNeeded = checkAuth(true);
 const UserProfile = require("../../lib/Structures/UserProfile");
-const moment = require("moment");
 const { ExtensionFlags } = require("../../lib/extensions/API/Constants");
 const PRIVILEGED_SCOPES = ["httpRequests", "dangerousGuildSettings"];
 const { extensionFlagRequest, prefix, webserverDisplay } = require("../../config");
+
+function isValidTz(tz) {
+    try {
+        Intl.DateTimeFormat(void 0, { timeZone: tz });
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 module.exports = (app, csrf, db) => {
     app.get("/api/channels/:guild", authNeeded, (rq, rs) => {
         const guilds = getGuilds(rq, rs);
@@ -306,7 +315,7 @@ module.exports = (app, csrf, db) => {
             });
             return;
         }
-        if (!moment.tz.zone(filteredBody.timezone)) {
+        if (!isValidTz(filteredBody.timezone)) {
             rs.status(400);
             rs.send({
                 error: "Invalid timezone. Refer to https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List for a list of correct timezones"

@@ -19,7 +19,7 @@
 
 "use strict";
 const { Command } = require("sosamba");
-const moment = require("moment");
+const luxon = require("luxon");
 const config = require("../config");
 
 class InfoCommand extends Command {
@@ -60,7 +60,7 @@ class InfoCommand extends Command {
                 },
                 {
                     name: await ctx.t("INFO_UPTIME"),
-                    value: this.getUptime(moment(), moment(Date.now() - this.sosamba.uptime)),
+                    value: this.getUptime(),
                     inline: true
                 }],
                 color: 0x008800
@@ -72,9 +72,15 @@ class InfoCommand extends Command {
         return `<@${id}> (${owner ? owner.username + "#" + owner.discriminator : "unknown to me :("})`;
     }
 
-    getUptime(m1, m2) {
-        const d = moment.duration(m1.diff(m2));
-        return `${d.days() > 0 ? d.days() + " days, " : ""}${d.hours() > 0 ? d.hours() + " hours, " : ""}${d.minutes()} minutes, and ${d.seconds()} seconds`;
+    getUptime() {
+        const diff = luxon.DateTime.utc().diff(luxon.DateTime.fromMillis(this.sosamba.readyTime), [
+            "days",
+            "hours",
+            "minutes",
+            "seconds"
+        ]);
+
+        return `${diff.days > 0 ? Math.floor(diff.days) + " days, " : ""}${diff.hours > 0 ? Math.floor(diff.hours) + " hours, " : ""}${Math.floor(diff.minutes)} minutes, and ${Math.floor(diff.seconds)} seconds`;
     }
 }
 

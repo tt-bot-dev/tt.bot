@@ -22,8 +22,6 @@ const { Command, SerializedArgumentParser, Eris: {
     User
 } } = require("sosamba");
 const UserProfile = require("../lib/Structures/UserProfile");
-const moment = require("moment");
-const { tzDateFormat } = require("../config");
 
 class TimeForCommand extends Command {
     constructor(sosamba, ...args) {
@@ -50,9 +48,8 @@ class TimeForCommand extends Command {
                 this.sosamba.getTag(user)));
         const data = new UserProfile(profile);
         if (!data.timezone) return await ctx.send(await ctx.t("NO_TZ"));
-        return ctx.send(await ctx.t("TIME_FOR",
-            moment(new Date()).tz(data.timezone)
-                .format(tzDateFormat), this.sosamba.getTag(user)));
+        return ctx.send(await ctx.t("TIME_FOR", await ctx.formatDate(Date.now(), data.timezone),
+            this.sosamba.getTag(user)));
     }
 }
 

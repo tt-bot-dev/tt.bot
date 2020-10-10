@@ -21,8 +21,6 @@
 const { Command, SerializedArgumentParser,
     Serializers: { Member }, Eris: {Constants: {UserFlags}} } = require("sosamba");
 const userByID = require("../lib/util/userByID");
-const moment = require("moment");
-const config = require("../config");
 
 class UserCommand extends Command {
     constructor(sosamba, ...args) {
@@ -60,9 +58,7 @@ class UserCommand extends Command {
                         inline: false
                     }, {
                         name: await ctx.t("CREATED_ON"),
-                        value: await ctx.userProfile && (await ctx.userProfile).timezone ?
-                            moment(new Date(user.createdAt)).tz((await ctx.userProfile).timezone).format(config.tzDateFormat) :
-                            moment(new Date(user.createdAt)).format(config.normalDateFormat),
+                        value: await ctx.formatDate(user.createdAt, (await ctx.userProfile).timezone),
                         inline: true
                     }, {
                         name: await ctx.t("CURRENT_VOICE"),
@@ -87,9 +83,7 @@ class UserCommand extends Command {
                     },
                     fields: [{
                         name: await ctx.t("CREATED_ON"),
-                        value: await ctx.userProfile && (await ctx.userProfile).timezone ?
-                            moment(new Date(user.createdAt)).tz((await ctx.userProfile).timezone).format(config.tzDateFormat) :
-                            moment(new Date(user.createdAt)).format(config.normalDateFormat),
+                        value: await ctx.formatDate(user.createdAt, (await ctx.userProfile).timezone),
                         inline: true
                     }],
                     footer: {

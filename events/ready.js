@@ -58,6 +58,7 @@ class ReadyEvent extends Event {
             }
         }));
         this.log.info(`tt.bot ${version} is connected as ${this.sosamba.getTag(this.sosamba.user)}`);
+        this.sosamba.readyTime = Date.now();
     }
 
     async leaveBotCollectionServers() {

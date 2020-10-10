@@ -98,10 +98,27 @@ module.exports = {
 
     /**
      * The date formatting, for the nice display on Discord.
-     * @type {string}
+     * @type {Intl.DateTimeFormatOptions}
      */
-    normalDateFormat: "D[.] M[.] YYYY [at] H:mm",
-    tzDateFormat: "D[.] M[.] YYYY [at] H:mm [(]Z[)]",
+    normalDateFormat: {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    },
+    /**
+     * The date formatting for dates with timezones, for the nice display on Discord.
+     * @type {Intl.DateTimeFormatOptions}
+     */
+    tzDateFormat: {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZoneName: "long"
+    },
     /**
      * The database options for the bot
      * If using the Docker image with the default RDB provider,

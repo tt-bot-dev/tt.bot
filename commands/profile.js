@@ -19,7 +19,6 @@
 
 "use strict";
 const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
-const moment = require("moment");
 const UserProfile = require("../lib/Structures/UserProfile");
 const RemoveSymbol = Symbol("tt.bot.profile.remove");
 const SetupSymbol = Symbol("tt.bot.profile.setup");
@@ -73,7 +72,7 @@ class ProfileCommand extends Command {
                 await ctx.send(await ctx.t("PROFILE_CREATE_TIMEZONE"));
                 const m = await ctx.waitForMessage(async ctx => {
                     if (ctx.msg.content.toLowerCase() === "none") return true;
-                    if (!moment.tz.zone(ctx.msg.content)) {
+                    if (!this.isValidTz(ctx.msg.content)) {
                         await ctx.msg.channel.createMessage(await ctx.t("INVALID_TIMEZONE"));
                         return false;
                     }
@@ -107,7 +106,7 @@ class ProfileCommand extends Command {
             if (!arg) {
                 await ctx.send(await ctx.t("PROFILE_TIMEZONE", (await ctx.userProfile).timezone));
             } else {
-                if (!moment.tz.zone(arg)) {
+                if (!this.isValidTz(arg)) {
                     await ctx.send(await ctx.t("INVALID_TIMEZONE"));
                     return;
                 }
@@ -152,6 +151,15 @@ class ProfileCommand extends Command {
             s[language] = (termsInForeign / terms.length * 100).toFixed(2);
         }
         return s;
+    }
+
+    isValidTz(tz) {
+        try {
+            Intl.DateTimeFormat(void 0, { timeZone: tz });
+            return true;
+        } catch {
+            return false;
+        }
     }
 }
 
