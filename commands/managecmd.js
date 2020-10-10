@@ -32,10 +32,10 @@ const ActionResolver = a => {
                         if (action === "reload") return ReloadSymbol;
                         throw new ParsingError("Invalid action");
                     };
-const CommandResolver = a => {
-                        const cmd = a.toLowerCase();
-                        if (this.sosamba.commands.has(cmd)) return this.sosamba.commands.get(cmd);
-                        return a;
+const CommandResolver = (cmdName, ctx) => {
+                        const cmd = cmdName.toLowerCase();
+                        if (ctx.sosamba.commands.has(cmd)) return ctx.sosamba.commands.get(cmd);
+                        return cmdName;
                     }
 
 ActionResolver.typeHint = "unload|load|reload";
