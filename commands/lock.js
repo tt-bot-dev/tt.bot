@@ -51,7 +51,7 @@ class LockCommand extends Command {
     }
 
     async run(ctx, [ channel, reason ]) {
-        if (!(await super.permissionCheck(ctx)) || !channel.permissionsOf(ctx.author.id).has("manageRoles")) {
+        if (!await super.permissionCheck(ctx) || !channel.permissionsOf(ctx.author.id).has("manageRoles")) {
             await ctx.send("You cannot lock the channel as you're missing permissions to do this in the target channel.");
             return;
         }

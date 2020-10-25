@@ -24,10 +24,10 @@ const QuerySymbol = Symbol("tt.bot.blacklist.query");
 const AddSymbol = Symbol("tt.bot.blacklist.add");
 const RemoveSymbol = Symbol("tt.bot.blacklist.remove");
 const ActionResolver = val => {
-                        if (val === "query") return QuerySymbol;
-                        else if (val === "add") return AddSymbol;
-                        else if (val === "remove") return RemoveSymbol;
-                    };
+    if (val === "query") return QuerySymbol;
+    else if (val === "add") return AddSymbol;
+    else if (val === "remove") return RemoveSymbol;
+};
 ActionResolver.typeHint = "query|add|remove";
 class BlacklistManagerCommand extends Command {
     constructor(sosamba, ...args) {

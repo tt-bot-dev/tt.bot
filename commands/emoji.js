@@ -23,8 +23,7 @@ const Regexes = require("../lib/e2p/regexes");
 const UnicodeEmojiRegex = require("emoji-regex");
 const EmojiSerializer = val => {
     if (Regexes.EmojiRegex.test(val) ||
-        UnicodeEmojiRegex().test(val) ||
-        val === "--gif") return val;
+        UnicodeEmojiRegex().test(val)) return val;
     throw new ParsingError("Invalid emoji");
 };
 

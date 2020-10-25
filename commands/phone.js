@@ -44,24 +44,24 @@ const checkValidNumber = n => !isNaN(n) &&
     n.length === 14 && // TTBOT and the 9-digit number
     /^88268/.test(n);
 const ActionResolver = (val, ctx) => {
-                        if (val === "register" && ctx.sosamba.isAdmin(ctx.member)) return RegisterSymbol;
-                        if (val === "call") return CallSymbol;
-                        if (val === "lookup") {
-                            ctx.action = LookupSymbol;
-                            return LookupSymbol;
-                        }
-                        if (val === "delete" && ctx.sosamba.isAdmin(ctx.member)) return DeleteSymbol;
-                        throw new ParsingError("Invalid action");
-                    };
+    if (val === "register" && ctx.sosamba.isAdmin(ctx.member)) return RegisterSymbol;
+    if (val === "call") return CallSymbol;
+    if (val === "lookup") {
+        ctx.action = LookupSymbol;
+        return LookupSymbol;
+    }
+    if (val === "delete" && ctx.sosamba.isAdmin(ctx.member)) return DeleteSymbol;
+    throw new ParsingError("Invalid action");
+};
 
 const NumberResolver = async (val, ctx) => {
-                        const num = convertNumber(val);
-                        if (!checkValidNumber(num)) {
-                            if (ctx.action === LookupSymbol) return undefined;
-                            throw new ParsingError(await ctx.t("NUMBER_INVALID", true));
-                        }
-                        return num;
-                    };
+    const num = convertNumber(val);
+    if (!checkValidNumber(num)) {
+        if (ctx.action === LookupSymbol) return undefined;
+        throw new ParsingError(await ctx.t("NUMBER_INVALID", true));
+    }
+    return num;
+};
 ActionResolver.typeHint = "register|call|lookup|delete";
 NumberResolver.typeHint = "TTBOT XXX YYY ZZZ";
 

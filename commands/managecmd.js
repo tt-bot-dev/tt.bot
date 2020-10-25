@@ -26,17 +26,17 @@ const UnloadSymbol = Symbol("tt.bot.manage.unload");
 const LoadSymbol = Symbol("tt.bot.manage.load");
 const ReloadSymbol = Symbol("tt.bot.manage.reload");
 const ActionResolver = a => {
-                        const action = a.toLowerCase();
-                        if (action === "unload") return UnloadSymbol;
-                        if (action === "load") return LoadSymbol;
-                        if (action === "reload") return ReloadSymbol;
-                        throw new ParsingError("Invalid action");
-                    };
+    const action = a.toLowerCase();
+    if (action === "unload") return UnloadSymbol;
+    if (action === "load") return LoadSymbol;
+    if (action === "reload") return ReloadSymbol;
+    throw new ParsingError("Invalid action");
+};
 const CommandResolver = (cmdName, ctx) => {
-                        const cmd = cmdName.toLowerCase();
-                        if (ctx.sosamba.commands.has(cmd)) return ctx.sosamba.commands.get(cmd);
-                        return cmdName;
-                    }
+    const cmd = cmdName.toLowerCase();
+    if (ctx.sosamba.commands.has(cmd)) return ctx.sosamba.commands.get(cmd);
+    return cmdName;
+};
 
 ActionResolver.typeHint = "unload|load|reload";
 CommandResolver.typeHint = "Command";

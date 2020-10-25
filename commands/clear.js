@@ -27,11 +27,11 @@ const { User } = require("eris");
 const D_EPOCH = BigInt(1421280000000);
 const sleep = ms => new Promise(rs => setTimeout(rs, ms));
 const FromResolver = async (val, ctx) => {
-                        if (val === "bots") return BotSymbol;
-                        else return user(val, ctx, {
-                            isFromArgParser: true
-                        });
-                    };
+    if (val === "bots") return BotSymbol;
+    else return user(val, ctx, {
+        isFromArgParser: true
+    });
+};
 FromResolver.typeHint = "User|\"bots\"";
 
 class ClearCommand extends Command {

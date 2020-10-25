@@ -24,10 +24,10 @@ const URLRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-
 const ImageExtensionRegex = /\.(?:png|jpg|bmp)$/i;
 const { read, MIME_JPEG } = require("jimp");
 const URLResolver = str => {
-                            if (!URLRegex.test(str)) throw new ParsingError("The input is not an URL");
-                            if (!ImageExtensionRegex.test(str)) throw new ParsingError("The input is an invalid or unsupported image. The valid formats are PNG, JPEG and BMP.");
-                            return str;
-                        };
+    if (!URLRegex.test(str)) throw new ParsingError("The input is not an URL");
+    if (!ImageExtensionRegex.test(str)) throw new ParsingError("The input is an invalid or unsupported image. The valid formats are PNG, JPEG and BMP.");
+    return str;
+};
 URLResolver.typeHint = "URL/attachment";
 
 class JPEGCommand extends Command {

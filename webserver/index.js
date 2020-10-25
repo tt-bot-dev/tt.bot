@@ -20,7 +20,7 @@
 "use strict";
 const e = require("polka"),
     util = require("./util"),
-    { checkAuth, checkAuthNeg, loadMiddleware, getGuilds, getHost } = util,
+    { checkAuth, checkAuthNeg, loadMiddleware, getGuilds } = util,
     scope = ["identify", "guilds"],
     { createServer: httpsServer } = require("https"),
     { createServer: httpServer } = require("http"),

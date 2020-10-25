@@ -23,9 +23,9 @@ const ModCommand = require("../lib/commandTypes/ModCommand");
 const OwnerCommand = require("../lib/commandTypes/OwnerCommand");
 const AdminCommand = require("../lib/commandTypes/AdminCommand");
 const CommandResolver = (val) => {
-                        if (!this.sosamba.commands.has(val)) throw new ParsingError("Command not found");
-                        return this.sosamba.commands.get(val);
-                    };
+    if (!this.sosamba.commands.has(val)) throw new ParsingError("Command not found");
+    return this.sosamba.commands.get(val);
+};
 CommandResolver.typeHint = "Command";
 class HelpCommand extends Command {
     constructor(sosamba, ...args) {

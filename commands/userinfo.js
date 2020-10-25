@@ -19,7 +19,7 @@
 
 "use strict";
 const { Command, SerializedArgumentParser,
-    Serializers: { Member }, Eris: {Constants: {UserFlags}} } = require("sosamba");
+    Serializers: { Member }, Eris: { Constants: { UserFlags } } } = require("sosamba");
 const userByID = require("../lib/util/userByID");
 
 class UserCommand extends Command {
@@ -123,7 +123,7 @@ class UserCommand extends Command {
 
         //Emojis taken from our internal guild
         if (bitArray.includes("BUG_HUNTER_LEVEL_2")) out.push(`${canUseExternal ? "<:e:743588190241292449>" : ":bug:"} This user is a Discord Bug Hunter (level 2)`);
-        if (bitArray.includes("VERIFIED_BOT")) out.push(`:white_check_mark: This bot is verified`);
+        if (bitArray.includes("VERIFIED_BOT")) out.push(":white_check_mark: This bot is verified");
         if (bitArray.includes("VERIFIED_BOT_DEVELOPER")) out.push(`${canUseExternal ? "<:e:743589119799590955>" : ":white_check_mark"} This user is a verified bot developer`);
 
         return out;
