@@ -6,6 +6,7 @@
     "dependencies": {
         "@polka/redirect": "^1.0.0-next.0",
         "@polka/send-type": "^0.5.2",
+        "@tt-bot-dev/e2p": "git+https://owo.codes/tt.bot/modules/e2p.git",
         "@tt-bot-dev/extension-runner": "git+https://owo.codes/tt.bot/extensions/runner.git",
         "@types/node": "^13.11.0",
         "@types/node-fetch": "^2.5.5",

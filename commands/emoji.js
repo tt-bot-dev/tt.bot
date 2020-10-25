@@ -23,11 +23,8 @@ const Regexes = require("../lib/e2p/regexes");
 const UnicodeEmojiRegex = require("emoji-regex");
 const EmojiSerializer = val => {
     if (Regexes.EmojiRegex.test(val) ||
-        Regexes.EmojiSkinToneMobile.test(val) ||
-        Regexes.EmojiSkinToneText.test(val) ||
-        Regexes.EmojiText.test(val) ||
-        Regexes.EmojiTextSkinTone.test(val) ||
-        UnicodeEmojiRegex().test(val)) return val;
+        UnicodeEmojiRegex().test(val) ||
+        val === "--gif") return val;
     throw new ParsingError("Invalid emoji");
 };
 
@@ -41,6 +38,11 @@ class EmojiCommand extends Command {
                 separator: " ",
                 filterEmptyArguments: true,
                 args: [{
+                    name: "doGif",
+                    type: Boolean,
+                    description: "whether to generate a GIF image or not"
+                },
+                {
                     name: "emojis",
                     restSplit: true,
                     type: EmojiSerializer,
@@ -52,15 +54,15 @@ class EmojiCommand extends Command {
             aliases: ["e2p"]
         });
     }
-    async run(ctx, input) {
-        if (input.length > 5) input = input.slice(0, 5);
+    async run(ctx, [asGif, ...input]) {
+        if (input.length > 5) input = input.filter(t => t !== "--gif").slice(0, 5);
         await ctx.send(await ctx.t("IMAGE_GENERATING"));
         const t = process.hrtime();
         let b;
         try {
-            b = await this.sosamba.workers.sendToRandom(0, "generateImage", { input }).promise;
+            b = await this.sosamba.workers.sendToRandom(0, "generateImage", { input, asGif }).promise;
             if (b && b.err) throw b.err;
-        } catch(err) {
+        } catch (err) {
             this.log.error(err);
             ctx.send(await ctx.t("ERROR", err));
             return;
@@ -75,7 +77,7 @@ class EmojiCommand extends Command {
                 description: "Enjoy!",
                 color: 0x008800,
                 image: {
-                    url: `attachment://image${b.isGif ? ".gif" :".png"}`
+                    url: `attachment://image${b.isGif ? ".gif" : ".png"}`
                 },
                 fields: b.generated ? [{
                     name: await ctx.t("IMAGE_AUTO_GENERATED"),
