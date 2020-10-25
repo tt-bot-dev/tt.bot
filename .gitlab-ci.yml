@@ -2,11 +2,13 @@ lint:
     stage: test
     image: node:alpine
     script: 
+        - npm i @tt-bot-dev/eslint-config 
         - npx eslint .
 
 test_build:
     stage: test
     image: node:alpine
     script:
-        - apk add alpine-sdk python cargo git bash
+        - apk add alpine-sdk python rustup git bash
+        - rustup default nightly
         - npm i --only=production
