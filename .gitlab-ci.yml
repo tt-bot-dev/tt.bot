@@ -13,5 +13,7 @@ test_build:
     script:
         - apk add alpine-sdk python git bash
         # Install rustup
-        - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s --default-toolchain=nightly -y
+        - curl --proto '=https' --tlsv1.2 -sSf -o install-rustup.sh https://sh.rustup.rs
+        - chmod +x install-rustup.sh
+        - ./install-rustup.sh --default-toolchain nightly -y
         - npm i --only=production
