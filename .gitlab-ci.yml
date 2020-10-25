@@ -1,0 +1,19 @@
+lint:
+    stage: test
+    image: node:alpine
+    script: 
+        - apk add alpine-sdk python
+        - npm i --only=development
+        - npx eslint .
+
+test_build:
+    stage: test
+    image: docker:latest
+    services:
+        - docker:dind
+    variables:
+        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    script:
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build -t $IMAGE_TAG .
+        
