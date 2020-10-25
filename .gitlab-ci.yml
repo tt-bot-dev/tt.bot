@@ -2,13 +2,17 @@ lint:
     stage: test
     image: node:alpine
     script: 
-        - npm i @tt-bot-dev/eslint-config 
+        - apk add bash # bash not present, wtf?
+        - rm package.json
+        - npm i @tt-bot-dev/eslint-config
         - npx eslint .
 
 test_build:
     stage: test
     image: node:alpine
     script:
-        - apk add alpine-sdk python rustup git bash
+        - apk add alpine-sdk python git bash
+        # Install rustup
+        - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
         - rustup default nightly
         - npm i --only=production
