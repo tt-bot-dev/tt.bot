@@ -2,13 +2,11 @@ lint:
     stage: test
     image: node:alpine
     script: 
-        - apk add alpine-sdk python git bash
-        - npm i --only=development
         - npx eslint .
 
 test_build:
     stage: test
     image: node:alpine
     script:
-        - apk add alpine-sdk python rust git bash
+        - apk add alpine-sdk python cargo git bash
         - npm i --only=production
