@@ -7,14 +7,14 @@ lint:
         - npm i @tt-bot-dev/eslint-config
         - npx eslint .
 
-test_build:
-    stage: test
-    image: node:alpine
-    script:
-        - apk add alpine-sdk python git bash
-        # Install rustup
-        - curl --proto '=https' --tlsv1.2 -sSf -o install-rustup.sh https://sh.rustup.rs
-        - chmod +x install-rustup.sh
-        - ./install-rustup.sh --default-toolchain nightly -y
-        - . $HOME/.cargo/env
-        - npm i --only=production
+# test_build:
+#     stage: test
+#     image: node:alpine
+#     script:
+#         - apk add alpine-sdk python git bash
+#         # Install rustup
+#         - curl --proto '=https' --tlsv1.2 -sSf -o install-rustup.sh https://sh.rustup.rs
+#         - chmod +x install-rustup.sh
+#         - ./install-rustup.sh --default-toolchain nightly -y
+#         - . $HOME/.cargo/env
+#         - npm i --only=production
