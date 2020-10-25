@@ -16,4 +16,5 @@ test_build:
         - curl --proto '=https' --tlsv1.2 -sSf -o install-rustup.sh https://sh.rustup.rs
         - chmod +x install-rustup.sh
         - ./install-rustup.sh --default-toolchain nightly -y
+        - . $HOME/.cargo/env
         - npm i --only=production
