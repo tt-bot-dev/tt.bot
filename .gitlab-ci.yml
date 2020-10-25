@@ -10,7 +10,7 @@ test_build:
     stage: test
     image: docker:latest
     services:
-        - docker:dind
+        - docker:dind-rootless
     variables:
         IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     script:
