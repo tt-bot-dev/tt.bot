@@ -2,7 +2,7 @@ lint:
     stage: test
     image: node:alpine
     script: 
-        - apk add alpine-sdk python
+        - apk add alpine-sdk python git
         - npm i --only=development
         - npx eslint .
 
@@ -16,4 +16,6 @@ test_build:
     script:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build -t $IMAGE_TAG .
+    tags:
+        - eric
         
