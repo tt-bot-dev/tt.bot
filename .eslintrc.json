@@ -1,3 +1,4 @@
 {
-    "extends": "@tt-bot-dev"
+    "extends": "@tt-bot-dev",
+    "parser": "babel-eslint"
 }
