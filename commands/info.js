@@ -69,7 +69,7 @@ class InfoCommand extends Command {
     }
 
     getOwnerInfo(id, owner) {
-        return `<@${id}> (${owner ? owner.username + "#" + owner.discriminator : "unknown to me :("})`;
+        return `<@${id}> (${owner ? `${owner.username}#${owner.discriminator}` : "unknown to me :("})`;
     }
 
     getUptime() {

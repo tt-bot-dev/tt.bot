@@ -68,7 +68,7 @@ class ProfileCommand extends Command {
             if (response) {
                 try {
                     await context.msg.delete(); 
-                } catch {/**/ }
+                } catch { /* */ }
                 await ctx.send(await ctx.t("PROFILE_CREATE_TIMEZONE"));
                 const m = await ctx.waitForMessage(async ctx => {
                     if (ctx.msg.content.toLowerCase() === "none") return true;
@@ -81,7 +81,7 @@ class ProfileCommand extends Command {
                 if (m.msg.content !== "none") profile.timezone = m.msg.content;
                 try {
                     await m.msg.delete(); 
-                } catch {/**/ }
+                } catch {/* */ }
 
                 await ctx.send(await ctx.t("PROFILE_CREATE_LOCALE"));
                 const m2 = await ctx.waitForMessage(async ctx => {
@@ -96,7 +96,7 @@ class ProfileCommand extends Command {
                 if (m2.msg.content !== "none") profile.locale = m2.msg.content;
                 try {
                     await m2.msg.delete(); 
-                } catch {/**/ }
+                } catch {/* */ }
             }
             const toWrite = UserProfile.create(profile);
             await ctx.db.createUserProfile(toWrite);
