@@ -65,7 +65,7 @@ class ExtensionCommand extends Command {
                 return;
             }
             let page = 0;
-            if (id > 1) page = parseInt(id - 1);
+            if (id > 1) page = parseInt(id) - 1;
             if (isNaN(page)) page = 0;
             const pageIndex = page === 0 ? 0 : page * 25 - 1;
 
