@@ -132,7 +132,7 @@ module.exports = (app, csrf, db) => {
             if (id === "new") return rs.send(d);
             const filteredBody = {};
             const extension = await db.getGuildExtension(id);
-            if (!extension || extension && extension.guildID !== guild) {
+            if (!extension || extension?.guildID !== guild) {
                 rs.status(404);
                 rs.send({ error: "Not Found" });
                 return;
@@ -163,7 +163,7 @@ module.exports = (app, csrf, db) => {
             ];
             const filteredBody = {};
             const extension = id === "new" ? { guildID: guild } : await db.getGuildExtension(id);
-            if (!extension || extension && extension.guildID !== guild) {
+            if (!extension || extension?.guildID !== guild) {
                 rs.status(404);
                 rs.send({ error: "Not Found" });
                 return;
@@ -271,7 +271,7 @@ module.exports = (app, csrf, db) => {
             return rs.send({ error: "Forbidden" });
         } else {
             const extension = await db.getGuildExtension(id);
-            if (!extension || extension && extension.guildID !== guild) {
+            if (!extension || extension?.guildID !== guild) {
                 rs.status(404);
                 rs.send({ error: "Not Found" });
                 return;

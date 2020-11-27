@@ -29,9 +29,9 @@ const e = require("polka"),
     fs = require("fs"),
     csrfProtection = csrf({
         value: req =>
-            req.body && req.body._csrf ||
-            req.query && req.query._csrf ||
-            req.query && req.query.state ||
+            req.body?._csrf ||
+            req.query?._csrf ||
+            req.query?.state ||
             req.headers["csrf-token"] ||
             req.headers["xsrf-token"] ||
             req.headers["x-csrf-token"] ||
@@ -50,7 +50,7 @@ module.exports = function (db, bot, config) {
     });
     const app = e({
         onError: (err, req, res) => {
-            if (err.code && err.code === "ebadcsrftoken".toUpperCase()) {
+            if (err.code === "ebadcsrftoken".toUpperCase()) {
                 res.status(403);
                 res.render("500", req.makeTemplatingData({
                     error: "Missing CSRF token! Please redo the action again in order to protect yourself.",
@@ -194,7 +194,7 @@ module.exports = function (db, bot, config) {
                 return;
             }
             const extension = await db.getGuildExtension(rq.params.extension);
-            if (!extension || extension && extension.guildID !== g.id) {
+            if (!extension || extension?.guildID !== g.id) {
                 rs.status(404);
                 return rs.render("404", rq.makeTemplatingData({
                     pageTitle: "404"
@@ -229,7 +229,7 @@ module.exports = function (db, bot, config) {
                 return;
             }
             const extension = await db.getGuildExtension(rq.params.extension);
-            if (!extension || extension && extension.guildID !== g.id) {
+            if (!extension || extension?.guildID !== g.id) {
                 rs.status(404);
                 return rs.render("404", rq.makeTemplatingData({
                     pageTitle: "404"

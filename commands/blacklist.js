@@ -76,8 +76,7 @@ class BlacklistManagerCommand extends Command {
             });
         } else if (action === AddSymbol) {
             const guild = this.sosamba.guilds.get(guildID);
-            let ownerID;
-            if (guild) ({ ownerID } = guild);
+            const ownerID = guild?.ownerID;
             await ctx.db.addBlacklistedGuild(guildID, ownerID, reasonSplit.join(" "));
             await Promise.all(this.sosamba.guilds.filter(g => g.id === guildID || g.ownerID === ownerID)
                 .map(g => {

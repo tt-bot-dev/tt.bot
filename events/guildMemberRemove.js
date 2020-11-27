@@ -29,7 +29,7 @@ class GuildMemberLeaveEvent extends Event {
 
     async run(guild, member) {
         const config = await this.sosamba.db.getGuildConfig(guild.id);
-        if (config && config.farewellChannelId && config.farewellMessage) {
+        if (config?.farewellChannelId && config?.farewellMessage) {
             const channel = guild.channels.get(config.farewellChannelId);
             if (channel) {
                 try { 

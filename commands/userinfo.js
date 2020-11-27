@@ -62,9 +62,8 @@ class UserCommand extends Command {
                         inline: true
                     }, {
                         name: await ctx.t("CURRENT_VOICE"),
-                        value: ctx.guild.voiceStates.has(user.id) ?
-                            ctx.guild.channels.get(ctx.guild.voiceStates.get(user.id).channelID)
-                                .name : await ctx.t("NONE"),
+                        value: ctx.guild.channels.get(ctx.guild.voiceStates.get(user.id)?.channelID)
+                            ?.name || await ctx.t("NONE"),
                         inline: true
                     }],
                     timestamp: new Date(user.joinedAt),

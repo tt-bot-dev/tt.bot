@@ -29,8 +29,7 @@ class ReadyEvent extends Event {
             name: "ready"
         });
         this.posterLog = new Logger({
-            level: this.sosamba.options.log && this.sosamba.options.log.level ?
-                this.sosamba.options.log.level : undefined,
+            level: this.sosamba.options.log?.level || undefined,
             name: "DBLPoster"
         });
         this.firedUp = false;

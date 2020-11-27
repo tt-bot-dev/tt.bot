@@ -29,7 +29,7 @@ class GuildMemberJoinEvent extends Event {
 
     async run(guild, member) {
         const config = await this.sosamba.db.getGuildConfig(guild.id);
-        if (config && config.greetingChannelId && config.greetingMessage) {
+        if (config?.greetingChannelId && config?.greetingMessage) {
             const channel = guild.channels.get(config.greetingChannelId);
             if (channel) {
                 try { 
