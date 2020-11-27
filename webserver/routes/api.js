@@ -69,13 +69,18 @@ module.exports = (app, csrf, db) => {
             return rs.send({ error: "Forbidden" });
         } else {
             const guild = rq.bot.guilds.get(rq.params.guild);
-            const highestRole = guild.members.get(rq.bot.user.id).roles
-                .map(r => guild.roles.get(r))
-                .sort((a, b) => b.position - a.position)[0] || {
-                position: -1
-            };
-            let roles = guild.roles.filter(r => r.position < highestRole.position);
-            if (rq.query.ignoreHierarchy === "true") roles = [...guild.roles.values()];
+            let roles;
+            if (rq.query.ignoreHierarchy === "true") {
+                roles = [...guild.roles.values()];
+            } else {
+                const highestRole = guild.members.get(rq.bot.user.id).roles
+                    .map(r => guild.roles.get(r))
+                    .sort((a, b) => b.position - a.position)[0] || {
+                    position: -1
+                };
+                roles = guild.roles.filter(r => r.position < highestRole.position);
+            }
+
             return rs.send(roles.sort((a, b) => b.position - a.position).map(r => ({
                 name: r.name,
                 id: r.id
@@ -211,7 +216,6 @@ module.exports = (app, csrf, db) => {
                 filteredBody.flags = flagNum;
             }
 
-            console.log(filteredBody.flags, filteredBody.privilegedFlags);
             if (filteredBody.commandTrigger.length > 20)
                 filteredBody.commandTrigger = filteredBody.commandTrigger.slice(0, 20);
             if (!uuidregex.test(filteredBody.store)) filteredBody.store = null;
