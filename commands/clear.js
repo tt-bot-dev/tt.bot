@@ -71,7 +71,7 @@ class ClearCommand extends Command {
     }
 
     async permissionCheck(ctx) {
-        return ctx.member.permission.has("manageMessages") || await super.permissionCheck(ctx);
+        return ctx.member.permissions.has("manageMessages") || await super.permissionCheck(ctx);
     }
 
 

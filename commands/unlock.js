@@ -47,7 +47,7 @@ class UnlockCommand extends Command {
 
     async permissionCheck(ctx) {
         // this should be bound to the channel instead, if possible
-        return ctx.member.permission.has("manageRoles") || await super.permissionCheck(ctx);
+        return ctx.member.permissions.has("manageRoles") || await super.permissionCheck(ctx);
     }
 
     async run(ctx, [ channel, reason ]) {

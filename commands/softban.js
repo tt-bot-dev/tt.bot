@@ -42,7 +42,7 @@ class SoftbanCommand extends Command {
     }
 
     async permissionCheck(ctx) {
-        return ctx.member.permission.has("banMembers") || await super.permissionCheck(ctx);
+        return ctx.member.permissions.has("banMembers") || await super.permissionCheck(ctx);
     }
 
     async run(ctx, { user, reason }) {

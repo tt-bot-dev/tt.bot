@@ -43,7 +43,7 @@ class KickCommand extends Command {
     }
 
     async permissionCheck(ctx) {
-        return ctx.member.permission.has("kickMembers") || await super.permissionCheck(ctx);
+        return ctx.member.permissions.has("kickMembers") || await super.permissionCheck(ctx);
     }
 
     async run(ctx, { user, reason }) {
