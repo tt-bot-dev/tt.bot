@@ -1,1 +1,2 @@
 webserver/static
+lib/extensions/**/*.js
