@@ -133,14 +133,6 @@ module.exports = {
     },
 
     /**
-     * Connection options that can be passed to rethinkdbdash.
-     * @see https://github.com/neumino/rethinkdbdash#importing-the-driver
-     */
-    connectionOpts: {
-        db: "ttalpha"
-    },
-
-    /**
      * The channel ID of the server to log into
      * @type {string}
      */
