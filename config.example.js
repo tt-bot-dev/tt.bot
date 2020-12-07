@@ -170,5 +170,9 @@ module.exports = {
          */
         token: "nEsprAvedLiVo"
     },
-    announcementChannelID: "123456789012345678"
+
+    /**
+     * The bot update channel
+     */
+    announcementChannelID: "123456789012345678",
 };
