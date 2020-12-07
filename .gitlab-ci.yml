@@ -4,7 +4,7 @@ lint:
     script: 
         - apk add bash # bash not present, wtf?
         - rm package.json
-        - npm i @tt-bot-dev/eslint-config
+        - npm i @tt-bot-dev/eslint-config babel-eslint
         - npx eslint .
 
 # test_build:
