@@ -37,7 +37,7 @@ module.exports = session => class SessionStore extends (session.session && sessi
             .then((sess) => {
                 if (!sess) return cb();
                 if (Date.now() >= sess.expiry) {
-                    this.db.deleteSession(sid).then(null, err => {
+                    this.db.removeSession(sid).then(null, err => {
                         this.logger.warn(`Couldn't delete the session ${sid}:\n${err.stack}`);
                     });
                     return cb();
