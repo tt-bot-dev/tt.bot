@@ -148,6 +148,12 @@ class PhoneCommand extends Command {
                 await ctx.send(await ctx.t("CALLER_NO_NUMBER"));
                 return;
             }
+
+            if (thisChannelNumber.id === number) {
+                await ctx.send(":cry: Are you lonely?");
+                return;
+            }
+
             const otherSideNumber = await ctx.db.getPhoneNumber(number);
             if (!otherSideNumber) {
                 await ctx.send(await ctx.t("NUMBER_NONEXISTANT"));
