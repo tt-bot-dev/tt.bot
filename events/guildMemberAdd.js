@@ -31,7 +31,7 @@ class GuildMemberJoinEvent extends Event {
         const config = await this.sosamba.db.getGuildConfig(guild.id);
         if (config?.greetingChannelId && config?.greetingMessage) {
             const channel = guild.channels.get(config.greetingChannelId);
-            if (channel) {
+            if (channel && this.sosamba.hasBotPermission(channel, "sendMessages")) {
                 try { 
                     await channel.createMessage(
                         {

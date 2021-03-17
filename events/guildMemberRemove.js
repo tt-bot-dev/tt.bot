@@ -31,7 +31,7 @@ class GuildMemberLeaveEvent extends Event {
         const config = await this.sosamba.db.getGuildConfig(guild.id);
         if (config?.farewellChannelId && config?.farewellMessage) {
             const channel = guild.channels.get(config.farewellChannelId);
-            if (channel) {
+            if (channel && this.sosamba.hasBotPermission(channel, "sendMessages")) {
                 try { 
                     await channel.createMessage({
                         content: this.sosamba.parseMsg(config.farewellMessage, member.user, guild),
