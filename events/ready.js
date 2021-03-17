@@ -24,15 +24,16 @@ const { version } = require("../package.json");
 const { botsGGKey, topGGKey, workerCount, prefix } = require("../config");
 
 class ReadyEvent extends Event {
+    posterLog = new Logger({
+        level: this.sosamba.options.log?.level || undefined,
+        name: "DBLPoster"
+    });
+    firedUp = false;
+
     constructor(...args) {
         super(...args, {
             name: "ready"
         });
-        this.posterLog = new Logger({
-            level: this.sosamba.options.log?.level || undefined,
-            name: "DBLPoster"
-        });
-        this.firedUp = false;
     }
     async run() {
         if (!this.firedUp) {
