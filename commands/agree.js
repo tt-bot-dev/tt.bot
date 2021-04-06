@@ -36,7 +36,7 @@ class AgreeCommand extends Command {
         if (!ctx.guild.roles.has(memberRole)) return;
         if (ctx.member.roles.includes(memberRole)) return;
         try {
-            if (!ctx.guild.members.get(this.sosamba.user.id).permission.has("manageRoles")) throw new Error();
+            if (!ctx.guild.members.get(this.sosamba.user.id).permissions.has("manageRoles")) throw new Error();
             await ctx.member.addRole(memberRole, "Agreement to server's rules");
         } catch {
             try {
