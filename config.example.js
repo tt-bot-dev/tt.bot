@@ -50,30 +50,6 @@ module.exports = {
      */
     prefix: "AAAAAAAaa",
 
-    /** 
-     * IP address to host the webserver on.
-     * @type {string}
-     */
-    webserverip: "127.0.0.1",
-
-    /**
-     * Whether to serve static content or not
-     * THIS IS NOT RELIABLE IN PRODUCTION ENVIRONMENTS.
-     * If you'd like to serve static content through
-     * a different web server, point /static to webserver/static
-     * @type {boolean}
-     * @default false
-     */
-    serveStatic: true,
-
-    /**
-     * Configures the website display URL. 
-     * This can be a function taking a URL if you for example want to use
-     * alternative links.
-     * @type {string|function}
-     */
-    webserverDisplay: "https://127.0.0.1:8826",
-
     /**
      * The client ID and client secret. These are obtainable from the page where you got the token.
      * @type {string}
