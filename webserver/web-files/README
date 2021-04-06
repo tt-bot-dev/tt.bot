@@ -1,4 +1,0 @@
-This folder SHOULD NOT be served to the end users.
-Please run uglifyitall.cmd or uglifyitall.sh to
-uglify these raw files which should be ready to be
-served to the end users.

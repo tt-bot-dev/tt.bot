@@ -43,7 +43,7 @@ module.exports = {
      * @type {string}
      */
     topGGKey: "/tbalealelalajioe,e.gokaoklelgoekejfoekeoeke",
-    
+
     /**
      * Bot's default prefix.
      * @type {string}
@@ -73,21 +73,6 @@ module.exports = {
      * @type {string|function}
      */
     webserverDisplay: "https://127.0.0.1:8826",
-
-    /**
-     * The port to host the webserver on. The default setting is 8090.
-     * @type {number}
-     */
-    httpPort: 8826,
-    //httpsPort: 8820, // Uncomment this line to use HTTPS. 
-
-    /**
-     * If httpsPort is present, these settings are used for HTTPS web server.
-     * @see https://nodejs.org/api/https.html#https_https_createserver_options_requestlistener
-     */
-    httpsSettings: {
-
-    },
 
     /**
      * The client ID and client secret. These are obtainable from the page where you got the token.
@@ -148,27 +133,68 @@ module.exports = {
      * The GitHub (personal) access token with `gist` permission.
      */
     gistKey: "a6ge954rb0zzt29ub897jf9b81t77a67erfv9",
-    
+
     /**
      * The initialization vector for encryption. You can either use your own 16 bytes or let the bot generate this.
      * @type {string}
      */
     encryptionIv: "",
 
-    /**
-     * The webhook details to post extension scope requests in
-     */
-    extensionFlagRequest: {
-        /**
-         * The webhook ID
+    webserver: {
+
+        /** 
+         * The hostname/IP address to host the webserver on.
          * @type {string}
          */
-        id: "1",
+        host: "127.0.0.1",
+
         /**
-         * The webhook token
-         * @type {string}
+         * Whether to serve static content or not
+         * THIS IS NOT RELIABLE IN PRODUCTION ENVIRONMENTS.
+         * If you'd like to serve static content through
+         * a different web server, point /static to node_modules/@tt-bot-dev/web/dist-client
+         * @type {boolean}
+         * @default false
          */
-        token: "nEsprAvedLiVo"
+        serveStatic: true,
+
+        /**
+         * Configures the website display URL. 
+         * This can be a function taking a URL if you for example want to use
+         * alternative links.
+         * @type {string|function}
+         */
+        display: "https://127.0.0.1:8826",
+
+        /**
+         * The port to host the webserver on. The default setting is 8090.
+         * @type {number}
+         */
+        httpPort: 8826,
+        //httpsPort: 8820, // Uncomment this line to use HTTPS. 
+
+        /**
+         * If httpsPort is present, these settings are used for HTTPS web server.
+         * @see https://nodejs.org/api/https.html#https_https_createserver_options_requestlistener
+         */
+        httpsSettings: {
+
+        },
+        /**
+         * The webhook details to post extension scope requests in
+         */
+        extensionFlagRequest: {
+            /**
+             * The webhook ID
+             * @type {string}
+             */
+            id: "1",
+            /**
+             * The webhook token
+             * @type {string}
+             */
+            token: "nEsprAvedLiVo"
+        },
     },
 
     /**
