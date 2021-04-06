@@ -23,8 +23,7 @@ const { user } = require("sosamba/lib/argParsers/switchSerializers/erisObjects")
 const Command = require("../lib/commandTypes/ModCommand");
 const BotSymbol = Symbol("tt.bot.clear.bots");
 const { User } = require("eris");
-// eslint cannot parse bigint literals :(
-const D_EPOCH = BigInt(1421280000000);
+const D_EPOCH = 1421280000000n;
 const sleep = ms => new Promise(rs => setTimeout(rs, ms));
 const FromResolver = async (val, ctx) => {
     if (val === "bots") return BotSymbol;
