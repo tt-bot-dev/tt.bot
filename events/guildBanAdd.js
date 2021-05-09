@@ -29,11 +29,14 @@ class GuildBanEvent extends Event {
     }
 
     async run(guild, user) {
-        const logConfig = await logging.getInfo(guild.id, this.sosamba.db);
+        const [logConfig, config] = await Promise.all([
+            logging.getInfo(guild.id, this.sosamba.db),
+            this.sosamba.db.getGuildConfig(guild.id)
+        ]);
+        
         if (logConfig.logEvents.includes("guildBan")) {
             await logging.handlers.ban(logConfig, guild, user, false);
         }
-        const config = await this.sosamba.db.getGuildConfig(guild.id);
         if (config?.modlogChannel && 
             guild.members.get(this.sosamba.user.id).permissions.has("viewAuditLogs")) {
             let auditLog;
