@@ -156,21 +156,6 @@ module.exports = {
         httpsSettings: {
 
         },
-        /**
-         * The webhook details to post extension scope requests in
-         */
-        extensionFlagRequest: {
-            /**
-             * The webhook ID
-             * @type {string}
-             */
-            id: "1",
-            /**
-             * The webhook token
-             * @type {string}
-             */
-            token: "nEsprAvedLiVo"
-        },
     },
 
     /**
