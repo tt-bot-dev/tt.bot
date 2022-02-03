@@ -19,48 +19,32 @@
 
 "use strict";
 const Command = require("../lib/commandTypes/ModCommand");
-const { SimpleArgumentParser } = require("sosamba");
+const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const { version: sosambaVersion } = require("sosamba/package.json");
 
 class UpdateReasonCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "reason",
-            args: "<caseID:String> <reason:String...>",
-            argParser: new SimpleArgumentParser(sosamba, {
+            args: [{
+                name: "case_id",
+                description: "The punishment to remove.",
+                type: ApplicationCommandOptionTypes.STRING,
+                required: true,
+            }, {
+                name: "reason",
+                description: "The new reason.",
+                type: ApplicationCommandOptionTypes.STRING,
+                required: true,
+            }],// "<caseID:String> <reason:String...>",
+            /*argParser: new SimpleArgumentParser(sosamba, {
                 separator: " "
-            }),
+            }),*/
             description: "Updates the reason for a strike."
         });
     }
 
-    async run(ctx, [caseID, ...reason]) {
-        if (!caseID) {
-            await ctx.send({
-                embed: {
-                    title: ":x: Argument required",
-                    description: "The argument `caseID` is required.",
-                    color: 0xFF0000,
-                    footer: {
-                        text: `Sosamba v${sosambaVersion}`
-                    }
-                }
-            });
-            return;
-        }
-        if (reason.length === 0) {
-            await ctx.send({
-                embed: {
-                    title: ":x: Argument required",
-                    description: "The argument `reason` is required.",
-                    color: 0xFF0000,
-                    footer: {
-                        text: `Sosamba v${sosambaVersion}`
-                    }
-                }
-            });
-            return;
-        }
+    async run(ctx, { case_id: caseID, reason }) {
         try {
             await this.sosamba.modLog.updateReason(caseID, ctx, reason.join(" "));
         } catch(err) {

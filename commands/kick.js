@@ -18,8 +18,7 @@
  */
 
 "use strict";
-const { SwitchArgumentParser,
-    Serializers: { Member } } = require("sosamba");
+const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const Command = require("../lib/commandTypes/ModCommand");
 const { PunishTypes } = require("../lib/modlog/constants");
 
@@ -27,7 +26,7 @@ class KickCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "kick",
-            argParser: new SwitchArgumentParser(sosamba, {
+            /*argParser: new SwitchArgumentParser(sosamba, {
                 user: {
                     type: Member,
                     description: "The user to kick"
@@ -37,7 +36,18 @@ class KickCommand extends Command {
                     default: "No reason provided.",
                     description: "The reason for the kick"
                 }
-            }),
+            }),*/
+            args: [{
+                name: "user",
+                description: "The user to ban.",
+                type: ApplicationCommandOptionTypes.USER,
+                required: true,
+            }, {
+                name: "reason",
+                description: "The reason for the ban",
+                type: ApplicationCommandOptionTypes.STRING,
+                required: false
+            }],
             description: "Kicks a user."
         });
     }
@@ -47,14 +57,17 @@ class KickCommand extends Command {
     }
 
     async run(ctx, { user, reason }) {
+        let _reason = reason ?? "No reason provided.";
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
             if (!this.sosamba.hasBotPermission(ctx.channel, "kickMembers") || !this.sosamba.passesRoleHierarchy(ctx.guild.members.get(this.sosamba.user.id), user)){
                 await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
                 return;
             }
-            await user.kick(encodeURIComponent(`${this.sosamba.getTag(ctx.author)}: ${reason}`));
-            this.sosamba.modLog.createPunishment(ctx, PunishTypes.KICK, user.id, reason);
-            await ctx.send(await ctx.t("KICK_DONE", user));
+            await user.kick(encodeURIComponent(`${this.sosamba.getTag(ctx.author)}: ${_reason}`));
+            this.sosamba.modLog.createPunishment(ctx, PunishTypes.KICK, user.id, _reason);
+            await ctx.send(await ctx.t("KICK_DONE", {
+                user: this.sosamba.getTag(user)
+            }));
         } else {
             await ctx.send(await ctx.t("ROLE_HIERARCHY_ERROR"));
         }

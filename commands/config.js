@@ -20,6 +20,7 @@
 "use strict";
 const { ReactionMenu } = require("sosamba");
 const { role, channel } = require("sosamba/lib/argParsers/switchSerializers/erisObjects");
+const config = require("../config");
 const { prefix: defaultPrefix } = require("../config");
 const Command = require("../lib/commandTypes/AdminCommand");
 const ConfigProps = require("../lib/util/config/Properties");
@@ -65,13 +66,17 @@ class ConfigMenu extends ReactionMenu {
             embed: {
                 color: 0x008800,
                 title: await this.ctx.t(propInfo.translationKey),
-                description: await this.ctx.t("SETTING_CURRENT_VAL", valueText),
+                description: await this.ctx.t("SETTING_CURRENT_VAL", {
+                    val: valueText
+                }),
                 fields: [{
                     name: await this.ctx.t("SETTING_SET"),
                     value: await this.ctx.t("SETTING_SET_DESCRIPTION")
                 }, {
                     name: await this.ctx.t(propInfo.default ? "SETTING_RESET" : "SETTING_DISABLE"),
-                    value: propInfo.default ? await this.ctx.t("SETTING_RESET_DESCRIPTION", propInfo.default) : await this.ctx.t("SETTING_DISABLE_DESCRIPTION")
+                    value: propInfo.default ? await this.ctx.t("SETTING_RESET_DESCRIPTION", {
+                        default: propInfo.default
+                    }) : await this.ctx.t("SETTING_DISABLE_DESCRIPTION")
                 }, {
                     name: await this.ctx.t("SETTING_HOME"),
                     value: await this.ctx.t("SETTING_HOME_DESCRIPTION")
@@ -124,7 +129,9 @@ class ConfigMenu extends ReactionMenu {
         const { prop, propInfo } = this.currentlyEditing;
         const m = await this.ctx.channel.createMessage(
             await this.ctx.t(propInfo.default ? "QUESTION_RESET" : "QUESTION_DISABLE",
-                await this.ctx.t(ConfigProps[prop].translationKey))
+                {
+                    setting: await this.ctx.t(ConfigProps[prop].translationKey)
+                })
         );
         const resp = await this.ctx.askYesNo();
         if (resp) {
@@ -175,11 +182,15 @@ class ConfigMenu extends ReactionMenu {
     static async DEFAULT_OBJ(ctx) {
         return {
             embed: {
-                description: await ctx.t("WELCOME_TO_CONFIG"),
+                description: await ctx.t("WELCOME_TO_CONFIG", {
+                    webInterfaceURL: config.webserver.display("/")
+                }),
                 color: 0x008800,
                 fields: await Promise.all(Object.values(ConfigProps).map(async n => ({
                     name: await ctx.t(n.translationKey),
-                    value: await ctx.t(n.descriptionTranslationKey)
+                    value: await ctx.t(n.descriptionTranslationKey, {
+                        defaultPrefix: config.prefix
+                    })
                 })))
             }
         };
@@ -231,6 +242,7 @@ class ConfigCommand extends Command {
     }
 
     async run(ctx) {
+        return; // Currently not implementable until Discord releases forms
         if (!await ctx.guildConfig) {
             await ctx.db.createGuildConfig(ctx._guildConfig = {
                 id: ctx.guild.id,

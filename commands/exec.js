@@ -18,6 +18,8 @@
  */
 
 "use strict";
+const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
+const { homeGuild } = require("../config");
 const Command = require("../lib/commandTypes/OwnerCommand");
 const CensorBuilder = require("../lib/CensorBuilder");
 const makegist = require("../lib/gist");
@@ -30,7 +32,14 @@ class ExecCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "exec",
-            description: "Executes shell commands."
+            args: [{
+                name: "command",
+                description: "The command to execute.",
+                type: ApplicationCommandOptionTypes.STRING,
+                required: true,
+            }],
+            description: "Executes shell commands.",
+            registerIn: homeGuild
         });
     }
     exec(command) {

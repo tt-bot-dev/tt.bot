@@ -26,11 +26,16 @@ class HackbanCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "hackban",
-            args: "<users:String...>",
-            argParser: new SimpleArgumentParser(sosamba, {
+
+            // Rest args when?
+            /*args: [{
+                name: "user",
+                description: "The user to ban, by ID.",
+            }],*/ //"<users:String...>",
+            /*argParser: new SimpleArgumentParser(sosamba, {
                 separator: " ",
                 filterEmptyArguments: true
-            }),
+            }),*/
             description: "Bans an user by ID."
         });
     }
@@ -63,22 +68,26 @@ class HackbanCommand extends Command {
                 const bans = await Promise.all(users.map(
                     u => this.doBan(ctx, u, false, true)
                 ));
-                await ctx.send(await ctx.t("HACKBANNED_USERS", bans.filter(b => b).length));
+                await ctx.send(await ctx.t("HACKBANNED_USERS", {
+                    users: bans.filter(b => b).length
+                }));
             }
         }
     }
 
     async doBan(ctx, id, send, mass) {
-        const [ member ] = await this.sosamba.memberRequester.request(ctx.guild, [ id ]);
+        const [member] = ctx.guild.members.has(id) ? [ ctx.guild.members.get(id) ] : await this.sosamba.memberRequester.request(ctx.guild, [id]);
         try {
             if (member && !ctx.sosamba.passesRoleHierarchy(ctx.member, member)) {
                 await ctx.send(await ctx.t("ROLE_HIERARCHY_ERROR"));
                 return false;
             }
-            await ctx.guild.banMember(id, 0, 
+            await ctx.guild.banMember(id, 0,
                 `${mass === false ? "Hackbanned" : "Masshackbanned"} by ${ctx.sosamba.getTag(ctx.author)}`);
-            if (send) await ctx.send(await ctx.t("BAN_DONE", member || { username: `Unknown User (${id})`, discriminator: "0000" }));
-            return true;   
+            if (send) await ctx.send(await ctx.t("BAN_DONE", {
+                user: this.sosamba.getTag(member || { username: `Unknown User (${id})`, discriminator: "0000" })
+            }));
+            return true;
         } catch (e) {
             console.error(e);
             if (send) await ctx.send(await ctx.t("MISSING_PERMISSIONS"));

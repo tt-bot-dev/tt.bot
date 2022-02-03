@@ -4,10 +4,7 @@
     "description": "A bot with aim for moderation and utilities made in JS using Eris.",
     "main": "index.js",
     "dependencies": {
-        "@polka/redirect": "^1.0.0-next.0",
-        "@polka/send-type": "^0.5.2",
         "@tt-bot-dev/e2p": "git+https://owo.codes/tt.bot/modules/e2p.git",
-        "@tt-bot-dev/extension-runner": "git+https://owo.codes/tt.bot/extensions/runner.git",
         "@tt-bot-dev/web": "git+https://owo.codes/tt.bot/modules/web.git",
         "@types/node": "^13.11.0",
         "@types/node-fetch": "^2.5.5",
@@ -15,23 +12,21 @@
         "emoji-regex": "^9.0.0",
         "eris": "github:abalabahaha/eris#dev",
         "gifwrap": "^0.9.2",
+        "intl-messageformat": "^9.3.20",
         "jimp": "^0.10.1",
         "jimp-upng": "git+https://owo.codes/tt.bot/frameworks/jimp-upng.git",
         "luxon": "^1.25.0",
         "node-fetch": "^2.6.0",
         "rethinkdbdash": "^2.3.31",
-        "sosamba": "^1.0.1",
+        "sosamba": "git+https://owo.codes/tt.bot/frameworks/sosamba#v2.0.0",
+        "undici": "^4.8.1",
         "uuid": "^7.0.3",
-        "vm2": "^3.9.1",
         "workers-as-promised": "git+https://owo.codes/tt.bot/external/WorkersAsPromised.git"
     },
     "devDependencies": {
-        "@tt-bot-dev/eslint-config": "^1.0.1",
-        "bulma": "^0.8.2",
-        "eslint": "^7.1.2",
-        "node-sass": "^4.13.1",
-        "uglify-es": "^3.3.9",
-        "babel-eslint": "^10.1.0"
+        "@tt-bot-dev/eslint-config": "git+https://owo.codes/tt.bot/frameworks/eslint-config.git",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^8.5.0"
     },
     "scripts": {
         "test": "eslint .",

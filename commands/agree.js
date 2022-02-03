@@ -20,13 +20,13 @@
 "use strict";
 
 const { Command } = require("sosamba");
-const dmReply = require("../lib/util/sendReplyToDMs");
 
 class AgreeCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "agree",
             description: "If the server has set up the rule agreement feature, agrees to the server's rules.",
+            guildOnly: true,
         });
     }
     async run(ctx) {
@@ -38,18 +38,21 @@ class AgreeCommand extends Command {
         try {
             if (!ctx.guild.members.get(this.sosamba.user.id).permissions.has("manageRoles")) throw new Error();
             await ctx.member.addRole(memberRole, "Agreement to server's rules");
+
+            await ctx.send({
+                content: "Welcome to the server!",
+                flags: 64
+            });
         } catch {
-            try {
-                await dmReply(ctx.author, await ctx.t("AGREE_FAULT", ctx.guild.members.get(ctx.guild.ownerID)));
-            } catch {
-                const m = await ctx.send(`${ctx.author.mention} ${await ctx.t("AGREE_FAULT", ctx.guild.members.get(ctx.guild.ownerID))}`);
-                setTimeout(() => m.delete(), 5000);
-            }
-        }
-        try {
-            await ctx.msg.delete();
-        } catch {
-            return;
+            const agreeFaultMessage = await ctx.t("AGREE_FAULT", {
+                serverOwner: this.sosamba.getTag(ctx.guild.members.get(ctx.guild.ownerID) ||
+                    (await this.sosamba.memberRequester.request(ctx.guild, [ctx.guild.ownerID]))[0])
+            });
+
+            await ctx.send({
+                content: agreeFaultMessage,
+                flags: 64
+            });
         }
     }
 }

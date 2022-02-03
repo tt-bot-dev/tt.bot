@@ -18,7 +18,7 @@
  */
 
 "use strict";
-const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
+const { Command, ParsingError, Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const Regexes = require("../lib/e2p/regexes");
 const UnicodeEmojiRegex = require("emoji-regex");
 const EmojiSerializer = val => {
@@ -33,7 +33,7 @@ class EmojiCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "emoji",
-            argParser: new SerializedArgumentParser(sosamba, {
+            /*argParser: new SerializedArgumentParser(sosamba, {
                 separator: " ",
                 filterEmptyArguments: true,
                 args: [{
@@ -48,22 +48,35 @@ class EmojiCommand extends Command {
                     description: "the emojis to convert into a picture"
                 }],
                 allowQuotedString: false
-            }),
+            }),*/
+            args: [{
+                name: "emojis",
+                description: "The emojis to render.",
+                type: ApplicationCommandOptionTypes.STRING,
+                required: true,
+            }, {
+                name: "gif",
+                description: "Whether to render this GIF as a picture or not.",
+                type: ApplicationCommandOptionTypes.BOOLEAN,
+                required: false
+            }],
             description: "Render up to 5 emojis as a picture.",
             aliases: ["e2p"]
         });
     }
-    async run(ctx, [asGif, ...input]) {
-        if (input.length > 5) input = input.filter(t => t !== "--gif").slice(0, 5);
+    async run(ctx, { emojis, gif }) {
+        this.log.debug(emojis);
+        const input = emojis.split(" ");
+        if (input.length > 5) input = input.slice(0, 5);
         await ctx.send(await ctx.t("IMAGE_GENERATING"));
         const t = process.hrtime();
         let b;
         try {
-            b = await this.sosamba.workers.sendToRandom(0, "generateImage", { input, asGif }).promise;
+            b = await this.sosamba.workers.sendToRandom(0, "generateImage", { input, asGif: gif }).promise;
             if (b && b.err) throw b.err;
         } catch (err) {
             this.log.error(err);
-            ctx.send(await ctx.t("ERROR", err));
+            ctx.send(await ctx.t("ERROR", { error: err.stack ?? err.toString() }));
             return;
         }
         if (!b) {
@@ -83,7 +96,10 @@ class EmojiCommand extends Command {
                     value: await ctx.t("IMAGE_CAVEATS")
                 }] : [],
                 footer: {
-                    text: await ctx.t("IMAGE_GENERATION_TIME", ...hrtime)
+                    text: await ctx.t("IMAGE_GENERATION_TIME", {
+                        seconds: hrtime[0], 
+                        ms: Math.floor(hrtime[1] / 1e6)
+                    })
                 }
             }
         }, {

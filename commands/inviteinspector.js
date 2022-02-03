@@ -24,13 +24,15 @@ class InviteInspectorCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "inviteinspector",
-            args: "<invite:String>",
+            //args: "<invite:String>",
             description: "Gets information about an invite.",
             aliases: ["iinspector"]
         });
     }
 
     async run(ctx, args) {
+        return; // TODO: decide on the future of this command... it might be a candidate for removal
+        
         let inviteData;
         try {
             inviteData = await this.sosamba.getInvite(args, true);

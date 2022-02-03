@@ -36,35 +36,43 @@ class InfoCommand extends Command {
             config.ownerID.map(i => this.getOwnerInfo(i, this.sosamba.users.get(i))) : 
             [this.getOwnerInfo(config.ownerID, this.sosamba.users.get(config.ownerID))];
         await ctx.send({
-            embed: {
+            embeds: [{
                 author: {
                     name: this.sosamba.user.username,
                     icon_url: this.sosamba.user.staticAvatarURL
                 }, 
                 fields: [{
                     name: await ctx.t("INFO_STATS"),
-                    value: await ctx.t("INFO_STATS_TEXT"),
+                    value: await ctx.t("INFO_STATS_TEXT", {
+                        guilds: this.sosamba.guilds.size,
+                        users: this.sosamba.users.size,
+                        channels: Object.keys(this.sosamba.channelGuildMap).length
+                    }),
                     inline: true
                 }, {
                     name: await ctx.t("INFO_AUTHORS"),
-                    value: await ctx.t("INFO_OWNERS", ownerStrings),
-                    inline: true
-                }, {
-                    name: await ctx.t("INFO_DONATE"),
-                    value: "https://ko-fi.com/tttie",
+                    value: await ctx.t("INFO_OWNERS", {
+                        owners: ownerStrings.join("\n")
+                    }),
                     inline: true
                 }, {
                     name: await ctx.t("INFO_VERSIONS"),
-                    value: `tt.bot: ${require("../package.json").version}\nSosamba: ${require("sosamba/package.json").version}\nEris: ${require("../node_modules/eris/package.json").version}\nNode.js: ${process.versions.node}\nV8: ${process.versions.v8}\n[Privacy](https://tttie.cz/privacy/tt.bot.html)`,
+                    value: `tt.bot: ${require("../package.json").version}\nSosamba: ${require("sosamba/package.json").version}\nEris: ${require("../node_modules/eris/package.json").version}\nNode.js: ${process.versions.node}\nV8: ${process.versions.v8}`,
                     inline: true
                 },
                 {
                     name: await ctx.t("INFO_UPTIME"),
-                    value: this.getUptime(),
+                    value: await this.getUptime(ctx),
                     inline: true
+                },
+                {
+                    name: await ctx.t("INFO_FREE_SOFTWARE"),
+                    value: await ctx.t("INFO_FREE_SOFTWARE_DESCRIPTION", {
+                        learnMore: config.webserver.display("/license")
+                    })
                 }],
                 color: 0x008800
-            }
+            }]
         });
     }
 
@@ -72,7 +80,7 @@ class InfoCommand extends Command {
         return `<@${id}> (${owner ? `${owner.username}#${owner.discriminator}` : "unknown to me :("})`;
     }
 
-    getUptime() {
+    getUptime(ctx) {
         const diff = luxon.DateTime.utc().diff(luxon.DateTime.fromMillis(this.sosamba.readyTime), [
             "days",
             "hours",
@@ -80,7 +88,35 @@ class InfoCommand extends Command {
             "seconds"
         ]);
 
-        return `${diff.days > 0 ? Math.floor(diff.days) + " days, " : ""}${diff.hours > 0 ? Math.floor(diff.hours) + " hours, " : ""}${Math.floor(diff.minutes)} minutes, and ${Math.floor(diff.seconds)} seconds`;
+        return this._formatDiff(ctx, diff);
+    }
+
+    async _formatDiff(ctx, diff) {
+        const userLanguage = await ctx.userLanguage;
+
+        const commonOptions = {
+            style: "unit",
+            unitDisplay: "long"
+        };
+
+        const dayFormatter = new Intl.NumberFormat(userLanguage, {
+            ...commonOptions,
+            unit: "day"
+        });
+        const hourFormatter = new Intl.NumberFormat(userLanguage, {
+            ...commonOptions,
+            unit: "hour"
+        });
+        const minuteFormatter = new Intl.NumberFormat(userLanguage, {
+            ...commonOptions,
+            unit: "minute"
+        });
+        const secondFormatter = new Intl.NumberFormat(userLanguage, {
+            ...commonOptions,
+            unit: "second"
+        });
+
+        return `${diff.days > 0 ? `${dayFormatter.format(diff.days)}, ` : ""}${diff.hours > 0 ? `${hourFormatter.format(diff.hours)}, ` : ""}${minuteFormatter.format(diff.minutes)}, ${secondFormatter.format(Math.floor(diff.seconds))}`;
     }
 }
 

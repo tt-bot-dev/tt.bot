@@ -19,21 +19,24 @@
 
 "use strict";
 const Command = require("../lib/commandTypes/OwnerCommand");
+const { homeGuild } = require("../config");
 const { STOP_REASONS } = require("sosamba/lib/Constants");
 
 class ExitCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "exit",
-            description: "Kills the bot, shutting down all reaction menus and message listeners gracefully."
+            description: "Kills the bot, shutting down all reaction menus and message listeners gracefully.",
+            registerIn: homeGuild
         });
     }
     async run(ctx) {
-        this.sosamba.reactionMenus.forEach(menu => {
+        // Shutdown whatever new mechanism comes into sosamba v2
+        /*this.sosamba.reactionMenus.forEach(menu => {
             this.sosamba.reactionMenus.remove(menu);
             menu.stopCallback(STOP_REASONS.SHUTDOWN);
         });
-        this.sosamba.messageListeners.clear();
+        this.sosamba.messageListeners.clear();*/
         this.sosamba.disconnect({
             reconnect: false
         });

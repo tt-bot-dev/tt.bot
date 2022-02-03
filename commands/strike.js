@@ -19,7 +19,7 @@
 
 "use strict";
 const Command = require("../lib/commandTypes/ModCommand");
-const { SwitchArgumentParser, Serializers: { Member } } = require("sosamba");
+const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const UserProfile = require("../lib/Structures/UserProfile");
 const { PunishTypes } = require("../lib/modlog/constants");
 
@@ -28,39 +28,58 @@ class StrikeCommand extends Command {
         super(sosamba, ...args, {
             name: "strike",
             description: "Strikes a user.",
-            argParser: new SwitchArgumentParser(sosamba, {
-                user: {
+            args: [{
+                name: "user",
+                description: "The user to ban.",
+                type: ApplicationCommandOptionTypes.USER,
+                required: true,
+            }, {
+                name: "reason",
+                description: "The reason for the ban",
+                type: ApplicationCommandOptionTypes.STRING,
+                required: false
+            }],
+            /*argParser: new SerializedArgumentParser(sosamba, {
+                args: [{
                     type: Member,
-                    description: "the user to strike"
-                },
-                reason: {
+                    description: "the user to strike",
+                    name: "user"
+                }, {
+                    name: "reason",
                     type: String,
                     description: "the strike reason",
-                    default: "No reason provided."
-                }
-            }),
+                    default: "No reason provided.",
+                    rest: true
+                }]
+            }),*/
             aliases: ["warn"]
         });
     }
 
     async run(ctx, { user, reason }) {
+        const _reason = reason ?? "No reason provided.";
         if (user.bot) return ctx.send(await ctx.t("BOTS_NOT_STRIKABLE"));
-        await this.sosamba.modLog.createPunishment(ctx, PunishTypes.STRIKE, user.id, reason);
-        const dm = await user.user.getDMChannel();
-        const p = await ctx.db.getUserProfile(user.id);
+        await this.sosamba.modLog.createPunishment(ctx, PunishTypes.STRIKE, user.id, _reason);
+        const [dm, p] = await Promise.all([
+            user.user.getDMChannel(),
+            ctx.db.getUserProfile(user.id)
+        ]);
         const prof = new UserProfile(p || {});
         try {
             await dm.createMessage({
                 embed: {
-                    title: await this.sosamba.i18n.getTranslation("YOU_GOT_STRIKED", prof.locale || "en"),
-                    description: await this.sosamba.i18n.getTranslation("STRIKE_DETAILS", prof.locale || "en", this.sosamba.getTag(ctx.author), reason),
+                    title: await this.sosamba.localeManager.translate(prof.locale || "en", "YOU_GOT_STRIKED"),
+                    description: await this.sosamba.localeManager.translate(prof.locale || "en", "STRIKE_DETAILS", {
+                        issuer: this.sosamba.getTag(ctx.author),
+                        reason: _reason
+                    }),
                     footer: {
-                        text: await this.sosamba.i18n.getTranslation("PAY_ATTENTION", prof.locale || "en")
+                        text: await this.sosamba.localeManager.translate(prof.locale || "en", "PAY_ATTENTION")
                     },
                     timestamp: new Date()
                 }
             });
-        } catch {}
+        } catch { }
         await ctx.send(":ok_hand:");
     }
 }

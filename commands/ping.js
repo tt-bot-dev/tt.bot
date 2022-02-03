@@ -30,18 +30,24 @@ class PingCommand extends Command {
     }
 
     async run(ctx) {
-        const m = await ctx.send(":ping_pong:");
+        await ctx.interaction.defer();
 
-        await ctx.send({
+        const m = await ctx.interaction.createFollowup(":ping_pong:");
+
+        await ctx.interaction.editOriginalMessage({
             content: "",
-            embed: {
+            embeds: [{
                 title: await ctx.t("PONG"),
-                description: await ctx.t("PING_LATENCY", m.timestamp - ctx.msg.timestamp),
+                description: await ctx.t("PING_LATENCY", {
+                    ms: m.timestamp - ctx.interaction.createdAt
+                }),
                 footer: {
-                    text: await ctx.t("PING_DISCORD_LATENCY", ctx.guild.shard.latency)
+                    text: await ctx.t("PING_DISCORD_LATENCY", {
+                        ms: ctx.guild.shard.latency
+                    })
                 },
                 color: 0x008800
-            }
+            }]
         });
     }
 }

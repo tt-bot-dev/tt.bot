@@ -18,24 +18,19 @@
  */
 
 "use strict";
-const { Command, SerializedArgumentParser, Eris: {
-    User
-} } = require("sosamba");
+const { Command, Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const UserProfile = require("../lib/Structures/UserProfile");
 
 class TimeForCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "timefor",
-            argParser: new SerializedArgumentParser(sosamba, {
-                args: [{
-                    default: ctx => ctx.author,
-                    name: "user",
-                    rest: true,
-                    type: User,
-                    description: "the user to get the time for"
-                }]
-            }),
+            args: [{
+                name: "user",
+                description: "The user to get the time for.",
+                type: ApplicationCommandOptionTypes.USER,
+                required: true,
+            }],
             description: "Gets the current time of a user.",
             aliases: ["tf", "time"]
         });
@@ -45,11 +40,13 @@ class TimeForCommand extends Command {
         const profile = await ctx.db.getUserProfile(user.id);
         if (!profile) return await ctx.send(
             await ctx.t(`PROFILE${user.id === ctx.author.id ? "" : "_SPECIFIC"}_NONEXISTENT`,
-                this.sosamba.getTag(user)));
+                { user: this.sosamba.getTag(user) }));
         const data = new UserProfile(profile);
         if (!data.timezone) return await ctx.send(await ctx.t("NO_TZ"));
-        return ctx.send(await ctx.t("TIME_FOR", await ctx.formatDate(Date.now(), data.timezone),
-            this.sosamba.getTag(user)));
+        return ctx.send(await ctx.t("TIME_FOR", {
+            time: await ctx.formatDate(Date.now(), data.timezone),
+            user: this.sosamba.getTag(user)
+        }));
     }
 }
 

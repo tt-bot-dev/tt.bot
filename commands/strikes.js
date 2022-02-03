@@ -18,13 +18,13 @@
  */
 
 "use strict";
-const { Command, SerializedArgumentParser, Serializers: { User } } = require("sosamba");
+const { Command, Eris: { Constants: { ApplicationCommandOptionTypes } }, Serializers: { User } } = require("sosamba");
 
 class StrikeListCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "strikes",
-            argParser: new SerializedArgumentParser(sosamba, {
+            /*argParser: new SerializedArgumentParser(sosamba, {
                 args: [{
                     name: "user",
                     type: User,
@@ -32,7 +32,13 @@ class StrikeListCommand extends Command {
                     rest: true,
                     description: "The user to get the strikes for"
                 }]
-            }),
+            }),*/
+            args: [{
+                name: "user",
+                description: "The user to ban.",
+                type: ApplicationCommandOptionTypes.USER,
+                required: true,
+            }],
             description: "Gets user's strikes.",
             aliases: ["warns"]
         });
@@ -52,15 +58,17 @@ class StrikeListCommand extends Command {
             });
         } else {
             await ctx.send({
-                embed: {
+                embeds: [{
                     author: {
-                        name: await ctx.t("STRIKE_OVERVIEW", this.sosamba.getTag(user))
+                        name: await ctx.t("STRIKE_OVERVIEW", {
+                            user: this.sosamba.getTag(user)
+                        })
                     },
                     fields: strikes.map(s => ({
                         name: `ID: ${s.id}`,
                         value: s.reason
                     }))
-                }
+                }]
             });
         }
     }

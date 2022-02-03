@@ -18,7 +18,7 @@
  */
 
 "use strict";
-const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
+const { Command, Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const OwnerCommand = require("../lib/commandTypes/OwnerCommand");
 const { version: sosambaVersion } = require("sosamba/package.json");
 const ShowSymbol = Symbol("tt.bot.tags.show");
@@ -28,10 +28,10 @@ const DeleteSymbol = Symbol("tt.bot.tags.delete");
 const TagObject = require("../lib/Structures/TagObject");
 
 class TagCommand extends Command {
-    constructor(sosamba, ...args) {
-        super(sosamba, ...args, {
+    constructor(sosamba, fn, fp) {
+        super(sosamba, fn, fp, {
             name: "tags",
-            argParser: new SerializedArgumentParser(sosamba, {
+            /*argParser: new SerializedArgumentParser(sosamba, {
                 allowQuotedString: true,
                 args: [{
                     name: "action",
@@ -55,85 +55,132 @@ class TagCommand extends Command {
                     description: "a required argument for the create and edit commands, else it isn't required"
                 }],
                 separator: " "
-            }),
+            }),*/
+            args: [
+                {
+                    name: "show",
+                    description: "Shows the contents of a tag",
+                    type: ApplicationCommandOptionTypes.SUB_COMMAND,
+                    options: [{
+                        name: "name",
+                        description: "The tag name",
+                        type: ApplicationCommandOptionTypes.STRING,
+                        required: true,
+                    }]
+                },
+                {
+                    name: "create",
+                    description: "Creates a tag",
+                    type: ApplicationCommandOptionTypes.SUB_COMMAND,
+                    options: [
+                        {
+                            name: "name",
+                            description: "The tag name",
+                            type: ApplicationCommandOptionTypes.STRING,
+                            required: true,
+                        }, {
+                            name: "content",
+                            description: "New tag contents",
+                            type: ApplicationCommandOptionTypes.STRING,
+                            required: true
+                        }
+                    ]
+                },
+                {
+                    name: "edit",
+                    description: "Edits a tag",
+                    type: ApplicationCommandOptionTypes.SUB_COMMAND,
+                    options: [
+                        {
+                            name: "name",
+                            description: "The tag name",
+                            type: ApplicationCommandOptionTypes.STRING,
+                            required: true,
+                        }, {
+                            name: "content",
+                            description: "New tag contents",
+                            type: ApplicationCommandOptionTypes.STRING,
+                            required: true
+                        }
+                    ]
+                },
+                {
+                    name: "delete",
+                    description: "Deletes a tag",
+                    type: ApplicationCommandOptionTypes.SUB_COMMAND,
+                    options: [{
+                        name: "name",
+                        description: "The tag name",
+                        type: ApplicationCommandOptionTypes.STRING,
+                        required: true,
+                    }]
+                },
+            ],
             description: "Store some data for later retrieval. Keep in mind that the tags are global and accessible by everyone.\n[ttMsg](https://github.com/tt-bot-dev/tt.bot/blob/master/docs/ttMsg.md) can be used in tags.",
             aliases: ["t", "tag"]
         });
     }
 
-    async run(ctx, [action, tag, val]) {
-        if (action === ShowSymbol) {
-            const d = await ctx.db.getTag(ctx.encryptData(tag));
-            if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
-            const data = new TagObject(d);
-            await ctx.send({
-                embed: {
-                    author: {
-                        name: await ctx.t("TAG_DISPLAY", data.id)
-                    },
-                    description: this.sosamba.parseMsg(data.content, ctx.member, ctx.guild)
+    async run(ctx, { name, content }) {
+        switch (ctx.subcommand) {
+            case "show": {
+                const d = await ctx.db.getTag(ctx.encryptData(name));
+                if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
+                const data = new TagObject(d);
+                await ctx.send({
+                    embed: {
+                        author: {
+                            name: await ctx.t("TAG_DISPLAY", {
+                                tag: data.id
+                            })
+                        },
+                        description: this.sosamba.parseMsg(data.content, ctx.member, ctx.guild)
+                    }
+                });
+                break;
+            }
+
+            case "delete": {
+                const d = await ctx.db.getTag(ctx.encryptData(name));
+                if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
+                if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== d.owner) {
+                    return await ctx.send(await ctx.t("TAG_NOTOWNER"));
+                } else {
+                    await ctx.db.deleteTag(ctx.encryptData(name));
+                    await ctx.send(await ctx.t("TAG_DELETED", { tag: name }));
                 }
-            });
-        } else if (action === DeleteSymbol) {
-            const d = await ctx.db.getTag(ctx.encryptData(tag));
-            if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
-            if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== d.owner) {
-                return await ctx.send(await ctx.t("TAG_NOTOWNER"));
-            } else {
-                await ctx.db.deleteTag(ctx.encryptData(tag));
-                await ctx.send(await ctx.t("TAG_DELETED", tag));
-            }
-        } else if (action === EditSymbol) {
-            if (!val) {
-                await ctx.send({
-                    embed: {
-                        title: ":x: Argument required",
-                        description: "The argument `value` is required.",
-                        color: 0xFF0000,
-                        footer: {
-                            text: `Sosamba v${sosambaVersion}`
-                        }
-                    }
-                });
-                return;
+                break;
             }
 
-            
-            const d = await ctx.db.getTag(ctx.encryptData(tag));
-            if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
-            const data = new TagObject(d);
-            if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== data.owner) {
-                return await ctx.send(await ctx.t("TAG_NOTOWNER"));
-            } else {
-                data.content = val;
-                await ctx.db.updateTag(ctx.encryptData(tag),
-                    data.toEncryptedObject());
-                await ctx.send(await ctx.t("TAG_UPDATED", tag));
-            }
-        } else if (action === CreateSymbol) {
-            if (!val) {
-                await ctx.send({
-                    embed: {
-                        title: ":x: Argument required",
-                        description: "The argument `value` is required.",
-                        color: 0xFF0000,
-                        footer: {
-                            text: `Sosamba v${sosambaVersion}`
-                        }
-                    }
-                });
-                return;
+            case "edit": {
+                const d = await ctx.db.getTag(ctx.encryptData(name));
+                if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
+                const data = new TagObject(d);
+                if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== data.owner) {
+                    return await ctx.send(await ctx.t("TAG_NOTOWNER"));
+                } else {
+                    data.content = content;
+                    await ctx.db.updateTag(ctx.encryptData(name),
+                        data.toEncryptedObject());
+                    await ctx.send(await ctx.t("TAG_UPDATED", {
+                        tag: name
+                    }));
+                }
+                break;
             }
 
-            if (await ctx.db.getTag(ctx.encryptData(tag)))
-                return await ctx.send(await ctx.t("TAG_EXISTS"));
+            case "create": {
+                if (await ctx.db.getTag(ctx.encryptData(name)))
+                    return await ctx.send(await ctx.t("TAG_EXISTS"));
 
-            await ctx.db.createTag(TagObject.create({
-                id: tag,
-                content: val,
-                owner: ctx.author.id
-            }));
-            await ctx.send(await ctx.t("TAG_CREATED", tag));
+                await ctx.db.createTag(TagObject.create({
+                    id: name,
+                    content,
+                    owner: ctx.author.id
+                }));
+                await ctx.send(await ctx.t("TAG_CREATED", { tag: name }));
+                break;
+            }
         }
     }
 }

@@ -18,6 +18,8 @@
  */
 
 "use strict";
+const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
+const { homeGuild } = require("../config");
 const Command = require("../lib/commandTypes/OwnerCommand");
 const { inspect } = require("util");
 const AsyncFunction = (async () => "").constructor;
@@ -27,11 +29,18 @@ class EvalCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "eval",
-            description: "Evaluates JavaScript code."
+            args: [{
+                name: "code",
+                description: "The code to evaluate",
+                type: ApplicationCommandOptionTypes.STRING,
+                required: true
+            }],
+            description: "Evaluates JavaScript code.",
+            registerIn: homeGuild
         });
     }
 
-    async run(ctx, args) {
+    async run(ctx, { code: args }) {
         let d;
         try {
             d = await new AsyncFunction("ctx", "args",
@@ -49,28 +58,28 @@ class EvalCommand extends Command {
                 if (!gist.ok) throw new Error();
             } catch (err) {
                 await ctx.send({
-                    embed: {
+                    embeds: [{
                         title: "Evaluated!",
                         color: 0x008800,
                         description: "Unfortunately, we can't provide the data here because they're too long and the request to GitHub's Gist APIs has failed.\nThereby, the output has been logged in the console."
-                    }
+                    }]
                 });
                 this.log.log(v);
                 return;
             }
             return await ctx.send({
-                embed: {
+                embeds: [{
                     title: "Evaluated!",
                     color: 0x008800,
                     description: `The data are too long. [View the gist here](${gist.body.html_url})`
-                }
+                }]
             });
         } else {
             ctx.send({
-                embed: {
+                embeds: [{
                     description,
                     color: 0x008800
-                }
+                }]
             });
         }
     }

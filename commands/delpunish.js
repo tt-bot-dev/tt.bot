@@ -19,40 +19,37 @@
 
 "use strict";
 const Command = require("../lib/commandTypes/ModCommand");
-const { SimpleArgumentParser } = require("sosamba");
+const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const { version: sosambaVersion } = require("sosamba/package.json");
 
 class RemoveStrikeCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "delpunish",
-            args: "<caseID:String> [reason:String...]",
-            argParser: new SimpleArgumentParser(sosamba, {
+            args: [{
+                name: "case_id",
+                description: "The punishment to remove.",
+                type: ApplicationCommandOptionTypes.STRING,
+                required: true,
+            }, {
+                name: "reason",
+                description: "The reason for removing this punishment.",
+                type: ApplicationCommandOptionTypes.STRING,
+                required: false,
+            }], // "<caseID:String> [reason:String...]",
+            /*argParser: new SimpleArgumentParser(sosamba, {
                 separator: " "
-            }),
+            }),*/
             description: "Removes a strike from a user.",
             aliases: ["rmpunish"]
         });
     }
 
-    async run(ctx, [caseID, ...reason]) {
-        if (!caseID) {
-            await ctx.send({
-                embed: {
-                    title: ":x: Argument required",
-                    description: "The argument `caseID` is required.",
-                    color: 0xFF0000,
-                    footer: {
-                        text: `Sosamba v${sosambaVersion}`
-                    }
-                }
-            });
-            return;
-        }
+    async run(ctx, { case_id: caseID, reason }) {
         try {
             await this.sosamba.modLog.removeStrike(caseID, ctx, reason.join(" "));
         } catch(err) {
-            await ctx.send(await ctx.t("CANNOT_UNSTRIKE", err));
+            await ctx.send(await ctx.t("CANNOT_UNSTRIKE", { error: err.toString() }));
             return;
         }
         await ctx.send(":ok_hand:");

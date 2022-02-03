@@ -19,7 +19,7 @@
 
 "use strict";
 const { Command } = require("sosamba");
-const { get } = require("chainfetch");
+const { request } = require("undici");
 
 class CatCommand extends Command {
     constructor(...args) {
@@ -31,14 +31,26 @@ class CatCommand extends Command {
     }
 
     async run(ctx) {
-        const { body } = await get("https://aws.random.cat/meow").toJSON();
+        const { statusCode, body } = await request("https://aws.random.cat/meow")
+        if (statusCode !== 200) {
+            await ctx.send({
+                embeds: [{
+                    color: 0xFF0000,
+                    title: ":x: Fetching the image has failed",
+                    description: "Try again later."
+                }],
+                flags: 64
+            });
+
+            return;
+        }
         await ctx.send({
-            embed: {
+            embeds: [{
                 image: {
-                    url: body.file
+                    url: (await body.json()).file
                 },
                 color: 0x008800
-            }
+            }]
         });
     }
 }

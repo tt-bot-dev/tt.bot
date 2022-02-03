@@ -29,7 +29,9 @@ class InviteCommand extends Command {
     }
 
     async run(ctx) {
-        await ctx.send(await ctx.t("BOT_INVITE"));
+        await ctx.send(await ctx.t("BOT_INVITE", {
+            botInviteLink: "https://discord.com/oauth2/authorize?client_id=195506253806436353&scope=bot"
+        }));
     }
 }
 

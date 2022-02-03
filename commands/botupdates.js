@@ -26,7 +26,8 @@ class UpdateFollowCommand extends Command {
         super(...args, {
             description: "Receive updates about tt.bot in this channel.",
             aliases: ["updates"],
-            name: "botupdates"
+            name: "botupdates",
+            guildOnly: true,
         });
     }
 
@@ -37,11 +38,12 @@ class UpdateFollowCommand extends Command {
     async run(ctx) {
         if (!ctx.sosamba.hasBotPermission(ctx.channel, "manageWebhooks")) {
             await ctx.send({
-                embed: {
+                embeds: [{
                     title: ":x: Missing Permissions",
                     description: "I need to be able to manage webhooks in this channel in order to set up bot updates. After that, you can feel free to remove it from me.",
                     color: 0xff0000,
-                }
+                }],
+                flags: 64
             });
             return;
         }

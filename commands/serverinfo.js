@@ -25,7 +25,8 @@ class ServerCommand extends Command {
         super(...args, {
             name: "serverinfo",
             description: "Shows the information about the server.",
-            aliases: ["server"]
+            aliases: ["server"],
+            guildOnly: true,
         });
     }
 
@@ -39,11 +40,14 @@ class ServerCommand extends Command {
             },
             fields: [{
                 name: await ctx.t("MEMBERS"),
-                value: await ctx.t("MEMBER_COUNT", ctx.guild.memberCount),
+                value: await ctx.t("MEMBER_COUNT", {
+                    members: ctx.guild.memberCount
+                }),
             },
             {
                 name: await ctx.t("OWNER"),
-                value: this.sosamba.getTag(ctx.guild.members.get(ctx.guild.ownerID)),
+                value: this.sosamba.getTag(ctx.guild.members.get(ctx.guild.ownerID) ||
+                    (await this.sosamba.memberRequester.request(ctx.guild, [ctx.guild.ownerID]))[0]),
             }, {
                 name: await ctx.t("GUILD_VERIFICATION_LEVEL"),
                 value: await this.getGuildVerification(ctx),
@@ -52,7 +56,9 @@ class ServerCommand extends Command {
                 value: ctx.guild.mfaLevel === 1 ? await ctx.t("YES") : await ctx.t("NO"),
             }, {
                 name: await ctx.t("ROLES"),
-                value: await ctx.t("ROLE_COUNT", ctx.guild.roles.size),
+                value: await ctx.t("ROLE_COUNT", {
+                    roles: ctx.guild.roles.size
+                }),
             }, {
                 name: await ctx.t("EXPLICIT_FILTERING"),
                 value: await this.getExplicitContent(ctx),
@@ -69,10 +75,9 @@ class ServerCommand extends Command {
                     if (ctx.guild.features.includes("INVITE_SPLASH"))
                         featureStr += `:cityscape: ${await ctx.t("ALLOWED_INVITE_SPLASH")}\n`;
                     if (ctx.guild.features.includes("VIP_REGIONS"))
-                        featureStr += `:loud_sound: ${await ctx.t("ALLOWED_VIP_REGIONS")}\n`;
-                    // Please, someone who has access to vanity URLs, if anything breaks, tell me
+                        featureStr += `:loud_sound: ${await ctx.t("ALLOWED_VIP_REGIONS")}\n`;                    
                     if (ctx.guild.features.includes("VANITY_URL"))
-                        featureStr += `:link: ${await ctx.t("ALLOWED_VANITY_URL", ctx.guild.vanityURL)}\n`;
+                        featureStr += `:link: ${await ctx.t("ALLOWED_VANITY_URL")}\n`;
                     if (ctx.guild.features.includes("VERIFIED"))
                         featureStr += `:white_check_mark: ${await ctx.t("ALLOWED_VERIFIED")}\n`;
                     if (ctx.guild.features.includes("PARTNERED"))
@@ -97,7 +102,9 @@ class ServerCommand extends Command {
             description: `
 **ID**: ${ctx.guild.id}
 **${await ctx.t("VOICE_REGION")}**: ${ctx.guild.region}
-**${await ctx.t("AFK_TIMEOUT")}**: ${await ctx.t("AFK_MINUTES", ctx.guild.afkTimeout)}
+**${await ctx.t("AFK_TIMEOUT")}**: ${await ctx.t("AFK_MINUTES", {
+    timeout: ctx.guild.afkTimeout / 60
+})}
 **Nitro Boosters**: ${ctx.guild.premiumSubscriptionCount} (Level ${ctx.guild.premiumTier})`,
             
             footer: {
@@ -108,11 +115,11 @@ class ServerCommand extends Command {
         };
 
         if (ctx.guild.splash) {
-            embed["image"] = {
+            embed.image = {
                 url: `https://cdn.discordapp.com/splashes/${ctx.guild.id}/${ctx.guild.splash}.png?size=2048`
             };
         }
-        await ctx.send({ embed });
+        await ctx.send({ embeds: [embed] });
     }
 
     async getGuildVerification(ctx) {
@@ -127,10 +134,10 @@ class ServerCommand extends Command {
             return await ctx.t("GUILD_VERIFICATION_MEDIUM");
 
         case 3:
-            return "(╯°□°）╯︵ ┻━┻" + await ctx.t("GUILD_VERIFICATION_TABLEFLIP");
+            return await ctx.t("GUILD_VERIFICATION_TABLEFLIP");
 
         case 4:
-            return "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻ " + await ctx.t("GUILD_VERIFICATION_ULTRATABLEFLIP");
+            return await ctx.t("GUILD_VERIFICATION_ULTRATABLEFLIP");
         }
     }
 

@@ -22,6 +22,7 @@ const { Event } = require("sosamba");
 const { serverLogChannel } = require("../config");
 const dm = require("../lib/util/sendReplyToDMs");
 const UserProfile = require("../lib/Structures/UserProfile");
+const config = require("../config");
 
 class GuildJoinEvent extends Event {
     constructor(...args) {
@@ -40,7 +41,8 @@ class GuildJoinEvent extends Event {
             return;
         }
         try {
-            await dm(guild.members.get(guild.ownerID), await this.getWelcomeMessage(guild.ownerID));
+            await dm(guild.members.get(guild.ownerID) || (await this.sosamba.memberRequester.request(guild, [guild.ownerID]))[0],
+                await this.getWelcomeMessage(guild.ownerID));
         } catch { }
         await this.sosamba.createMessage(serverLogChannel, {
             embed: {
@@ -63,25 +65,37 @@ class GuildJoinEvent extends Event {
 
         return {
             embed: {
-                title: await this.sosamba.i18n.getTranslation("HI_I_AM_BOT", lang),
-                description: await this.sosamba.i18n.getTranslation("SOME_THINGS_SAID", lang),
+                title: await this.sosamba.localeManager.translate(lang, "HI_I_AM_BOT"),
+                description: await this.sosamba.localeManager.translate(lang, "SOME_THINGS_SAID", {
+                    botName: this.sosamba.user.username
+                }),
                 fields: [{
-                    name: await this.sosamba.i18n.getTranslation("GETTING_STARTED", lang),
-                    value: await this.sosamba.i18n.getTranslation("GETTING_STARTED_DESCRIPTION", lang)
+                    name: await this.sosamba.localeManager.translate(lang, "GETTING_STARTED"),
+                    value: await this.sosamba.localeManager.translate(lang, "GETTING_STARTED_DESCRIPTION", {
+                        defaultPrefix: config.prefix
+                    })
                 }, {
-                    name: await this.sosamba.i18n.getTranslation("EVERYTHING_ELSE", lang),
-                    value: await this.sosamba.i18n.getTranslation("EVERYTHING_ELSE_DESCRIPTION", lang)
+                    name: await this.sosamba.localeManager.translate(lang, "EVERYTHING_ELSE"),
+                    value: await this.sosamba.localeManager.translate(lang, "EVERYTHING_ELSE_DESCRIPTION", {
+                        defaultPrefix: config.prefix
+                    })
                 }, {
-                    name: await this.sosamba.i18n.getTranslation("FREE_SOFTWARE", lang),
-                    value: await this.sosamba.i18n.getTranslation("FREE_SOFTWARE_DESCRIPTION", lang)
+                    name: await this.sosamba.localeManager.translate(lang, "FREE_SOFTWARE"),
+                    value: await this.sosamba.localeManager.translate(lang, "FREE_SOFTWARE_DESCRIPTION")
                 },
                 {
-                    name: ":newspaper: Updates",
-                    value: "You can opt into receiving updates about tt.bot by typing `tt.botupdates` into a channel where you want to receive them. This requires the bot to have the Manage Webhooks permission."
+                    name: await this.sosamba.localeManager.translate(lang, "WELCOME_UPDATES"),
+                    value: await this.sosamba.localeManager.translate(lang, "WELCOME_UPDATES_DESCRIPTION", {
+                        defaultPrefix: config.prefix
+                    })
                 },
                 {
-                    name: await this.sosamba.i18n.getTranslation("THANKS_FOR_CHOOSING", lang),
-                    value: await this.sosamba.i18n.getTranslation("WISHING_GOOD_LUCK", lang)
+                    name: await this.sosamba.localeManager.translate(lang, "WELCOME_PRIVACY_POLICY"),
+                    value: await this.sosamba.localeManager.translate(lang, "WELCOME_PRIVACY_POLICY_DESCRIPTION"),
+                },
+                {
+                    name: await this.sosamba.localeManager.translate(lang, "THANKS_FOR_CHOOSING"),
+                    value: await this.sosamba.localeManager.translate(lang, "WISHING_GOOD_LUCK")
                 }],
                 color: 0x008800
             }

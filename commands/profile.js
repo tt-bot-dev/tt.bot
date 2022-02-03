@@ -18,7 +18,7 @@
  */
 
 "use strict";
-const { Command, SerializedArgumentParser, ParsingError } = require("sosamba");
+const { Command, Eris: { Constants: { ApplicationCommandOptionTypes }} } = require("sosamba");
 const UserProfile = require("../lib/Structures/UserProfile");
 const RemoveSymbol = Symbol("tt.bot.profile.remove");
 const SetupSymbol = Symbol("tt.bot.profile.setup");
@@ -29,7 +29,7 @@ class ProfileCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "profile",
-            argParser: new SerializedArgumentParser(sosamba, {
+            /*argParser: new SerializedArgumentParser(sosamba, {
                 args: [{
                     name: "action",
                     type: val => {
@@ -45,7 +45,33 @@ class ProfileCommand extends Command {
                     description: "an additional argument, if needed (the timezone for `timezone` and the language for `locale`)",
                     default: SerializedArgumentParser.None
                 }],
-            }),
+            }),*/
+            args: [
+                {
+                    name: "update",
+                    description: "Updates your user profile (and creates one if you don't have one)",
+                    type: ApplicationCommandOptionTypes.SUB_COMMAND,
+                    options: [
+                        {
+                            name: "timezone",
+                            description: "The timezone to use",
+                            type: ApplicationCommandOptionTypes.STRING,
+                            required: false,
+                        }, {
+                            name: "locale",
+                            description: "The locale to use",
+                            type: ApplicationCommandOptionTypes.STRING,
+                            choices: ProfileCommand.getLocales(sosamba),
+                            required: false
+                        }
+                    ]
+                },
+                {
+                    name: "remove",
+                    description: "Removes the user profile",
+                    type: ApplicationCommandOptionTypes.SUB_COMMAND
+                },
+            ],
             description: "Manages the data we know about you."
         });
     }
@@ -83,11 +109,12 @@ class ProfileCommand extends Command {
                     await m.msg.delete(); 
                 } catch {/* */ }
 
-                await ctx.send(await ctx.t("PROFILE_CREATE_LOCALE"));
+                await ctx.send(await ctx.t("PROFILE_CREATE_LOCALE", {
+                    languages: [...this.sosamba.localeManager.locales.keys()].join(", ")
+                }));
                 const m2 = await ctx.waitForMessage(async ctx => {
                     if (ctx.msg.content.toLowerCase() === "none") return true;
-                    if (!Object.prototype.hasOwnProperty
-                        .call(this.sosamba.i18n.languages, ctx.msg.content)) {
+                    if (!ctx.sosamba.localeManager.locales.has( ctx.msg.content)) {
                         await ctx.msg.channel.createMessage(await ctx.t("INVALID_LOCALE"));
                         return false;
                     }
@@ -104,7 +131,9 @@ class ProfileCommand extends Command {
             await ctx.send(await ctx.t("PROFILE_CREATED"));
         } else if (action === TimezoneSymbol) {
             if (!arg) {
-                await ctx.send(await ctx.t("PROFILE_TIMEZONE", (await ctx.userProfile).timezone));
+                await ctx.send(await ctx.t("PROFILE_TIMEZONE", {
+                    tz: (await ctx.userProfile).timezone
+                }));
             } else {
                 if (!this.isValidTz(arg)) {
                     await ctx.send(await ctx.t("INVALID_TIMEZONE"));
@@ -118,21 +147,27 @@ class ProfileCommand extends Command {
         } else if (action === LocaleSymbol) {
             if (!arg) {
                 const status = this.calculateLocaleStatus();
-                await ctx.send(await ctx.t("PROFILE_LOCALE_LIST", await ctx.userLanguage,
-                    (await Promise.all(Object.keys(status).map(
-                        async lang => `${lang} (${await this.sosamba.i18n.getTranslation("NATIVE_LOCALE_NAME", lang)}/${await this.sosamba.i18n.getTranslation("ENGLISH_LOCALE_NAME", lang)}) - ${status[lang]}%`
-                    ))).join("\n")));
+                await ctx.send(await ctx.t("PROFILE_LOCALE_LIST", {
+                    currentLocale: await ctx.userLanguage,
+                    translationStatus: await Promise.all(Object.keys(status).map(
+                        async lang => `${lang} (${await this.sosamba.localeManager.translate(lang, "NATIVE_LOCALE_NAME")}/${await this.sosamba.localeManager.translate(lang, "ENGLISH_LOCALE_NAME")}) - ${status[lang]}%`
+                    )).join("\n")
+                }));
             } else {
-                if (!Object.prototype.hasOwnProperty
-                    .call(ctx.sosamba.i18n.languages, arg)) {
-                    await ctx.send(await ctx.t("INVALID_LOCALE", arg));
+                if (!ctx.sosamba.localeManager.locales.has(arg)) {
+                    await ctx.send(await ctx.t("INVALID_LOCALE", {
+                        locale: arg,
+                        languages: [...this.sosamba.localeManager.locales.keys()].join(", ")
+                    }));
                     return;
                 }
                 const profile = await ctx.userProfile;
                 profile.locale = arg;
                 await (ctx.userProfile = profile);
                 await ctx.send(await ctx.t("LOCALE_SET",
-                    `${arg} (${await ctx.t("NATIVE_LOCALE_NAME")}/${await ctx.t("ENGLISH_LOCALE_NAME")})`));
+                    {
+                        locale: `${arg} (${await ctx.t("NATIVE_LOCALE_NAME")}/${await ctx.t("ENGLISH_LOCALE_NAME")})`
+                    }));
             }
         }
     }
@@ -141,10 +176,8 @@ class ProfileCommand extends Command {
         const s = {
             en: (100).toFixed(2)
         };
-        const terms = Object.keys(this.sosamba.i18n.languages.en);
-        for (const [language, translation] of Object.entries(this.sosamba.i18n.languages)) {
-            if (!Object.prototype.hasOwnProperty
-                .call(this.sosamba.i18n.languages, language)) continue;
+        const terms = Object.keys(this.sosamba.localeManager.locales.get("en").terms);
+        for (const [language, { terms: translation }] of this.sosamba.localeManager.entries()) {
             if (language === "en") continue;
             const termsInForeign = terms.filter(term => Object.prototype.hasOwnProperty
                 .call(translation, term)).length;
@@ -160,6 +193,19 @@ class ProfileCommand extends Command {
         } catch {
             return false;
         }
+    }
+
+    static getLocales(sosamba) {
+        const terms = Object.keys(sosamba.localeManager.locales.get("en").terms);
+
+        return sosamba.localeManager.locales.map(l => {
+            const termsInForeign = terms.filter(term => Object.prototype.hasOwnProperty
+                .call(l.terms, term)).length;
+            return {
+                name: `${l.terms.ENGLISH_LOCALE_NAME} (${l.terms.NATIVE_LOCALE_NAME}) \u2013 ${(termsInForeign / terms.length * 100).toFixed(2)}%`,
+                value: l.id
+            };
+        })
     }
 }
 

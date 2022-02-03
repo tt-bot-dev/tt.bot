@@ -19,7 +19,7 @@
 
 "use strict";
 const { Command } = require("sosamba");
-const { get } = require("chainfetch");
+const { request } = require("undici");
 
 class DogCommand extends Command {
     constructor(...args) {
@@ -31,15 +31,27 @@ class DogCommand extends Command {
     }
 
     async run(ctx) {
-        const { body } = await get("https://random.dog/woof.json?filter=mp4,webm").toJSON();
+        const { statusCode, body } = await request("https://random.dog/woof.json?filter=mp4,webm");
 
-        ctx.send({
-            embed: {
+        if (statusCode !== 200) {
+            await ctx.send({
+                embeds: [{
+                    color: 0xFF0000,
+                    title: ":x: Fetching the image has failed",
+                    description: "Try again later."
+                }]
+            });
+
+            return;
+        }
+
+        await ctx.send({
+            embeds: [{
                 image: {
-                    url: body.url
+                    url: (await body.json()).url
                 },
                 color: 0x008800
-            }
+            }]
         });
     }
 }

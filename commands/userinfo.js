@@ -18,36 +18,34 @@
  */
 
 "use strict";
-const { Command, SerializedArgumentParser,
-    Serializers: { Member }, Eris: { Constants: { UserFlags } } } = require("sosamba");
+const { Command, Eris: { Constants: { UserFlags, ApplicationCommandOptionTypes }, Member } } = require("sosamba");
 const userByID = require("../lib/util/userByID");
 
 class UserCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "userinfo",
-            argParser: new SerializedArgumentParser(sosamba, {
-                args: [{
-                    default: ctx => ctx.member,
-                    type: [Member, userByID],
-                    rest: true,
-                    name: "user",
-                    description: "the user to get the information for"
-                }]
-            }),
+            args: [{
+                name: "user",
+                description: "The user to get the information about.",
+                type: ApplicationCommandOptionTypes.USER,
+                required: true,
+            }],
             description: "Gets some information about the user.",
             aliases: ["uinfo", "user", "whois"]
         });
     }
 
-    async run(ctx, [user]) {
+    async run(ctx, { user }) {
         if (user instanceof Member) {
             const roles = user.roles.map(r => ctx.guild.roles.get(r).name);
             roles.unshift("@everyone");
             const nick = user.nick || this.sosamba.getTag(user);
             ctx.send({
-                embed: {
-                    title: await ctx.t("USER_INFO", `${nick} ${nick === this.sosamba.getTag(user) ? "" : `(${this.sosamba.getTag(user)})`} (${user.id}) ${user.bot ? "(BOT)" : ""}`),
+                embeds: [{
+                    title: await ctx.t("USER_INFO", {
+                        user: `${nick}${nick === this.sosamba.getTag(user) ? "" : ` (${this.sosamba.getTag(user)})`} (${user.id}) ${user.bot ? "(BOT)" : ""}`
+                    }),
                     description: user.user.publicFlags ? this.bitArrayToEmoji(ctx, this.parseUserBitfield(user.user.publicFlags)).join("\n") : undefined,
                     thumbnail: {
                         url: user.user.avatarURL
@@ -63,19 +61,21 @@ class UserCommand extends Command {
                     }, {
                         name: await ctx.t("CURRENT_VOICE"),
                         value: ctx.guild.channels.get(ctx.guild.voiceStates.get(user.id)?.channelID)
-                            ?.name || await ctx.t("NONE"),
+                            ?.name || await ctx.t("NO_CURRENT_VOICE"),
                         inline: true
                     }],
                     timestamp: new Date(user.joinedAt),
                     footer: {
                         text: await ctx.t("JOINED_ON")
                     }
-                }
+                }]
             });
         } else {
             await ctx.send({
-                embed: {
-                    title: await ctx.t("USER_INFO", `${this.sosamba.getTag(user)} ${user.bot ? "(BOT)" : ""}`),
+                embeds: [{
+                    title: await ctx.t("USER_INFO_LIMITED", {
+                        user: `${this.sosamba.getTag(user)} ${user.bot ? "(BOT)" : ""}`
+                    }),
                     description: user.publicFlags ? this.bitArrayToEmoji(ctx, this.parseUserBitfield(user.publicFlags)).join("\n") : undefined,
                     thumbnail: {
                         url: user.avatarURL
@@ -86,10 +86,9 @@ class UserCommand extends Command {
                         inline: true
                     }],
                     footer: {
-                        // NOT_IN_SERVER
-                        text: "They're not in this server, so that's everything I know 😥"
+                        text: await ctx.t("NOT_IN_SERVER")
                     }
-                }
+                }]
             });
         }
         

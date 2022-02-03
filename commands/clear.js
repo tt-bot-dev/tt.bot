@@ -18,10 +18,9 @@
  */
 
 "use strict";
-const { SwitchArgumentParser } = require("sosamba");
+const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const { user } = require("sosamba/lib/argParsers/switchSerializers/erisObjects");
 const Command = require("../lib/commandTypes/ModCommand");
-const BotSymbol = Symbol("tt.bot.clear.bots");
 const { User } = require("eris");
 const D_EPOCH = 1421280000000n;
 const sleep = ms => new Promise(rs => setTimeout(rs, ms));
@@ -37,33 +36,27 @@ class ClearCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "clear",
-            argParser: new SwitchArgumentParser(sosamba, {
-                messages: {
-                    type: Number,
-                    default: 100,
-                    description: "the number of messages to clean"
-                },
-                contains: {
-                    type: String,
-                    default: SwitchArgumentParser.None,
-                    description: "an optional argument that filters the messages by content"
-                },
-                mentions: {
-                    type: User,
-                    default: SwitchArgumentParser.None,
-                    description: "an optional argument that filters the messages by mentions"
-                },
-                from: {
-                    type: FromResolver,
-                    default: SwitchArgumentParser.None,
-                    description: "an optional argument that filters the messages by their author - use `bots` in order to specify bots as an author."
-                },
-                invert: {
-                    type: Boolean,
-                    default: false,
-                    description: "determines whether all above settings should be inverted."
-                }
-            }),
+            args: [{
+                name: "messages",
+                description: "The amount of messages to fetch for clearing. Limited to 1000.",
+                type: ApplicationCommandOptionTypes.INTEGER,
+                required: true
+            }, {
+                name: "mentions",
+                description: "Filters messages which mention this user.",
+                type: ApplicationCommandOptionTypes.USER,
+                required: false
+            }, {
+                name: "from",
+                description: "Filters messages created by this user.",
+                type: ApplicationCommandOptionTypes.USER,
+                required: false
+            }, {
+                name: "invert",
+                description: "Inverts preceeding settings.",
+                type: ApplicationCommandOptionTypes.BOOLEAN,
+                required: false
+            }],
             description: "Clears the desired number of messages.",
             aliases: ["clean", "prune", "purge"]
         });
@@ -80,12 +73,15 @@ class ClearCommand extends Command {
         await Promise.all(p);
         return true;
     }
-    async run(ctx, { messages, contains, mentions, from, invert }) {
+    async run(ctx, { messages, mentions, from, invert }) {
         if (!this.sosamba.hasBotPermission(ctx.channel, "manageMessages")) {
             await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
             return;
         }
-        await ctx.send(await ctx.t("CLEAR_CONFIRM"));
+        await ctx.send({
+            content: await ctx.t("CLEAR_CONFIRM"),
+            components: ctx.createYesNoButtons()
+        });
         const r = await ctx.askYesNo(true);
         if (!r.response) {
             await ctx.send(await ctx.t("OP_CANCELLED"));
@@ -96,13 +92,15 @@ class ClearCommand extends Command {
         const oldestPossibleSnowflake = BigInt(Date.now()) - D_EPOCH << BigInt(22);
         const msgs = await ctx.channel.getMessages(messages > 1000 ? 1000 : messages);
         const toDelete = msgs.filter(msg => {
-            const v = this.matchesCriteriaContaining(msg, contains) && this.matchesCriteriaFrom(msg, from) && this.matchesCriteriaMentions(msg, mentions);
+            const v = this.matchesCriteriaFrom(msg, from) && this.matchesCriteriaMentions(msg, mentions);
             return invert ? !v : v;
         }).map(msg => msg.id)
             .filter(msg => msg > oldestPossibleSnowflake);
         await this.deleteStrategy(ctx.channel, toDelete);
         
-        const msgOK = await ctx.send(await ctx.t("CLEAR_DONE", toDelete.length));
+        const msgOK = await ctx.send(await ctx.t("CLEAR_DONE", {
+            messages: toDelete.length
+        }));
         setTimeout(async () => await msgOK.delete(), 2000);
     }
 
@@ -120,12 +118,6 @@ class ClearCommand extends Command {
         else return false;
     }
 
-    matchesCriteriaFrom(msg, from) {
-        if (!from) return true;
-        if (from === BotSymbol && msg.author.bot) return true;
-        if (from && msg.author.id === from.id) return true;
-        else return false;
-    }
 
     async deleteStrategy(channel, messages) {
         if (messages.length === 1) {

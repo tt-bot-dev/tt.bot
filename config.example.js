@@ -162,4 +162,14 @@ module.exports = {
      * The bot update channel
      */
     announcementChannelID: "123456789012345678",
+
+    /**
+     * The home guild for the bot, some maintainer-only commands are registered there
+     */
+    homeGuild: "234567890123456789",
+
+    /**
+     * Whether to deploy all the commands to the home guild only or not
+     */
+    deployCommandsToHomeGuild: false
 };

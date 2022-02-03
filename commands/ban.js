@@ -18,7 +18,7 @@
  */
 
 "use strict";
-const { SwitchArgumentParser, Serializers: { Member } } = require("sosamba");
+const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const { PunishTypes } = require("../lib/modlog/constants");
 const Command = require("../lib/commandTypes/ModCommand");
 
@@ -26,28 +26,29 @@ class BanCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "ban",
-            argParser: new SwitchArgumentParser(sosamba, {
-                user: {
-                    type: Member,
-                    description: "the user to ban"
-                },
-                reason: {
-                    type: String,
-                    default: "No reason provided.",
-                    description: "the optional reason for the ban"
-                },
-                soft: {
-                    type: Boolean,
-                    default: false,
-                    description: "determines if the user will be unbanned immediately after banning."
-                },
-                days: {
-                    type: Number,
-                    default: 0,
-                    description: "the amount of days worth of messages to purge"
-                }
-            }),
-            description: "Bans a user."
+            args: [{
+                name: "user",
+                description: "The user to ban.",
+                type: ApplicationCommandOptionTypes.USER,
+                required: true,
+            }, {
+                name: "reason",
+                description: "The reason for the ban",
+                type: ApplicationCommandOptionTypes.STRING,
+                required: false
+            }, {
+                name: "soft",
+                description: "Determines whether the user will be unbanned immediately after banning.",
+                type: ApplicationCommandOptionTypes.BOOLEAN,
+                required: false
+            }, {
+                name: "days",
+                description: "The amount of days worth of message history to purge.",
+                type: ApplicationCommandOptionTypes.INTEGER,
+                required: false
+            }],
+            description: "Bans a user from this server.",
+            guildOnly: true,
         });
     }
 
@@ -56,15 +57,22 @@ class BanCommand extends Command {
     }
 
     async run(ctx, { user, reason, soft, days }) {
+        let _reason = reason ?? "No reason provided.";
+        let _soft = soft ?? false;
+        let _days = days ?? 0;
+
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
-            if (!ctx.guild.members.get(this.sosamba.user.id).permissions.has("banMembers") || !this.sosamba.passesRoleHierarchy(ctx.guild.members.get(this.sosamba.user.id), user)) {
+            if (!ctx.guild.members.get(this.sosamba.user.id).permissions.has("banMembers") ||
+                !this.sosamba.passesRoleHierarchy(ctx.guild.members.get(this.sosamba.user.id), user)) {
                 await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
                 return;
             }
-            await ctx.guild.banMember(user.id, days, encodeURIComponent(`${this.sosamba.getTag(ctx.author)}: ${reason}`));
-            if (soft) await ctx.guild.unbanMember(user.id);
-            this.sosamba.modLog.createPunishment(ctx, soft ? PunishTypes.SOFTBAN : PunishTypes.BAN, user.id, reason).catch(() => void 0);
-            await ctx.send(await ctx.t(`${soft ? "SOFT": ""}BAN_DONE`, user.user));
+            await ctx.guild.banMember(user.id, _days, encodeURIComponent(`${this.sosamba.getTag(ctx.author)}: ${_reason}`));
+            if (_soft) await ctx.guild.unbanMember(user.id);
+            this.sosamba.modLog.createPunishment(ctx, _soft ? PunishTypes.SOFTBAN : PunishTypes.BAN, user.id, _reason).catch(() => void 0);
+            await ctx.send(await ctx.t(`${_soft ? "SOFT" : ""}BAN_DONE`, {
+                user: this.sosamba.getTag(user.user)
+            }));
         } else {
             ctx.send(await ctx.t("ROLE_HIERARCHY_ERROR"));
         }
