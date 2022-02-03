@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (C) 2021 tt.bot dev team
+# Copyright (C) 2022 tt.bot dev team
 # 
 # This file is part of tt.bot.
 # 
