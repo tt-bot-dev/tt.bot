@@ -40,7 +40,8 @@ class UpdateReasonCommand extends Command {
             /*argParser: new SimpleArgumentParser(sosamba, {
                 separator: " "
             }),*/
-            description: "Updates the reason for a strike."
+            description: "Updates the reason for a strike.",
+            guildOnly: true,
         });
     }
 

@@ -41,7 +41,8 @@ class RemoveStrikeCommand extends Command {
                 separator: " "
             }),*/
             description: "Removes a strike from a user.",
-            aliases: ["rmpunish"]
+            aliases: ["rmpunish"],
+            guildOnly: true,
         });
     }
 

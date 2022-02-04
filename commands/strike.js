@@ -52,7 +52,8 @@ class StrikeCommand extends Command {
                     rest: true
                 }]
             }),*/
-            aliases: ["warn"]
+            aliases: ["warn"],
+            guildOnly: true,
         });
     }
 

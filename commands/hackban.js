@@ -36,7 +36,8 @@ class HackbanCommand extends Command {
                 separator: " ",
                 filterEmptyArguments: true
             }),*/
-            description: "Bans an user by ID."
+            description: "Bans an user by ID.",
+            guildOnly: true,
         });
     }
 

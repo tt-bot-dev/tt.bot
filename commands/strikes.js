@@ -40,7 +40,8 @@ class StrikeListCommand extends Command {
                 required: true,
             }],
             description: "Gets user's strikes.",
-            aliases: ["warns"]
+            aliases: ["warns"],
+            guildOnly: true,
         });
     }
 

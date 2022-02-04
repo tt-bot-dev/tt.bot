@@ -237,7 +237,8 @@ class ConfigCommand extends Command {
         super(...args, {
             name: "config",
             description: "Lets you manage what I know about your server.",
-            aliases: ["settings"]
+            aliases: ["settings"],
+            guildOnly: true,
         });
     }
 

@@ -48,7 +48,8 @@ class KickCommand extends Command {
                 type: ApplicationCommandOptionTypes.STRING,
                 required: false
             }],
-            description: "Kicks a user."
+            description: "Kicks a user.",
+            guildOnly: true,
         });
     }
 
