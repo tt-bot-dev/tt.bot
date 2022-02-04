@@ -246,7 +246,7 @@ class ConfigCommand extends Command {
         return; // Currently not implementable until Discord releases forms
         // eslint-disable-next-line no-unreachable
         if (!await ctx.guildConfig) {
-            await ctx.db.createGuildConfig(ctx._guildConfig = {
+            await this.sosamba.db.createGuildConfig(ctx._guildConfig = {
                 id: ctx.guild.id,
                 prefix: defaultPrefix
             });

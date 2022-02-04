@@ -74,7 +74,7 @@ class BlacklistManagerCommand extends Command {
     async run(ctx, { id, reason }) {
         switch (ctx.subcommand) {
         case "query": {
-            const guilds = await ctx.db.getBlacklistedGuildById(id);
+            const guilds = await this.sosamba.db.getBlacklistedGuildById(id);
             if (guilds.length === 0) {
                 return await ctx.send({
                     embeds: [{
@@ -102,7 +102,7 @@ class BlacklistManagerCommand extends Command {
         case "add": {
             const guild = this.sosamba.guilds.get(id);
             const ownerID = guild?.ownerID;
-            await ctx.db.addBlacklistedGuild(id, ownerID, reason ?? "");
+            await this.sosamba.db.addBlacklistedGuild(id, ownerID, reason ?? "");
             await Promise.all(this.sosamba.guilds.filter(g => g.id === id || g.ownerID === ownerID)
                 .map(g => {
                     g.__automaticallyLeft = true;
@@ -112,7 +112,7 @@ class BlacklistManagerCommand extends Command {
             break;
         }
         case "remove": {
-            await ctx.db.removeBlacklistedGuild(id);
+            await this.sosamba.db.removeBlacklistedGuild(id);
             await ctx.send(":ok_hand:");
             break;
         }

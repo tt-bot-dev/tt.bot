@@ -20,6 +20,7 @@
 "use strict";
 
 const { Command } = require("sosamba");
+const { getGuildConfig, t } = require("../lib/util");
 
 class AgreeCommand extends Command {
     constructor(...args) {
@@ -30,7 +31,8 @@ class AgreeCommand extends Command {
         });
     }
     async run(ctx) {
-        const { memberRole, agreeChannel } = await ctx.guildConfig || {};
+        // This should probably switch to something button-based
+        const { memberRole, agreeChannel } = await getGuildConfig(ctx) || {};
         if (!memberRole || !agreeChannel) return;
         if (ctx.channel.id !== agreeChannel) return;
         if (!ctx.guild.roles.has(memberRole)) return;
@@ -44,7 +46,7 @@ class AgreeCommand extends Command {
                 flags: 64
             });
         } catch {
-            const agreeFaultMessage = await ctx.t("AGREE_FAULT", {
+            const agreeFaultMessage = await t(ctx, "AGREE_FAULT", {
                 serverOwner: this.sosamba.getTag(ctx.guild.members.get(ctx.guild.ownerID) ||
                     (await this.sosamba.memberRequester.request(ctx.guild, [ctx.guild.ownerID]))[0])
             });

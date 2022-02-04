@@ -20,6 +20,7 @@
 "use strict";
 const Command = require("../lib/commandTypes/ModCommand");
 const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
+const { t } = require("../lib/util");
 
 class UpdateReasonCommand extends Command {
     constructor(sosamba, ...args) {
@@ -35,10 +36,7 @@ class UpdateReasonCommand extends Command {
                 description: "The new reason.",
                 type: ApplicationCommandOptionTypes.STRING,
                 required: true,
-            }],// "<caseID:String> <reason:String...>",
-            /*argParser: new SimpleArgumentParser(sosamba, {
-                separator: " "
-            }),*/
+            }],
             description: "Updates the reason for a strike.",
             guildOnly: true,
         });
@@ -48,7 +46,7 @@ class UpdateReasonCommand extends Command {
         try {
             await this.sosamba.modLog.updateReason(caseID, ctx, reason.join(" "));
         } catch(err) {
-            await ctx.send(await ctx.t("ERROR", err));
+            await ctx.send(await t(ctx, "ERROR", { error: err.toString() }));
             return;
         }
         await ctx.send(":ok_hand:");

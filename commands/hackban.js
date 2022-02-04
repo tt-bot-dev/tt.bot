@@ -20,6 +20,7 @@
 "use strict";
 const Command = require("../lib/commandTypes/ModCommand");
 const { version: sosambaVersion } = require("sosamba/package.json");
+const { t } = require("../lib/util");
 
 class HackbanCommand extends Command {
     constructor(sosamba, ...args) {
@@ -58,7 +59,7 @@ class HackbanCommand extends Command {
             });
         } else {
             if (!this.sosamba.hasBotPermission(ctx.channel, "banMembers")) {
-                await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
+                await ctx.send(await t(ctx, "MISSING_PERMISSIONS"));
                 return;
             }
             const send = users.length === 1;
@@ -68,7 +69,7 @@ class HackbanCommand extends Command {
                 const bans = await Promise.all(users.map(
                     u => this.doBan(ctx, u, false, true)
                 ));
-                await ctx.send(await ctx.t("HACKBANNED_USERS", {
+                await ctx.send(await t(ctx, "HACKBANNED_USERS", {
                     users: bans.filter(b => b).length
                 }));
             }
@@ -79,18 +80,18 @@ class HackbanCommand extends Command {
         const [member] = ctx.guild.members.has(id) ? [ ctx.guild.members.get(id) ] : await this.sosamba.memberRequester.request(ctx.guild, [id]);
         try {
             if (member && !ctx.sosamba.passesRoleHierarchy(ctx.member, member)) {
-                await ctx.send(await ctx.t("ROLE_HIERARCHY_ERROR"));
+                await ctx.send(await t(ctx, "ROLE_HIERARCHY_ERROR"));
                 return false;
             }
             await ctx.guild.banMember(id, 0,
                 `${mass === false ? "Hackbanned" : "Masshackbanned"} by ${ctx.sosamba.getTag(ctx.author)}`);
-            if (send) await ctx.send(await ctx.t("BAN_DONE", {
+            if (send) await ctx.send(await t(ctx, "BAN_DONE", {
                 user: this.sosamba.getTag(member || { username: `Unknown User (${id})`, discriminator: "0000" })
             }));
             return true;
         } catch (e) {
             console.error(e);
-            if (send) await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
+            if (send) await ctx.send(await t(ctx, "MISSING_PERMISSIONS"));
             return false;
         }
     }

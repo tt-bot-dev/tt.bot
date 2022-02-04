@@ -29,23 +29,6 @@ class ProfileCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "profile",
-            /*argParser: new SerializedArgumentParser(sosamba, {
-                args: [{
-                    name: "action",
-                    type: val => {
-                        if (val === "remove") return RemoveSymbol;
-                        else if (val === "setup") return SetupSymbol;
-                        else if (val === "timezone") return TimezoneSymbol;
-                        else if (val === "locale") return LocaleSymbol;
-                        throw new ParsingError("Invalid action");
-                    },
-                    description: "the action to do with your profile: remove, setup, timezone, locale"
-                }, {
-                    type: String,
-                    description: "an additional argument, if needed (the timezone for `timezone` and the language for `locale`)",
-                    default: SerializedArgumentParser.None
-                }],
-            }),*/
             args: [
                 {
                     name: "update",
@@ -77,10 +60,13 @@ class ProfileCommand extends Command {
     }
 
     async run(ctx, [action, arg]) {
+        return; // We haven't gotten to updating it yet
+
+        //eslint-disable-next-line no-unreachable
         if (action === RemoveSymbol) {
             if ((await ctx.userProfile).fake) return ctx.send(await ctx.t("PROFILE_NONEXISTENT"));
             else {
-                await ctx.db.deleteUserProfile(ctx.author.id);
+                await this.sosamba.db.deleteUserProfile(ctx.author.id);
                 ctx.send(await ctx.t("PROFILE_DELETED"));
             }
         } else if (action === SetupSymbol) {
@@ -126,7 +112,7 @@ class ProfileCommand extends Command {
                 } catch {/* */ }
             }
             const toWrite = UserProfile.create(profile);
-            await ctx.db.createUserProfile(toWrite);
+            await this.sosamba.db.createUserProfile(toWrite);
             ctx._userProfile = new UserProfile(toWrite);
             await ctx.send(await ctx.t("PROFILE_CREATED"));
         } else if (action === TimezoneSymbol) {

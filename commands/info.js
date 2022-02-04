@@ -18,9 +18,13 @@
  */
 
 "use strict";
-const { Command } = require("sosamba");
+const { Command, Eris: { VERSION: erisVersion } } = require("sosamba");
 const luxon = require("luxon");
 const config = require("../config");
+const { t } = require("../lib/util");
+
+const { version: ttBotVersion } = require("../package.json");
+const { version: sosambaVersion } = require("sosamba/package.json");
 
 class InfoCommand extends Command {
     constructor(...args) {
@@ -42,32 +46,32 @@ class InfoCommand extends Command {
                     icon_url: this.sosamba.user.staticAvatarURL
                 }, 
                 fields: [{
-                    name: await ctx.t("INFO_STATS"),
-                    value: await ctx.t("INFO_STATS_TEXT", {
+                    name: await t(ctx, "INFO_STATS"),
+                    value: await t(ctx, "INFO_STATS_TEXT", {
                         guilds: this.sosamba.guilds.size,
                         users: this.sosamba.users.size,
                         channels: Object.keys(this.sosamba.channelGuildMap).length
                     }),
                     inline: true
                 }, {
-                    name: await ctx.t("INFO_AUTHORS"),
-                    value: await ctx.t("INFO_OWNERS", {
+                    name: await t(ctx, "INFO_AUTHORS"),
+                    value: await t(ctx, "INFO_OWNERS", {
                         owners: ownerStrings.join("\n")
                     }),
                     inline: true
                 }, {
-                    name: await ctx.t("INFO_VERSIONS"),
-                    value: `tt.bot: ${require("../package.json").version}\nSosamba: ${require("sosamba/package.json").version}\nEris: ${require("../node_modules/eris/package.json").version}\nNode.js: ${process.versions.node}\nV8: ${process.versions.v8}`,
+                    name: await t(ctx, "INFO_VERSIONS"),
+                    value: `tt.bot: ${ttBotVersion}\nSosamba: ${sosambaVersion}\nEris: ${erisVersion}\nNode.js: ${process.versions.node}`,
                     inline: true
                 },
                 {
-                    name: await ctx.t("INFO_UPTIME"),
+                    name: await t(ctx, "INFO_UPTIME"),
                     value: await this.getUptime(ctx),
                     inline: true
                 },
                 {
-                    name: await ctx.t("INFO_FREE_SOFTWARE"),
-                    value: await ctx.t("INFO_FREE_SOFTWARE_DESCRIPTION", {
+                    name: await t(ctx, "INFO_FREE_SOFTWARE"),
+                    value: await t(ctx, "INFO_FREE_SOFTWARE_DESCRIPTION", {
                         learnMore: config.webserver.display("/license")
                     })
                 }],

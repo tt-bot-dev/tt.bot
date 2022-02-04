@@ -19,6 +19,7 @@
 
 "use strict";
 const { Command } = require("sosamba");
+const { t } = require("../lib/util");
 
 class ServerCommand extends Command {
     constructor(...args) {
@@ -39,76 +40,76 @@ class ServerCommand extends Command {
                 url: ctx.guild.iconURL
             },
             fields: [{
-                name: await ctx.t("MEMBERS"),
-                value: await ctx.t("MEMBER_COUNT", {
+                name: await t(ctx, "MEMBERS"),
+                value: await t(ctx, "MEMBER_COUNT", {
                     members: ctx.guild.memberCount
                 }),
             },
             {
-                name: await ctx.t("OWNER"),
+                name: await t(ctx, "OWNER"),
                 value: this.sosamba.getTag(ctx.guild.members.get(ctx.guild.ownerID) ||
                     (await this.sosamba.memberRequester.request(ctx.guild, [ctx.guild.ownerID]))[0]),
             }, {
-                name: await ctx.t("GUILD_VERIFICATION_LEVEL"),
+                name: await t(ctx, "GUILD_VERIFICATION_LEVEL"),
                 value: await this.getGuildVerification(ctx),
             }, {
-                name: await ctx.t("REQUIRES_ADMIN_MFA"),
-                value: ctx.guild.mfaLevel === 1 ? await ctx.t("YES") : await ctx.t("NO"),
+                name: await t(ctx, "REQUIRES_ADMIN_MFA"),
+                value: ctx.guild.mfaLevel === 1 ? await t(ctx, "YES") : await t(ctx, "NO"),
             }, {
-                name: await ctx.t("ROLES"),
-                value: await ctx.t("ROLE_COUNT", {
+                name: await t(ctx, "ROLES"),
+                value: await t(ctx, "ROLE_COUNT", {
                     roles: ctx.guild.roles.size
                 }),
             }, {
-                name: await ctx.t("EXPLICIT_FILTERING"),
+                name: await t(ctx, "EXPLICIT_FILTERING"),
                 value: await this.getExplicitContent(ctx),
             }, {
-                name: await ctx.t("DEFAULT_NOTIFICATIONS"),
+                name: await t(ctx, "DEFAULT_NOTIFICATIONS"),
                 value: ctx.guild.defaultNotifications === 1
-                    ? await ctx.t("ONLY_MENTIONS")
-                    : await ctx.t("ALL_MESSAGES"),
+                    ? await t(ctx, "ONLY_MENTIONS")
+                    : await t(ctx, "ALL_MESSAGES"),
             },
             {
-                name: await ctx.t("FEATURES"),
+                name: await t(ctx, "FEATURES"),
                 value: await (async () => {
                     let featureStr = "";
                     if (ctx.guild.features.includes("INVITE_SPLASH"))
-                        featureStr += `:cityscape: ${await ctx.t("ALLOWED_INVITE_SPLASH")}\n`;
+                        featureStr += `:cityscape: ${await t(ctx, "ALLOWED_INVITE_SPLASH")}\n`;
                     if (ctx.guild.features.includes("VIP_REGIONS"))
-                        featureStr += `:loud_sound: ${await ctx.t("ALLOWED_VIP_REGIONS")}\n`;                    
+                        featureStr += `:loud_sound: ${await t(ctx, "ALLOWED_VIP_REGIONS")}\n`;                    
                     if (ctx.guild.features.includes("VANITY_URL"))
-                        featureStr += `:link: ${await ctx.t("ALLOWED_VANITY_URL")}\n`;
+                        featureStr += `:link: ${await t(ctx, "ALLOWED_VANITY_URL")}\n`;
                     if (ctx.guild.features.includes("VERIFIED"))
-                        featureStr += `:white_check_mark: ${await ctx.t("ALLOWED_VERIFIED")}\n`;
+                        featureStr += `:white_check_mark: ${await t(ctx, "ALLOWED_VERIFIED")}\n`;
                     if (ctx.guild.features.includes("PARTNERED"))
-                        featureStr += `:star: ${await ctx.t("ALLOWED_PARTNERED")}\n`;
+                        featureStr += `:star: ${await t(ctx, "ALLOWED_PARTNERED")}\n`;
                     if (ctx.guild.features.includes("COMMERCE"))
-                        featureStr += `:moneybag: ${await ctx.t("ALLOWED_COMMERCE")}\n`;
+                        featureStr += `:moneybag: ${await t(ctx, "ALLOWED_COMMERCE")}\n`;
                     if (ctx.guild.features.includes("NEWS"))
-                        featureStr += `:newspaper: ${await ctx.t("ALLOWED_NEWS")}\n`;
+                        featureStr += `:newspaper: ${await t(ctx, "ALLOWED_NEWS")}\n`;
                     if (ctx.guild.features.includes("LURKABLE"))
-                        featureStr += `:eyes: ${await ctx.t("ALLOWED_LURKABLE")}\n`;
+                        featureStr += `:eyes: ${await t(ctx, "ALLOWED_LURKABLE")}\n`;
                     if (ctx.guild.features.includes("DISCOVERABLE"))
-                        featureStr += `:mag: ${await ctx.t("ALLOWED_DISCOVERABLE")}\n`;
+                        featureStr += `:mag: ${await t(ctx, "ALLOWED_DISCOVERABLE")}\n`;
                     if (ctx.guild.features.includes("FEATURABLE"))
-                        featureStr += `:star2: ${await ctx.t("ALLOWED_FEATURABLE")}\n`;
+                        featureStr += `:star2: ${await t(ctx, "ALLOWED_FEATURABLE")}\n`;
                     if (ctx.guild.features.includes("ANIMATED_ICON"))
-                        featureStr += `:mountain: ${await ctx.t("ALLOWED_ANIMATED_ICON")}\n`;
+                        featureStr += `:mountain: ${await t(ctx, "ALLOWED_ANIMATED_ICON")}\n`;
                     if (ctx.guild.features.includes("BANNER"))
-                        featureStr += `:sunrise_over_mountains: ${await ctx.t("ALLOWED_BANNER")}\n`;
-                    return featureStr || await ctx.t("NONE");
+                        featureStr += `:sunrise_over_mountains: ${await t(ctx, "ALLOWED_BANNER")}\n`;
+                    return featureStr || await t(ctx, "NONE");
                 })()
             }],
             description: `
 **ID**: ${ctx.guild.id}
-**${await ctx.t("VOICE_REGION")}**: ${ctx.guild.region}
-**${await ctx.t("AFK_TIMEOUT")}**: ${await ctx.t("AFK_MINUTES", {
+**${await t(ctx, "VOICE_REGION")}**: ${ctx.guild.region}
+**${await t(ctx, "AFK_TIMEOUT")}**: ${await t(ctx, "AFK_MINUTES", {
     timeout: ctx.guild.afkTimeout / 60
 })}
 **Nitro Boosters**: ${ctx.guild.premiumSubscriptionCount} (Level ${ctx.guild.premiumTier})`,
             
             footer: {
-                text: await ctx.t("CREATED_ON")
+                text: await t(ctx, "CREATED_ON")
             },
             timestamp: new Date(ctx.guild.createdAt),
             color: 0x008800
@@ -125,32 +126,32 @@ class ServerCommand extends Command {
     async getGuildVerification(ctx) {
         switch (ctx.guild.verificationLevel) {
         case 0:
-            return await ctx.t("GUILD_VERIFICATION_NONE");
+            return await t(ctx, "GUILD_VERIFICATION_NONE");
 
         case 1:
-            return await ctx.t("GUILD_VERIFICATION_LOW");
+            return await t(ctx, "GUILD_VERIFICATION_LOW");
 
         case 2:
-            return await ctx.t("GUILD_VERIFICATION_MEDIUM");
+            return await t(ctx, "GUILD_VERIFICATION_MEDIUM");
 
         case 3:
-            return await ctx.t("GUILD_VERIFICATION_TABLEFLIP");
+            return await t(ctx, "GUILD_VERIFICATION_TABLEFLIP");
 
         case 4:
-            return await ctx.t("GUILD_VERIFICATION_ULTRATABLEFLIP");
+            return await t(ctx, "GUILD_VERIFICATION_ULTRATABLEFLIP");
         }
     }
 
     async getExplicitContent(ctx) {
         switch (ctx.guild.explicitContentFilter) {
         case 0:
-            return await ctx.t("EXPLICIT_FILTERING_OFF");
+            return await t(ctx, "EXPLICIT_FILTERING_OFF");
 
         case 1:
-            return await ctx.t("EXPLICIT_FILTERING_NOROLE");
+            return await t(ctx, "EXPLICIT_FILTERING_NOROLE");
 
         case 2:
-            return await ctx.t("EXPLICIT_FILTERING_ON");
+            return await t(ctx, "EXPLICIT_FILTERING_ON");
         }
     }
 }

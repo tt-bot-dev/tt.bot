@@ -21,6 +21,7 @@
 const { Command, ParsingError, Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const Regexes = require("../lib/e2p/regexes");
 const UnicodeEmojiRegex = require("emoji-regex");
+const { t } = require("../lib/util");
 const EmojiSerializer = val => {
     if (Regexes.EmojiRegex.test(val) ||
         UnicodeEmojiRegex().test(val)) return val;
@@ -33,22 +34,6 @@ class EmojiCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "emoji",
-            /*argParser: new SerializedArgumentParser(sosamba, {
-                separator: " ",
-                filterEmptyArguments: true,
-                args: [{
-                    name: "doGif",
-                    type: Boolean,
-                    description: "whether to generate a GIF image or not"
-                },
-                {
-                    name: "emojis",
-                    restSplit: true,
-                    type: EmojiSerializer,
-                    description: "the emojis to convert into a picture"
-                }],
-                allowQuotedString: false
-            }),*/
             args: [{
                 name: "emojis",
                 description: "The emojis to render.",
@@ -68,23 +53,23 @@ class EmojiCommand extends Command {
         this.log.debug(emojis);
         let input = emojis.split(" ");
         if (input.length > 5) input = input.slice(0, 5);
-        await ctx.send(await ctx.t("IMAGE_GENERATING"));
-        const t = process.hrtime();
+        await ctx.send(await t(ctx, "IMAGE_GENERATING"));
+        const time = process.hrtime();
         let b;
         try {
             b = await this.sosamba.workers.sendToRandom(0, "generateImage", { input, asGif: gif }).promise;
             if (b && b.err) throw b.err;
         } catch (err) {
             this.log.error(err);
-            ctx.send(await ctx.t("ERROR", { error: err.stack ?? err.toString() }));
+            await ctx.send(await t(ctx, "ERROR", { error: err.stack ?? err.toString() }));
             return;
         }
         if (!b) {
-            ctx.send(await ctx.t("IMAGE_NONE"));
+            await ctx.send(await t(ctx, "IMAGE_NONE"));
             return;
         }
-        const hrtime = process.hrtime(t);
-        ctx.send({
+        const hrtime = process.hrtime(time);
+        await ctx.send({
             embed: {
                 description: "Enjoy!",
                 color: 0x008800,
@@ -92,11 +77,11 @@ class EmojiCommand extends Command {
                     url: `attachment://image${b.isGif ? ".gif" : ".png"}`
                 },
                 fields: b.generated ? [{
-                    name: await ctx.t("IMAGE_AUTO_GENERATED"),
-                    value: await ctx.t("IMAGE_CAVEATS")
+                    name: await t(ctx, "IMAGE_AUTO_GENERATED"),
+                    value: await t(ctx, "IMAGE_CAVEATS")
                 }] : [],
                 footer: {
-                    text: await ctx.t("IMAGE_GENERATION_TIME", {
+                    text: await t(ctx, "IMAGE_GENERATION_TIME", {
                         seconds: hrtime[0], 
                         ms: Math.floor(hrtime[1] / 1e6)
                     })

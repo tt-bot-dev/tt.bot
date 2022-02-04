@@ -20,6 +20,7 @@
 "use strict";
 const Command = require("../lib/commandTypes/ModCommand");
 const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
+const { t } = require("../lib/util");
 
 class RemoveStrikeCommand extends Command {
     constructor(sosamba, ...args) {
@@ -49,7 +50,7 @@ class RemoveStrikeCommand extends Command {
         try {
             await this.sosamba.modLog.removeStrike(caseID, ctx, reason.join(" "));
         } catch(err) {
-            await ctx.send(await ctx.t("CANNOT_UNSTRIKE", { error: err.toString() }));
+            await ctx.send(await t(ctx, "CANNOT_UNSTRIKE", { error: err.toString() }));
             return;
         }
         await ctx.send(":ok_hand:");

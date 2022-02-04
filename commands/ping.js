@@ -19,6 +19,7 @@
 
 "use strict";
 const { Command } = require("sosamba");
+const { t } = require("../lib/util");
 
 class PingCommand extends Command {
     constructor(...args) {
@@ -37,12 +38,12 @@ class PingCommand extends Command {
         await ctx.interaction.editOriginalMessage({
             content: "",
             embeds: [{
-                title: await ctx.t("PONG"),
-                description: await ctx.t("PING_LATENCY", {
+                title: await t(ctx, "PONG"),
+                description: await t(ctx, "PING_LATENCY", {
                     ms: m.timestamp - ctx.interaction.createdAt
                 }),
                 footer: {
-                    text: await ctx.t("PING_DISCORD_LATENCY", {
+                    text: await t(ctx, "PING_DISCORD_LATENCY", {
                         ms: ctx.guild.shard.latency
                     })
                 },

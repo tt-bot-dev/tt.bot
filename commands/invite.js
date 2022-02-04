@@ -19,6 +19,7 @@
 
 "use strict";
 const { Command } = require("sosamba");
+const { t } = require("../lib/util");
 
 class InviteCommand extends Command {
     constructor(...args) {
@@ -29,7 +30,7 @@ class InviteCommand extends Command {
     }
 
     async run(ctx) {
-        await ctx.send(await ctx.t("BOT_INVITE", {
+        await ctx.send(await t(ctx, "BOT_INVITE", {
             botInviteLink: "https://discord.com/oauth2/authorize?client_id=195506253806436353&scope=bot"
         }));
     }

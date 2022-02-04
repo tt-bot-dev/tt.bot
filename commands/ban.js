@@ -21,6 +21,7 @@
 const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const { PunishTypes } = require("../lib/modlog/constants");
 const Command = require("../lib/commandTypes/ModCommand");
+const { t } = require("../lib/util");
 
 class BanCommand extends Command {
     constructor(sosamba, ...args) {
@@ -64,17 +65,17 @@ class BanCommand extends Command {
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
             if (!ctx.guild.members.get(this.sosamba.user.id).permissions.has("banMembers") ||
                 !this.sosamba.passesRoleHierarchy(ctx.guild.members.get(this.sosamba.user.id), user)) {
-                await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
+                await ctx.send(await t(ctx, "MISSING_PERMISSIONS"));
                 return;
             }
             await ctx.guild.banMember(user.id, _days, encodeURIComponent(`${this.sosamba.getTag(ctx.author)}: ${_reason}`));
             if (_soft) await ctx.guild.unbanMember(user.id);
             this.sosamba.modLog.createPunishment(ctx, _soft ? PunishTypes.SOFTBAN : PunishTypes.BAN, user.id, _reason).catch(() => void 0);
-            await ctx.send(await ctx.t(`${_soft ? "SOFT" : ""}BAN_DONE`, {
+            await ctx.send(await t(ctx, `${_soft ? "SOFT" : ""}BAN_DONE`, {
                 user: this.sosamba.getTag(user.user)
             }));
         } else {
-            ctx.send(await ctx.t("ROLE_HIERARCHY_ERROR"));
+            ctx.send(await t(ctx, "ROLE_HIERARCHY_ERROR"));
         }
     }
 }

@@ -20,6 +20,7 @@
 "use strict";
 const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const Command = require("../lib/commandTypes/ModCommand");
+const { t } = require("../lib/util");
 const D_EPOCH = 1421280000000n;
 const sleep = ms => new Promise(rs => setTimeout(rs, ms));
 
@@ -67,16 +68,16 @@ class ClearCommand extends Command {
     }
     async run(ctx, { messages, mentions, from, invert }) {
         if (!this.sosamba.hasBotPermission(ctx.channel, "manageMessages")) {
-            await ctx.send(await ctx.t("MISSING_PERMISSIONS"));
+            await ctx.send(await t(ctx, "MISSING_PERMISSIONS"));
             return;
         }
         await ctx.send({
-            content: await ctx.t("CLEAR_CONFIRM"),
+            content: await t(ctx, "CLEAR_CONFIRM"),
             components: ctx.createYesNoButtons()
         });
         const r = await ctx.askYesNo(true);
         if (!r.response) {
-            await ctx.send(await ctx.t("OP_CANCELLED"));
+            await ctx.send(await t(ctx, "OP_CANCELLED"));
             setTimeout(() => this.clearMessages(ctx, r), 2000);
             return;
         }
@@ -90,7 +91,7 @@ class ClearCommand extends Command {
             .filter(msg => msg > oldestPossibleSnowflake);
         await this.deleteStrategy(ctx.channel, toDelete);
         
-        const msgOK = await ctx.send(await ctx.t("CLEAR_DONE", {
+        const msgOK = await ctx.send(await t(ctx, "CLEAR_DONE", {
             messages: toDelete.length
         }));
         setTimeout(async () => await msgOK.delete(), 2000);

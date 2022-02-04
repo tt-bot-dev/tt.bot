@@ -19,20 +19,12 @@
 
 "use strict";
 const { Command, Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
+const { t } = require("../lib/util");
 
 class StrikeListCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "strikes",
-            /*argParser: new SerializedArgumentParser(sosamba, {
-                args: [{
-                    name: "user",
-                    type: User,
-                    default: ctx => ctx.author,
-                    rest: true,
-                    description: "The user to get the strikes for"
-                }]
-            }),*/
             args: [{
                 name: "user",
                 description: "The user to ban.",
@@ -47,13 +39,13 @@ class StrikeListCommand extends Command {
 
     async run(ctx, [user]) {
         if (user.bot) {
-            await ctx.send(await ctx.t("BOTS_NOT_STRIKABLE"));
+            await ctx.send(await t(ctx, "BOTS_NOT_STRIKABLE"));
             return;
         }
         const strikes = await this.sosamba.modLog.getUserStrikes(user.id, ctx);
         if (strikes > 25) {
             const strikeStr = strikes.map(s => `${s.id} - ${s.reason}`);
-            await ctx.send(await ctx.t("TOO_MUCH_STRIKES"), {
+            await ctx.send(await t(ctx, "TOO_MUCH_STRIKES"), {
                 file: Buffer.from(strikeStr.join("\r\n")),
                 name: "strikes.txt"
             });
@@ -61,7 +53,7 @@ class StrikeListCommand extends Command {
             await ctx.send({
                 embeds: [{
                     author: {
-                        name: await ctx.t("STRIKE_OVERVIEW", {
+                        name: await t(ctx, "STRIKE_OVERVIEW", {
                             user: this.sosamba.getTag(user)
                         })
                     },

@@ -22,6 +22,7 @@ const Command = require("../lib/commandTypes/ModCommand");
 const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const UserProfile = require("../lib/Structures/UserProfile");
 const { PunishTypes } = require("../lib/modlog/constants");
+const { t } = require("../lib/util");
 
 class StrikeCommand extends Command {
     constructor(sosamba, ...args) {
@@ -30,7 +31,7 @@ class StrikeCommand extends Command {
             description: "Strikes a user.",
             args: [{
                 name: "user",
-                description: "The user to ban.",
+                description: "The user to strike.",
                 type: ApplicationCommandOptionTypes.USER,
                 required: true,
             }, {
@@ -39,19 +40,6 @@ class StrikeCommand extends Command {
                 type: ApplicationCommandOptionTypes.STRING,
                 required: false
             }],
-            /*argParser: new SerializedArgumentParser(sosamba, {
-                args: [{
-                    type: Member,
-                    description: "the user to strike",
-                    name: "user"
-                }, {
-                    name: "reason",
-                    type: String,
-                    description: "the strike reason",
-                    default: "No reason provided.",
-                    rest: true
-                }]
-            }),*/
             aliases: ["warn"],
             guildOnly: true,
         });
@@ -59,11 +47,11 @@ class StrikeCommand extends Command {
 
     async run(ctx, { user, reason }) {
         const _reason = reason ?? "No reason provided.";
-        if (user.bot) return ctx.send(await ctx.t("BOTS_NOT_STRIKABLE"));
+        if (user.bot) return ctx.send(await t(ctx, "BOTS_NOT_STRIKABLE"));
         await this.sosamba.modLog.createPunishment(ctx, PunishTypes.STRIKE, user.id, _reason);
         const [dm, p] = await Promise.all([
             user.user.getDMChannel(),
-            ctx.db.getUserProfile(user.id)
+            this.sosamba.db.getUserProfile(user.id)
         ]);
         const prof = new UserProfile(p || {});
         try {

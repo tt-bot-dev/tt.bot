@@ -19,6 +19,7 @@
 
 "use strict";
 const { Command, Eris: { Constants: { UserFlags, ApplicationCommandOptionTypes }, Member } } = require("sosamba");
+const { t } = require("../lib/util");
 
 class UserCommand extends Command {
     constructor(sosamba, ...args) {
@@ -40,9 +41,9 @@ class UserCommand extends Command {
             const roles = user.roles.map(r => ctx.guild.roles.get(r).name);
             roles.unshift("@everyone");
             const nick = user.nick || this.sosamba.getTag(user);
-            ctx.send({
+            await ctx.send({
                 embeds: [{
-                    title: await ctx.t("USER_INFO", {
+                    title: await t(ctx, "USER_INFO", {
                         user: `${nick}${nick === this.sosamba.getTag(user) ? "" : ` (${this.sosamba.getTag(user)})`} (${user.id}) ${user.bot ? "(BOT)" : ""}`
                     }),
                     description: user.user.publicFlags ? this.bitArrayToEmoji(ctx, this.parseUserBitfield(user.user.publicFlags)).join("\n") : undefined,
@@ -50,29 +51,29 @@ class UserCommand extends Command {
                         url: user.user.avatarURL
                     },
                     fields: [{
-                        name: await ctx.t("ROLES"),
-                        value: roles.join(", ").length > 1024 ? await ctx.t("TOOLONG") : roles.join(", "),
+                        name: await t(ctx, "ROLES"),
+                        value: roles.join(", ").length > 1024 ? await t(ctx, "TOOLONG") : roles.join(", "),
                         inline: false
                     }, {
-                        name: await ctx.t("CREATED_ON"),
+                        name: await t(ctx, "CREATED_ON"),
                         value: await ctx.formatDate(user.createdAt, (await ctx.userProfile).timezone),
                         inline: true
                     }, {
-                        name: await ctx.t("CURRENT_VOICE"),
+                        name: await t(ctx, "CURRENT_VOICE"),
                         value: ctx.guild.channels.get(ctx.guild.voiceStates.get(user.id)?.channelID)
-                            ?.name || await ctx.t("NO_CURRENT_VOICE"),
+                            ?.name || await t(ctx, "NO_CURRENT_VOICE"),
                         inline: true
                     }],
                     timestamp: new Date(user.joinedAt),
                     footer: {
-                        text: await ctx.t("JOINED_ON")
+                        text: await t(ctx, "JOINED_ON")
                     }
                 }]
             });
         } else {
             await ctx.send({
                 embeds: [{
-                    title: await ctx.t("USER_INFO_LIMITED", {
+                    title: await t(ctx, "USER_INFO_LIMITED", {
                         user: `${this.sosamba.getTag(user)} ${user.bot ? "(BOT)" : ""}`
                     }),
                     description: user.publicFlags ? this.bitArrayToEmoji(ctx, this.parseUserBitfield(user.publicFlags)).join("\n") : undefined,
@@ -80,12 +81,12 @@ class UserCommand extends Command {
                         url: user.avatarURL
                     },
                     fields: [{
-                        name: await ctx.t("CREATED_ON"),
+                        name: await t(ctx, "CREATED_ON"),
                         value: await ctx.formatDate(user.createdAt, (await ctx.userProfile).timezone),
                         inline: true
                     }],
                     footer: {
-                        text: await ctx.t("NOT_IN_SERVER")
+                        text: await t(ctx, "NOT_IN_SERVER")
                     }
                 }]
             });

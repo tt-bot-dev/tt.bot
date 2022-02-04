@@ -20,6 +20,7 @@
 "use strict";
 const { Command, Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const UserProfile = require("../lib/Structures/UserProfile");
+const { t, formatDate } = require("../lib/util");
 
 class TimeForCommand extends Command {
     constructor(sosamba, ...args) {
@@ -37,14 +38,14 @@ class TimeForCommand extends Command {
     }
 
     async run(ctx, [user]) {
-        const profile = await ctx.db.getUserProfile(user.id);
+        const profile = await this.sosamba.db.getUserProfile(user.id);
         if (!profile) return await ctx.send(
-            await ctx.t(`PROFILE${user.id === ctx.author.id ? "" : "_SPECIFIC"}_NONEXISTENT`,
+            await t(ctx, `PROFILE${user.id === ctx.author.id ? "" : "_SPECIFIC"}_NONEXISTENT`,
                 { user: this.sosamba.getTag(user) }));
         const data = new UserProfile(profile);
-        if (!data.timezone) return await ctx.send(await ctx.t("NO_TZ"));
-        return ctx.send(await ctx.t("TIME_FOR", {
-            time: await ctx.formatDate(Date.now(), data.timezone),
+        if (!data.timezone) return await ctx.send(await t(ctx, "NO_TZ"));
+        return ctx.send(await t(ctx, "TIME_FOR", {
+            time: await formatDate(Date.now(), data.timezone),
             user: this.sosamba.getTag(user)
         }));
     }

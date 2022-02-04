@@ -19,20 +19,12 @@
 
 "use strict";
 const { Command, Eris: { Member, Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
+const { t } = require("../lib/util");
 
 class AvatarCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "getavatar",
-            /*argParser: new SerializedArgumentParser(sosamba, {
-                args: [{
-                    default: ctx => ctx.author,
-                    rest: true,
-                    name: "user",
-                    type: [User, userByID],
-                    description: "the user to get the avatar from"
-                }]
-            }),*/
             args: [{
                 name: "user",
                 description: "The user to get the avatar for.",
@@ -73,7 +65,7 @@ class AvatarCommand extends Command {
             embeds: [{
                 //image: 
                 author: {
-                    name: await ctx.t("USER_AVATAR", {
+                    name: await t(ctx, "USER_AVATAR", {
                         user: this.sosamba.getTag(user)
                     })
                 },
