@@ -20,7 +20,6 @@
 "use strict";
 const Command = require("../lib/commandTypes/ModCommand");
 const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
-const { version: sosambaVersion } = require("sosamba/package.json");
 
 class UpdateReasonCommand extends Command {
     constructor(sosamba, ...args) {

@@ -18,7 +18,7 @@
  */
 
 "use strict";
-const { Command, Eris: { Constants: { ApplicationCommandOptionTypes } }, Serializers: { User } } = require("sosamba");
+const { Command, Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 
 class StrikeListCommand extends Command {
     constructor(sosamba, ...args) {

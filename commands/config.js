@@ -244,6 +244,7 @@ class ConfigCommand extends Command {
 
     async run(ctx) {
         return; // Currently not implementable until Discord releases forms
+        // eslint-disable-next-line no-unreachable
         if (!await ctx.guildConfig) {
             await ctx.db.createGuildConfig(ctx._guildConfig = {
                 id: ctx.guild.id,

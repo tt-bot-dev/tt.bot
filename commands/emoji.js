@@ -66,7 +66,7 @@ class EmojiCommand extends Command {
     }
     async run(ctx, { emojis, gif }) {
         this.log.debug(emojis);
-        const input = emojis.split(" ");
+        let input = emojis.split(" ");
         if (input.length > 5) input = input.slice(0, 5);
         await ctx.send(await ctx.t("IMAGE_GENERATING"));
         const t = process.hrtime();

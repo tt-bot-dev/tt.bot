@@ -31,7 +31,7 @@ class CatCommand extends Command {
     }
 
     async run(ctx) {
-        const { statusCode, body } = await request("https://aws.random.cat/meow")
+        const { statusCode, body } = await request("https://aws.random.cat/meow");
         if (statusCode !== 200) {
             await ctx.send({
                 embeds: [{

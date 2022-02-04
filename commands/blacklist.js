@@ -73,49 +73,49 @@ class BlacklistManagerCommand extends Command {
 
     async run(ctx, { id, reason }) {
         switch (ctx.subcommand) {
-            case "query": {
-                const guilds = await ctx.db.getBlacklistedGuildById(id);
-                if (guilds.length === 0) {
-                    return await ctx.send({
-                        embeds: [{
-                            title: ":x: Cannot find blacklisted guilds by these IDs.",
-                            description: "It's not blacklisted. Check the ID and try again.",
-                            color: 0xFF0000
-                        }]
-                    });
-                }
-
-                const fields = guilds.map(g => ({
-                    name: `${g.id} ${g.ownerID ? `(owned by ${g.ownerID})` : ""}`,
-                    value: g.reason || "no reason"
-                }));
-
-                await ctx.send({
+        case "query": {
+            const guilds = await ctx.db.getBlacklistedGuildById(id);
+            if (guilds.length === 0) {
+                return await ctx.send({
                     embeds: [{
-                        title: "Here are the blacklisted guilds for this ID",
-                        color: 0x008800,
-                        fields: fields.slice(0, 25)
+                        title: ":x: Cannot find blacklisted guilds by these IDs.",
+                        description: "It's not blacklisted. Check the ID and try again.",
+                        color: 0xFF0000
                     }]
                 });
-                break;
             }
-            case "add": {
-                const guild = this.sosamba.guilds.get(id);
-                const ownerID = guild?.ownerID;
-                await ctx.db.addBlacklistedGuild(id, ownerID, reason ?? "");
-                await Promise.all(this.sosamba.guilds.filter(g => g.id === id || g.ownerID === ownerID)
-                    .map(g => {
-                        g.__automaticallyLeft = true;
-                        return g.leave();
-                    }));
-                await ctx.send(":ok_hand:");
-                break;
-            }
-            case "remove": {
-                await ctx.db.removeBlacklistedGuild(id);
-                await ctx.send(":ok_hand:");
-                break;
-            }
+
+            const fields = guilds.map(g => ({
+                name: `${g.id} ${g.ownerID ? `(owned by ${g.ownerID})` : ""}`,
+                value: g.reason || "no reason"
+            }));
+
+            await ctx.send({
+                embeds: [{
+                    title: "Here are the blacklisted guilds for this ID",
+                    color: 0x008800,
+                    fields: fields.slice(0, 25)
+                }]
+            });
+            break;
+        }
+        case "add": {
+            const guild = this.sosamba.guilds.get(id);
+            const ownerID = guild?.ownerID;
+            await ctx.db.addBlacklistedGuild(id, ownerID, reason ?? "");
+            await Promise.all(this.sosamba.guilds.filter(g => g.id === id || g.ownerID === ownerID)
+                .map(g => {
+                    g.__automaticallyLeft = true;
+                    return g.leave();
+                }));
+            await ctx.send(":ok_hand:");
+            break;
+        }
+        case "remove": {
+            await ctx.db.removeBlacklistedGuild(id);
+            await ctx.send(":ok_hand:");
+            break;
+        }
         }
     }
 }

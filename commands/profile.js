@@ -18,7 +18,7 @@
  */
 
 "use strict";
-const { Command, Eris: { Constants: { ApplicationCommandOptionTypes }} } = require("sosamba");
+const { Command, Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const UserProfile = require("../lib/Structures/UserProfile");
 const RemoveSymbol = Symbol("tt.bot.profile.remove");
 const SetupSymbol = Symbol("tt.bot.profile.setup");
@@ -205,7 +205,7 @@ class ProfileCommand extends Command {
                 name: `${l.terms.ENGLISH_LOCALE_NAME} (${l.terms.NATIVE_LOCALE_NAME}) \u2013 ${(termsInForeign / terms.length * 100).toFixed(2)}%`,
                 value: l.id
             };
-        })
+        });
     }
 }
 

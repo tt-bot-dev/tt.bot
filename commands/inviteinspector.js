@@ -32,7 +32,7 @@ class InviteInspectorCommand extends Command {
 
     async run(ctx, args) {
         return; // TODO: decide on the future of this command... it might be a candidate for removal
-        
+        // eslint-disable-next-line no-unreachable
         let inviteData;
         try {
             inviteData = await this.sosamba.getInvite(args, true);

@@ -20,11 +20,6 @@
 "use strict";
 const { Command, Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
 const OwnerCommand = require("../lib/commandTypes/OwnerCommand");
-const { version: sosambaVersion } = require("sosamba/package.json");
-const ShowSymbol = Symbol("tt.bot.tags.show");
-const CreateSymbol = Symbol("tt.bot.tags.create");
-const EditSymbol = Symbol("tt.bot.tags.edit");
-const DeleteSymbol = Symbol("tt.bot.tags.delete");
 const TagObject = require("../lib/Structures/TagObject");
 
 class TagCommand extends Command {
@@ -123,64 +118,64 @@ class TagCommand extends Command {
 
     async run(ctx, { name, content }) {
         switch (ctx.subcommand) {
-            case "show": {
-                const d = await ctx.db.getTag(ctx.encryptData(name));
-                if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
-                const data = new TagObject(d);
-                await ctx.send({
-                    embed: {
-                        author: {
-                            name: await ctx.t("TAG_DISPLAY", {
-                                tag: data.id
-                            })
-                        },
-                        description: this.sosamba.parseMsg(data.content, ctx.member, ctx.guild)
-                    }
-                });
-                break;
-            }
-
-            case "delete": {
-                const d = await ctx.db.getTag(ctx.encryptData(name));
-                if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
-                if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== d.owner) {
-                    return await ctx.send(await ctx.t("TAG_NOTOWNER"));
-                } else {
-                    await ctx.db.deleteTag(ctx.encryptData(name));
-                    await ctx.send(await ctx.t("TAG_DELETED", { tag: name }));
+        case "show": {
+            const d = await ctx.db.getTag(ctx.encryptData(name));
+            if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
+            const data = new TagObject(d);
+            await ctx.send({
+                embed: {
+                    author: {
+                        name: await ctx.t("TAG_DISPLAY", {
+                            tag: data.id
+                        })
+                    },
+                    description: this.sosamba.parseMsg(data.content, ctx.member, ctx.guild)
                 }
-                break;
+            });
+            break;
+        }
+
+        case "delete": {
+            const d = await ctx.db.getTag(ctx.encryptData(name));
+            if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
+            if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== d.owner) {
+                return await ctx.send(await ctx.t("TAG_NOTOWNER"));
+            } else {
+                await ctx.db.deleteTag(ctx.encryptData(name));
+                await ctx.send(await ctx.t("TAG_DELETED", { tag: name }));
             }
+            break;
+        }
 
-            case "edit": {
-                const d = await ctx.db.getTag(ctx.encryptData(name));
-                if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
-                const data = new TagObject(d);
-                if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== data.owner) {
-                    return await ctx.send(await ctx.t("TAG_NOTOWNER"));
-                } else {
-                    data.content = content;
-                    await ctx.db.updateTag(ctx.encryptData(name),
-                        data.toEncryptedObject());
-                    await ctx.send(await ctx.t("TAG_UPDATED", {
-                        tag: name
-                    }));
-                }
-                break;
-            }
-
-            case "create": {
-                if (await ctx.db.getTag(ctx.encryptData(name)))
-                    return await ctx.send(await ctx.t("TAG_EXISTS"));
-
-                await ctx.db.createTag(TagObject.create({
-                    id: name,
-                    content,
-                    owner: ctx.author.id
+        case "edit": {
+            const d = await ctx.db.getTag(ctx.encryptData(name));
+            if (!d) return ctx.send(await ctx.t("TAG_DOESNTEXIST"));
+            const data = new TagObject(d);
+            if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== data.owner) {
+                return await ctx.send(await ctx.t("TAG_NOTOWNER"));
+            } else {
+                data.content = content;
+                await ctx.db.updateTag(ctx.encryptData(name),
+                    data.toEncryptedObject());
+                await ctx.send(await ctx.t("TAG_UPDATED", {
+                    tag: name
                 }));
-                await ctx.send(await ctx.t("TAG_CREATED", { tag: name }));
-                break;
             }
+            break;
+        }
+
+        case "create": {
+            if (await ctx.db.getTag(ctx.encryptData(name)))
+                return await ctx.send(await ctx.t("TAG_EXISTS"));
+
+            await ctx.db.createTag(TagObject.create({
+                id: name,
+                content,
+                owner: ctx.author.id
+            }));
+            await ctx.send(await ctx.t("TAG_CREATED", { tag: name }));
+            break;
+        }
         }
     }
 }

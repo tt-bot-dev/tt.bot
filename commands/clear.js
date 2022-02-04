@@ -19,18 +19,9 @@
 
 "use strict";
 const { Eris: { Constants: { ApplicationCommandOptionTypes } } } = require("sosamba");
-const { user } = require("sosamba/lib/argParsers/switchSerializers/erisObjects");
 const Command = require("../lib/commandTypes/ModCommand");
-const { User } = require("eris");
 const D_EPOCH = 1421280000000n;
 const sleep = ms => new Promise(rs => setTimeout(rs, ms));
-const FromResolver = async (val, ctx) => {
-    if (val === "bots") return BotSymbol;
-    else return user(val, ctx, {
-        isFromArgParser: true
-    });
-};
-FromResolver.typeHint = "User|\"bots\"";
 
 class ClearCommand extends Command {
     constructor(sosamba, ...args) {

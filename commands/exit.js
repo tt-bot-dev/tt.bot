@@ -20,7 +20,7 @@
 "use strict";
 const Command = require("../lib/commandTypes/OwnerCommand");
 const { homeGuild } = require("../config");
-const { STOP_REASONS } = require("sosamba/lib/Constants");
+// const { STOP_REASONS } = require("sosamba/lib/Constants");
 
 class ExitCommand extends Command {
     constructor(...args) {

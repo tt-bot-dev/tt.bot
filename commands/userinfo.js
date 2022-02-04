@@ -19,7 +19,6 @@
 
 "use strict";
 const { Command, Eris: { Constants: { UserFlags, ApplicationCommandOptionTypes }, Member } } = require("sosamba");
-const userByID = require("../lib/util/userByID");
 
 class UserCommand extends Command {
     constructor(sosamba, ...args) {
