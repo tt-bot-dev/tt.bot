@@ -1,10 +1,10 @@
 lint:
     stage: test
-    image: node:alpine
+    image: node:current-alpine
     script: 
         - apk add bash # bash not present, wtf?
         - rm package.json
-        - npm i @tt-bot-dev/eslint-config babel-eslint
+        - npm i git+https://owo.codes/tt.bot/frameworks/eslint-config.git
         - npx eslint .
 
 # test_build:
