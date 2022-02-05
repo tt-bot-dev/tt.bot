@@ -17,15 +17,13 @@
  * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Command from "../lib/commandTypes/ModCommand.js";
+import Command from "../lib/commandTypes/ModCommand.mjs";
 import { Eris } from "sosamba";
-import UserProfile from "../lib/Structures/UserProfile.js";
-import ModlogConstants from "../lib/modlog/constants.js";
-import util from "../lib/util.js";
+import UserProfile from "../lib/Structures/UserProfile.mjs";
+import { PunishTypes } from "../lib/modlog/constants.mjs";
+import { t } from "../lib/util.mjs";
 
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
-const { PunishTypes } = ModlogConstants;
-const { t } = util;
 
 class StrikeCommand extends Command {
     constructor(sosamba, ...args) {

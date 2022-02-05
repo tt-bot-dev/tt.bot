@@ -20,10 +20,8 @@
 import { Command, Eris } from "sosamba";
 import luxon from "luxon";
 import config from "../config.js";
-import util from "../lib/util.js";
+import { t } from "../lib/util.mjs";
 import ttbotPackage, { sosambaPackage } from "../lib/package.mjs";
-
-const { t } = util;
 
 const { VERSION: erisVersion } = Eris;
 const { version: ttBotVersion } = ttbotPackage;
@@ -75,6 +73,7 @@ class InfoCommand extends Command {
                 {
                     name: await t(ctx, "INFO_FREE_SOFTWARE"),
                     value: await t(ctx, "INFO_FREE_SOFTWARE_DESCRIPTION", {
+                        // @ts-expect-error: config.webserver.display is internally converted to a callable
                         learnMore: config.webserver.display("/license")
                     })
                 }],

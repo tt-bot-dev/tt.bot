@@ -18,7 +18,7 @@
  */
 
 import { Event } from "sosamba";
-import logging from "../lib/logging.js";
+import * as logging from "../lib/logging.mjs";
 
 class GuildBanEvent extends Event {
     constructor(...args) {

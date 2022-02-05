@@ -18,12 +18,11 @@
  */
 
 import { Command, Eris } from "sosamba";
-import OwnerCommand from "../lib/commandTypes/OwnerCommand.js";
-import TagObject from "../lib/Structures/TagObject.js";
+import OwnerCommand from "../lib/commandTypes/OwnerCommand.mjs";
+import TagObject from "../lib/Structures/TagObject.mjs";
 import dataEncryption from "../lib/dataEncryption.js";
-import util from "../lib/util.js";
+import { t } from "../lib/util.mjs";
 
-const { t } = util;
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
 const { encrypt } = dataEncryption;
 

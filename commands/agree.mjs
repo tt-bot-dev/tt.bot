@@ -18,9 +18,7 @@
  */
 
 import { Command } from "sosamba";
-import util from "../lib/util.js";
-
-const { getGuildConfig, t } = util;
+import { getGuildConfig, t } from "../lib/util.mjs";
 
 class AgreeCommand extends Command {
     constructor(...args) {

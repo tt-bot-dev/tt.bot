@@ -8,7 +8,6 @@
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "checkJs": true,
-        "importsNotUsedAsValues": "error"
     },
     "exclude": [
         "node_modules",
@@ -19,5 +18,8 @@
         "*.mjs",
         "**/*.js",
         "**/*.mjs"
-    ]
+    ],
+    "typeAcquisition": {
+        "enable": true
+    }
 }

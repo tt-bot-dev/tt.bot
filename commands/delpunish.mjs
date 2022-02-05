@@ -18,11 +18,10 @@
  */
 
 import { Eris } from "sosamba";
-import Command from "../lib/commandTypes/ModCommand.js";
-import util from "../lib/util.js";
+import Command from "../lib/commandTypes/ModCommand.mjs";
+import { t } from "../lib/util.mjs";
 
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
-const { t } = util;
 
 class RemoveStrikeCommand extends Command {
     constructor(sosamba, ...args) {

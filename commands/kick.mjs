@@ -18,13 +18,11 @@
  */
 
 import { Eris } from "sosamba";
-import Command from "../lib/commandTypes/ModCommand.js";
-import ModlogConstants from "../lib/modlog/constants.js";
-import util from "../lib/util.js";
+import Command from "../lib/commandTypes/ModCommand.mjs";
+import { PunishTypes } from "../lib/modlog/constants.mjs";
+import { t } from "../lib/util.mjs";
 
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
-const { PunishTypes } = ModlogConstants;
-const { t } = util;
 
 class KickCommand extends Command {
     constructor(sosamba, ...args) {

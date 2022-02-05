@@ -20,7 +20,7 @@
 "use strict";
 
 import { Event, Logger } from "sosamba";
-import w from "../lib/util/worker.js";
+import w from "../lib/util/worker.mjs";
 import config from "../config.js";
 import ttbotPackage from "../lib/package.mjs";
 

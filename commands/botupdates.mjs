@@ -18,7 +18,7 @@
  */
 
 "use strict";
-import Command from "../lib/commandTypes/AdminCommand.js";
+import Command from "../lib/commandTypes/AdminCommand.mjs";
 import config from "../config.js";
 
 const { announcementChannelID } = config;

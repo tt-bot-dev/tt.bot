@@ -18,10 +18,9 @@
  */
 
 import { Command, Eris } from "sosamba";
-import util from "../lib/util.js";
+import { t } from "../lib/util.mjs";
 
 const { Constants: { UserFlags, ApplicationCommandOptionTypes }, Member } = Eris;
-const { t } = util;
 
 class UserCommand extends Command {
     constructor(sosamba, ...args) {

@@ -21,7 +21,7 @@
 const { ReactionMenu } = require("sosamba");
 const config = require("../config");
 const { prefix: defaultPrefix } = require("../config");
-const Command = require("../lib/commandTypes/AdminCommand");
+const Command = require("../lib/commandTypes/AdminCommand.mjs").default;
 const ConfigProps = require("../lib/util/config/Properties");
 
 class ConfigMenu extends ReactionMenu {

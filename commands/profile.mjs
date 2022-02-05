@@ -18,7 +18,7 @@
  */
 
 import { Command, Eris } from "sosamba";
-import UserProfile from "../lib/Structures/UserProfile.js";
+import UserProfile from "../lib/Structures/UserProfile.mjs";
 
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
 

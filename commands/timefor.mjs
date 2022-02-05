@@ -18,11 +18,10 @@
  */
 
 import { Command, Eris } from "sosamba";
-import UserProfile from "../lib/Structures/UserProfile.js";
-import util from "../lib/util.js";
+import UserProfile from "../lib/Structures/UserProfile.mjs";
+import { t, formatDate } from "../lib/util.mjs";
 
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
-const { t, formatDate } = util;
 
 class TimeForCommand extends Command {
     constructor(sosamba, ...args) {
@@ -47,7 +46,7 @@ class TimeForCommand extends Command {
         const data = new UserProfile(profile);
         if (!data.timezone) return await ctx.send(await t(ctx, "NO_TZ"));
         return ctx.send(await t(ctx, "TIME_FOR", {
-            time: await formatDate(Date.now(), data.timezone),
+            time: await formatDate(ctx, Date.now(), data.timezone),
             user: this.sosamba.getTag(user)
         }));
     }

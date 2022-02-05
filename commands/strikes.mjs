@@ -18,10 +18,9 @@
  */
 
 import { Command, Eris } from "sosamba";
-import util from "../lib/util.js";
+import { t } from "../lib/util.mjs";
 
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
-const { t } = util;
 
 class StrikeListCommand extends Command {
     constructor(sosamba, ...args) {

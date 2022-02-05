@@ -18,11 +18,11 @@
  */
 
 import { Event } from "sosamba";
-import logging from "../lib/logging.js";
+import * as logging from "../lib/logging.mjs";
 
 class GuildUnbanLogger extends Event {
-    constructor(sosamba, fn, fp) {
-        super(sosamba, fn, fp, {
+    constructor(...args) {
+        super(...args, {
             name: "guildBanRemove"
         });
 

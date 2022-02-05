@@ -19,10 +19,10 @@
 
 import { Eris } from "sosamba";
 import config from "../config.js";
-import Command from "../lib/commandTypes/OwnerCommand.js";
+import Command from "../lib/commandTypes/OwnerCommand.mjs";
 import { spawn } from "child_process";
-import CensorBuilder from "../lib/CensorBuilder.js";
-import makegist from "../lib/gist.js";
+import CensorBuilder from "../lib/CensorBuilder.mjs";
+import makegist from "../lib/gist.mjs";
 
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
 const { homeGuild } = config;

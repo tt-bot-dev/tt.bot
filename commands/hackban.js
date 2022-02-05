@@ -18,9 +18,9 @@
  */
 
 "use strict";
-const Command = require("../lib/commandTypes/ModCommand");
+const Command = require("../lib/commandTypes/ModCommand.mjs").default;
 const { version: sosambaVersion } = require("sosamba/package.json");
-const { t } = require("../lib/util");
+const { t } = require("../lib/util.mjs").default;
 
 class HackbanCommand extends Command {
     constructor(sosamba, ...args) {

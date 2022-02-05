@@ -18,7 +18,7 @@
  */
 
 import config from "../config.js";
-import Command from "../lib/commandTypes/OwnerCommand.js";
+import Command from "../lib/commandTypes/OwnerCommand.mjs";
 // const { STOP_REASONS } = require("sosamba/lib/Constants");
 
 const { homeGuild } = config;

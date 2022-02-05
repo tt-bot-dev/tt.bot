@@ -18,9 +18,7 @@
  */
 
 import { Command } from "sosamba";
-import util from "../lib/util.js";
-
-const { t } = util;
+import { t } from "../lib/util.mjs";
 
 class ServerCommand extends Command {
     constructor(...args) {

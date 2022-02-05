@@ -20,12 +20,11 @@
 "use strict";
 
 import { Command, Eris } from "sosamba";
-import Regexes from "../lib/e2p/regexes.js";
+import * as Regexes from "../lib/e2p/regexes.mjs";
 import UnicodeEmojiRegex from "emoji-regex";
-import util from "../lib/util.js";
+import { t } from "../lib/util.mjs";
 
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
-const { t } = util;
 
 class EmojiCommand extends Command {
     constructor(sosamba, ...args) {
@@ -67,7 +66,7 @@ class EmojiCommand extends Command {
         }
         const hrtime = process.hrtime(time);
         await ctx.send({
-            embed: {
+            embeds: [{
                 description: "Enjoy!",
                 color: 0x008800,
                 image: {
@@ -83,7 +82,7 @@ class EmojiCommand extends Command {
                         ms: Math.floor(hrtime[1] / 1e6)
                     })
                 }
-            }
+            }]
         }, {
             file: Buffer.from(b.image),
             name: b.isGif ? "image.gif" : "image.png"

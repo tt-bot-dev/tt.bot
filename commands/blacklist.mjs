@@ -17,7 +17,7 @@
  * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Command from "../lib/commandTypes/OwnerCommand.js";
+import Command from "../lib/commandTypes/OwnerCommand.mjs";
 import config from "../config.js";
 import { Eris } from "sosamba";
 

@@ -19,7 +19,7 @@
 
 "use strict";
 import { Event } from "sosamba";
-import logging from "../lib/logging.js";
+import * as logging from "../lib/logging.mjs";
 
 class MessageUpdateLogger extends Event {
     constructor(...args) {
