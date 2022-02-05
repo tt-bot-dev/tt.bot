@@ -17,10 +17,31 @@
  * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
-import("./lib/load.mjs").then(mod => {
-    return mod.default();
-}).catch(err => {
-    console.error(":( tt.bot has failed initializing");
-    console.error(err);
-});
+import { Event } from "sosamba";
+import config from "../config.js";
+
+class GuildLeaveEvent extends Event {
+    constructor(...args) {
+        super(...args, {
+            name: "guildDelete"
+        });
+    }
+
+    prerequisites(guild) {
+        return !guild.__automaticallyLeft;
+    }
+
+    async run(guild) {
+        await this.sosamba.createMessage(config.serverLogChannel, {
+            embed: {
+                author: {
+                    name: `I was removed from ${guild.name} (${guild.id}) 😢`,
+                    icon_url: guild.iconURL
+                },
+                color: 0x008800
+            }
+        });
+    }
+}
+
+export default GuildLeaveEvent;

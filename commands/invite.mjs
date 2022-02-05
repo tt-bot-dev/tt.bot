@@ -17,10 +17,24 @@
  * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
-import("./lib/load.mjs").then(mod => {
-    return mod.default();
-}).catch(err => {
-    console.error(":( tt.bot has failed initializing");
-    console.error(err);
-});
+import { Command } from "sosamba";
+import util from "../lib/util.js";
+
+const { t } = util;
+
+class InviteCommand extends Command {
+    constructor(...args) {
+        super(...args, { 
+            name: "invite",
+            description: "Sends a link to invite me."
+        });
+    }
+
+    async run(ctx) {
+        await ctx.send(await t(ctx, "BOT_INVITE", {
+            botInviteLink: "https://discord.com/oauth2/authorize?client_id=195506253806436353&scope=bot"
+        }));
+    }
+}
+
+export default InviteCommand;

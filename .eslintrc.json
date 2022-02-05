@@ -1,3 +1,9 @@
 {
-    "extends": "@tt-bot-dev"
+    "extends": "@tt-bot-dev",
+    "overrides": [{
+        "files": "*.mjs",
+        "parserOptions": {
+            "sourceType": "module"
+        }
+    }]
 }

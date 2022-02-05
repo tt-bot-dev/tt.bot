@@ -25,6 +25,7 @@
     },
     "devDependencies": {
         "@tt-bot-dev/eslint-config": "git+https://owo.codes/tt.bot/frameworks/eslint-config.git",
+        "@tt-bot-dev/types": "git+https://owo.codes/tt.bot/modules/types.git",
         "babel-eslint": "^10.1.0",
         "eslint": "^8.5.0"
     },

@@ -19,7 +19,6 @@
 
 "use strict";
 const { ReactionMenu } = require("sosamba");
-const { role, channel } = require("sosamba/lib/argParsers/switchSerializers/erisObjects");
 const config = require("../config");
 const { prefix: defaultPrefix } = require("../config");
 const Command = require("../lib/commandTypes/AdminCommand");

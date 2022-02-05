@@ -17,10 +17,27 @@
  * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
-import("./lib/load.mjs").then(mod => {
-    return mod.default();
-}).catch(err => {
-    console.error(":( tt.bot has failed initializing");
-    console.error(err);
-});
+import { Event } from "sosamba";
+import logging from "../lib/logging.js";
+
+class BulkDeleteLogger extends Event {
+    constructor(...args) {
+        super(...args, {
+            name: "messageDeleteBulk"
+        });
+    }
+
+    async prerequisites(msg) {
+        return msg[0].channel.guild;
+    }
+
+    async run(msg) {
+        const [{ channel }] = msg;
+        const logConfig = await logging.getInfo(channel.guild.id, this.sosamba.db);
+        if (logConfig.logEvents.includes("messageBulkDelete")) {
+            await logging.handlers.bulkDelete(logConfig, msg.length, channel);
+        }
+    }
+}
+
+export default BulkDeleteLogger;

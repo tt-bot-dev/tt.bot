@@ -17,10 +17,17 @@
  * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
-import("./lib/load.mjs").then(mod => {
-    return mod.default();
-}).catch(err => {
-    console.error(":( tt.bot has failed initializing");
-    console.error(err);
-});
+import { Event } from "sosamba";
+
+class DebugEvent extends Event {
+    constructor(...args) {
+        super(...args, {
+            name: "debug"
+        });
+    }
+    async run(...args) {
+        this.log.debug(...args);
+    }
+}
+
+export default DebugEvent;

@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "target": "esnext",
+        
+        "jsx": "preserve",
+        "strictFunctionTypes": true,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "checkJs": true,
+        "importsNotUsedAsValues": "error"
+    },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*"
+    ],
+    "include": [
+        "*.js",
+        "*.mjs",
+        "**/*.js",
+        "**/*.mjs"
+    ]
+}

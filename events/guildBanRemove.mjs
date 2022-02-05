@@ -17,10 +17,23 @@
  * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
-import("./lib/load.mjs").then(mod => {
-    return mod.default();
-}).catch(err => {
-    console.error(":( tt.bot has failed initializing");
-    console.error(err);
-});
+import { Event } from "sosamba";
+import logging from "../lib/logging.js";
+
+class GuildUnbanLogger extends Event {
+    constructor(sosamba, fn, fp) {
+        super(sosamba, fn, fp, {
+            name: "guildBanRemove"
+        });
+
+    }
+
+    async run(guild, user) {
+        const logConfig = await logging.getInfo(guild.id, this.sosamba.db);
+        if (logConfig.logEvents.includes("guildUnban")) {
+            await logging.handlers.ban(logConfig, guild, user, true);
+        }
+    }
+}
+
+export default GuildUnbanLogger;
