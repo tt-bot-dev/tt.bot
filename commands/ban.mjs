@@ -22,7 +22,7 @@ import Command from "../lib/commandTypes/ModCommand.mjs";
 import { PunishTypes } from "../lib/modlog/constants.mjs";
 import { t } from "../lib/util.mjs";
 
-const { Constants: { ApplicationCommandOptionTypes }} = Eris;
+const { Constants: { ApplicationCommandOptionTypes } } = Eris;
 
 class BanCommand extends Command {
     constructor(sosamba, ...args) {

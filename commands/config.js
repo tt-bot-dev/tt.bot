@@ -24,6 +24,9 @@ const { prefix: defaultPrefix } = require("../config");
 const Command = require("../lib/commandTypes/AdminCommand.mjs").default;
 const ConfigProps = require("../lib/util/config/Properties");
 
+const role = null;
+const channel = null;
+
 class ConfigMenu extends ReactionMenu {
     constructor(...args) {
         super(...args);

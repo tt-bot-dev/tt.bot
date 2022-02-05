@@ -17,7 +17,7 @@
  * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
+
 import { Command, Eris } from "sosamba";
 import { t } from "../lib/util.mjs";
 

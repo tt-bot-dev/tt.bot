@@ -50,7 +50,7 @@ class EvalCommand extends Command {
     async run(ctx, { code: args }) {
         let d;
         try {
-            AsyncFunction
+            AsyncFunction;
 
             d = await new AsyncFunction("ctx", "args",
                 "require", "__dirname", "__filename", "module", args)

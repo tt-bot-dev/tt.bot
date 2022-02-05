@@ -18,7 +18,7 @@
  */
 
 import { Command, Eris } from "sosamba";
-import UserProfile from "../lib/Structures/UserProfile.mjs";
+// import UserProfile from "../lib/Structures/UserProfile.mjs";
 
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
 
@@ -57,10 +57,13 @@ class ProfileCommand extends Command {
     }
 
     async run(ctx, [action, arg]) {
+        ctx;
+        action;
+        arg;
         return; // We haven't gotten to updating it yet
 
         //eslint-disable-next-line no-unreachable
-        if (action === RemoveSymbol) {
+        /*if (action === RemoveSymbol) {
             if ((await ctx.userProfile).fake) return ctx.send(await ctx.t("PROFILE_NONEXISTENT"));
             else {
                 await this.sosamba.db.deleteUserProfile(ctx.author.id);
@@ -77,7 +80,7 @@ class ProfileCommand extends Command {
             if (response) {
                 try {
                     await context.msg.delete(); 
-                } catch { /* */ }
+                } catch { /* * / }
                 await ctx.send(await ctx.t("PROFILE_CREATE_TIMEZONE"));
                 const m = await ctx.waitForMessage(async ctx => {
                     if (ctx.msg.content.toLowerCase() === "none") return true;
@@ -90,7 +93,7 @@ class ProfileCommand extends Command {
                 if (m.msg.content !== "none") profile.timezone = m.msg.content;
                 try {
                     await m.msg.delete(); 
-                } catch {/* */ }
+                } catch {/* * / }
 
                 await ctx.send(await ctx.t("PROFILE_CREATE_LOCALE", {
                     languages: [...this.sosamba.localeManager.locales.keys()].join(", ")
@@ -106,7 +109,7 @@ class ProfileCommand extends Command {
                 if (m2.msg.content !== "none") profile.locale = m2.msg.content;
                 try {
                     await m2.msg.delete(); 
-                } catch {/* */ }
+                } catch {/* * / }
             }
             const toWrite = UserProfile.create(profile);
             await this.sosamba.db.createUserProfile(toWrite);
@@ -152,7 +155,7 @@ class ProfileCommand extends Command {
                         locale: `${arg} (${await ctx.t("NATIVE_LOCALE_NAME")}/${await ctx.t("ENGLISH_LOCALE_NAME")})`
                     }));
             }
-        }
+        }*/
     }
 
     calculateLocaleStatus() {

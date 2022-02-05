@@ -17,7 +17,7 @@
  * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
+
 import { Event } from "sosamba";
 import * as logging from "../lib/logging.mjs";
 
