@@ -38,7 +38,7 @@ class TimeForCommand extends Command {
         });
     }
 
-    async run(ctx, [user]) {
+    async run(ctx, { user }) {
         const profile = await this.sosamba.db.getUserProfile(user.id);
         if (!profile) return await ctx.send(
             await t(ctx, `PROFILE${user.id === ctx.author.id ? "" : "_SPECIFIC"}_NONEXISTENT`,
