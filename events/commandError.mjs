@@ -37,14 +37,14 @@ class CommandErrorEvent extends Event {
         this.log.error(e);
         try {
             await ctx.send({
-                embed: {
+                embeds: [{
                     title: ":x: Error running the command",
                     description: `I am unable to run the command because of a coding error:\n\`\`\`js\n${e.stack}\n\`\`\``,
                     color: 0xFF0000,
                     footer: {
                         text: `Please report this issue on our support server or on GitHub. | tt.bot v${ttbotPackage.version} running on Sosamba v${sosambaPackage.version}`
                     }
-                }
+                }]
             });
         } catch {}
     }

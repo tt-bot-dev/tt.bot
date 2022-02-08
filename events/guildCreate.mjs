@@ -43,13 +43,13 @@ class GuildJoinEvent extends Event {
                 await this.getWelcomeMessage(guild.ownerID));
         } catch { }
         await this.sosamba.createMessage(config.serverLogChannel, {
-            embed: {
+            embeds: [{
                 author: {
                     name: `I was added into ${guild.name} (${guild.id})`,
                     icon_url: guild.iconURL
                 },
                 color: 0x008800
-            }
+            }]
         });
     }
 
@@ -62,7 +62,7 @@ class GuildJoinEvent extends Event {
         }
 
         return {
-            embed: {
+            embeds: [{
                 title: await this.sosamba.localeManager.translate(lang, "HI_I_AM_BOT"),
                 description: await this.sosamba.localeManager.translate(lang, "SOME_THINGS_SAID", {
                     botName: this.sosamba.user.username
@@ -96,7 +96,7 @@ class GuildJoinEvent extends Event {
                     value: await this.sosamba.localeManager.translate(lang, "WISHING_GOOD_LUCK")
                 }],
                 color: 0x008800
-            }
+            }]
         };
     }
 }

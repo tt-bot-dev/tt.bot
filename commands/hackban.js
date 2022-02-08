@@ -48,14 +48,14 @@ class HackbanCommand extends Command {
     async run(ctx, users) {
         if (users.length === 0) {
             await ctx.send({
-                embed: {
+                embeds: [{
                     title: ":x: Argument required",
                     description: "The argument `users` is required.",
                     color: 0xFF0000,
                     footer: {
                         text: `Sosamba v${sosambaVersion}`
                     }
-                }
+                }]
             });
         } else {
             if (!this.sosamba.hasBotPermission(ctx.channel, "banMembers")) {

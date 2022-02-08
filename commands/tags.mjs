@@ -101,14 +101,14 @@ class TagCommand extends Command {
             if (!d) return ctx.send(await t(ctx, "TAG_DOESNTEXIST"));
             const data = new TagObject(d);
             await ctx.send({
-                embed: {
+                embeds: [{
                     author: {
                         name: await t(ctx, "TAG_DISPLAY", {
                             tag: data.id
                         })
                     },
                     description: this.sosamba.parseMsg(data.content, ctx.member, ctx.guild)
-                }
+                }]
             });
             break;
         }

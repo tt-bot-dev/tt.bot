@@ -83,29 +83,29 @@ class ExecCommand extends Command {
                 gist = await makegist("exec.md", description, "Evaluated code");
             } catch (err) {
                 await ctx.send({
-                    embed: {
+                    embeds: [{
                         title: "Executed!",
                         color: 0x008800,
                         description: "Unfortunately, we can't provide the data here because they're too long and the request to GitHub's Gist APIs has failed.\nThereby, the output has been logged in the console."
-                    }
+                    }]
                 });
                 this.log.log(overall);
                 return; // we don't replace anything here, because that's console
             }
             return await ctx.send({
-                embed: {
+                embeds: [{
                     title: "Executed!",
                     color: 0x008800,
                     description: `The data are too long. [View the gist here](${gist.body.html_url})`
-                }
+                }]
             });
         }
         await ctx.send({
-            embed: {
+            embeds: [{
                 title: "Executed!",
                 description,
                 color: 0x008800
-            }
+            }]
         });
     }
 }

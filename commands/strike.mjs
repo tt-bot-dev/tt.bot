@@ -57,7 +57,7 @@ class StrikeCommand extends Command {
         const prof = new UserProfile(p || {});
         try {
             await dm.createMessage({
-                embed: {
+                embeds: [{
                     title: await this.sosamba.localeManager.translate(prof.locale || "en", "YOU_GOT_STRIKED"),
                     description: await this.sosamba.localeManager.translate(prof.locale || "en", "STRIKE_DETAILS", {
                         issuer: this.sosamba.getTag(ctx.author),
@@ -67,7 +67,7 @@ class StrikeCommand extends Command {
                         text: await this.sosamba.localeManager.translate(prof.locale || "en", "PAY_ATTENTION")
                     },
                     timestamp: new Date()
-                }
+                }]
             });
         } catch { }
         await ctx.send(":ok_hand:");

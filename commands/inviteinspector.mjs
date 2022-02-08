@@ -38,7 +38,7 @@ class InviteInspectorCommand extends Command {
         } catch (err) {
             if (err.code === 40007) {
                 return ctx.send({
-                    embed: {
+                    embeds: [{
                         color: 0xFF0000,
                         author: {
                             name: await ctx.t("OOPS")
@@ -47,11 +47,11 @@ class InviteInspectorCommand extends Command {
                         footer: {
                             text: await ctx.t("CONTACT_GUILD_ADMIN")
                         }
-                    }
+                    }]
                 });
             }
             return ctx.send({
-                embed: {
+                embeds: [{
                     color: 0xFF0000,
                     author: {
                         name: await ctx.t("OOPS")
@@ -60,11 +60,11 @@ class InviteInspectorCommand extends Command {
                     footer: {
                         text: await ctx.t("INVITE_ERR_FOOTER")   
                     }
-                }
+                }]
             });
         }
-        ctx.send({
-            embed: {
+        await ctx.send({
+            embeds: [{
                 color: 0x008800,
                 author: {
                     name: inviteData.guild.name,
@@ -91,7 +91,7 @@ class InviteInspectorCommand extends Command {
                     text: await ctx.t("INV_INVITER", this.sosamba.getTag(inviteData.inviter)),
                     icon_url: inviteData.avatarURL
                 } : null
-            }
+            }]
         });
     }
 }

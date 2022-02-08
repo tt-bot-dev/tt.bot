@@ -33,13 +33,13 @@ class GuildLeaveEvent extends Event {
 
     async run(guild) {
         await this.sosamba.createMessage(config.serverLogChannel, {
-            embed: {
+            embeds: [{
                 author: {
                     name: `I was removed from ${guild.name} (${guild.id}) 😢`,
                     icon_url: guild.iconURL
                 },
                 color: 0x008800
-            }
+            }]
         });
     }
 }
