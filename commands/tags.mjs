@@ -20,11 +20,10 @@
 import { Command, Eris } from "sosamba";
 import OwnerCommand from "../lib/commandTypes/OwnerCommand.mjs";
 import TagObject from "../lib/Structures/TagObject.mjs";
-import dataEncryption from "../lib/dataEncryption.js";
+import { encrypt } from "../lib/dataEncryption.mjs";
 import { t } from "../lib/util.mjs";
 
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
-const { encrypt } = dataEncryption;
 
 class TagCommand extends Command {
     constructor(sosamba, fn, fp) {
