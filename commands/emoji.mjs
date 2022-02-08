@@ -49,7 +49,9 @@ class EmojiCommand extends Command {
         this.log.debug(emojis);
         let input = emojis.split(" ").filter(val => Regexes.EmojiRegex.test(val) || UnicodeEmojiRegex().test(val));
         if (input.length > 5) input = input.slice(0, 5);
-        await ctx.send(await t(ctx, "IMAGE_GENERATING"));
+        
+        await ctx.interaction.defer();
+
         const time = process.hrtime();
         let b;
         try {
@@ -65,6 +67,7 @@ class EmojiCommand extends Command {
             return;
         }
         const hrtime = process.hrtime(time);
+        
         await ctx.send({
             embeds: [{
                 description: "Enjoy!",
