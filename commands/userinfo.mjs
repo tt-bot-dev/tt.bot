@@ -18,7 +18,7 @@
  */
 
 import { Command, Eris } from "sosamba";
-import { t } from "../lib/util.mjs";
+import { formatDate, getUserProfile, t } from "../lib/util.mjs";
 
 const { Constants: { UserFlags, ApplicationCommandOptionTypes }, Member } = Eris;
 
@@ -57,7 +57,7 @@ class UserCommand extends Command {
                         inline: false
                     }, {
                         name: await t(ctx, "CREATED_ON"),
-                        value: await ctx.formatDate(user.createdAt, (await ctx.userProfile).timezone),
+                        value: await formatDate(ctx, user.createdAt, (await getUserProfile(ctx)).timezone),
                         inline: true
                     }, {
                         name: await t(ctx, "CURRENT_VOICE"),
@@ -83,11 +83,11 @@ class UserCommand extends Command {
                     },
                     fields: [{
                         name: await t(ctx, "CREATED_ON"),
-                        value: await ctx.formatDate(user.createdAt, (await ctx.userProfile).timezone),
+                        value: await formatDate(ctx, user.createdAt, (await getUserProfile(ctx)).timezone),
                         inline: true
                     }],
                     footer: {
-                        text: await t(ctx, "NOT_IN_SERVER")
+                        text: ctx.guild ? await t(ctx, "NOT_IN_SERVER") : undefined
                     }
                 }]
             });
@@ -109,21 +109,25 @@ class UserCommand extends Command {
         const canUseExternal = this.sosamba.hasBotPermission(ctx.channel, "externalEmojis");
 
         // Emojis taken from discord.bots.gg Discord guild
-        if (bitArray.includes("DISCORD_EMPLOYEE")) out.push(`${canUseExternal ? "<:e:314348604095594498>" : ":tools:"} This user is a Discord employee`);
-        if (bitArray.includes("DISCORD_PARTNER")) out.push(`${canUseExternal ? "<:e:314068430556758017>": ":infinity:"} This user is partnered with Discord`);
-        if (bitArray.includes("HYPESQUAD_EVENTS")) out.push(`${canUseExternal ? "<:e:585765895939424258>" : ":sparkles:"} This user is a HypeSquad event attendee/coordinator`);
+        if (bitArray.includes("STAFF")) out.push(`${canUseExternal ? "<:e:314348604095594498>" : ":tools:"} This user is a Discord employee`);
+        if (bitArray.includes("PARTNER")) out.push(`${canUseExternal ? "<:e:314068430556758017>": ":infinity:"} This user is partnered with Discord`);
+        if (bitArray.includes("HYPESQUAD")) out.push(`${canUseExternal ? "<:e:585765895939424258>" : ":sparkles:"} This user is a HypeSquad event attendee/coordinator`);
         if (bitArray.includes("BUG_HUNTER_LEVEL_1")) out.push(`${canUseExternal ? "<:e:585765206769139723>" : ":bug:"} This user is a Discord Bug Hunter (level 1)`);
-        if (bitArray.includes("HOUSE_BRAVERY")) out.push(`${canUseExternal ? "<:e:585763004218343426>" : ":shield:"} This user is in the House of Bravery`);
-        if (bitArray.includes("HOUSE_BRILLIANCE")) out.push(`${canUseExternal ? "<:e:585763004495298575>" : ":sunglasses:"} This user is in the House of Brilliance`);
-        if (bitArray.includes("HOUSE_BALANCE")) out.push(`${canUseExternal ? "<:e:585763004574859273>" : ":scales:"} This user is in the House of Balance`);
-        if (bitArray.includes("EARLY_SUPPORTER")) out.push(`${canUseExternal ? "<:e:585763690868113455>" : ":medal:"} This user is an early supporter of Discord`);
-        if (bitArray.includes("TEAM_USER")) out.push(":busts_in_silhouette: This user is tied to a [team](https://discord.com/developers/docs/topics/teams)");
+        if (bitArray.includes("HYPESQUAD_ONLINE_HOUSE_1")) out.push(`${canUseExternal ? "<:e:585763004218343426>" : ":shield:"} This user is in the House of Bravery`);
+        if (bitArray.includes("HYPESQUAD_ONLINE_HOUSE_2")) out.push(`${canUseExternal ? "<:e:585763004495298575>" : ":sunglasses:"} This user is in the House of Brilliance`);
+        if (bitArray.includes("HYPESQUAD_ONLINE_HOUSE_3")) out.push(`${canUseExternal ? "<:e:585763004574859273>" : ":scales:"} This user is in the House of Balance`);
+        if (bitArray.includes("PREMIUM_EARLY_SUPPORTER")) out.push(`${canUseExternal ? "<:e:585763690868113455>" : ":medal:"} This user is an early supporter of Discord`);
+        if (bitArray.includes("TEAM_PSEUDO_USER")) out.push(":busts_in_silhouette: This user is tied to a [team](https://discord.com/developers/docs/topics/teams)");
         if (bitArray.includes("SYSTEM")) out.push(":robot: This user is a Discord system user");
 
-        //Emojis taken from our internal guild
+        // Emojis taken from our internal guild
         if (bitArray.includes("BUG_HUNTER_LEVEL_2")) out.push(`${canUseExternal ? "<:e:743588190241292449>" : ":bug:"} This user is a Discord Bug Hunter (level 2)`);
         if (bitArray.includes("VERIFIED_BOT")) out.push(":white_check_mark: This bot is verified");
-        if (bitArray.includes("VERIFIED_BOT_DEVELOPER")) out.push(`${canUseExternal ? "<:e:743589119799590955>" : ":white_check_mark"} This user is a verified bot developer`);
+        if (bitArray.includes("VERIFIED_BOT_DEVELOPER")) out.push(`${canUseExternal ? "<:e:743589119799590955>" : ":white_check_mark:"} This user is a verified bot developer`);
+
+        // Emojis taken from discord.bots.gg Discord guild
+        if (bitArray.includes("CERTIFIED_MODERATOR")) out.push(`${canUseExternal ? "<:e:853274382339670046>" : ":shield:"} This user is a Discord Certified Moderator`)
+        if (bitArray.includes("BOT_HTTP_INTERACTIONS")) out.push(":robot: This bot receives interactions via HTTP");
 
         return out;
     }
