@@ -19,7 +19,7 @@
 
 import { Event } from "sosamba";
 import config from "../config.js";
-import dm from "../lib/util/sendReplyToDMs.js";
+import dm from "../lib/util/sendReplyToDMs.mjs";
 import UserProfile from "../lib/Structures/UserProfile.mjs";
 
 class GuildJoinEvent extends Event {
