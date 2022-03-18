@@ -50,11 +50,8 @@ class EvalCommand extends Command {
     async run(ctx, { code: args }) {
         let d;
         try {
-            AsyncFunction;
-
-            d = await new AsyncFunction("ctx", "args",
-                "require", "__dirname", "__filename", "module", args)
-                .bind(this)(ctx, args, require, __dirname, __filename, module);
+            d = await new AsyncFunction("ctx", "args", "importMeta", args)
+                .bind(this)(ctx, args, import.meta);
         } catch (err) {
             d = err.stack;
         }
