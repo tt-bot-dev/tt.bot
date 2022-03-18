@@ -31,10 +31,10 @@ class PingCommand extends Command {
 
     async run(ctx) {
         await ctx.interaction.defer();
+        
+        const m = await ctx.interaction.getOriginalMessage();
 
-        const m = await ctx.interaction.createFollowup(":ping_pong:");
-
-        await ctx.interaction.editOriginalMessage({
+        await ctx.send({
             content: "",
             embeds: [{
                 title: await t(ctx, "PONG"),
