@@ -126,7 +126,7 @@ class UserCommand extends Command {
         if (bitArray.includes("VERIFIED_BOT_DEVELOPER")) out.push(`${canUseExternal ? "<:e:743589119799590955>" : ":white_check_mark:"} This user is a verified bot developer`);
 
         // Emojis taken from discord.bots.gg Discord guild
-        if (bitArray.includes("CERTIFIED_MODERATOR")) out.push(`${canUseExternal ? "<:e:853274382339670046>" : ":shield:"} This user is a Discord Certified Moderator`)
+        if (bitArray.includes("CERTIFIED_MODERATOR")) out.push(`${canUseExternal ? "<:e:853274382339670046>" : ":shield:"} This user is a Discord Certified Moderator`);
         if (bitArray.includes("BOT_HTTP_INTERACTIONS")) out.push(":robot: This bot receives interactions via HTTP");
 
         return out;

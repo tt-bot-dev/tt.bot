@@ -57,21 +57,65 @@ class ProfileCommand extends Command {
         });
     }
 
-    async run(ctx, {timezone, locale}) {
+    async run(ctx, { timezone, locale }) {
         switch (ctx.subcommand) {
-            case "remove": {
-                if ((await getUserProfile(ctx)).fake) {
-                    await ctx.send({
-                        content: await t(ctx, "PROFILE_NONEXISTENT")
-                    });
+        case "remove": {
+            if ((await getUserProfile(ctx)).fake) {
+                await ctx.send({
+                    content: await t(ctx, "PROFILE_NONEXISTENT")
+                });
+                return;
+            }
+
+            await ctx.send({
+                embeds: [{
+                    title: ":question: Are you sure you want to delete your profile?",
+                    description: "You will still be able to create a new one using `/profile update`.",
+                    color: 0xffff00
+                }],
+                components: [{
+                    type: ComponentTypes.ACTION_ROW,
+                    components: ctx.createYesNoButtons()
+                }]
+            });
+
+            const canDelete = await ctx.askYesNo();
+
+            if (canDelete) {
+                await this.sosamba.db.deleteUserProfile(ctx.author.id);
+                await ctx.send({
+                    content: await t(ctx, "PROFILE_DELETED"),
+                    embeds: [],
+                    components: []
+                });
+            } else {
+                await ctx.send({
+                    content: await t(ctx, "OP_CANCELLED"),
+                    embeds: [],
+                    components: []
+                });
+            }
+
+            break;
+        }
+
+        case "update": {
+            const profile = await getUserProfile(ctx);
+
+            if (timezone) {
+                if (!this.isValidTz(timezone)) {
+                    await ctx.send(await t(ctx, "INVALID_TIMEZONE"));
+
                     return;
                 }
+            }
 
+            if (profile.fake) {
                 await ctx.send({
                     embeds: [{
-                        title: ":question: Are you sure you want to delete your profile?",
-                        description: "You will still be able to create a new one using `/profile update`.",
-                        color: 0xffff00
+                        title: ":question: You don't have a profile yet.",
+                        description: "Would you like to create one?",
+                        color: 0xFFFF00
                     }],
                     components: [{
                         type: ComponentTypes.ACTION_ROW,
@@ -79,12 +123,15 @@ class ProfileCommand extends Command {
                     }]
                 });
 
-                const canDelete = await ctx.askYesNo();
+                const canCreate = await ctx.askYesNo();
 
-                if (canDelete) {
-                    await this.sosamba.db.deleteUserProfile(ctx.author.id);
+                if (canCreate) {
+                    if (timezone) profile.timezone = timezone;
+                    if (locale) profile.locale = locale;
+
+                    await this.sosamba.db.createUserProfile(profile.toEncryptedObject());
                     await ctx.send({
-                        content: await t(ctx, "PROFILE_DELETED"),
+                        content: await t(ctx, "PROFILE_CREATED"),
                         embeds: [],
                         components: []
                     });
@@ -96,62 +143,15 @@ class ProfileCommand extends Command {
                     });
                 }
 
-                break;
+                return;
             }
 
-            case "update": {
-                const profile = await getUserProfile(ctx);
+            if (timezone) profile.timezone = timezone;
+            if (locale) profile.locale = locale;
 
-                if (timezone) {
-                    if (!this.isValidTz(timezone)) {
-                        await ctx.send(await t(ctx, "INVALID_TIMEZONE"));
-
-                        return;
-                    }
-                }
-
-                if (profile.fake) {
-                    await ctx.send({
-                        embeds: [{
-                            title: ":question: You don't have a profile yet.",
-                            description: "Would you like to create one?",
-                            color: 0xFFFF00
-                        }],
-                        components: [{
-                            type: ComponentTypes.ACTION_ROW,
-                            components: ctx.createYesNoButtons()
-                        }]
-                    });
-
-                    const canCreate = await ctx.askYesNo();
-
-                    if (canCreate) {
-                        if (timezone) profile.timezone = timezone;
-                        if (locale) profile.locale = locale;
-
-                        await this.sosamba.db.createUserProfile(profile.toEncryptedObject());
-                        await ctx.send({
-                            content: await t(ctx, "PROFILE_CREATED"),
-                            embeds: [],
-                            components: []
-                        });
-                    } else {
-                        await ctx.send({
-                            content: await t(ctx, "OP_CANCELLED"),
-                            embeds: [],
-                            components: []
-                        });
-                    }
-
-                    return;
-                }
-
-                if (timezone) profile.timezone = timezone;
-                if (locale) profile.locale = locale;
-
-                await setUserProfile(ctx, profile);
-                await ctx.send(":ok_hand: Profile successfully updated.");
-            }
+            await setUserProfile(ctx, profile);
+            await ctx.send(":ok_hand: Profile successfully updated.");
+        }
         }
         return; // We haven't gotten to updating it yet
 
