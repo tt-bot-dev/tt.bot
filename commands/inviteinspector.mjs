@@ -17,35 +17,45 @@
  * along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Command } from "sosamba";
+import { Command, Eris } from "sosamba";
+import { t } from "../lib/util.mjs";
+
+const { Constants: { ApplicationCommandOptionTypes, ChannelTypes } } = Eris;
 
 class InviteInspectorCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "inviteinspector",
             //args: "<invite:String>",
+            args: [
+                {
+                    name: "code",
+                    description: "The code/invite link to look up",
+                    type: ApplicationCommandOptionTypes.STRING,
+                    required: true
+                }
+            ],
             description: "Gets information about an invite.",
             aliases: ["iinspector"]
         });
     }
 
-    async run(ctx, args) {
-        return; // TODO: decide on the future of this command... it might be a candidate for removal
+    async run(ctx, { code }) {
         // eslint-disable-next-line no-unreachable
         let inviteData;
         try {
-            inviteData = await this.sosamba.getInvite(args, true);
+            inviteData = await this.sosamba.getInvite(code, true);
         } catch (err) {
             if (err.code === 40007) {
                 return ctx.send({
                     embeds: [{
                         color: 0xFF0000,
                         author: {
-                            name: await ctx.t("OOPS")
+                            name: await t(ctx,"OOPS")
                         },
-                        description: await ctx.t("CANNOT_GET_INVITE_BANNED"),
+                        description: await t(ctx,"CANNOT_GET_INVITE_BANNED"),
                         footer: {
-                            text: await ctx.t("CONTACT_GUILD_ADMIN")
+                            text: await t(ctx,"CONTACT_GUILD_ADMIN")
                         }
                     }]
                 });
@@ -54,45 +64,74 @@ class InviteInspectorCommand extends Command {
                 embeds: [{
                     color: 0xFF0000,
                     author: {
-                        name: await ctx.t("OOPS")
+                        name: await t(ctx,"OOPS")
                     },
-                    description: await ctx.t("CANNOT_GET_INVITE"),
+                    description: await t(ctx,"CANNOT_GET_INVITE"),
                     footer: {
-                        text: await ctx.t("INVITE_ERR_FOOTER")   
+                        text: await t(ctx,"INVITE_ERR_FOOTER")   
                     }
                 }]
             });
         }
+
+        const fields = [{
+            name: await t(ctx, "INV_CHANNEL_TYPE"),
+            value: `${this._getUserFriendlyChannelType(inviteData.channel.type)} ${inviteData.channel.name}`,
+            inline: true
+        }, {
+            name: await t(ctx, "MEMBERS"),
+            value: `<:e:658538493470965787> ${inviteData.memberCount} | <:e:313956277808005120> ${inviteData.presenceCount}`,
+            inline: true
+        }];
+
+        /* if (inviteData.guildScheduledEvent) {} */ // todo - once eris implements support for scheduled events
+
         await ctx.send({
             embeds: [{
                 color: 0x008800,
-                author: {
-                    name: inviteData.guild.name,
-                    icon_url: inviteData.guild.icon ? `https://cdn.discordapp.com/icons/${inviteData.guild.id}/${inviteData.guild.icon}.png` : null
+                title: `${inviteData.guild.name} (${inviteData.guild.id})`,
+                url: `https://discord.gg/${inviteData.code}`,
+                thumbnail: {
+                    url: inviteData.guild.icon ?
+                        inviteData.guild.iconURL :
+                        "https://cdn.discordapp.com/embed/avatars/0.png"
                 },
-                fields: [{
-                    name: await ctx.t("INV_CHANNEL_TYPE"),
-                    value: await ctx.t("INV_CHANNEL_TYPE_VAL", inviteData.channel.type, inviteData.channel.name),
-                    inline: true
-                }, {
-                    name: await ctx.t("INV_GUILD_ID"),
-                    value: inviteData.guild.id,
-                    inline: true
-                }, {
-                    name: await ctx.t("MEMBERS"),
-                    value: await ctx.t("INV_MEMBERS_VAL", inviteData.memberCount, inviteData.presenceCount),
-                    inline: true
-                }, {
-                    name: await ctx.t("INV_JOIN"),
-                    value: await ctx.t("INV_JOIN_LINK",inviteData.code),
-                    inline: true
-                }],
+                fields,
                 footer: inviteData.inviter ? {
-                    text: await ctx.t("INV_INVITER", this.sosamba.getTag(inviteData.inviter)),
-                    icon_url: inviteData.avatarURL
+                    text: await t(ctx, "INV_INVITER", {
+                        user: this.sosamba.getTag(inviteData.inviter)
+                    }),
+                    icon_url: inviteData.inviter.avatarURL
                 } : null
             }]
         });
+    }
+
+    /**
+     * @param {import("eris").InviteChannel["type"]} type 
+     */
+    _getUserFriendlyChannelType(type) {
+        switch (type) {
+        case ChannelTypes.GUILD_TEXT: {
+            return "<:e:585783907841212418>";
+        }
+
+        case ChannelTypes.GUILD_VOICE: {
+            return "<:e:585783907673440266>";
+        }
+
+        case ChannelTypes.GUILD_NEWS: {
+            return "<:e:658522693058166804>";
+        }
+
+        case ChannelTypes.GUILD_STORE: {
+            return "<:e:658538492409806849>";
+        }
+
+        case ChannelTypes.GUILD_STAGE_VOICE: {
+            return "<:e:824240882793447444>";
+        }
+        }
     }
 }
 
