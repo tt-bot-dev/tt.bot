@@ -87,7 +87,7 @@ class UserCommand extends Command {
                         inline: true
                     }],
                     footer: {
-                        text: ctx.guild ? await t(ctx, "NOT_IN_SERVER") : undefined
+                        text: ctx.guild ? await t(ctx, "NOT_IN_SERVER") : "Use the command somewhere the user is in for more information!"
                     }
                 }]
             });
