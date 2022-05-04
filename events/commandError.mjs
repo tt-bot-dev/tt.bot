@@ -18,13 +18,7 @@
  */
 
 import { Event } from "sosamba";
-import ttbotPackage from "../lib/package.mjs";
-
-import { createRequire } from "module";
-const req = createRequire(import.meta.url);
-
-// JSON imports still cannot go through ESM
-const sosambaPackage = req("sosamba/package.json");
+import ttbotPackage, { sosambaPackage } from "../lib/package.mjs";
 
 class CommandErrorEvent extends Event {
     constructor(...args) {
