@@ -19,6 +19,7 @@
 
 import { Command, Eris } from "sosamba";
 import { t } from "../lib/util.mjs";
+import resolveInvite from "../lib/util/resolveInvite.mjs";
 
 const { Constants: { ApplicationCommandOptionTypes, ChannelTypes } } = Eris;
 
@@ -44,7 +45,7 @@ class InviteInspectorCommand extends Command {
         // eslint-disable-next-line no-unreachable
         let inviteData;
         try {
-            inviteData = await this.sosamba.getInvite(code, true);
+            inviteData = await this.sosamba.getInvite(resolveInvite(code), true);
         } catch (err) {
             if (err.code === 40007) {
                 return ctx.send({
