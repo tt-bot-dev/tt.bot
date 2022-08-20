@@ -1,2 +1,3 @@
 webserver/static
 lib/extensions/**/*.js
+languages/
