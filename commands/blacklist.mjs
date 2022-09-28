@@ -38,8 +38,8 @@ class BlacklistManagerCommand extends Command {
                         name: "id",
                         description: "The ID to look for",
                         type: ApplicationCommandOptionTypes.STRING,
-                        required: true
-                    }]
+                        required: true,
+                    }],
                 },
                 {
                     name: "add",
@@ -49,13 +49,13 @@ class BlacklistManagerCommand extends Command {
                         name: "id",
                         description: "The ID of the server to blacklist",
                         type: ApplicationCommandOptionTypes.STRING,
-                        required: true
+                        required: true,
                     }, {
                         name: "reason",
                         description: "The reason for blacklisting the server.",
                         type: ApplicationCommandOptionTypes.STRING,
-                        required: false
-                    }]
+                        required: false,
+                    }],
                 },
                 {
                     name: "remove",
@@ -65,11 +65,11 @@ class BlacklistManagerCommand extends Command {
                         name: "id",
                         description: "The ID of the server to remove from the blacklist.",
                         type: ApplicationCommandOptionTypes.STRING,
-                        required: true
-                    }]
-                }
+                        required: true,
+                    }],
+                },
             ],
-            registerIn: homeGuild
+            registerIn: homeGuild,
         });
     }
 
@@ -82,22 +82,22 @@ class BlacklistManagerCommand extends Command {
                     embeds: [{
                         title: ":x: Cannot find blacklisted guilds by these IDs.",
                         description: "It's not blacklisted. Check the ID and try again.",
-                        color: 0xFF0000
-                    }]
+                        color: 0xFF0000,
+                    }],
                 });
             }
 
             const fields = guilds.map(g => ({
                 name: `${g.id} ${g.ownerID ? `(owned by ${g.ownerID})` : ""}`,
-                value: g.reason || "no reason"
+                value: g.reason || "no reason",
             }));
 
             await ctx.send({
                 embeds: [{
                     title: "Here are the blacklisted guilds for this ID",
                     color: 0x008800,
-                    fields: fields.slice(0, 25)
-                }]
+                    fields: fields.slice(0, 25),
+                }],
             });
             break;
         }

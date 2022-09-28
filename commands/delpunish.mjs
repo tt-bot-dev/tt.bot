@@ -47,7 +47,7 @@ class RemoveStrikeCommand extends Command {
     async run(ctx, { case_id: caseID, reason }) {
         try {
             await this.sosamba.modLog.removeStrike(caseID, ctx, reason.join(" "));
-        } catch(err) {
+        } catch (err) {
             await ctx.send(await t(ctx, "CANNOT_UNSTRIKE", { error: err.toString() }));
             return;
         }

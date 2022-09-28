@@ -23,7 +23,7 @@ import * as logging from "../lib/logging.mjs";
 class BulkDeleteLogger extends Event {
     constructor(...args) {
         super(...args, {
-            name: "messageDeleteBulk"
+            name: "messageDeleteBulk",
         });
     }
 

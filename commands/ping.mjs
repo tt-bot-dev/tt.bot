@@ -25,7 +25,7 @@ class PingCommand extends Command {
         super(...args, {
             name: "ping",
             description: "Shows my latency to Discord.",
-            aliases: ["pong"]
+            aliases: ["pong"],
         });
     }
 
@@ -39,15 +39,15 @@ class PingCommand extends Command {
             embeds: [{
                 title: await t(ctx, "PONG"),
                 description: await t(ctx, "PING_LATENCY", {
-                    ms: m.timestamp - ctx.interaction.createdAt
+                    ms: m.timestamp - ctx.interaction.createdAt,
                 }),
                 footer: {
                     text: await t(ctx, "PING_DISCORD_LATENCY", {
-                        ms: ctx.guild.shard.latency
-                    })
+                        ms: ctx.guild.shard.latency,
+                    }),
                 },
-                color: 0x008800
-            }]
+                color: 0x008800,
+            }],
         });
     }
 }

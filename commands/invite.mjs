@@ -24,13 +24,13 @@ class InviteCommand extends Command {
     constructor(...args) {
         super(...args, { 
             name: "invite",
-            description: "Sends a link to invite me."
+            description: "Sends a link to invite me.",
         });
     }
 
     async run(ctx) {
         await ctx.send(await t(ctx, "BOT_INVITE", {
-            botInviteLink: "https://discord.com/oauth2/authorize?client_id=195506253806436353&scope=bot"
+            botInviteLink: "https://discord.com/oauth2/authorize?client_id=195506253806436353&scope=bot",
         }));
     }
 }

@@ -18,9 +18,7 @@
  */
 
 "use strict";
-import("./lib/load.mjs").then(mod => {
-    return mod.default();
-}).catch(err => {
+import("./lib/load.mjs").then(mod => mod.default()).catch(err => {
     console.error(":( tt.bot has failed initializing");
     console.error(err);
 });

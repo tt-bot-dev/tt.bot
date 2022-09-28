@@ -28,11 +28,11 @@ class HackbanCommand extends Command {
             name: "hackban",
 
             // Rest args when?
-            /*args: [{
+            /* args: [{
                 name: "user",
                 description: "The user to ban, by ID.",
-            }],*/ //"<users:String...>",
-            /*argParser: new SimpleArgumentParser(sosamba, {
+            }],*/ // "<users:String...>",
+            /* argParser: new SimpleArgumentParser(sosamba, {
                 separator: " ",
                 filterEmptyArguments: true
             }),*/
@@ -53,9 +53,9 @@ class HackbanCommand extends Command {
                     description: "The argument `users` is required.",
                     color: 0xFF0000,
                     footer: {
-                        text: `Sosamba v${sosambaVersion}`
-                    }
-                }]
+                        text: `Sosamba v${sosambaVersion}`,
+                    },
+                }],
             });
         } else {
             if (!this.sosamba.hasBotPermission(ctx.channel, "banMembers")) {
@@ -67,10 +67,10 @@ class HackbanCommand extends Command {
                 await this.doBan(ctx, users[0], true, false);
             } else {
                 const bans = await Promise.all(users.map(
-                    u => this.doBan(ctx, u, false, true)
+                    u => this.doBan(ctx, u, false, true),
                 ));
                 await ctx.send(await t(ctx, "HACKBANNED_USERS", {
-                    users: bans.filter(b => b).length
+                    users: bans.filter(b => b).length,
                 }));
             }
         }
@@ -86,7 +86,7 @@ class HackbanCommand extends Command {
             await ctx.guild.banMember(id, 0,
                 `${mass === false ? "Hackbanned" : "Masshackbanned"} by ${ctx.sosamba.getTag(ctx.author)}`);
             if (send) await ctx.send(await t(ctx, "BAN_DONE", {
-                user: this.sosamba.getTag(member || { username: `Unknown User (${id})`, discriminator: "0000" })
+                user: this.sosamba.getTag(member || { username: `Unknown User (${id})`, discriminator: "0000" }),
             }));
             return true;
         } catch (e) {

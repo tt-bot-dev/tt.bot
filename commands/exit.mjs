@@ -27,18 +27,19 @@ class ExitCommand extends Command {
         super(...args, {
             name: "exit",
             description: "Kills the bot, shutting down all reaction menus and message listeners gracefully.",
-            registerIn: homeGuild
+            registerIn: homeGuild,
         });
     }
+
     async run(ctx) {
         // Shutdown whatever new mechanism comes into sosamba v2
-        /*this.sosamba.reactionMenus.forEach(menu => {
+        /* this.sosamba.reactionMenus.forEach(menu => {
             this.sosamba.reactionMenus.remove(menu);
             menu.stopCallback(STOP_REASONS.SHUTDOWN);
         });
         this.sosamba.messageListeners.clear();*/
         this.sosamba.disconnect({
-            reconnect: false
+            reconnect: false,
         });
         await ctx.send(":wave:");
         process.exit(0);

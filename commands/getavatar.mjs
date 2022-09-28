@@ -34,7 +34,7 @@ class AvatarCommand extends Command {
                 required: true,
             }],
             description: "Gets someone's avatar.",
-            aliases: ["avatar"]
+            aliases: ["avatar"],
         });
     }
 
@@ -47,41 +47,41 @@ class AvatarCommand extends Command {
         const fields = [
             {
                 name: "PNG",
-                value: this._getEmbedFieldValueString("png", user)
+                value: this._getEmbedFieldValueString("png", user),
             },
             {
                 name: "JPEG",
-                value: this._getEmbedFieldValueString("jpg", user)
+                value: this._getEmbedFieldValueString("jpg", user),
             },
             {
                 name: "WebP",
-                value: this._getEmbedFieldValueString("webp", user)
-            }
+                value: this._getEmbedFieldValueString("webp", user),
+            },
         ];
         if (user.avatar.startsWith("a_")) fields.unshift({
             name: "GIF",
-            value: this._getEmbedFieldValueString("gif", user)
+            value: this._getEmbedFieldValueString("gif", user),
         });
 
         await ctx.send({
             embeds: [{
-                //image: 
+                // image: 
                 author: {
                     name: await t(ctx, "USER_AVATAR", {
-                        user: this.sosamba.getTag(user)
-                    })
+                        user: this.sosamba.getTag(user),
+                    }),
                 },
                 image: {
-                    url: user.avatarURL
+                    url: user.avatarURL,
                 },
                 // description: descString
-                /*description: `PNG: [128x128](${user.dynamicAvatarURL("png", 128)}) [256x256](${user.dynamicAvatarURL("png", 256)}) [512x512](${user.dynamicAvatarURL("png", 512)}) [1024x1024](${user.dynamicAvatarURL("png", 1024)}) [2048x2048](${user.dynamicAvatarURL("png", 2048)}) [4096x4096](${user.dynamicAvatarURL("png", 4096)})
+                /* description: `PNG: [128x128](${user.dynamicAvatarURL("png", 128)}) [256x256](${user.dynamicAvatarURL("png", 256)}) [512x512](${user.dynamicAvatarURL("png", 512)}) [1024x1024](${user.dynamicAvatarURL("png", 1024)}) [2048x2048](${user.dynamicAvatarURL("png", 2048)}) [4096x4096](${user.dynamicAvatarURL("png", 4096)})
 GIF: [128x128](${user.dynamicAvatarURL("gif", 128)}) [256x256](${user.dynamicAvatarURL("gif", 256)}) [512x512](${user.dynamicAvatarURL("gif", 512)}) [1024x1024](${user.dynamicAvatarURL("gif", 1024)}) [2048x2048](${user.dynamicAvatarURL("gif", 2048)}) [4096x4096](${user.dynamicAvatarURL("gif", 4096)})
 JPEG: [128x128](${user.dynamicAvatarURL("jpg", 128)}) [256x256](${user.dynamicAvatarURL("jpg", 256)}) [512x512](${user.dynamicAvatarURL("jpg", 512)}) [1024x1024](${user.dynamicAvatarURL("jpg", 1024)}) [2048x2048](${user.dynamicAvatarURL("jpg", 2048)}) [4096x4096](${user.dynamicAvatarURL("jpg", 4096)})
 WebP: [128x128](${user.dynamicAvatarURL("webp", 128)}) [256x256](${user.dynamicAvatarURL("webp", 256)}) [512x512](${user.dynamicAvatarURL("webp", 512)}) [1024x1024](${user.dynamicAvatarURL("webp", 1024)}) [2048x2048](${user.dynamicAvatarURL("webp", 2048)}) [4096x4096](${user.dynamicAvatarURL("webp", 4096)})`,*/
             }, {
-                fields
-            }]
+                fields,
+            }],
         });
     }
 

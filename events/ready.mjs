@@ -30,15 +30,17 @@ const { WorkerTypes } = w;
 class ReadyEvent extends Event {
     posterLog = new Logger({
         level: this.sosamba.options.log?.level || undefined,
-        name: "DBLPoster"
+        name: "DBLPoster",
     });
+
     firedUp = false;
 
     constructor(...args) {
         super(...args, {
-            name: "ready"
+            name: "ready",
         });
     }
+
     async run() {
         if (!this.firedUp) {
             for (let i = 0; i < workerCount; i++) {
@@ -67,16 +69,17 @@ class ReadyEvent extends Event {
 
     async leaveBotCollectionServers() {
         // This is not effective with intents
-        /*await Promise.all(this.sosamba.botCollectionServers
+        /* await Promise.all(this.sosamba.botCollectionServers
             .map(g => g.leave()
                 .then(
                     () => this.log.debug(`Left ${g.name} (${g.id}) for being a bot collection guild`))
             ));*/
     }
+
     async postStats() {
         if (botsGGKey) try {
             await this.sosamba.postStatsTo(botsGGKey, `https://discord.bots.gg/api/v1/bots/${this.sosamba.user.id}/stats`, {
-                guildCount: this.sosamba.guilds.size
+                guildCount: this.sosamba.guilds.size,
             });
         } catch (err) {
             this.posterLog.error("Cannot POST to bots.gg :(", err.body);

@@ -22,7 +22,7 @@ import { Event } from "sosamba";
 class GuildMemberLeaveEvent extends Event {
     constructor(...args) {
         super(...args, {
-            name: "guildMemberRemove"
+            name: "guildMemberRemove",
         });
     }
 
@@ -37,13 +37,13 @@ class GuildMemberLeaveEvent extends Event {
                         allowedMentions: {
                             users: [member.id],
                             roles: false,
-                            everyone: false
-                        }
+                            everyone: false,
+                        },
                     });
                 } catch {}
             } else {
                 await this.sosamba.db.updateGuildConfig(guild.id, {
-                    farewellChannelId: null
+                    farewellChannelId: null,
                 });
             }
         }

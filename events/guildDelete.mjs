@@ -23,7 +23,7 @@ import config from "../config.js";
 class GuildLeaveEvent extends Event {
     constructor(...args) {
         super(...args, {
-            name: "guildDelete"
+            name: "guildDelete",
         });
     }
 
@@ -36,10 +36,10 @@ class GuildLeaveEvent extends Event {
             embeds: [{
                 author: {
                     name: `I was removed from ${guild.name} (${guild.id}) 😢`,
-                    icon_url: guild.iconURL
+                    icon_url: guild.iconURL,
                 },
-                color: 0x008800
-            }]
+                color: 0x008800,
+            }],
         });
     }
 }

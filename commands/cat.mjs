@@ -25,7 +25,7 @@ class CatCommand extends Command {
         super(...args, {
             name: "cat",
             description: "Gets a random cat picture.",
-            aliases: ["meow"]
+            aliases: ["meow"],
         });
     }
 
@@ -36,9 +36,9 @@ class CatCommand extends Command {
                 embeds: [{
                     color: 0xFF0000,
                     title: ":x: Fetching the image has failed",
-                    description: "Try again later."
+                    description: "Try again later.",
                 }],
-                flags: 64
+                flags: 64,
             });
 
             return;
@@ -46,10 +46,10 @@ class CatCommand extends Command {
         await ctx.send({
             embeds: [{
                 image: {
-                    url: (await body.json()).file
+                    url: (await body.json()).file,
                 },
-                color: 0x008800
-            }]
+                color: 0x008800,
+            }],
         });
     }
 }

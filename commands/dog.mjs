@@ -25,7 +25,7 @@ class DogCommand extends Command {
         super(...args, {
             name: "dog",
             description: "Gets a random dog picture.",
-            aliases: ["woof"]
+            aliases: ["woof"],
         });
     }
 
@@ -37,8 +37,8 @@ class DogCommand extends Command {
                 embeds: [{
                     color: 0xFF0000,
                     title: ":x: Fetching the image has failed",
-                    description: "Try again later."
-                }]
+                    description: "Try again later.",
+                }],
             });
 
             return;
@@ -47,10 +47,10 @@ class DogCommand extends Command {
         await ctx.send({
             embeds: [{
                 image: {
-                    url: (await body.json()).url
+                    url: (await body.json()).url,
                 },
-                color: 0x008800
-            }]
+                color: 0x008800,
+            }],
         });
     }
 }

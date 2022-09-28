@@ -43,17 +43,17 @@ class ProfileCommand extends Command {
                             description: "The locale to use",
                             type: ApplicationCommandOptionTypes.STRING,
                             choices: ProfileCommand.getLocales(sosamba),
-                            required: false
-                        }
-                    ]
+                            required: false,
+                        },
+                    ],
                 },
                 {
                     name: "remove",
                     description: "Removes the user profile",
-                    type: ApplicationCommandOptionTypes.SUB_COMMAND
+                    type: ApplicationCommandOptionTypes.SUB_COMMAND,
                 },
             ],
-            description: "Manages the data we know about you."
+            description: "Manages the data we know about you.",
         });
     }
 
@@ -62,7 +62,7 @@ class ProfileCommand extends Command {
         case "remove": {
             if ((await getUserProfile(ctx)).fake) {
                 await ctx.send({
-                    content: await t(ctx, "PROFILE_NONEXISTENT")
+                    content: await t(ctx, "PROFILE_NONEXISTENT"),
                 });
                 return;
             }
@@ -71,12 +71,12 @@ class ProfileCommand extends Command {
                 embeds: [{
                     title: ":question: Are you sure you want to delete your profile?",
                     description: "You will still be able to create a new one using `/profile update`.",
-                    color: 0xffff00
+                    color: 0xffff00,
                 }],
                 components: [{
                     type: ComponentTypes.ACTION_ROW,
-                    components: ctx.createYesNoButtons()
-                }]
+                    components: ctx.createYesNoButtons(),
+                }],
             });
 
             const canDelete = await ctx.askYesNo();
@@ -86,13 +86,13 @@ class ProfileCommand extends Command {
                 await ctx.send({
                     content: await t(ctx, "PROFILE_DELETED"),
                     embeds: [],
-                    components: []
+                    components: [],
                 });
             } else {
                 await ctx.send({
                     content: await t(ctx, "OP_CANCELLED"),
                     embeds: [],
-                    components: []
+                    components: [],
                 });
             }
 
@@ -115,12 +115,12 @@ class ProfileCommand extends Command {
                     embeds: [{
                         title: ":question: You don't have a profile yet.",
                         description: "Would you like to create one?",
-                        color: 0xFFFF00
+                        color: 0xFFFF00,
                     }],
                     components: [{
                         type: ComponentTypes.ACTION_ROW,
-                        components: ctx.createYesNoButtons()
-                    }]
+                        components: ctx.createYesNoButtons(),
+                    }],
                 });
 
                 const canCreate = await ctx.askYesNo();
@@ -133,13 +133,13 @@ class ProfileCommand extends Command {
                     await ctx.send({
                         content: await t(ctx, "PROFILE_CREATED"),
                         embeds: [],
-                        components: []
+                        components: [],
                     });
                 } else {
                     await ctx.send({
                         content: await t(ctx, "OP_CANCELLED"),
                         embeds: [],
-                        components: []
+                        components: [],
                     });
                 }
 
@@ -155,8 +155,8 @@ class ProfileCommand extends Command {
         }
         return; // We haven't gotten to updating it yet
 
-        //eslint-disable-next-line no-unreachable
-        /*if (action === RemoveSymbol) {
+        // eslint-disable-next-line no-unreachable
+        /* if (action === RemoveSymbol) {
             if ((await ctx.userProfile).fake) return ctx.send(await ctx.t("PROFILE_NONEXISTENT"));
             else {
                 await this.sosamba.db.deleteUserProfile(ctx.author.id);
@@ -253,7 +253,7 @@ class ProfileCommand extends Command {
 
     calculateLocaleStatus() {
         const s = {
-            en: (100).toFixed(2)
+            en: (100).toFixed(2),
         };
         const terms = Object.keys(this.sosamba.localeManager.locales.get("en").terms);
         for (const [language, { terms: translation }] of this.sosamba.localeManager.entries()) {
@@ -282,7 +282,7 @@ class ProfileCommand extends Command {
                 .call(l.terms, term)).length;
             return {
                 name: `${l.terms.ENGLISH_LOCALE_NAME} (${l.terms.NATIVE_LOCALE_NAME}) \u2013 ${(termsInForeign / terms.length * 100).toFixed(2)}%`,
-                value: l.id
+                value: l.id,
             };
         });
     }

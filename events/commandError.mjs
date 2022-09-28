@@ -23,7 +23,7 @@ import ttbotPackage, { sosambaPackage } from "../lib/package.mjs";
 class CommandErrorEvent extends Event {
     constructor(...args) {
         super(...args, {
-            name: "commandError"
+            name: "commandError",
         });
     }
 
@@ -36,9 +36,9 @@ class CommandErrorEvent extends Event {
                     description: `I am unable to run the command because of a coding error:\n\`\`\`js\n${e.stack}\n\`\`\``,
                     color: 0xFF0000,
                     footer: {
-                        text: `Please report this issue on our support server or on GitHub. | tt.bot v${ttbotPackage.version} running on Sosamba v${sosambaPackage.version}`
-                    }
-                }]
+                        text: `Please report this issue on our support server or on GitHub. | tt.bot v${ttbotPackage.version} running on Sosamba v${sosambaPackage.version}`,
+                    },
+                }],
             });
         } catch {}
     }

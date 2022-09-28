@@ -45,7 +45,7 @@ class UpdateFollowCommand extends Command {
                     description: "I need to be able to manage webhooks in this channel in order to set up bot updates. After that, you can feel free to remove it from me.",
                     color: 0xff0000,
                 }],
-                flags: 64
+                flags: 64,
             });
             return;
         }

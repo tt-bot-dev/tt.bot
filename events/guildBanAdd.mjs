@@ -23,14 +23,14 @@ import * as logging from "../lib/logging.mjs";
 class GuildBanEvent extends Event {
     constructor(...args) {
         super(...args, {
-            name: "guildBanAdd"
+            name: "guildBanAdd",
         });
     }
 
     async run(guild, user) {
         const [logConfig, config] = await Promise.all([
             logging.getInfo(guild.id, this.sosamba.db),
-            this.sosamba.db.getGuildConfig(guild.id)
+            this.sosamba.db.getGuildConfig(guild.id),
         ]);
         
         if (logConfig.logEvents.includes("guildBan")) {
@@ -47,7 +47,7 @@ class GuildBanEvent extends Event {
                 if (entry?.user.id !== this.sosamba.user.id) this.sosamba.modLog.addBan(user.id, {
                     guildConfig: config,
                     author: entry.user,
-                    guild
+                    guild,
                 }, entry.reason);
             }
         }

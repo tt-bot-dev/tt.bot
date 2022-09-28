@@ -39,12 +39,13 @@ class EmojiCommand extends Command {
                 name: "gif",
                 description: "Whether to render this GIF as a picture or not.",
                 type: ApplicationCommandOptionTypes.BOOLEAN,
-                required: false
+                required: false,
             }],
             description: "Render up to 5 emojis as a picture.",
-            aliases: ["e2p"]
+            aliases: ["e2p"],
         });
     }
+
     async run(ctx, { emojis, gif }) {
         this.log.debug(emojis);
         let input = emojis.split(" ").filter(val => Regexes.EmojiRegex.test(val) || UnicodeEmojiRegex().test(val));
@@ -73,22 +74,22 @@ class EmojiCommand extends Command {
                 description: "Enjoy!",
                 color: 0x008800,
                 image: {
-                    url: `attachment://image${b.isGif ? ".gif" : ".png"}`
+                    url: `attachment://image${b.isGif ? ".gif" : ".png"}`,
                 },
                 fields: b.generated ? [{
                     name: await t(ctx, "IMAGE_AUTO_GENERATED"),
-                    value: await t(ctx, "IMAGE_CAVEATS")
+                    value: await t(ctx, "IMAGE_CAVEATS"),
                 }] : [],
                 footer: {
                     text: await t(ctx, "IMAGE_GENERATION_TIME", {
                         seconds: hrtime[0], 
-                        ms: Math.floor(hrtime[1] / 1e6)
-                    })
-                }
-            }]
+                        ms: Math.floor(hrtime[1] / 1e6),
+                    }),
+                },
+            }],
         }, {
             file: Buffer.from(b.image),
-            name: b.isGif ? "image.gif" : "image.png"
+            name: b.isGif ? "image.gif" : "image.png",
         });
     }
 }

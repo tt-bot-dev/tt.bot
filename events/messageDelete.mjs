@@ -23,7 +23,7 @@ import * as logging from "../lib/logging.mjs";
 class MessageDeleteLogger extends Event {
     constructor(...args) {
         super(...args, {
-            name: "messageDelete"
+            name: "messageDelete",
         });
     }
 

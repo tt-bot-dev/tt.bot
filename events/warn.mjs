@@ -22,9 +22,10 @@ import { Event } from "sosamba";
 class WarnEvent extends Event {
     constructor(...args) {
         super(...args, {
-            name: "warn"
+            name: "warn",
         });
     }
+
     async run(...args) {
         this.log.warn(...args);
     }

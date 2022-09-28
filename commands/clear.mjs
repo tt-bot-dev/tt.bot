@@ -33,22 +33,22 @@ class ClearCommand extends Command {
                 name: "messages",
                 description: "The amount of messages to fetch for clearing. Limited to 1000.",
                 type: ApplicationCommandOptionTypes.INTEGER,
-                required: true
+                required: true,
             }, {
                 name: "mentions",
                 description: "Filters messages which mention this user.",
                 type: ApplicationCommandOptionTypes.USER,
-                required: false
+                required: false,
             }, {
                 name: "from",
                 description: "Filters messages created by this user.",
                 type: ApplicationCommandOptionTypes.USER,
-                required: false
+                required: false,
             }, {
                 name: "invert",
                 description: "Inverts preceeding settings.",
                 type: ApplicationCommandOptionTypes.BOOLEAN,
-                required: false
+                required: false,
             }],
             description: "Clears the desired number of messages.",
             aliases: ["clean", "prune", "purge"],
@@ -67,6 +67,7 @@ class ClearCommand extends Command {
         await Promise.all(p);
         return true;
     }
+
     async run(ctx, { messages, mentions, from, invert }) {
         if (!this.sosamba.hasBotPermission(ctx.channel, "manageMessages")) {
             await ctx.send(await t(ctx, "MISSING_PERMISSIONS"));
@@ -74,7 +75,7 @@ class ClearCommand extends Command {
         }
         await ctx.send({
             content: await t(ctx, "CLEAR_CONFIRM"),
-            components: ctx.createYesNoButtons()
+            components: ctx.createYesNoButtons(),
         });
         const r = await ctx.askYesNo(true);
         if (!r.response) {
@@ -93,7 +94,7 @@ class ClearCommand extends Command {
         await this.deleteStrategy(ctx.channel, toDelete);
         
         const msgOK = await ctx.send(await t(ctx, "CLEAR_DONE", {
-            messages: toDelete.length
+            messages: toDelete.length,
         }));
         setTimeout(async () => await msgOK.delete(), 2000);
     }

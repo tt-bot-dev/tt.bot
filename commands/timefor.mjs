@@ -34,7 +34,7 @@ class TimeForCommand extends Command {
                 required: true,
             }],
             description: "Gets the current time of a user.",
-            aliases: ["tf", "time"]
+            aliases: ["tf", "time"],
         });
     }
 
@@ -47,7 +47,7 @@ class TimeForCommand extends Command {
         if (!data.timezone) return await ctx.send(await t(ctx, "NO_TZ"));
         return ctx.send(await t(ctx, "TIME_FOR", {
             time: await formatDate(ctx, Date.now(), data.timezone),
-            user: this.sosamba.getTag(user)
+            user: this.sosamba.getTag(user),
         }));
     }
 }

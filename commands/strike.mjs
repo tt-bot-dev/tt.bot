@@ -39,7 +39,7 @@ class StrikeCommand extends Command {
                 name: "reason",
                 description: "The reason for the ban",
                 type: ApplicationCommandOptionTypes.STRING,
-                required: false
+                required: false,
             }],
             aliases: ["warn"],
             guildOnly: true,
@@ -52,7 +52,7 @@ class StrikeCommand extends Command {
         await this.sosamba.modLog.createPunishment(ctx, PunishTypes.STRIKE, user.id, _reason);
         const [dm, p] = await Promise.all([
             user.user.getDMChannel(),
-            this.sosamba.db.getUserProfile(user.id)
+            this.sosamba.db.getUserProfile(user.id),
         ]);
         const prof = new UserProfile(p || {});
         try {
@@ -61,13 +61,13 @@ class StrikeCommand extends Command {
                     title: await this.sosamba.localeManager.translate(prof.locale || "en", "YOU_GOT_STRIKED"),
                     description: await this.sosamba.localeManager.translate(prof.locale || "en", "STRIKE_DETAILS", {
                         issuer: this.sosamba.getTag(ctx.author),
-                        reason: _reason
+                        reason: _reason,
                     }),
                     footer: {
-                        text: await this.sosamba.localeManager.translate(prof.locale || "en", "PAY_ATTENTION")
+                        text: await this.sosamba.localeManager.translate(prof.locale || "en", "PAY_ATTENTION"),
                     },
-                    timestamp: new Date()
-                }]
+                    timestamp: new Date(),
+                }],
             });
         } catch { }
         await ctx.send(":ok_hand:");

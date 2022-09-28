@@ -23,7 +23,7 @@ import * as logging from "../lib/logging.mjs";
 class GuildUnbanLogger extends Event {
     constructor(...args) {
         super(...args, {
-            name: "guildBanRemove"
+            name: "guildBanRemove",
         });
 
     }

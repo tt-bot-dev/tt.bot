@@ -39,7 +39,7 @@ class TagCommand extends Command {
                         description: "The tag name",
                         type: ApplicationCommandOptionTypes.STRING,
                         required: true,
-                    }]
+                    }],
                 },
                 {
                     name: "create",
@@ -55,9 +55,9 @@ class TagCommand extends Command {
                             name: "content",
                             description: "New tag contents",
                             type: ApplicationCommandOptionTypes.STRING,
-                            required: true
-                        }
-                    ]
+                            required: true,
+                        },
+                    ],
                 },
                 {
                     name: "edit",
@@ -73,9 +73,9 @@ class TagCommand extends Command {
                             name: "content",
                             description: "New tag contents",
                             type: ApplicationCommandOptionTypes.STRING,
-                            required: true
-                        }
-                    ]
+                            required: true,
+                        },
+                    ],
                 },
                 {
                     name: "delete",
@@ -86,7 +86,7 @@ class TagCommand extends Command {
                         description: "The tag name",
                         type: ApplicationCommandOptionTypes.STRING,
                         required: true,
-                    }]
+                    }],
                 },
             ],
             description: "Store some data for later retrieval. Keep in mind that the tags are global and accessible by everyone.\n[ttMsg](https://github.com/tt-bot-dev/tt.bot/blob/master/docs/ttMsg.md) can be used in tags.",
@@ -103,11 +103,11 @@ class TagCommand extends Command {
                 embeds: [{
                     author: {
                         name: await t(ctx, "TAG_DISPLAY", {
-                            tag: data.id
-                        })
+                            tag: data.id,
+                        }),
                     },
-                    description: this.sosamba.parseMsg(data.content, ctx.member, ctx.guild)
-                }]
+                    description: this.sosamba.parseMsg(data.content, ctx.member, ctx.guild),
+                }],
             });
             break;
         }
@@ -135,7 +135,7 @@ class TagCommand extends Command {
                 await this.sosamba.db.updateTag(encrypt(name),
                     data.toEncryptedObject());
                 await ctx.send(await t(ctx, "TAG_UPDATED", {
-                    tag: name
+                    tag: name,
                 }));
             }
             break;
@@ -148,7 +148,7 @@ class TagCommand extends Command {
             await this.sosamba.db.createTag(TagObject.create({
                 id: name,
                 content,
-                owner: ctx.author.id
+                owner: ctx.author.id,
             }));
             await ctx.send(await t(ctx, "TAG_CREATED", { tag: name }));
             break;

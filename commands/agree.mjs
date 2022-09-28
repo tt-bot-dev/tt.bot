@@ -28,6 +28,7 @@ class AgreeCommand extends Command {
             guildOnly: true,
         });
     }
+
     async run(ctx) {
         // This should probably switch to something button-based
         const { memberRole, agreeChannel } = await getGuildConfig(ctx) || {};
@@ -41,17 +42,17 @@ class AgreeCommand extends Command {
 
             await ctx.send({
                 content: "Welcome to the server!",
-                flags: 64
+                flags: 64,
             });
         } catch {
             const agreeFaultMessage = await t(ctx, "AGREE_FAULT", {
                 serverOwner: this.sosamba.getTag(ctx.guild.members.get(ctx.guild.ownerID) ||
-                    (await this.sosamba.memberRequester.request(ctx.guild, [ctx.guild.ownerID]))[0])
+                    (await this.sosamba.memberRequester.request(ctx.guild, [ctx.guild.ownerID]))[0]),
             });
 
             await ctx.send({
                 content: agreeFaultMessage,
-                flags: 64
+                flags: 64,
             });
         }
     }

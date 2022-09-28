@@ -69,8 +69,8 @@ class PhoneCommand extends Command {
                         name: "number",
                         description: "The number to register",
                         type: ApplicationCommandOptionTypes.STRING,
-                        required: true
-                    }]
+                        required: true,
+                    }],
                 },
                 {
                     name: "call",
@@ -80,8 +80,8 @@ class PhoneCommand extends Command {
                         name: "number",
                         description: "The number to call",
                         type: ApplicationCommandOptionTypes.STRING,
-                        required: true
-                    }]
+                        required: true,
+                    }],
                 },
                 {
                     name: "lookup",
@@ -91,8 +91,8 @@ class PhoneCommand extends Command {
                         name: "number",
                         description: "The number to look the details up for (defaults to the phone number of this channel)",
                         type: ApplicationCommandOptionTypes.STRING,
-                        required: false
-                    }]
+                        required: false,
+                    }],
                 },
                 {
                     name: "delete",
@@ -102,14 +102,14 @@ class PhoneCommand extends Command {
                         name: "number",
                         description: "The number to delete",
                         type: ApplicationCommandOptionTypes.STRING,
-                        required: true
-                    }]
+                        required: true,
+                    }],
                 },
                 {
                     name: "hangup",
                     description: "Hangs a phone call up",
                     type: ApplicationCommandOptionTypes.SUB_COMMAND,
-                    options: []
+                    options: [],
                 },
                 {
                     name: "reply",
@@ -119,9 +119,9 @@ class PhoneCommand extends Command {
                         name: "message",
                         description: "The message to send over",
                         type: ApplicationCommandOptionTypes.STRING,
-                        required: true
-                    }]
-                }
+                        required: true,
+                    }],
+                },
             ],
             
         });
@@ -154,10 +154,10 @@ class PhoneCommand extends Command {
                 embeds: [{
                     title: `:x: ${await t(ctx, "NUMBER_INVALID")}`,
                     description: await t(ctx, "NUMBER_INVALID_HINT"),
-                    color: 0xFF0000
+                    color: 0xFF0000,
                 }],
-                flags: 64
-            })
+                flags: 64,
+            });
 
             return;
         }
@@ -176,10 +176,10 @@ class PhoneCommand extends Command {
                         description: "Registering phone numbers is restricted to administrators.",
                         color: 0xFF0000,
                         footer: {
-                            text: "Contact the server administrators to register a phone number!"
-                        }
+                            text: "Contact the server administrators to register a phone number!",
+                        },
                     }],
-                    flags: 64
+                    flags: 64,
                 });
 
                 return;
@@ -199,9 +199,9 @@ class PhoneCommand extends Command {
                     embeds: [{
                         title: ":x: Cannot register this number",
                         description: await t(ctx, "ALREADY_HAVE_NUMBER"),
-                        color: 0xFF0000
+                        color: 0xFF0000,
                     }],
-                    flags: 64
+                    flags: 64,
                 });
                 return;
             }
@@ -215,7 +215,7 @@ class PhoneCommand extends Command {
                     embeds: [{
                         title: ":x: Cannot register this number",
                         description: await t(ctx, "NUMBER_RESERVED"),
-                        color: 0xFF0000
+                        color: 0xFF0000,
                     }],
                 });
                 return;
@@ -226,7 +226,7 @@ class PhoneCommand extends Command {
                     embeds: [{
                         title: ":x: Cannot register this number",
                         description: await t(ctx, "NUMBER_EXISTS"),
-                        color: 0xFF0000
+                        color: 0xFF0000,
                     }],
                 });
                 return;
@@ -237,12 +237,12 @@ class PhoneCommand extends Command {
                     title: ":question: Would you like to create a private number?",
                     // todo add note about defaulting to public
                     description: await t(ctx, "QUESTION_NUMBER_PRIVATE"),
-                    color: 0xFFFF00
+                    color: 0xFFFF00,
                 }],
                 components: [{
                     type: ComponentTypes.ACTION_ROW,
-                    components: ctx.createYesNoButtons()
-                }]
+                    components: ctx.createYesNoButtons(),
+                }],
             });
 
             const isPrivate = await ctx.askYesNo(true);
@@ -258,9 +258,9 @@ class PhoneCommand extends Command {
                 embeds: [{
                     title: ":white_check_mark: Phone number created",
                     description: "Try making a phone call using `/phone call`!",
-                    color: 0x008800
+                    color: 0x008800,
                 }],
-                components: []
+                components: [],
             };
 
             if (isPrivate.context) {
@@ -280,7 +280,7 @@ class PhoneCommand extends Command {
                         description: "Deleting phone numbers is restricted to administrators.",
                         color: 0xFF0000,
                     }],
-                    flags: 64
+                    flags: 64,
                 });
 
                 return;
@@ -298,7 +298,7 @@ class PhoneCommand extends Command {
                         description: await t(ctx, "NUMBER_NONEXISTANT"),
                         color: 0xFF0000,
                     }],
-                    flags: 64
+                    flags: 64,
                 });
                 return;
             }
@@ -310,7 +310,7 @@ class PhoneCommand extends Command {
                         description: await t(ctx, "NUMBER_NONEXISTANT"),
                         color: 0xFF0000,
                     }],
-                    flags: 64
+                    flags: 64,
                 });
                 return;
             }
@@ -319,12 +319,12 @@ class PhoneCommand extends Command {
                 embeds: [{
                     title: ":question: Would you like to delete the phone number?",
                     description: await t(ctx, "QUESTION_DELETE_NUM", { number: num }),
-                    color: 0xFF0000
+                    color: 0xFF0000,
                 }],
                 components: [{
                     type: ComponentTypes.ACTION_ROW,
-                    components: ctx.createYesNoButtons()
-                }]
+                    components: ctx.createYesNoButtons(),
+                }],
             });
 
             const resp = await ctx.askYesNo(true);
@@ -337,15 +337,15 @@ class PhoneCommand extends Command {
                     embeds: [{
                         title: ":white_check_mark: Phone number deleted successfully.",
                         description: `Anyone can register the number ${num} from now on.`,
-                        color: 0x008800
+                        color: 0x008800,
                     }],
-                    components: []
+                    components: [],
                 });
             } else {
                 const content = {
                     embeds: [],
                     components: [],
-                    content: await t(ctx, "OP_CANCELLED")
+                    content: await t(ctx, "OP_CANCELLED"),
                 };
 
                 if (resp.context) {
@@ -366,16 +366,15 @@ class PhoneCommand extends Command {
         
         
                 data = await this.sosamba.db.getPhoneNumber(num);
-            }
-            else [data] = await this.sosamba.db.getChannelPhoneNumbers(ctx.guild.id, ctx.channel.id);
+            } else [data] = await this.sosamba.db.getChannelPhoneNumbers(ctx.guild.id, ctx.channel.id);
  
             if (!data) {
                 await ctx.send({
                     embeds: [{
                         title: ":x: Cannot look this phone number up",
                         description: await t(ctx, "NUMBER_NONEXISTANT"),
-                        color: 0xFF0000
-                    }]
+                        color: 0xFF0000,
+                    }],
                 });
                 return;
             }
@@ -408,7 +407,7 @@ class PhoneCommand extends Command {
                 embeds: [{
                     author: {
                         name: await t(ctx, "NUMBER_INFORMATION", {
-                            number: data.id
+                            number: data.id,
                         }),
                     },
                     fields,
@@ -428,10 +427,10 @@ class PhoneCommand extends Command {
                         description: await t(ctx, "CALLER_NO_NUMBER"),
                         color: 0xFF0000,
                         footer: {
-                            text: "You can register a phone number using /phone register."
-                        }
+                            text: "You can register a phone number using /phone register.",
+                        },
                     }],
-                    flags: 64
+                    flags: 64,
                 });
                     
                 return;
@@ -446,9 +445,9 @@ class PhoneCommand extends Command {
                     embeds: [{
                         title: ":x: Cannot call this number",
                         description: await t(ctx, "NUMBER_NONEXISTANT"),
-                        color: 0xFF0000
+                        color: 0xFF0000,
                     }],
-                    flags: 64
+                    flags: 64,
                 });
                 return;
             }
@@ -458,9 +457,9 @@ class PhoneCommand extends Command {
                     embeds: [{
                         title: ":x: Cannot call this number",
                         description: "This number is registered to the same channel as the number you're calling from.",
-                        color: 0xFF0000
+                        color: 0xFF0000,
                     }],
-                    flags: 64
+                    flags: 64,
                 });
 
                 return;
@@ -472,11 +471,11 @@ class PhoneCommand extends Command {
                         title: ":x: Cannot call this number",
                         description: "You are in a call already.",
                         footer: {
-                            text: "Hang the current call up with /phone hangup and try again."
+                            text: "Hang the current call up with /phone hangup and try again.",
                         },
-                        color: 0xFF0000
+                        color: 0xFF0000,
                     }],
-                    flags: 64
+                    flags: 64,
                 });
 
                 return;
@@ -488,11 +487,11 @@ class PhoneCommand extends Command {
                         title: ":x: Cannot call this number",
                         description: "The other side is busy.",
                         footer: {
-                            text: "Try calling them again later!"
+                            text: "Try calling them again later!",
                         },
-                        color: 0xFF0000
+                        color: 0xFF0000,
                     }],
-                    flags: 64
+                    flags: 64,
                 });
 
                 return;
@@ -502,8 +501,8 @@ class PhoneCommand extends Command {
                 embeds: [{
                     title: `📞 ${await t(ctx, "CALLING")}`,
                     description: "Please wait until the other side picks up…",
-                    color: 0x008800
-                }]
+                    color: 0x008800,
+                }],
             });
 
             const callerString = `${thisChannelNumber.id} ${!thisChannelNumber.private ? `(#${ctx.channel.name} at ${ctx.guild.name})` : ""}`;
@@ -515,13 +514,13 @@ class PhoneCommand extends Command {
                         description: callerString,
                         ...thisChannelNumber.private ? {} : {
                             thumbnail: {
-                                url: ctx.guild.iconURL
-                            }
+                                url: ctx.guild.iconURL,
+                            },
                         },
                         footer: {
-                            text: "The call will time out in 2 minutes."
+                            text: "The call will time out in 2 minutes.",
                         },
-                        color: 0xFFFF00
+                        color: 0xFFFF00,
                     }],
                     components: [{
                         type: ComponentTypes.ACTION_ROW,
@@ -529,25 +528,25 @@ class PhoneCommand extends Command {
                             ctx.withButton({
                                 custom_id: `phone:${thisChannelNumber.id}:pickup`,
                                 style: ButtonStyles.SUCCESS,
-                                label: "Pickup"
+                                label: "Pickup",
                             }),
                             ctx.withButton({
                                 custom_id: `phone:${thisChannelNumber.id}:hangup`,
                                 style: ButtonStyles.DANGER,
-                                label: "Reject"
-                            })
-                        ]
-                    }]
+                                label: "Reject",
+                            }),
+                        ],
+                    }],
                 });
 
                 try {
                     const answer = await ctx.waitForAnyComponent(c => [
                         `phone:${thisChannelNumber.id}:pickup`,
-                        `phone:${thisChannelNumber.id}:hangup`
+                        `phone:${thisChannelNumber.id}:hangup`,
                     ].includes(c.componentData), 120000);
 
                     await answer.interaction.editParent({
-                        components: []
+                        components: [],
                     });
 
                     switch (answer.componentData) {
@@ -563,16 +562,16 @@ class PhoneCommand extends Command {
                                                 text: "Want to call the other side again? Use the /phone call command.",
                                             },
                                             color: 0xFF0000,
-                                        }]
+                                        }],
                                     }),
                                     this.sosamba.createMessage(ctx.channel.id, {
                                         embeds: [{
                                             title: ":wave: The call was hung up",
                                             description: "Want to call the other side again? Use the /phone call command.",
                                             color: 0xFF0000,
-                                        }]
-                                    })
-                                ]
+                                        }],
+                                    }),
+                                ],
                             );
 
                             return;
@@ -580,7 +579,7 @@ class PhoneCommand extends Command {
 
                         await this.addChannelsToSpeakerPhone(
                             thisChannelNumber,
-                            otherSideNumber
+                            otherSideNumber,
                         );
                         break;
                     }
@@ -593,15 +592,15 @@ class PhoneCommand extends Command {
                                         title: ":wave: The call was hung up",
                                         description: "Want to call the other side again? Use the /phone call command.",
                                         color: 0xFF0000,
-                                    }]
-                                }))
+                                    }],
+                                })),
                         );
 
                         return;
                     }
                     }
 
-                } catch(err) {
+                } catch (err) {
                     if (err.message === "Timed out") {
                         await Promise.all(
                             [otherSideNumber.channelID, ctx.channel.id]
@@ -610,11 +609,11 @@ class PhoneCommand extends Command {
                                         title: `:hourglass: The call ${cID === otherSideNumber.channelID ? `from ${thisChannelNumber.id}` : `to ${otherSideNumber.id}`} timed out`,
                                         description: "Try calling them again later.",
                                         footer: {
-                                            text: "To call other people, use the /phone call command."
+                                            text: "To call other people, use the /phone call command.",
                                         },
-                                        color: 0xFFFF00
-                                    }]
-                                }))
+                                        color: 0xFFFF00,
+                                    }],
+                                })),
                         );
                     } else {
                         await Promise.all(
@@ -625,10 +624,10 @@ class PhoneCommand extends Command {
                                         description: `I am unable to proceed with the call any further due to a coding error.\n\`\`\`js\n${err.stack}\n\`\`\``,
                                         color: 0xFF0000,
                                         footer: {
-                                            text: `Please report this issue on our support server or on GitHub. | tt.bot v${ttbotPackage.version} running on Sosamba v${sosambaPackage.version}`
-                                        }
-                                    }]
-                                }))
+                                            text: `Please report this issue on our support server or on GitHub. | tt.bot v${ttbotPackage.version} running on Sosamba v${sosambaPackage.version}`,
+                                        },
+                                    }],
+                                })),
                         );
 
                         // remove any ghost call entries that may occur
@@ -643,7 +642,7 @@ class PhoneCommand extends Command {
                             title: ":x: Cannot call this number",
                             description: await t(ctx, "CALL_ABORTED_BOT_REMOVED"),
                             color: 0xFF0000,
-                        }]
+                        }],
                     });
                     const phoneNumbers = await this.sosamba.db.getGuildPhoneNumbers(otherSideNumber.guildID);
                     await Promise.all(phoneNumbers.map(async ({ id }) => this.sosamba.db.deletePhoneNumber(id)));
@@ -654,7 +653,7 @@ class PhoneCommand extends Command {
                             title: ":x: Cannot call this number",
                             description: await t(ctx, "CALL_ABORTED_NO_PERMISSIONS"),
                             color: 0xFF0000,
-                        }]
+                        }],
                     });
                     return;
                 }
@@ -668,9 +667,9 @@ class PhoneCommand extends Command {
                     embeds: [{
                         title: ":x: You're not currently in a phone call",
                         description: "Try calling someone using /phone call!",
-                        color: 0xFF0000
+                        color: 0xFF0000,
                     }],
-                    flags: 64
+                    flags: 64,
                 });
 
                 return;
@@ -685,8 +684,8 @@ class PhoneCommand extends Command {
                             title: ":wave: The call was hung up",
                             description: "Want to call the other side again? Use the /phone call command.",
                             color: 0xFF0000,
-                        }]
-                    }))
+                        }],
+                    })),
             );
 
             this.phoneCalls.delete(phoneCallData.caller.channelID);
@@ -698,8 +697,8 @@ class PhoneCommand extends Command {
                     description: "Want to call the other side again? Use the /phone call command.",
                     color: 0x008800,
                 }],
-                flags: 64
-            })
+                flags: 64,
+            });
 
             break;
         }
@@ -710,9 +709,9 @@ class PhoneCommand extends Command {
                     embeds: [{
                         title: ":x: You're not currently in a phone call",
                         description: "Try calling someone using /phone call!",
-                        color: 0xFF0000
+                        color: 0xFF0000,
                     }],
-                    flags: 64
+                    flags: 64,
                 });
 
                 return;
@@ -728,9 +727,9 @@ class PhoneCommand extends Command {
                     },
                     description: message,
                     footer: {
-                        text: "This message is user-generated content."
-                    }
-                }]
+                        text: "This message is user-generated content.",
+                    },
+                }],
             };
 
             await this.sosamba.createMessage(phoneCallData.otherSide.channelID, content);
@@ -744,8 +743,8 @@ class PhoneCommand extends Command {
             title: ":white_check_mark: Connected",
             color: 0x008800,
             footer: {
-                text: "Use /phone reply to send a message over! Type /phone hangup to hang up."
-            }
+                text: "Use /phone reply to send a message over! Type /phone hangup to hang up.",
+            },
         };
 
         const callerChannel = this.sosamba.getChannel(phoneNumberInfo.channelID);
@@ -757,12 +756,12 @@ class PhoneCommand extends Command {
 
         this.phoneCalls.set(callerChannel.id, {
             caller: phoneNumberInfo,
-            otherSide: otherSidePhoneNumberInfo
+            otherSide: otherSidePhoneNumberInfo,
         });
 
         this.phoneCalls.set(otherSideChannel.id, {
             caller: otherSidePhoneNumberInfo,
-            otherSide: phoneNumberInfo
+            otherSide: phoneNumberInfo,
         });
 
         await Promise.all([
@@ -772,10 +771,10 @@ class PhoneCommand extends Command {
                     description: otherSideCallerString,
                     ...otherSidePhoneNumberInfo.private ? {} : {
                         thumbnail: {
-                            url: otherSideChannel.guild.iconURL
-                        }
+                            url: otherSideChannel.guild.iconURL,
+                        },
                     },
-                }]
+                }],
             }),
             otherSideChannel.createMessage({
                 embeds: [{
@@ -783,11 +782,11 @@ class PhoneCommand extends Command {
                     description: callerString,
                     ...phoneNumberInfo.private ? {} : {
                         thumbnail: {
-                            url: callerChannel.guild.iconURL
-                        }
+                            url: callerChannel.guild.iconURL,
+                        },
                     },
-                }]
-            })
+                }],
+            }),
         ]);
     }
 }

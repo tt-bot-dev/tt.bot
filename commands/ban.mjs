@@ -37,17 +37,17 @@ class BanCommand extends Command {
                 name: "reason",
                 description: "The reason for the ban",
                 type: ApplicationCommandOptionTypes.STRING,
-                required: false
+                required: false,
             }, {
                 name: "soft",
                 description: "Determines whether the user will be unbanned immediately after banning.",
                 type: ApplicationCommandOptionTypes.BOOLEAN,
-                required: false
+                required: false,
             }, {
                 name: "days",
                 description: "The amount of days worth of message history to purge.",
                 type: ApplicationCommandOptionTypes.INTEGER,
-                required: false
+                required: false,
             }],
             description: "Bans a user from this server.",
             guildOnly: true,
@@ -59,9 +59,9 @@ class BanCommand extends Command {
     }
 
     async run(ctx, { user, reason, soft, days }) {
-        let _reason = reason ?? "No reason provided.";
-        let _soft = soft ?? false;
-        let _days = days ?? 0;
+        const _reason = reason ?? "No reason provided.";
+        const _soft = soft ?? false;
+        const _days = days ?? 0;
 
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
             if (!ctx.guild.members.get(this.sosamba.user.id).permissions.has("banMembers") ||
@@ -73,7 +73,7 @@ class BanCommand extends Command {
             if (_soft) await ctx.guild.unbanMember(user.id);
             this.sosamba.modLog.createPunishment(ctx, _soft ? PunishTypes.SOFTBAN : PunishTypes.BAN, user.id, _reason).catch(() => void 0);
             await ctx.send(await t(ctx, `${_soft ? "SOFT" : ""}BAN_DONE`, {
-                user: this.sosamba.getTag(user.user)
+                user: this.sosamba.getTag(user.user),
             }));
         } else {
             ctx.send(await t(ctx, "ROLE_HIERARCHY_ERROR"));

@@ -48,21 +48,21 @@ class StrikeListCommand extends Command {
             const strikeStr = strikes.map(s => `${s.id} - ${s.reason}`);
             await ctx.send(await t(ctx, "TOO_MUCH_STRIKES"), {
                 file: Buffer.from(strikeStr.join("\r\n")),
-                name: "strikes.txt"
+                name: "strikes.txt",
             });
         } else {
             await ctx.send({
                 embeds: [{
                     author: {
                         name: await t(ctx, "STRIKE_OVERVIEW", {
-                            user: this.sosamba.getTag(user)
-                        })
+                            user: this.sosamba.getTag(user),
+                        }),
                     },
                     fields: strikes.map(s => ({
                         name: `ID: ${s.id}`,
-                        value: s.reason
-                    }))
-                }]
+                        value: s.reason,
+                    })),
+                }],
             });
         }
     }

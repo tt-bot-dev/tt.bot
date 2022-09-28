@@ -32,7 +32,7 @@ class InfoCommand extends Command {
         super(...args, {
             name: "info",
             description: "Shows the information about the bot and its owners.",
-            aliases: ["about"]
+            aliases: ["about"],
         });
     }
 
@@ -44,41 +44,43 @@ class InfoCommand extends Command {
             embeds: [{
                 author: {
                     name: this.sosamba.user.username,
-                    icon_url: this.sosamba.user.staticAvatarURL
+                    icon_url: this.sosamba.user.staticAvatarURL,
                 }, 
                 fields: [{
                     name: await t(ctx, "INFO_STATS"),
                     value: await t(ctx, "INFO_STATS_TEXT", {
                         guilds: this.sosamba.guilds.size,
                         users: this.sosamba.users.size,
-                        channels: Object.keys(this.sosamba.channelGuildMap).length
+                        channels: Object.keys(this.sosamba.channelGuildMap).length,
                     }),
-                    inline: true
-                }, {
+                    inline: true,
+                },
+                {
                     name: await t(ctx, "INFO_AUTHORS"),
                     value: await t(ctx, "INFO_OWNERS", {
-                        owners: ownerStrings.join("\n")
+                        owners: ownerStrings.join("\n"),
                     }),
-                    inline: true
-                }, {
+                    inline: true,
+                },
+                {
                     name: await t(ctx, "INFO_VERSIONS"),
                     value: `tt.bot: ${ttBotVersion}\nSosamba: ${sosambaVersion}\nEris: ${erisVersion}\nNode.js: ${process.versions.node}`,
-                    inline: true
+                    inline: true,
                 },
                 {
                     name: await t(ctx, "INFO_UPTIME"),
                     value: await this.getUptime(ctx),
-                    inline: true
+                    inline: true,
                 },
                 {
                     name: await t(ctx, "INFO_FREE_SOFTWARE"),
                     value: await t(ctx, "INFO_FREE_SOFTWARE_DESCRIPTION", {
                         // @ts-expect-error: config.webserver.display is internally converted to a callable
-                        learnMore: config.webserver.display("/license")
-                    })
+                        learnMore: config.webserver.display("/license"),
+                    }),
                 }],
-                color: 0x008800
-            }]
+                color: 0x008800,
+            }],
         });
     }
 
@@ -91,7 +93,7 @@ class InfoCommand extends Command {
             "days",
             "hours",
             "minutes",
-            "seconds"
+            "seconds",
         ]);
 
         return this._formatDiff(ctx, diff);
@@ -105,24 +107,24 @@ class InfoCommand extends Command {
          */
         const commonOptions = {
             style: "unit",
-            unitDisplay: "long"
+            unitDisplay: "long",
         };
 
         const dayFormatter = new Intl.NumberFormat(userLanguage, {
             ...commonOptions,
-            unit: "day"
+            unit: "day",
         });
         const hourFormatter = new Intl.NumberFormat(userLanguage, {
             ...commonOptions,
-            unit: "hour"
+            unit: "hour",
         });
         const minuteFormatter = new Intl.NumberFormat(userLanguage, {
             ...commonOptions,
-            unit: "minute"
+            unit: "minute",
         });
         const secondFormatter = new Intl.NumberFormat(userLanguage, {
             ...commonOptions,
-            unit: "second"
+            unit: "second",
         });
 
         return `${diff.days > 0 ? `${dayFormatter.format(diff.days)}, ` : ""}${diff.hours > 0 ? `${hourFormatter.format(diff.hours)}, ` : ""}${minuteFormatter.format(diff.minutes)}, ${secondFormatter.format(Math.floor(diff.seconds))}`;

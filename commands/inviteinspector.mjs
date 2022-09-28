@@ -27,17 +27,17 @@ class InviteInspectorCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "inviteinspector",
-            //args: "<invite:String>",
+            // args: "<invite:String>",
             args: [
                 {
                     name: "code",
                     description: "The code/invite link to look up",
                     type: ApplicationCommandOptionTypes.STRING,
-                    required: true
-                }
+                    required: true,
+                },
             ],
             description: "Gets information about an invite.",
-            aliases: ["iinspector"]
+            aliases: ["iinspector"],
         });
     }
 
@@ -52,37 +52,37 @@ class InviteInspectorCommand extends Command {
                     embeds: [{
                         color: 0xFF0000,
                         author: {
-                            name: await t(ctx,"OOPS")
+                            name: await t(ctx,"OOPS"),
                         },
                         description: await t(ctx,"CANNOT_GET_INVITE_BANNED"),
                         footer: {
-                            text: await t(ctx,"CONTACT_GUILD_ADMIN")
-                        }
-                    }]
+                            text: await t(ctx,"CONTACT_GUILD_ADMIN"),
+                        },
+                    }],
                 });
             }
             return ctx.send({
                 embeds: [{
                     color: 0xFF0000,
                     author: {
-                        name: await t(ctx,"OOPS")
+                        name: await t(ctx,"OOPS"),
                     },
                     description: await t(ctx,"CANNOT_GET_INVITE"),
                     footer: {
-                        text: await t(ctx,"INVITE_ERR_FOOTER")   
-                    }
-                }]
+                        text: await t(ctx,"INVITE_ERR_FOOTER"),   
+                    },
+                }],
             });
         }
 
         const fields = [{
             name: await t(ctx, "INV_CHANNEL_TYPE"),
             value: `${this._getUserFriendlyChannelType(inviteData.channel.type)} ${inviteData.channel.name}`,
-            inline: true
+            inline: true,
         }, {
             name: await t(ctx, "MEMBERS"),
             value: `<:e:658538493470965787> ${inviteData.memberCount} | <:e:313956277808005120> ${inviteData.presenceCount}`,
-            inline: true
+            inline: true,
         }];
 
         /* if (inviteData.guildScheduledEvent) {} */ // todo - once eris implements support for scheduled events
@@ -95,16 +95,16 @@ class InviteInspectorCommand extends Command {
                 thumbnail: {
                     url: inviteData.guild.icon ?
                         inviteData.guild.iconURL :
-                        "https://cdn.discordapp.com/embed/avatars/0.png"
+                        "https://cdn.discordapp.com/embed/avatars/0.png",
                 },
                 fields,
                 footer: inviteData.inviter ? {
                     text: await t(ctx, "INV_INVITER", {
-                        user: this.sosamba.getTag(inviteData.inviter)
+                        user: this.sosamba.getTag(inviteData.inviter),
                     }),
-                    icon_url: inviteData.inviter.avatarURL
-                } : null
-            }]
+                    icon_url: inviteData.inviter.avatarURL,
+                } : null,
+            }],
         });
     }
 

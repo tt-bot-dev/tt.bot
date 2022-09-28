@@ -33,7 +33,7 @@ class UserCommand extends Command {
                 required: true,
             }],
             description: "Gets some information about the user.",
-            aliases: ["uinfo", "user", "whois"]
+            aliases: ["uinfo", "user", "whois"],
         });
     }
 
@@ -45,58 +45,58 @@ class UserCommand extends Command {
             await ctx.send({
                 embeds: [{
                     title: await t(ctx, "USER_INFO", {
-                        user: `${nick}${nick === this.sosamba.getTag(user) ? "" : ` (${this.sosamba.getTag(user)})`} (${user.id}) ${user.bot ? "(BOT)" : ""}`
+                        user: `${nick}${nick === this.sosamba.getTag(user) ? "" : ` (${this.sosamba.getTag(user)})`} (${user.id}) ${user.bot ? "(BOT)" : ""}`,
                     }),
                     description: user.user.publicFlags ? this.bitArrayToEmoji(ctx, this.parseUserBitfield(user.user.publicFlags)).join("\n") : undefined,
                     thumbnail: {
-                        url: user.user.avatarURL
+                        url: user.user.avatarURL,
                     },
                     fields: [{
                         name: await t(ctx, "ROLES"),
                         value: roles.join(", ").length > 1024 ? await t(ctx, "TOOLONG") : roles.join(", "),
-                        inline: false
+                        inline: false,
                     }, {
                         name: await t(ctx, "CREATED_ON"),
                         value: await formatDate(ctx, user.createdAt, (await getUserProfile(ctx)).timezone),
-                        inline: true
+                        inline: true,
                     }, {
                         name: await t(ctx, "CURRENT_VOICE"),
                         value: ctx.guild.channels.get(ctx.guild.voiceStates.get(user.id)?.channelID)
                             ?.name || await t(ctx, "NO_CURRENT_VOICE"),
-                        inline: true
+                        inline: true,
                     }],
                     timestamp: new Date(user.joinedAt),
                     footer: {
-                        text: await t(ctx, "JOINED_ON")
-                    }
-                }]
+                        text: await t(ctx, "JOINED_ON"),
+                    },
+                }],
             });
         } else {
             await ctx.send({
                 embeds: [{
                     title: await t(ctx, "USER_INFO_LIMITED", {
-                        user: `${this.sosamba.getTag(user)} ${user.bot ? "(BOT)" : ""}`
+                        user: `${this.sosamba.getTag(user)} ${user.bot ? "(BOT)" : ""}`,
                     }),
                     description: user.publicFlags ? this.bitArrayToEmoji(ctx, this.parseUserBitfield(user.publicFlags)).join("\n") : undefined,
                     thumbnail: {
-                        url: user.avatarURL
+                        url: user.avatarURL,
                     },
                     fields: [{
                         name: await t(ctx, "CREATED_ON"),
                         value: await formatDate(ctx, user.createdAt, (await getUserProfile(ctx)).timezone),
-                        inline: true
+                        inline: true,
                     }],
                     footer: {
-                        text: ctx.guild ? await t(ctx, "NOT_IN_SERVER") : "Use the command somewhere the user is in for more information!"
-                    }
-                }]
+                        text: ctx.guild ? await t(ctx, "NOT_IN_SERVER") : "Use the command somewhere the user is in for more information!",
+                    },
+                }],
             });
         }
         
     }
 
     parseUserBitfield(bitfield) {
-        let out = [];
+        const out = [];
         for (const k of Object.keys(UserFlags)) {
             if (k === "NONE") continue;
             if (bitfield & UserFlags[k]) out.push(k);
@@ -105,7 +105,7 @@ class UserCommand extends Command {
     }
 
     bitArrayToEmoji(ctx, bitArray) {
-        let out = [];
+        const out = [];
         const canUseExternal = this.sosamba.hasBotPermission(ctx.channel, "externalEmojis");
 
         // Emojis taken from discord.bots.gg Discord guild

@@ -25,14 +25,14 @@ import UserProfile from "../lib/Structures/UserProfile.mjs";
 class GuildJoinEvent extends Event {
     constructor(...args) {
         super(...args, {
-            name: "guildCreate"
+            name: "guildCreate",
         });
     }
 
     async run(guild) {
         const blacklist = await this.sosamba.db.getBlacklistedGuilds();
         // blacklisting bot collection servers with intents is too expensive
-        if (/*this.sosamba.botCollectionServers.includes(guild)
+        if (/* this.sosamba.botCollectionServers.includes(guild)
         || */blacklist.find(entry => entry.id === guild.id || entry.ownerID === guild.ownerID)) {
             guild.__automaticallyLeft = true;
             await guild.leave();
@@ -46,10 +46,10 @@ class GuildJoinEvent extends Event {
             embeds: [{
                 author: {
                     name: `I was added into ${guild.name} (${guild.id})`,
-                    icon_url: guild.iconURL
+                    icon_url: guild.iconURL,
                 },
-                color: 0x008800
-            }]
+                color: 0x008800,
+            }],
         });
     }
 
@@ -65,27 +65,29 @@ class GuildJoinEvent extends Event {
             embeds: [{
                 title: await this.sosamba.localeManager.translate(lang, "HI_I_AM_BOT"),
                 description: await this.sosamba.localeManager.translate(lang, "SOME_THINGS_SAID", {
-                    botName: this.sosamba.user.username
+                    botName: this.sosamba.user.username,
                 }),
                 fields: [{
                     name: await this.sosamba.localeManager.translate(lang, "GETTING_STARTED"),
                     value: await this.sosamba.localeManager.translate(lang, "GETTING_STARTED_DESCRIPTION", {
-                        defaultPrefix: config.prefix
-                    })
-                }, {
+                        defaultPrefix: config.prefix,
+                    }),
+                },
+                {
                     name: await this.sosamba.localeManager.translate(lang, "EVERYTHING_ELSE"),
                     value: await this.sosamba.localeManager.translate(lang, "EVERYTHING_ELSE_DESCRIPTION", {
-                        defaultPrefix: config.prefix
-                    })
-                }, {
+                        defaultPrefix: config.prefix,
+                    }),
+                },
+                {
                     name: await this.sosamba.localeManager.translate(lang, "FREE_SOFTWARE"),
-                    value: await this.sosamba.localeManager.translate(lang, "FREE_SOFTWARE_DESCRIPTION")
+                    value: await this.sosamba.localeManager.translate(lang, "FREE_SOFTWARE_DESCRIPTION"),
                 },
                 {
                     name: await this.sosamba.localeManager.translate(lang, "WELCOME_UPDATES"),
                     value: await this.sosamba.localeManager.translate(lang, "WELCOME_UPDATES_DESCRIPTION", {
-                        defaultPrefix: config.prefix
-                    })
+                        defaultPrefix: config.prefix,
+                    }),
                 },
                 {
                     name: await this.sosamba.localeManager.translate(lang, "WELCOME_PRIVACY_POLICY"),
@@ -93,10 +95,10 @@ class GuildJoinEvent extends Event {
                 },
                 {
                     name: await this.sosamba.localeManager.translate(lang, "THANKS_FOR_CHOOSING"),
-                    value: await this.sosamba.localeManager.translate(lang, "WISHING_GOOD_LUCK")
+                    value: await this.sosamba.localeManager.translate(lang, "WISHING_GOOD_LUCK"),
                 }],
-                color: 0x008800
-            }]
+                color: 0x008800,
+            }],
         };
     }
 }

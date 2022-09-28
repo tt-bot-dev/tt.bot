@@ -33,36 +33,41 @@ class ServerCommand extends Command {
     async run(ctx) {
         const embed = {
             author: {
-                name: ctx.guild.name
+                name: ctx.guild.name,
             },
             thumbnail: {
-                url: ctx.guild.iconURL
+                url: ctx.guild.iconURL,
             },
             fields: [{
                 name: await t(ctx, "MEMBERS"),
                 value: await t(ctx, "MEMBER_COUNT", {
-                    members: ctx.guild.memberCount
+                    members: ctx.guild.memberCount,
                 }),
             },
             {
                 name: await t(ctx, "OWNER"),
                 value: this.sosamba.getTag(ctx.guild.members.get(ctx.guild.ownerID) ||
                     (await this.sosamba.memberRequester.request(ctx.guild, [ctx.guild.ownerID]))[0]),
-            }, {
+            },
+            {
                 name: await t(ctx, "GUILD_VERIFICATION_LEVEL"),
                 value: await this.getGuildVerification(ctx),
-            }, {
+            },
+            {
                 name: await t(ctx, "REQUIRES_ADMIN_MFA"),
                 value: ctx.guild.mfaLevel === 1 ? await t(ctx, "YES") : await t(ctx, "NO"),
-            }, {
+            },
+            {
                 name: await t(ctx, "ROLES"),
                 value: await t(ctx, "ROLE_COUNT", {
-                    roles: ctx.guild.roles.size
+                    roles: ctx.guild.roles.size,
                 }),
-            }, {
+            },
+            {
                 name: await t(ctx, "EXPLICIT_FILTERING"),
                 value: await this.getExplicitContent(ctx),
-            }, {
+            },
+            {
                 name: await t(ctx, "DEFAULT_NOTIFICATIONS"),
                 value: ctx.guild.defaultNotifications === 1
                     ? await t(ctx, "ONLY_MENTIONS")
@@ -97,26 +102,26 @@ class ServerCommand extends Command {
                     if (ctx.guild.features.includes("BANNER"))
                         featureStr += `:sunrise_over_mountains: ${await t(ctx, "ALLOWED_BANNER")}\n`;
                     return featureStr || await t(ctx, "NONE");
-                })()
+                })(),
             }],
             description: `
 **ID**: ${ctx.guild.id}
 **${await t(ctx, "VOICE_REGION")}**: ${ctx.guild.region}
 **${await t(ctx, "AFK_TIMEOUT")}**: ${await t(ctx, "AFK_MINUTES", {
-    timeout: ctx.guild.afkTimeout / 60
+    timeout: ctx.guild.afkTimeout / 60,
 })}
 **Nitro Boosters**: ${ctx.guild.premiumSubscriptionCount} (Level ${ctx.guild.premiumTier})`,
             
             footer: {
-                text: await t(ctx, "CREATED_ON")
+                text: await t(ctx, "CREATED_ON"),
             },
             timestamp: new Date(ctx.guild.createdAt),
-            color: 0x008800
+            color: 0x008800,
         };
 
         if (ctx.guild.splash) {
             embed.image = {
-                url: `https://cdn.discordapp.com/splashes/${ctx.guild.id}/${ctx.guild.splash}.png?size=2048`
+                url: `https://cdn.discordapp.com/splashes/${ctx.guild.id}/${ctx.guild.splash}.png?size=2048`,
             };
         }
         await ctx.send({ embeds: [embed] });

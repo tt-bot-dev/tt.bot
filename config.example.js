@@ -66,7 +66,7 @@ module.exports = {
         month: "numeric",
         day: "numeric",
         hour: "2-digit",
-        minute: "2-digit"
+        minute: "2-digit",
     },
     /**
      * The date formatting for dates with timezones, for the nice display on Discord.
@@ -78,7 +78,7 @@ module.exports = {
         day: "numeric",
         hour: "2-digit",
         minute: "2-digit",
-        timeZoneName: "long"
+        timeZoneName: "long",
     },
     /**
      * The database options for the bot
@@ -89,8 +89,8 @@ module.exports = {
     database: {
         provider: RethinkDBProvider,
         options: {
-            db: "ttalpha"
-        }
+            db: "ttalpha",
+        },
     },
 
     /**
@@ -147,7 +147,7 @@ module.exports = {
          * @type {number}
          */
         httpPort: 8826,
-        //httpsPort: 8820, // Uncomment this line to use HTTPS. 
+        // httpsPort: 8820, // Uncomment this line to use HTTPS. 
 
         /**
          * If httpsPort is present, these settings are used for HTTPS web server.
@@ -171,5 +171,5 @@ module.exports = {
     /**
      * Whether to deploy all the commands to the home guild only or not
      */
-    deployCommandsToHomeGuild: false
+    deployCommandsToHomeGuild: false,
 };
