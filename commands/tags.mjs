@@ -29,6 +29,7 @@ class TagCommand extends Command {
     constructor(sosamba, fn, fp) {
         super(sosamba, fn, fp, {
             name: "tags",
+            description: "Store some text for later retrieval. Keep in mind that tags are global and accessible by everyone.",
             args: [
                 {
                     name: "show",
@@ -89,7 +90,6 @@ class TagCommand extends Command {
                     }],
                 },
             ],
-            description: "Store some data for later retrieval. Keep in mind that the tags are global and accessible by everyone.\n[ttMsg](https://github.com/tt-bot-dev/tt.bot/blob/master/docs/ttMsg.md) can be used in tags.",
         });
     }
 

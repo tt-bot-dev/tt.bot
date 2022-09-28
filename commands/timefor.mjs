@@ -27,14 +27,13 @@ class TimeForCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "timefor",
+            description: "Gets the current time of a user.",
             args: [{
                 name: "user",
                 description: "The user to get the time for.",
                 type: ApplicationCommandOptionTypes.USER,
                 required: true,
             }],
-            description: "Gets the current time of a user.",
-            aliases: ["tf", "time"],
         });
     }
 

@@ -26,15 +26,14 @@ class StrikeListCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "strikes",
+            description: "Gets user's strikes.",
+            guildOnly: true,
             args: [{
                 name: "user",
                 description: "The user to ban.",
                 type: ApplicationCommandOptionTypes.USER,
                 required: true,
             }],
-            description: "Gets user's strikes.",
-            aliases: ["warns"],
-            guildOnly: true,
         });
     }
 

@@ -30,6 +30,7 @@ class StrikeCommand extends Command {
         super(sosamba, ...args, {
             name: "strike",
             description: "Strikes a user.",
+            guildOnly: true,
             args: [{
                 name: "user",
                 description: "The user to strike.",
@@ -41,8 +42,6 @@ class StrikeCommand extends Command {
                 type: ApplicationCommandOptionTypes.STRING,
                 required: false,
             }],
-            aliases: ["warn"],
-            guildOnly: true,
         });
     }
 

@@ -27,14 +27,13 @@ class AvatarCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "getavatar",
+            description: "Gets someone's avatar.",
             args: [{
                 name: "user",
                 description: "The user to get the avatar for.",
                 type: ApplicationCommandOptionTypes.USER,
                 required: true,
             }],
-            description: "Gets someone's avatar.",
-            aliases: ["avatar"],
         });
     }
 

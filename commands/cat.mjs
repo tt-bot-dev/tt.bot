@@ -25,7 +25,6 @@ class CatCommand extends Command {
         super(...args, {
             name: "cat",
             description: "Gets a random cat picture.",
-            aliases: ["meow"],
         });
     }
 

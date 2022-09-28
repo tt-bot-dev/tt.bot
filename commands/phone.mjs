@@ -60,6 +60,7 @@ class PhoneCommand extends Command {
         super(sosamba, ...args, {
             name: "phone",
             description: "Talk with people across Discord.",
+            guildOnly: true,
             args: [
                 {
                     name: "register",

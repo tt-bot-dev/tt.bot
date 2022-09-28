@@ -26,14 +26,13 @@ class UserCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "userinfo",
+            description: "Gets some information about the user.",
             args: [{
                 name: "user",
                 description: "The user to get the information about.",
                 type: ApplicationCommandOptionTypes.USER,
                 required: true,
             }],
-            description: "Gets some information about the user.",
-            aliases: ["uinfo", "user", "whois"],
         });
     }
 

@@ -26,9 +26,8 @@ const { announcementChannelID } = config;
 class UpdateFollowCommand extends Command {
     constructor(...args) {
         super(...args, {
-            description: "Receive updates about tt.bot in this channel.",
-            aliases: ["updates"],
             name: "botupdates",
+            description: "Receive updates about tt.bot in this channel.",
             guildOnly: true,
         });
     }

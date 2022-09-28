@@ -27,6 +27,8 @@ class UpdateReasonCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "reason",
+            description: "Updates the reason for a strike.",
+            guildOnly: true,
             args: [{
                 name: "case_id",
                 description: "The punishment to remove.",
@@ -38,8 +40,6 @@ class UpdateReasonCommand extends Command {
                 type: ApplicationCommandOptionTypes.STRING,
                 required: true,
             }],
-            description: "Updates the reason for a strike.",
-            guildOnly: true,
         });
     }
 

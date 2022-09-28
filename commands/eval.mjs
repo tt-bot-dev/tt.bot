@@ -36,14 +36,14 @@ class EvalCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "eval",
+            description: "Evaluates JavaScript code.",
+            registerIn: homeGuild,
             args: [{
                 name: "code",
                 description: "The code to evaluate",
                 type: ApplicationCommandOptionTypes.STRING,
                 required: true,
             }],
-            description: "Evaluates JavaScript code.",
-            registerIn: homeGuild,
         });
     }
 

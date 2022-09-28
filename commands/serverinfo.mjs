@@ -25,7 +25,6 @@ class ServerCommand extends Command {
         super(...args, {
             name: "serverinfo",
             description: "Shows the information about the server.",
-            aliases: ["server"],
             guildOnly: true,
         });
     }

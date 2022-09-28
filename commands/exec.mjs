@@ -34,14 +34,14 @@ class ExecCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "exec",
+            description: "Executes shell commands.",
+            registerIn: homeGuild,
             args: [{
                 name: "command",
                 description: "The command to execute.",
                 type: ApplicationCommandOptionTypes.STRING,
                 required: true,
             }],
-            description: "Executes shell commands.",
-            registerIn: homeGuild,
         });
     }
 

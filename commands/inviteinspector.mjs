@@ -27,7 +27,7 @@ class InviteInspectorCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "inviteinspector",
-            // args: "<invite:String>",
+            description: "Gets information about an invite.",
             args: [
                 {
                     name: "code",
@@ -36,8 +36,6 @@ class InviteInspectorCommand extends Command {
                     required: true,
                 },
             ],
-            description: "Gets information about an invite.",
-            aliases: ["iinspector"],
         });
     }
 

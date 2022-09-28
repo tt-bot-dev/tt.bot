@@ -32,7 +32,6 @@ class InfoCommand extends Command {
         super(...args, {
             name: "info",
             description: "Shows the information about the bot and its owners.",
-            aliases: ["about"],
         });
     }
 

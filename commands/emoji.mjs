@@ -30,6 +30,7 @@ class EmojiCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "emoji",
+            description: "Render up to 5 emojis as a picture.",
             args: [{
                 name: "emojis",
                 description: "The emojis to render.",
@@ -41,8 +42,6 @@ class EmojiCommand extends Command {
                 type: ApplicationCommandOptionTypes.BOOLEAN,
                 required: false,
             }],
-            description: "Render up to 5 emojis as a picture.",
-            aliases: ["e2p"],
         });
     }
 

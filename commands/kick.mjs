@@ -28,6 +28,8 @@ class KickCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "kick",
+            description: "Kicks a user.",
+            guildOnly: true,
             args: [{
                 name: "user",
                 description: "The user to ban.",
@@ -39,8 +41,6 @@ class KickCommand extends Command {
                 type: ApplicationCommandOptionTypes.STRING,
                 required: false,
             }],
-            description: "Kicks a user.",
-            guildOnly: true,
         });
     }
 

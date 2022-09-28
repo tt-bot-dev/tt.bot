@@ -27,6 +27,8 @@ class RemoveStrikeCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "delpunish",
+            description: "Removes a strike from a user.",
+            guildOnly: true,
             args: [{
                 name: "case_id",
                 description: "The punishment to remove.",
@@ -38,9 +40,6 @@ class RemoveStrikeCommand extends Command {
                 type: ApplicationCommandOptionTypes.STRING,
                 required: false,
             }],
-            description: "Removes a strike from a user.",
-            aliases: ["rmpunish"],
-            guildOnly: true,
         });
     }
 

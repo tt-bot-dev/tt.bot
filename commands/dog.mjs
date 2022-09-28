@@ -25,7 +25,6 @@ class DogCommand extends Command {
         super(...args, {
             name: "dog",
             description: "Gets a random dog picture.",
-            aliases: ["woof"],
         });
     }
 

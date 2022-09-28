@@ -25,7 +25,6 @@ class PingCommand extends Command {
         super(...args, {
             name: "ping",
             description: "Shows my latency to Discord.",
-            aliases: ["pong"],
         });
     }
 

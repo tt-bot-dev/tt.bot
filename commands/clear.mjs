@@ -29,6 +29,8 @@ class ClearCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "clear",
+            description: "Clears the desired number of messages.",
+            guildOnly: true,
             args: [{
                 name: "messages",
                 description: "The amount of messages to fetch for clearing. Limited to 1000.",
@@ -50,9 +52,6 @@ class ClearCommand extends Command {
                 type: ApplicationCommandOptionTypes.BOOLEAN,
                 required: false,
             }],
-            description: "Clears the desired number of messages.",
-            aliases: ["clean", "prune", "purge"],
-            guildOnly: true,
         });
     }
 

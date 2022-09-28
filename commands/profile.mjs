@@ -27,6 +27,7 @@ class ProfileCommand extends Command {
     constructor(sosamba, ...args) {
         super(sosamba, ...args, {
             name: "profile",
+            description: "Manages the data we know about you.",
             args: [
                 {
                     name: "update",
@@ -53,7 +54,6 @@ class ProfileCommand extends Command {
                     type: ApplicationCommandOptionTypes.SUB_COMMAND,
                 },
             ],
-            description: "Manages the data we know about you.",
         });
     }
 
