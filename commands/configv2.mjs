@@ -22,7 +22,7 @@ import { InteractionListener, Eris } from "sosamba";
 import config from "../config.js";
 import { getGuildConfig, setGuildConfig, t } from "../lib/util.mjs";
 import Command from "../lib/commandTypes/AdminCommand.mjs";
-import ConfigProps from "../lib/util/config/Properties.js";
+import ConfigProps from "../lib/util/config/Properties.mjs";
 
 const { webserver, prefix: defaultPrefix } = config;
 const { Constants: { ChannelTypes, ComponentTypes, ButtonStyles, InteractionTypes, TextInputStyles } } = Eris;
