@@ -341,8 +341,6 @@ class ConfigInteractionListener extends InteractionListener {
     }
 
     
-    static PREFIX = "🖋";
-
     static MODROLE = "🔨";
 
     static FAREWELL = "👋";
@@ -372,7 +370,6 @@ class ConfigInteractionListener extends InteractionListener {
     static DISABLE = "❌";
 
     static EmojiPropMap = {
-        prefix: this.PREFIX,
         modRole: this.MODROLE,
         farewellMessage: this.FAREWELL,
         farewellChannelId: this.FAREWELLCHANNEL,
