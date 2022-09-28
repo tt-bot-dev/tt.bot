@@ -28,6 +28,8 @@ class BanCommand extends Command {
     constructor(...args) {
         super(...args, {
             name: "ban",
+            description: "Bans a user from this server.",
+            guildOnly: true,
             args: [{
                 name: "user",
                 description: "The user to ban.",
@@ -49,8 +51,6 @@ class BanCommand extends Command {
                 type: ApplicationCommandOptionTypes.INTEGER,
                 required: false,
             }],
-            description: "Bans a user from this server.",
-            guildOnly: true,
         });
     }
 

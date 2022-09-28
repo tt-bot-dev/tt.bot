@@ -29,6 +29,7 @@ class BlacklistManagerCommand extends Command {
         super(...args, {
             name: "blacklist",
             description: "Manages blacklisted servers.",
+            registerIn: homeGuild,
             args: [
                 {
                     name: "query",
@@ -69,7 +70,6 @@ class BlacklistManagerCommand extends Command {
                     }],
                 },
             ],
-            registerIn: homeGuild,
         });
     }
 
