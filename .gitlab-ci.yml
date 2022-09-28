@@ -2,7 +2,7 @@ lint:
     stage: test
     image: node:current-alpine
     script: 
-        - apk add git # bash not present, wtf?
+        - apk add git
         - rm package.json
         - npm i git+https://owo.codes/tt.bot/frameworks/eslint-config.git
         - npx eslint .
