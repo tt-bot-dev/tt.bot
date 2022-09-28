@@ -24,8 +24,8 @@ import { getUserProfile, setUserProfile, t } from "../lib/util.mjs";
 const { Constants: { ApplicationCommandOptionTypes, ComponentTypes } } = Eris;
 
 class ProfileCommand extends Command {
-    constructor(...args) {
-        super(...args, {
+    constructor(sosamba, ...args) {
+        super(sosamba, ...args, {
             name: "profile",
             description: "Manages the data we know about you.",
             args: [
