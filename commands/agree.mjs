@@ -32,10 +32,62 @@ class AgreeCommand extends Command {
     async run(ctx) {
         // This should probably switch to something button-based
         const { memberRole, agreeChannel } = await getGuildConfig(ctx) || {};
-        if (!memberRole || !agreeChannel) return;
-        if (ctx.channel.id !== agreeChannel) return;
-        if (!ctx.guild.roles.has(memberRole)) return;
-        if (ctx.member.roles.includes(memberRole)) return;
+        if (!memberRole || !agreeChannel) {
+            await ctx.send({
+                embeds: [{
+                    title: ":x: Cannot add the member role",
+                    description: "The bot is misconfigured – the member role and/or the agreement channel are not set.",
+                    footer: {
+                        text: "Please contact the server's admins to reconfigure me.",
+                    },
+                    color: 0xFF0000,
+                }],
+
+                flags: 64,
+            });
+
+            return;
+        }
+        if (ctx.channel.id !== agreeChannel) {
+            await ctx.send({
+                embeds: [{
+                    title: ":x: This command cannot be run in this channel",
+                    description: "Switch to the appropriate channel and run the command again.",
+                    color: 0xFF0000,
+                }],
+
+                flags: 64,
+            });
+        }
+        if (!ctx.guild.roles.has(memberRole)) {
+            await ctx.send({
+                embeds: [{
+                    title: ":x: Cannot add the member role",
+                    description: "The member role does not exist.",
+                    footer: {
+                        text: "Please contact the server's admins to reconfigure me.",
+                    },
+                    color: 0xFF0000,
+                }],
+
+                flags: 64,
+            });
+
+            return;
+        }
+        if (ctx.member.roles.includes(memberRole)) {
+            await ctx.send({
+                embeds: [{
+                    title: ":x: Cannot add the member role",
+                    description: "You already have the member role!",
+                    color: 0xFF0000,
+                }],
+
+                flags: 64,
+            });
+
+            return;
+        }
         try {
             if (!ctx.guild.members.get(this.sosamba.user.id).permissions.has("manageRoles")) throw new Error();
             await ctx.member.addRole(memberRole, "Agreement to server's rules");

@@ -80,7 +80,7 @@ class BlacklistManagerCommand extends Command {
             if (guilds.length === 0) {
                 return await ctx.send({
                     embeds: [{
-                        title: ":x: Cannot find blacklisted guilds by these IDs.",
+                        title: ":x: Cannot find blacklisted guilds by these IDs",
                         description: "It's not blacklisted. Check the ID and try again.",
                         color: 0xFF0000,
                     }],

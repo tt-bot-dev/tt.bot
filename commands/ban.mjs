@@ -66,7 +66,10 @@ class BanCommand extends Command {
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
             if (!ctx.guild.members.get(this.sosamba.user.id).permissions.has("banMembers") ||
                 !this.sosamba.passesRoleHierarchy(ctx.guild.members.get(this.sosamba.user.id), user)) {
-                await ctx.send(await t(ctx, "MISSING_PERMISSIONS"));
+                await ctx.send({
+                    content: await t(ctx, "MISSING_PERMISSIONS"),
+                    flags: 64,
+                });
                 return;
             }
             await ctx.guild.banMember(user.id, _days, encodeURIComponent(`${this.sosamba.getTag(ctx.author)}: ${_reason}`));
@@ -76,7 +79,10 @@ class BanCommand extends Command {
                 user: this.sosamba.getTag(user.user),
             }));
         } else {
-            ctx.send(await t(ctx, "ROLE_HIERARCHY_ERROR"));
+            await ctx.send({
+                content: await t(ctx, "ROLE_HIERARCHY_ERROR"),
+                flags: 64,
+            });
         }
     }
 }

@@ -57,6 +57,8 @@ class InviteInspectorCommand extends Command {
                             text: await t(ctx,"CONTACT_GUILD_ADMIN"),
                         },
                     }],
+
+                    flags: 64,
                 });
             }
             return ctx.send({
@@ -70,6 +72,8 @@ class InviteInspectorCommand extends Command {
                         text: await t(ctx,"INVITE_ERR_FOOTER"),   
                     },
                 }],
+
+                flags: 64,
             });
         }
 

@@ -59,11 +59,17 @@ class EmojiCommand extends Command {
             if (b && b.err) throw b.err;
         } catch (err) {
             this.log.error(err);
-            await ctx.send(await t(ctx, "ERROR", { error: err.stack ?? err.toString() }));
+            await ctx.send({
+                content: await t(ctx, "ERROR", { error: err.stack ?? err.toString() }),
+                flags: 64,
+            });
             return;
         }
         if (!b) {
-            await ctx.send(await t(ctx, "IMAGE_NONE"));
+            await ctx.send({
+                content: await t(ctx, "IMAGE_NONE"),
+                flags: 64,
+            });
             return;
         }
         const hrtime = process.hrtime(time);

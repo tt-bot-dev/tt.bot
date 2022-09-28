@@ -47,7 +47,10 @@ class StrikeCommand extends Command {
 
     async run(ctx, { user, reason }) {
         const _reason = reason ?? "No reason provided.";
-        if (user.bot) return ctx.send(await t(ctx, "BOTS_NOT_STRIKABLE"));
+        if (user.bot) return ctx.send({
+            content: await t(ctx, "BOTS_NOT_STRIKABLE"),
+            flags: 64,
+        });
         await this.sosamba.modLog.createPunishment(ctx, PunishTypes.STRIKE, user.id, _reason);
         const [dm, p] = await Promise.all([
             user.user.getDMChannel(),

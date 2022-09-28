@@ -52,7 +52,10 @@ class KickCommand extends Command {
         const _reason = reason ?? "No reason provided.";
         if (this.sosamba.passesRoleHierarchy(ctx.member, user)) {
             if (!this.sosamba.hasBotPermission(ctx.channel, "kickMembers") || !this.sosamba.passesRoleHierarchy(ctx.guild.members.get(this.sosamba.user.id), user)) {
-                await ctx.send(await t(ctx, "MISSING_PERMISSIONS"));
+                await ctx.send({
+                    content: await t(ctx, "MISSING_PERMISSIONS"),
+                    flags: 64,
+                });
                 return;
             }
             await user.kick(encodeURIComponent(`${this.sosamba.getTag(ctx.author)}: ${_reason}`));
@@ -61,7 +64,10 @@ class KickCommand extends Command {
                 user: this.sosamba.getTag(user),
             }));
         } else {
-            await ctx.send(await t(ctx, "ROLE_HIERARCHY_ERROR"));
+            await ctx.send({
+                content: await t(ctx, "ROLE_HIERARCHY_ERROR"),
+                flags: 64,
+            });
         }
     }
 }

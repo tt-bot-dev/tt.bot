@@ -97,7 +97,10 @@ class TagCommand extends Command {
         switch (ctx.subcommand) {
         case "show": {
             const d = await this.sosamba.db.getTag(encrypt(name));
-            if (!d) return ctx.send(await t(ctx, "TAG_DOESNTEXIST"));
+            if (!d) return ctx.send({
+                content: await t(ctx, "TAG_DOESNTEXIST"),
+                flags: 64,
+            });
             const data = new TagObject(d);
             await ctx.send({
                 embeds: [{
@@ -114,9 +117,15 @@ class TagCommand extends Command {
 
         case "delete": {
             const d = await this.sosamba.db.getTag(encrypt(name));
-            if (!d) return ctx.send(await t(ctx, "TAG_DOESNTEXIST"));
+            if (!d) return ctx.send({
+                content: await t(ctx, "TAG_DOESNTEXIST"),
+                flags: 64,
+            });
             if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== d.owner) {
-                return await ctx.send(await t(ctx, "TAG_NOTOWNER"));
+                return await ctx.send({
+                    content: await t(ctx, "TAG_NOTOWNER"),
+                    flags: 64,
+                });
             } else {
                 await this.sosamba.db.deleteTag(encrypt(name));
                 await ctx.send(await t(ctx, "TAG_DELETED", { tag: name }));
@@ -126,10 +135,16 @@ class TagCommand extends Command {
 
         case "edit": {
             const d = await this.sosamba.db.getTag(encrypt(name));
-            if (!d) return ctx.send(await t(ctx, "TAG_DOESNTEXIST"));
+            if (!d) return ctx.send({
+                content: await t(ctx, "TAG_DOESNTEXIST"),
+                flags: 64,
+            });
             const data = new TagObject(d);
             if (!OwnerCommand.prototype.permissionCheck(ctx) && ctx.author.id !== data.owner) {
-                return await ctx.send(await t(ctx, "TAG_NOTOWNER"));
+                return await ctx.send({
+                    content: await t(ctx, "TAG_NOTOWNER"),
+                    flags: 64,
+                });
             } else {
                 data.content = content;
                 await this.sosamba.db.updateTag(encrypt(name),
@@ -143,7 +158,10 @@ class TagCommand extends Command {
 
         case "create": {
             if (await this.sosamba.db.getTag(encrypt(name)))
-                return await ctx.send(await t(ctx, "TAG_EXISTS"));
+                return await ctx.send({
+                    content: await t(ctx, "TAG_EXISTS"),
+                    flags: 64,
+                });
 
             await this.sosamba.db.createTag(TagObject.create({
                 id: name,

@@ -33,9 +33,9 @@ class CatCommand extends Command {
         if (statusCode !== 200) {
             await ctx.send({
                 embeds: [{
-                    color: 0xFF0000,
                     title: ":x: Fetching the image has failed",
                     description: "Try again later.",
+                    color: 0xFF0000,
                 }],
                 flags: 64,
             });

@@ -37,9 +37,12 @@ class StrikeListCommand extends Command {
         });
     }
 
-    async run(ctx, [user]) {
+    async run(ctx, { user }) {
         if (user.bot) {
-            await ctx.send(await t(ctx, "BOTS_NOT_STRIKABLE"));
+            await ctx.send({
+                content: await t(ctx, "BOTS_NOT_STRIKABLE"),
+                flags: 64,
+            });
             return;
         }
         const strikes = await this.sosamba.modLog.getUserStrikes(user.id, ctx);

@@ -38,6 +38,8 @@ class DogCommand extends Command {
                     title: ":x: Fetching the image has failed",
                     description: "Try again later.",
                 }],
+
+                flags: 64,
             });
 
             return;

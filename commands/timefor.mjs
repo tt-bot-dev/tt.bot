@@ -39,11 +39,16 @@ class TimeForCommand extends Command {
 
     async run(ctx, { user }) {
         const profile = await this.sosamba.db.getUserProfile(user.id);
-        if (!profile) return await ctx.send(
-            await t(ctx, `PROFILE${user.id === ctx.author.id ? "" : "_SPECIFIC"}_NONEXISTENT`,
-                { user: this.sosamba.getTag(user) }));
+        if (!profile) return await ctx.send({
+            content: await t(ctx, `PROFILE${user.id === ctx.author.id ? "" : "_SPECIFIC"}_NONEXISTENT`,
+                { user: this.sosamba.getTag(user) }),
+            flags: 64,
+        });
         const data = new UserProfile(profile);
-        if (!data.timezone) return await ctx.send(await t(ctx, "NO_TZ"));
+        if (!data.timezone) return await ctx.send({
+            content: await t(ctx, "NO_TZ"),
+            flags: 64,
+        });
         return ctx.send(await t(ctx, "TIME_FOR", {
             time: await formatDate(ctx, Date.now(), data.timezone),
             user: this.sosamba.getTag(user),

@@ -85,7 +85,7 @@ class ExecCommand extends Command {
                     embeds: [{
                         title: "Executed!",
                         color: 0x008800,
-                        description: "Unfortunately, we can't provide the data here because they're too long and the request to GitHub's Gist APIs has failed.\nThereby, the output has been logged in the console.",
+                        description: "Unfortunately, we can't provide the output here because it is too large to display and the request to GitHub's Gist APIs has failed.\nThereby, the output has been logged in the console.",
                     }],
                 });
                 this.log.log(overall);
@@ -95,7 +95,7 @@ class ExecCommand extends Command {
                 embeds: [{
                     title: "Executed!",
                     color: 0x008800,
-                    description: `The data are too long. [View the gist here](${gist.body.html_url})`,
+                    description: `The output is too large to display. [View the gist here](${gist.body.html_url})`,
                 }],
             });
         }

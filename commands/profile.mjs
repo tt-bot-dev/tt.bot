@@ -104,7 +104,10 @@ class ProfileCommand extends Command {
 
             if (timezone) {
                 if (!this.isValidTz(timezone)) {
-                    await ctx.send(await t(ctx, "INVALID_TIMEZONE"));
+                    await ctx.send({
+                        content: await t(ctx, "INVALID_TIMEZONE"),
+                        flags: 64,
+                    });
 
                     return;
                 }
