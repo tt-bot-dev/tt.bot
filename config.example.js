@@ -101,7 +101,7 @@ module.exports = {
 
     /**
      * A number of workers to spawn. These are used to scale the work without blocking the entire bot.
-     * @type {string}
+     * @type {number}
      */
     workerCount: 5,
 
@@ -160,16 +160,19 @@ module.exports = {
 
     /**
      * The bot update channel
+     * @type {string}
      */
     announcementChannelID: "123456789012345678",
 
     /**
      * The home guild for the bot, some maintainer-only commands are registered there
+     * @type {string}
      */
     homeGuild: "234567890123456789",
 
     /**
      * Whether to deploy all the commands to the home guild only or not
+     * @type {boolean}
      */
     deployCommandsToHomeGuild: false,
 };
