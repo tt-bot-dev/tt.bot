@@ -23,8 +23,8 @@ import { formatDate, getUserProfile, t } from "../lib/util.mjs";
 const { Constants: { UserFlags, ApplicationCommandOptionTypes }, Member } = Eris;
 
 class UserCommand extends Command {
-    constructor(sosamba, ...args) {
-        super(sosamba, ...args, {
+    constructor(...args) {
+        super(...args, {
             name: "userinfo",
             description: "Gets some information about the user.",
             args: [{

@@ -25,8 +25,8 @@ const { homeGuild } = config;
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
 
 class BlacklistManagerCommand extends Command {
-    constructor(sosamba, ...args) {
-        super(sosamba, ...args, {
+    constructor(...args) {
+        super(...args, {
             name: "blacklist",
             description: "Manages blacklisted servers.",
             args: [

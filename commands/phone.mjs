@@ -56,8 +56,8 @@ class PhoneCommand extends Command {
     /** @type {Map<string, { caller: PhoneCallData, otherSide: PhoneCallData }>} */
     phoneCalls = new Map();
 
-    constructor(sosamba, ...args) {
-        super(sosamba, ...args, {
+    constructor(...args) {
+        super(...args, {
             name: "phone",
             description: "Talk with people across Discord.",
             guildOnly: true,

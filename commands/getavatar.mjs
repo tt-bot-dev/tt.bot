@@ -24,8 +24,8 @@ import { t } from "../lib/util.mjs";
 const { Member, Constants: { ApplicationCommandOptionTypes } } = Eris;
 
 class AvatarCommand extends Command {
-    constructor(sosamba, ...args) {
-        super(sosamba, ...args, {
+    constructor(...args) {
+        super(...args, {
             name: "getavatar",
             description: "Gets someone's avatar.",
             args: [{

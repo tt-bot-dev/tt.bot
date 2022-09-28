@@ -33,8 +33,8 @@ const { homeGuild } = config;
 const AsyncFunction = (async () => "").constructor;
 
 class EvalCommand extends Command {
-    constructor(sosamba, ...args) {
-        super(sosamba, ...args, {
+    constructor(...args) {
+        super(...args, {
             name: "eval",
             description: "Evaluates JavaScript code.",
             registerIn: homeGuild,

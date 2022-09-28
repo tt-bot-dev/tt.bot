@@ -26,8 +26,8 @@ const D_EPOCH = 1421280000000n;
 const sleep = ms => new Promise(rs => setTimeout(rs, ms));
 
 class ClearCommand extends Command {
-    constructor(sosamba, ...args) {
-        super(sosamba, ...args, {
+    constructor(...args) {
+        super(...args, {
             name: "clear",
             description: "Clears the desired number of messages.",
             guildOnly: true,

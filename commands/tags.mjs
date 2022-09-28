@@ -26,8 +26,8 @@ import { t } from "../lib/util.mjs";
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
 
 class TagCommand extends Command {
-    constructor(sosamba, fn, fp) {
-        super(sosamba, fn, fp, {
+    constructor(...args) {
+        super(...args, {
             name: "tags",
             description: "Store some text for later retrieval. Keep in mind that tags are global and accessible by everyone.",
             args: [

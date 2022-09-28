@@ -24,8 +24,8 @@ import { t, formatDate } from "../lib/util.mjs";
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
 
 class TimeForCommand extends Command {
-    constructor(sosamba, ...args) {
-        super(sosamba, ...args, {
+    constructor(...args) {
+        super(...args, {
             name: "timefor",
             description: "Gets the current time of a user.",
             args: [{

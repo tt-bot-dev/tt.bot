@@ -24,8 +24,8 @@ import { t } from "../lib/util.mjs";
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
 
 class UpdateReasonCommand extends Command {
-    constructor(sosamba, ...args) {
-        super(sosamba, ...args, {
+    constructor(...args) {
+        super(...args, {
             name: "reason",
             description: "Updates the reason for a strike.",
             guildOnly: true,

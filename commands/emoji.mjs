@@ -27,8 +27,8 @@ import { t } from "../lib/util.mjs";
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
 
 class EmojiCommand extends Command {
-    constructor(sosamba, ...args) {
-        super(sosamba, ...args, {
+    constructor(...args) {
+        super(...args, {
             name: "emoji",
             description: "Render up to 5 emojis as a picture.",
             args: [{

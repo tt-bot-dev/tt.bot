@@ -26,8 +26,8 @@ import { t } from "../lib/util.mjs";
 const { Constants: { ApplicationCommandOptionTypes } } = Eris;
 
 class StrikeCommand extends Command {
-    constructor(sosamba, ...args) {
-        super(sosamba, ...args, {
+    constructor(...args) {
+        super(...args, {
             name: "strike",
             description: "Strikes a user.",
             guildOnly: true,
