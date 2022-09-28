@@ -20,7 +20,7 @@ A clear and concise description of what you expected to happen.
 - [ ] This happens on official tt.bot
 - [ ] This happens on a selfhosted instance
 
-**If this happens on a selfhosted version, fill this out: <!--run `<prefix>info` to get these if you have no idea-->**
+**If this happens on a selfhosted version, fill this out: <!--run `/info` to get these if you have no idea-->**
 
 **Node.js**: 
 **tt.bot**: 
