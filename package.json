@@ -5,22 +5,21 @@
     "main": "index.js",
     "dependencies": {
         "@tt-bot-dev/e2p": "git+https://owo.codes/tt.bot/modules/e2p.git",
-        "@tt-bot-dev/web": "git+https://owo.codes/tt.bot/modules/web.git",
-        "@types/node": "^13.11.0",
-        "emoji-regex": "^9.0.0",
+        "@tt-bot-dev/web": "git+https://owo.codes/tt.bot/modules/web.git#v5.0.0",
+        "@types/node": "^18.7.23",
+        "emoji-regex": "^10.2.1",
         "eris": "github:abalabahaha/eris#dev",
-        "intl-messageformat": "^9.3.20",
-        "luxon": "^1.25.0",
+        "intl-messageformat": "^10.1.5",
+        "luxon": "^3.0.4",
         "rethinkdbdash": "^2.3.31",
         "sosamba": "git+https://owo.codes/tt.bot/frameworks/sosamba#v2.0.0",
-        "undici": "^4.8.1",
-        "uuid": "^7.0.3",
+        "undici": "^5.10.0",
+        "uuid": "^9.0.0",
         "workers-as-promised": "git+https://owo.codes/tt.bot/external/WorkersAsPromised.git"
     },
     "devDependencies": {
         "@tt-bot-dev/eslint-config": "git+https://owo.codes/tt.bot/frameworks/eslint-config.git",
         "@tt-bot-dev/types": "git+https://owo.codes/tt.bot/modules/types.git",
-        "babel-eslint": "^10.1.0",
         "eslint": "^8.5.0",
         "typescript": "^4.5.5"
     },
@@ -30,12 +29,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/tt-bot-dev/tt.bot.git"
+        "url": "git+https://owo.codes/tt.bot/bot.git"
     },
     "author": "TTtie <me@tttie.cz>",
     "license": "AGPL-3.0-or-later",
     "bugs": {
         "url": "https://github.com/tt-bot-dev/tt.bot/issues"
     },
-    "homepage": "https://github.com/tt-bot-dev/tt.bot#readme"
+    "homepage": "https://owo.codes/tt.bot/bot/-/blob/master/README.md"
 }
