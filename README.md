@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2020 tt.bot dev team
+Copyright (C) 2024 tt.bot dev team
  
 This file is part of tt.bot.
  
@@ -19,7 +19,9 @@ along with tt.bot.  If not, see <http://www.gnu.org/licenses/>.
 # tt.bot 
 [![Discord][discord shield]][discord invite] [![Add me!][tt.bot add shield]][tt.bot invite]
 [![Build Status][gh shield]][gh]
-[![Donate using Ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T11LVG2)
+
+> [!IMPORTANT]  
+> tt.bot has shutdown on 2.&nbsp;3.&nbsp;2024, 00:00 UTC. Feel free to [read more on why I shut it down and what happens next](https://tttie.cz/blog/2024/02/loslassen/).
 
 tt.bot is a simple to use moderation/utility bot written in JavaScript using [Node.js] and the [Sosamba] framework based on the [Eris] library.
 
